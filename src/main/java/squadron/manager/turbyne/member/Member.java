@@ -14,7 +14,7 @@ import javax.persistence.*;
 public
 class Member {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     private String full_name;

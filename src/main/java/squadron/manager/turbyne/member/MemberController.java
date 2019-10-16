@@ -2,22 +2,20 @@ package squadron.manager.turbyne.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping(MemberController.URI)
 public class MemberController {
 
-    public static final String URI = "/api/members";
+    static final String URI = "/api/members";
 
     @Autowired
     MemberRepository memberRepository;
-
     @GetMapping
     public
     Iterable<Member> getAllMembers() { return memberRepository.findAll();}
-
     @PostMapping
     public
     Member create(@Valid @RequestBody MemberJSON memberJSON) {
