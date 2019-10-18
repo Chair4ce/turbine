@@ -1,7 +1,6 @@
 // This file holds our state type, as well as any other types related to this Redux store.
 
 // Response object for GET /members
-// https://docs.opendota.com/#tag/members%2Fpaths%2F~1members%2Fget
 export interface Member extends ApiResponse {
     _id: string;
     full_name: string;
