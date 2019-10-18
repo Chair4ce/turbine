@@ -22,7 +22,7 @@ const MembersPage: React.FC<AllProps> = ({ match }) => {
     return (
         <Switch>
             <Route exact path={`${match.path}/`} component={MembersIndexPage} />
-            <Route path={`${match.path}/:id`} component={ShowMembersPage} />
+            <Route path={`${match.path}/:full_name`} component={ShowMembersPage} />
         </Switch>
     );
 };

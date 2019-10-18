@@ -47,7 +47,7 @@ interface PropsFromDispatch {
 }
 
 interface RouteParams {
-    _id: string;
+    full_name: string;
 }
 
 interface State {
@@ -80,7 +80,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
     public render() {
         const { data, loading, match } = this.props;
-        const selected = data.find(member => member._id === match.params._id);
+        const selected = data.find(member => member.full_name === match.params.full_name);
 
         return (
             <Page>
@@ -114,13 +114,6 @@ class ShowMembersPage extends React.Component<AllProps, State> {
                                         </MemberDetailsRow>
                                         <MemberDetailsRow>
                                             <MemberDetailsAttrName>Grade:</MemberDetailsAttrName> {selected.grade}
-                                        </MemberDetailsRow>
-                                        <MemberDetailsRow>
-                                            <MemberDetailsAttrName>SSN:</MemberDetailsAttrName> {selected.SSAN}
-                                        </MemberDetailsRow>
-                                        <MemberDetailsRow>
-                                            <MemberDetailsAttrName>EPR/OPR Status:</MemberDetailsAttrName>{' '}
-                                            {selected.epr_opr_status}
                                         </MemberDetailsRow>
                                     </MemberDetailsColumn>
                                     <MemberDetailsColumn>

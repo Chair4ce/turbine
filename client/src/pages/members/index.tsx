@@ -52,7 +52,7 @@ class MembersIndexPage extends React.Component<AllProps> {
                     <tr key={member.id}>
                         <MemberDetail>
                             <MemberName>
-                                <Link to={`/members/${member._id}`}>{member.full_name}</Link>
+                                <Link to={`/members/${member.full_name}`}>{member.full_name}</Link>
                             </MemberName>
                         </MemberDetail>
                         <td>{member.grade}</td>

@@ -30,6 +30,7 @@ public class MemberController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Member> getMemberBId(@PathVariable(value = "id") Long id) throws Exception {
+        System.out.println("getting member with id: " + id);
         Member member = memberRepository.findById(id).orElseThrow(() -> new Exception("Member not found with id ::" + id));
         return ResponseEntity.ok().body(member);
     }
