@@ -13,7 +13,6 @@ import LoadingSpinner from '../../components/data/LoadingSpinner';
 import { ApplicationState } from '../../store';
 import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
-// import {MemberMenuBox, MenuButton} from "../../components/members/MemberMenuBox";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -52,7 +51,7 @@ class MembersIndexPage extends React.Component<AllProps> {
                     <tr key={member.id}>
                         <MemberDetail>
                             <MemberName>
-                                <Link to={`/members/${member.full_name}`}>{member.full_name}</Link>
+                                <Link to={`/members/${member.id + member.full_name}`}>{member.full_name}</Link>
                             </MemberName>
                         </MemberDetail>
                         <td>{member.grade}</td>

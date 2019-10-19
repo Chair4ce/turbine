@@ -47,7 +47,7 @@ interface PropsFromDispatch {
 }
 
 interface RouteParams {
-    full_name: string;
+    memberId: string;
 }
 
 interface State {
@@ -80,7 +80,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
     public render() {
         const { data, loading, match } = this.props;
-        const selected = data.find(member => member.full_name === match.params.full_name);
+        const selected = data.find(member => ((member.id + member.full_name) === match.params.memberId));
 
         return (
             <Page>

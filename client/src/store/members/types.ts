@@ -4,15 +4,15 @@
 export interface Member extends ApiResponse {
     _id: string;
     full_name: string;
-    grade: String;
-    assigned_pas: String;
-    dafsc: String;
-    office_symbol: String;
-    duty_title: String;
-    duty_start_date: String;
-    duty_phone: String;
-    awardec_status: String;
-    epr_opr_status: String;
+    grade: string;
+    assigned_pas: string;
+    dafsc: string;
+    office_symbol: string;
+    duty_title: string;
+    duty_start_date: string;
+    duty_phone: string;
+    awardec_status: string;
+    epr_opr_status: string;
 }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
