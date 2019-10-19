@@ -6,8 +6,6 @@ import styled from '../../utils/styled';
 import Page from '../../components/layout/Page';
 import Container from '../../components/layout/Container';
 import DataTable from '../../components/layout/DataTable';
-import LoadingOverlay from '../../components/data/LoadingOverlay';
-import LoadingOverlayInner from '../../components/data/LoadingOverlayInner';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 
 import { ApplicationState } from '../../store';
@@ -71,11 +69,7 @@ class MembersIndexPage extends React.Component<AllProps> {
                 <Container>
                     <TableWrapper>
                         {loading && (
-                            <LoadingOverlay>
-                                <LoadingOverlayInner>
                                     <LoadingSpinner />
-                                </LoadingOverlayInner>
-                            </LoadingOverlay>
                         )}
                         {this.renderData()}
                     </TableWrapper>

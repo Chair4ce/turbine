@@ -11,12 +11,7 @@ const lightTheme: Theme = {
         white: brandColors.white,
         borders: darken(0.05, brandColors.gray5),
         tableOdd: darken(0.025, brandColors.gray5),
-        brand: brandColors.red,
-        attrs: {
-            str: '#f44336',
-            agi: '#39d402',
-            int: '#01a9f4',
-        },
+        brand: brandColors.red
     },
     fonts: {
         headings:

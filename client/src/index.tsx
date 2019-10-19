@@ -1,6 +1,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { createBrowserHistory } from 'history';
+import './index.scss';
 
 import Main from './main';
 import * as serviceWorker from './serviceWorker';

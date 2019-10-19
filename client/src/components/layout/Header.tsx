@@ -95,12 +95,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => (
                 <HeaderNavLink to="/members" activeClassName="is-active">
                     Members
                 </HeaderNavLink>
-                <HeaderNavLink to="/squadrons" activeClassName="is-active">
-                    Squadrons
-                </HeaderNavLink>
             </HeaderNav>
-            {/*<HeaderRight>*/}
-            {/*</HeaderRight>*/}
         </HeaderInner>
     </Wrapper>
 );

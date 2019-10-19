@@ -10,7 +10,6 @@ const Root: React.FC<RootProps> = ({ children }) => <Wrapper>{children}</Wrapper
 export default Root;
 
 const Wrapper = styled('div')`
-
     display: flex;
     flex-direction: column;
     width: 100%;

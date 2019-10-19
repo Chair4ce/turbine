@@ -29,7 +29,6 @@ export const StatAttribute = styled('div')<StatAttributeProps>`
     flex: 1 1 0;
     padding: 0 1rem;
     font-size: 0.8rem;
-    color: ${props => props.isPrimaryAttr && props.theme.colors.attrs[props.attr]};
 `;
 
 export interface BulletProps {
@@ -42,5 +41,4 @@ export const Bullet = styled('div')<BulletProps>`
     width: 0.5rem;
     margin-right: 8px;
     border-radius: 50%;
-    background-color: ${props => props.theme.colors.attrs[props.attr]};
 `;

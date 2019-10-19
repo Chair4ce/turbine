@@ -30,8 +30,6 @@ import { ApplicationState } from '../../store';
 import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
-import LoadingOverlay from '../../components/data/LoadingOverlay';
-import LoadingOverlayInner from '../../components/data/LoadingOverlayInner';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 
 // Separate state props + dispatch props to their own interfaces.
@@ -87,11 +85,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
                 <Container>
                     <Wrapper>
                         {loading && (
-                            <LoadingOverlay>
-                                <LoadingOverlayInner>
                                     <LoadingSpinner />
-                                </LoadingOverlayInner>
-                            </LoadingOverlay>
                         )}
                         {selected && (
                             <>

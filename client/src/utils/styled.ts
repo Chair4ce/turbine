@@ -10,11 +10,6 @@ export interface Theme {
         brand: string;
         black: string;
         white: string;
-        attrs: {
-            str: string;
-            agi: string;
-            int: string;
-        };
     };
     fonts: {
         body: string;

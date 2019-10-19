@@ -12,11 +12,6 @@ const lightTheme: Theme = {
         borders: lighten(0.05, brandColors.gray75),
         tableOdd: lighten(0.025, brandColors.gray75),
         brand: brandColors.steelteal,
-        attrs: {
-            str: '#f44336',
-            agi: '#39d402',
-            int: '#01a9f4',
-        },
     },
     fonts: {
         headings:
