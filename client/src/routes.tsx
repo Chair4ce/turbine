@@ -26,7 +26,6 @@ const Routes: React.FC = () => (
         <Switch>
             <Route exact path="/" component={IndexPage} />
             <Route path="/members" component={MembersPage} />
-            {/*<Route path="/squadrons" component={SquadronsPage} />*/}
             <Route component={() => <div>Not Found</div>} />
         </Switch>
     </Root>
