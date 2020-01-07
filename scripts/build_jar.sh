@@ -9,9 +9,9 @@ pushd ${BASE_DIR}/client
 popd
 
 pushd ${BASE_DIR}
-   mvn -Dflyway.user=${PIE_DB_USERNAME} -Dflyway.password= -Dflyway.url=${PIE_DB_URL} clean flyway:migrate package -DskipTests
-    rm ${BASE_DIR}/artifacts/pie.jar || true
-    cp ${BASE_DIR}/target/pie-[0-9\.]*-SNAPSHOT.jar ${BASE_DIR}/artifacts/pie.jar
+   mvn -Dflyway.user=${TURBINE_DB_USERNAME} -Dflyway.password= -Dflyway.url=${TURBINE_DB_URL} clean flyway:migrate package -DskipTests
+    rm ${BASE_DIR}/artifacts/turbyne.jar || true
+    cp ${BASE_DIR}/target/turbyne-[0-9\.]*-SNAPSHOT.jar ${BASE_DIR}/artifacts/turbyne.jar
 popd
 
 #pushd ${BASE_DIR}

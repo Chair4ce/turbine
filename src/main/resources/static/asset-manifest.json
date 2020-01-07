@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/static/css/main.630421e3.chunk.css",
+    "main.js": "/static/js/main.b47c8d9a.chunk.js",
+    "main.js.map": "/static/js/main.b47c8d9a.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.e077b804.js",
+    "runtime-main.js.map": "/static/js/runtime-main.e077b804.js.map",
+    "static/css/2.a934fa1a.chunk.css": "/static/css/2.a934fa1a.chunk.css",
+    "static/js/2.df5f0242.chunk.js": "/static/js/2.df5f0242.chunk.js",
+    "static/js/2.df5f0242.chunk.js.map": "/static/js/2.df5f0242.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.8ce4e06e988e841544b9098cd4257d9e.js": "/precache-manifest.8ce4e06e988e841544b9098cd4257d9e.js",
+    "service-worker.js": "/service-worker.js",
+    "static/css/2.a934fa1a.chunk.css.map": "/static/css/2.a934fa1a.chunk.css.map",
+    "static/css/main.630421e3.chunk.css.map": "/static/css/main.630421e3.chunk.css.map",
+    "static/media/index.css": "/static/media/ibm-plex-sans-latin-700italic.72e9af40.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e077b804.js",
+    "static/css/2.a934fa1a.chunk.css",
+    "static/js/2.df5f0242.chunk.js",
+    "static/css/main.630421e3.chunk.css",
+    "static/js/main.b47c8d9a.chunk.js"
+  ]
+}

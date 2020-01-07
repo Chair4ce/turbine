@@ -1,6 +1,7 @@
 // This file holds our state type, as well as any other types related to this Redux store.
 
 // Response object for GET /members
+
 export interface Member extends ApiResponse {
     _id: string;
     full_name: string;
@@ -38,5 +39,4 @@ export enum MembersActionTypes {
 export interface MembersState {
     readonly loading: boolean;
     readonly data: Member[];
-    readonly errors?: string;
 }

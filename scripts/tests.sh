@@ -15,6 +15,7 @@ function main {
             unitTests
         ;;
         *)
+            yarnBuild
             jarBuild
             unitTests
             acceptanceTests
@@ -26,6 +27,8 @@ function main {
 function acceptanceTests {
     showBanner "Acceptance Tests"
 
+    #export any envars here
+
     SPECIFIC_TESTS=""
 
     if [[ "${2}" == "./tests/"*".test.ts" ]]; then
@@ -36,14 +39,14 @@ function acceptanceTests {
         ./seed_db.sh
     popd
 
-    java -jar ${BASE_DIR}/target/pie-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
-    echo $! > ${BASE_DIR}/tmp/pie.pid
+    java -jar -Dspring.profiles.active=test ${BASE_DIR}/target/turbine-[0-9\.]*-SNAPSHOT.jar --server.port=9090 &> ${BASE_DIR}/tmp/acceptance.log &
+    echo $! > ${BASE_DIR}/tmp/turbine.pid
 
-    testConnection ${REACT_APP_HOST} $(cat ${BASE_DIR}/tmp/pie.pid)
+    testConnection ${REACT_APP_HOST} $(cat ${BASE_DIR}/tmp/turbine.pid)
 
     pushd ${BASE_DIR}/acceptance
         yarn install
-        if [[ "${PIE_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
+        if [[ "${TURBINE_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
             xvfb-run yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
         else
             yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
@@ -61,6 +64,7 @@ function unitTests {
 
     pushd ${BASE_DIR}
         if [[ $(mvn test | grep -E "\[INFO\]|\[ERROR\]|Expected" | grep "\[ERROR\]" | wc -l) -gt 0 ]]; then
+            echo "Unit Tests Failed... Exiting"
             exit 1
         fi
     popd
@@ -72,9 +76,9 @@ function unitTests {
 
 function cleanup {
     showBanner "Cleanup"
-    if [[ -f ${BASE_DIR}/tmp/pie.pid ]]; then
-        cat ${BASE_DIR}/tmp/pie.pid | xargs kill -9
-        rm ${BASE_DIR}/tmp/pie.pid
+    if [[ -f ${BASE_DIR}/tmp/turbine.pid ]]; then
+        cat ${BASE_DIR}/tmp/turbine.pid | xargs kill -9
+        rm ${BASE_DIR}/tmp/turbine.pid
     fi
 
 #    pushd ${BASE_DIR}/scripts/seed_db
@@ -85,7 +89,11 @@ trap cleanup EXIT
 
 function jarBuild {
     showBanner "Build JAR"
-    ${BASE_DIR}/scripts/build_jar.sh
+       pushd ${BASE_DIR}
+        mvn -Dflyway.user=${TURBINE_DB_USERNAME} -Dflyway.password= -Dflyway.url=${TURBINE_DB_URL} clean flyway:migrate package
+        rm ${BASE_DIR}/artifacts/turbine.jar || true
+        cp ${BASE_DIR}/target/turbine-[0-9\.]*-SNAPSHOT.jar ${BASE_DIR}/artifacts/turbine.jar
+    popd
 }
 
 function setup {

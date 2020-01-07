@@ -12,7 +12,6 @@ import { Member } from '../store/members/types';
 interface PropsFromState {
     loading: boolean;
     data: Member[];
-    errors?: string;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -32,7 +31,6 @@ const MembersPage: React.FC<AllProps> = ({ match }) => {
 // separate them from each other to prevent prop conflicts.
 const mapStateToProps = ({ members }: ApplicationState) => ({
     loading: members.loading,
-    errors: members.errors,
     data: members.data,
 });
 

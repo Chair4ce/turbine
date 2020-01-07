@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
-export PIE_DB_URL="jdbc:mysql://localhost:3306/piedev?useSSL=false&serverTimezone=UTC"
-export PIE_DB_USERNAME=pie
+export TURBINE_DB_URL="jdbc:mysql://localhost:3306/turbinedev?useSSL=false&serverTimezone=UTC"
+export TURBINE_DB_USERNAME=turbine
 

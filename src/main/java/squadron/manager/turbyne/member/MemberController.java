@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping(MemberController.URI)
 public class MemberController {
-    static final String URI = "/api/members";
+    public static final String URI = "/api/members";
 
     @Autowired
     private MemberRepository memberRepository;
