@@ -36,6 +36,7 @@ import LoadingSpinner from '../../components/data/LoadingSpinner';
 interface PropsFromState {
     loading: boolean;
     data: Member[];
+    errors?: string;
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -130,6 +131,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 // separate them from each other to prevent prop conflicts.
 const mapStateToProps = ({ members }: ApplicationState) => ({
     loading: members.loading,
+    errors: members.errors,
     data: members.data,
 });
 

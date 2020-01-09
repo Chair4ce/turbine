@@ -1,0 +1,13 @@
+---
+applications:
+- name: Turbine
+  buildpacks:
+    - https://github.com/cloudfoundry/java-buildpack.git
+  memory: 1GB
+  instances: 1
+  stack: cflinuxfs3
+  services:
+    - turbinedev
+  path: turbyne.jar
+
+

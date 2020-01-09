@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>squadron.manager</groupId>
-    <artifactId>turbyne</artifactId>
+    <artifactId>turbine</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>turbyne</name>
+    <name>turbine</name>
     <description>turbine with mysql</description>
 
     <properties>

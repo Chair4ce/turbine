@@ -4,6 +4,7 @@ import { MembersState, MembersActionTypes } from './types';
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [],
+    errors: undefined,
     loading: false,
 };
 
@@ -15,7 +16,10 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             return { ...state, loading: true };
         }
         case MembersActionTypes.FETCH_SUCCESS: {
-            return { ...state, loading: false, data: action.data };
+            return { ...state, loading: false, data: action.payload };
+        }
+        case MembersActionTypes.FETCH_ERROR: {
+            return { ...state, loading: false, errors: action.payload };
         }
         default: {
             return state;

@@ -16,6 +16,7 @@ import { fetchRequest } from '../../store/members/actions';
 interface PropsFromState {
     loading: boolean;
     data: Member[];
+    errors?: string;
 }
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
@@ -83,6 +84,7 @@ class MembersIndexPage extends React.Component<AllProps> {
 // separate them from each other to prevent prop conflicts.
 const mapStateToProps = ({ members }: ApplicationState) => ({
     loading: members.loading,
+    errors: members.errors,
     data: members.data,
 });
 

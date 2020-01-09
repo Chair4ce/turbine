@@ -89,6 +89,7 @@ describe('reducer', () => {
             membersReducer(undefined, mockAction)
         ).toEqual({
             data: members,
+            errors: undefined,
             loading: false
         });
     });

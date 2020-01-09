@@ -3,7 +3,7 @@
 // Response object for GET /members
 
 export interface Member extends ApiResponse {
-    _id: string;
+    id: string;
     full_name: string;
     grade: string;
     assigned_pas: string;
@@ -39,4 +39,5 @@ export enum MembersActionTypes {
 export interface MembersState {
     readonly loading: boolean;
     readonly data: Member[];
+    readonly errors?: string;
 }

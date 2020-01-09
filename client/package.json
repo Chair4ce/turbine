@@ -5,6 +5,9 @@
   "dependencies": {
     "@emotion/core": "^10.0.17",
     "@emotion/styled": "^10.0.17",
+    "@types/react-beautiful-dnd": "^11.0.3",
+    "@types/redux-devtools-extension": "^2.13.2",
+    "@types/redux-mock-store": "^1.0.1",
     "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.4",
     "@types/classnames": "^2.2.7",
@@ -37,7 +40,8 @@
     "typeface-ibm-plex-mono": "^0.0.61",
     "typeface-ibm-plex-sans": "^0.0.75",
     "typesafe-actions": "^4.4.2",
-    "url-join": "^4.0.0"
+    "url-join": "^4.0.0",
+    "typescript": "3.2.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -76,6 +80,7 @@
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "babel-plugin-emotion": "^10.0.17",
+    "@types/url-join": "^4.0.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",
     "enzyme-to-json": "^3.4.3",
@@ -87,8 +92,7 @@
     "jest-fetch-mock": "^2.1.2",
     "prettier": "^1.18.2",
     "react-scripts": "^3.1.1",
-    "ts-jest": "^24.2.0",
-    "typescript": "3.5.3"
+    "ts-jest": "^24.2.0"
   },
   "proxy": "http://localhost:8080"
 }
