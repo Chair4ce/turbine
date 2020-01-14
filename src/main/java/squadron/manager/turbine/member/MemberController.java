@@ -3,6 +3,7 @@ package squadron.manager.turbine.member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -15,11 +16,12 @@ public class MemberController {
     @Autowired
     private MemberRepository memberRepository;
 
+    @CrossOrigin
     @GetMapping
     public List<Member> getAllMembers() throws Exception {
         return memberRepository.findAll();
     }
-
+    @CrossOrigin
     @PostMapping
     public Member create(@Valid @RequestBody MemberJSON memberJSON) {
         Member member = new Member(memberJSON.getFull_name(), memberJSON.getGrade(), memberJSON.getAssigned_pas(),
@@ -28,6 +30,7 @@ public class MemberController {
         return this.memberRepository.save(member);
     }
 
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Member> getMemberBId(@PathVariable(value = "id") Long id) throws Exception {
         System.out.println("getting member with id: " + id);

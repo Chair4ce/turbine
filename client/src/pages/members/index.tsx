@@ -30,6 +30,7 @@ type AllProps = PropsFromState & PropsFromDispatch;
 class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
         const { fetchRequest: fr } = this.props;
+        console.log("fetching members from component");
         fr();
     }
 
@@ -45,7 +46,7 @@ class MembersIndexPage extends React.Component<AllProps> {
                         <td colSpan={3}>Loading...</td>
                     </MemberLoading>
                 )}
-                {data.map(member => (
+                {!loading && data.length > 0 && (data.map(member => (
                     <tr key={member.id}>
                         <MemberDetail>
                             <MemberName>
@@ -56,7 +57,7 @@ class MembersIndexPage extends React.Component<AllProps> {
                         <td>{member.dafsc}</td>
                         <td>{member.office_symbol}</td>
                     </tr>
-                ))}
+                )))}
             </DataTable>
         );
     }

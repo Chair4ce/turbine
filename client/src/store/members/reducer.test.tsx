@@ -46,7 +46,7 @@ describe('reducer', () => {
     it('should handle FETCH_SUCCESS', () => {
         let mockAction = {
             type: MembersActionTypes.FETCH_SUCCESS,
-            data: memberList,
+            payload: memberList,
         };
 
         let members = [

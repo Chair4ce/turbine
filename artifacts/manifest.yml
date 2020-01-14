@@ -8,6 +8,6 @@ applications:
   stack: cflinuxfs3
   services:
     - turbinedev
-  path: turbyne.jar
+  path: turbine.jar
 
 
