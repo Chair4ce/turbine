@@ -26,9 +26,7 @@ export default DataTable;
 
 const Wrapper = styled('table')`
     margin-bottom: 0;
-    box-shadow: 2px 0px 25px 0px rgba(0,0,0,0.34);
-    border-top: 1px solid ${props => props.theme.colors.borders};
-    border-bottom: 1px solid ${props => props.theme.colors.borders};
+    color: ${props => props.theme.colors.textLight};
 
     thead {
 
@@ -38,20 +36,14 @@ const Wrapper = styled('table')`
                 width: 100%;
                 padding: 1rem;
                 text-align: left;
-                border-bottom: 2px solid ${props => props.theme.colors.borders};
-            }
+                    }
         }
     }
 
     tbody {
         tr {
-            border-top: 1px solid ${props => props.theme.colors.borders};
-
-            &:nth-of-type(even) {
-                background: ${props => props.theme.colors.tableOdd};
-            }
-
-            td {
+ 
+              td {
                 padding: 0.5rem 1rem;
                 font-size: 0.85rem;
             }

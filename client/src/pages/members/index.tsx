@@ -11,6 +11,7 @@ import LoadingSpinner from '../../components/data/LoadingSpinner';
 import { ApplicationState } from '../../store';
 import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
+import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -66,6 +67,7 @@ class MembersIndexPage extends React.Component<AllProps> {
 
         return (
             <Page>
+                <TopNavBar/>
                 <Container>
                     <TableWrapper>
                         {loading && (
@@ -125,7 +127,7 @@ const MemberName = styled('div')`
     margin-left: 1rem;
 
     a {
-        color: ${props => props.theme.colors.brand};
+        color: ${props => props.theme.colors.textLight};
     }
 `;
 

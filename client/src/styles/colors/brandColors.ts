@@ -15,6 +15,7 @@ const brandColors = {
     steelteal: '#337E83',
     darkGrey: '#232323',
     lightGrey: '#464646',
+    paper: '#CBCBCB',
     selected: 'rgba(255, 255, 255, 0.15)'
 };
 

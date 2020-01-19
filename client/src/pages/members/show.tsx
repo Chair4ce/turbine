@@ -31,6 +31,7 @@ import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
+import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -82,6 +83,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
         return (
             <Page>
+                <TopNavBar/>
                 <Container>
                     <Wrapper>
                         {loading && (

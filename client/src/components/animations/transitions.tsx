@@ -16,8 +16,35 @@ export const spin = keyframes`
 transform: rotateZ(0);
 }
 100% {
-transform: rotateZ(360deg);
+transform: rotateZ(180deg);
 }
+`;
+
+export const shine = keyframes`
+0%, 10% {
+background-position: -1000px;
+}
+20% {
+background-position: top left;
+}
+90% {
+background-position: top right;
+}
+100% {
+background-position: 1000px;
+}
+`;
+
+export const shinyRotation = keyframes`
+ 0% {
+transform: rotateZ(25deg) rotateX(20deg) rotateY(0deg);
+  }
+  50% {
+transform: rotateZ(-25deg) rotateX(-20deg) rotateY(180deg);
+  }
+  100% {
+transform: rotateZ(25deg) rotateX(20deg) rotateY(360deg);
+  }
 `;
 
 export const reverseSpin = keyframes`
@@ -25,7 +52,7 @@ export const reverseSpin = keyframes`
 transform: rotateZ(0);
 }
 100% {
-transform: rotateZ(-360deg);
+transform: rotateZ(-180deg);
 }
 `;
 

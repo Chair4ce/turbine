@@ -3,11 +3,11 @@ import { Route, Switch } from 'react-router-dom'
 import { Global } from '@emotion/core'
 
 import Root from './components/layout/Root'
-import Header from './components/layout/Header'
 import Main from './pages/index'
 import MembersPage from './pages/members'
 import normalize from './styles/normalize'
 import globals from './styles/globals'
+import LeftNavBar from "./components/layout/leftNavBar/LeftNavBar";
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -22,7 +22,7 @@ const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
         <Global styles={globals} />
-        <Header title="Turbine" />
+        <LeftNavBar title="Turbine" />
         <Switch>
             <Route exact path="/" component={Main} />
             <Route path="/members" component={MembersPage} />

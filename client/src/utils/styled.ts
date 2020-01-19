@@ -1,8 +1,11 @@
 import styled, { CreateStyled } from '@emotion/styled';
+import brandColors from "../styles/colors/brandColors";
 
 export interface Theme {
     colors: {
         background: string;
+        MenuBackground: string,
+        textLight: string,
         body: string;
         headings: string;
         borders: string;

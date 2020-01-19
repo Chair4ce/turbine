@@ -7,7 +7,11 @@ const pathF1 = "M17.7148 7.60266C17.6411 12.1355 14.0083 18.0962 6.93935 16.1133
 const pathF2 = "M15.975 3.88535C14.9886 2.55193 13.7069 1.80684 12.1818 1.56719C10.3228 0.809511 6.4073 1.90548 4.54015 3.94945L7.20744 2.95631C7.32316 2.91322 7.44435 2.87946 7.56673 2.86302C10.6972 2.4425 11.6962 5.45717 14.2503 6.6731C15.4235 7.23161 16.0422 6.97418 16.3679 6.52267C16.9307 5.74261 16.547 4.65865 15.975 3.88535Z";
 const GlassBallIcon = () => {
     return (
-        <Wrapper>
+        <Wrapper
+        >
+            <div
+            className="GlassShine">
+            </div>
         <svg
             width="21"
             height="21"
@@ -82,6 +86,42 @@ export default GlassBallIcon;
 
 const Wrapper = styled('div')`
 
+.GlassShine {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  height: 17px;
+  width: 16px;
+  margin:0;
+  border-radius: 50%;
+  overflow:hidden;
+  z-index: 107;
+  
+  :hover:after {
+content:'';
+top:0;
+transform:translateX(100%);
+width:100%;
+height:18px;
+position: absolute;
+z-index:1;
+animation: slide .5s 1;
+ 
+background: -moz-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(128,186,232,0) 99%, rgba(125,185,232,0) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(255,255,255,0)), color-stop(50%,rgba(255,255,255,0.8)), color-stop(99%,rgba(128,186,232,0)), color-stop(100%,rgba(125,185,232,0))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(left, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* IE10+ */
+background: linear-gradient(to right, rgba(255,255,255,0) 0%,rgba(255,255,255,0.8) 50%,rgba(128,186,232,0) 99%,rgba(125,185,232,0) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#007db9e8',GradientType=1 ); /* IE6-9 */
+  }
+}
+
+@keyframes slide {
+0% {transform:translateX(-100%);}
+100% {transform:translateX(100%);}
+}  
+
 .Dimple {
 position: absolute;
 width: 15px;
@@ -90,12 +130,17 @@ top: 2px;
 right: 3px;
 border-radius: 8px;
 background: linear-gradient(191.77deg, #373737 8.62%, rgba(55, 55, 55, 0) 50.14%, rgba(255, 255, 255, 0.3) 88.33%);
-z-index: 0;
+z-index: 100
+;
 }
 
 .GlassAddIcon {
 top: 3px;
 right: 4px;
+z-index: 101;
 }
+
+
+
 
 `;
