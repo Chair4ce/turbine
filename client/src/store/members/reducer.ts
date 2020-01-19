@@ -13,7 +13,6 @@ export const initialState: MembersState = {
 const reducer: Reducer<MembersState> = (state = initialState, action) => {
     switch (action.type) {
         case MembersActionTypes.FETCH_REQUEST: {
-            console.log("loading members");
             return {
                 ...state,
                 loading: true

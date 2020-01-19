@@ -12,7 +12,10 @@ const brandColors = {
     yellow: '#f3df49',
     red: '#eb5558',
     green: '#9ee79a',
-    steelteal: '#5288AA'
+    steelteal: '#337E83',
+    darkGrey: '#232323',
+    lightGrey: '#464646',
+    selected: 'rgba(255, 255, 255, 0.15)'
 };
 
 export default brandColors;

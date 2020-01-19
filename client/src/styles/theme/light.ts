@@ -11,7 +11,8 @@ const lightTheme: Theme = {
         white: brandColors.white,
         borders: darken(0.05, brandColors.gray5),
         tableOdd: darken(0.025, brandColors.gray5),
-        brand: brandColors.red
+        brand: brandColors.red,
+        menuTitleBar: brandColors.steelteal,
     },
     fonts: {
         headings:
@@ -37,6 +38,7 @@ const lightTheme: Theme = {
         xl: '1200px',
     },
     widths: {
+        sm: '168px',
         md: '720px',
         lg: '960px',
         xl: '1140px',

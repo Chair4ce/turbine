@@ -11,6 +11,24 @@ export const EaseIn = keyframes`
   } 
 `;
 
+export const spin = keyframes`
+0% {
+transform: rotateZ(0);
+}
+100% {
+transform: rotateZ(360deg);
+}
+`;
+
+export const reverseSpin = keyframes`
+0% {
+transform: rotateZ(0);
+}
+100% {
+transform: rotateZ(-360deg);
+}
+`;
+
 export const EaseOut = keyframes`
   0% {
   opacity: 1;

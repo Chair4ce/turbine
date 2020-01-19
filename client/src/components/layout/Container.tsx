@@ -6,7 +6,6 @@ import {EaseIn} from "../animations/transitions";
 
 const Container = styled('div')`
     margin-left: 0;
-    width: 100%;
     max-width: ${props => props.theme.widths.md};
 
     @media (min-width: ${props => props.theme.breakpoints.lg}) {

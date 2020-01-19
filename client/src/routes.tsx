@@ -4,7 +4,7 @@ import { Global } from '@emotion/core'
 
 import Root from './components/layout/Root'
 import Header from './components/layout/Header'
-import IndexPage from './pages/index'
+import Main from './pages/index'
 import MembersPage from './pages/members'
 import normalize from './styles/normalize'
 import globals from './styles/globals'
@@ -24,7 +24,7 @@ const Routes: React.FC = () => (
         <Global styles={globals} />
         <Header title="Turbine" />
         <Switch>
-            <Route exact path="/" component={IndexPage} />
+            <Route exact path="/" component={Main} />
             <Route path="/members" component={MembersPage} />
             <Route component={() => <div>Not Found</div>} />
         </Switch>

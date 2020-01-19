@@ -10,6 +10,7 @@ export interface Theme {
         brand: string;
         black: string;
         white: string;
+        menuTitleBar: string;
     };
     fonts: {
         body: string;
@@ -31,6 +32,7 @@ export interface Theme {
         xl: string;
     };
     widths: {
+        sm: string;
         md: string;
         lg: string;
         xl: string;

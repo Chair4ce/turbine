@@ -3,7 +3,7 @@ import Page from '../components/layout/Page'
 import Container from '../components/layout/Container'
 import styled from '../utils/styled'
 
-function IndexPage() {
+function Main() {
   return (
     <Page>
       <Container>
@@ -15,7 +15,7 @@ function IndexPage() {
   )
 }
 
-export default IndexPage
+export default Main
 
 const PageContent = styled('article')`
   max-width: ${props => props.theme.widths.md};

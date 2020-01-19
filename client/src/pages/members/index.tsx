@@ -30,7 +30,6 @@ type AllProps = PropsFromState & PropsFromDispatch;
 class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
         const { fetchRequest: fr } = this.props;
-        console.log("fetching members from component");
         fr();
     }
 

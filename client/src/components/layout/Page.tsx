@@ -1,7 +1,8 @@
 import styled from '../../utils/styled';
 
 const Page = styled('div')`
-    margin-top: 3rem;
+  margin-top: 60px;
+    margin-left: 198px;
     display: flex;
     flex-direction: row;
     flex: 1 1 auto;
