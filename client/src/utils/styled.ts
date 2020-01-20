@@ -1,5 +1,4 @@
 import styled, { CreateStyled } from '@emotion/styled';
-import brandColors from "../styles/colors/brandColors";
 
 export interface Theme {
     colors: {

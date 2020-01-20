@@ -24,19 +24,20 @@ import {
     MemberDetailsAttrName,
 } from '../../components/members/MemberDetails';
 import Page from '../../components/layout/Page';
-import Container from '../../components/layout/Container';
+import PageContainer from '../../components/layout/PageContainer';
 
 import { ApplicationState } from '../../store';
-import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
+import MemberModel from "../../store/members/MemberModel";
+import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
     loading: boolean;
-    data: Member[];
+    data: MemberModel[];
     errors?: string;
 }
 
@@ -50,7 +51,7 @@ interface RouteParams {
 }
 
 interface State {
-    selected?: Member;
+    selected?: MemberModel;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -84,7 +85,8 @@ class ShowMembersPage extends React.Component<AllProps, State> {
         return (
             <Page>
                 <TopNavBar/>
-                <Container>
+                <LeftNavBar/>
+                <PageContainer>
                     <Wrapper>
                         {loading && (
                                     <LoadingSpinner />
@@ -122,7 +124,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
                             </>
                         )}
                     </Wrapper>
-                </Container>
+                </PageContainer>
             </Page>
         );
     }

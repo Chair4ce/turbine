@@ -1,9 +1,10 @@
 import { Reducer } from 'redux';
 import { MembersState, MembersActionTypes } from './types';
+import MemberModel from "./MemberModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
-    data: [],
+    data: [] as MemberModel[],
     errors: undefined,
     loading: false,
 };

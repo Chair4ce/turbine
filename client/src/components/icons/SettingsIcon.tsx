@@ -44,7 +44,7 @@ const SettingsIcon = () => {
                 <filter id="filter1_b" x="7.55898" y="7.55905" width="14.882" height="14.882" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
                     <feFlood floodOpacity="0" result="BackgroundImageFix"/>
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-                    <feOffset dy="1"/>
+                    <feOffset dy="0"/>
                     <feGaussianBlur stdDeviation="0.5"/>
                     <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0"/>
                     <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>

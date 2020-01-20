@@ -135,7 +135,7 @@ z-index: 100
 }
 
 .GlassAddIcon {
-top: 3px;
+top: 2px;
 right: 4px;
 z-index: 101;
 }
