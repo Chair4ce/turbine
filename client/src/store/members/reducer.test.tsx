@@ -1,4 +1,4 @@
-import {MembersActionTypes} from "./types";
+import {MemberActionTypes} from "./types";
 import {membersReducer} from "./reducer";
 import MemberModel from "./MemberModel";
 
@@ -45,7 +45,7 @@ describe('reducer', () => {
 
     it('should handle FETCH_SUCCESS', () => {
         let mockAction = {
-            type: MembersActionTypes.FETCH_SUCCESS,
+            type: MemberActionTypes.FETCH_SUCCESS,
             payload: memberList,
         };
 

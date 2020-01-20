@@ -1,0 +1,15 @@
+CREATE TABLE AET
+(
+    id      INT(11) NOT NULL AUTO_INCREMENT,
+    org_id  TEXT,
+    pas_Code TEXT,
+    PRIMARY KEY (id)
+);
+
+
+INSERT INTO AET (org_id, pas_Code) VALUES
+('CFT1', 'QAZWSXEDC'),
+('CFT2','QAZWSXEDC'),
+('CFT3','QAZWSXEDC'),
+('CFT1', 'WSXEDCRFV'),
+('CFT2','WSXEDCRFV');

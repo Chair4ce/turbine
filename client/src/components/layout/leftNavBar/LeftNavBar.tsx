@@ -3,23 +3,33 @@ import SettingsIcon from "../../icons/SettingsIcon";
 import styled from "../../../utils/styled";
 import {shine} from "../../animations/transitions";
 import {connect} from "react-redux";
-import {fetchRequest} from "../../../store/squadrons/actions";
+import {showSquadronInput, squadronsFetchRequest, updateSquadronInputState} from "../../../store/squadrons/actions";
 import {ApplicationState} from "../../../store";
-import MenuTitleBar from "../../icons/MenuTitleBar";
-import GlassBallIcon from "../../icons/GlassBall";
 import SquadronModel from "../../../store/squadrons/SquadronModel";
-import ItemRow from "../LeftNavMenu";
+import FlightModel from "../../../store/flights/FlightModel";
+import AETModel from "../../../store/AETs/AETModel";
+import {flightsFetchRequest} from "../../../store/flights/actions";
+import {AETsFetchRequest} from "../../../store/AETs/actions";
+import {StyledAddSquadronBar} from "./AddSquadronBar";
+import MenuTitleBar from "./MenuTitleBar";
+import ItemRow from "./ItemRow";
 
 interface PropsFromState {
-    loading: boolean;
+    sqLoading: boolean;
     squadrons: SquadronModel[];
-    addSquadron?: boolean;
-    errors?: string;
+    newInput: SquadronModel | undefined;
+    showSqInput: boolean;
+    sqErrors?: string;
+    flights: FlightModel[];
+    AETs: AETModel[];
 }
 
 interface PropsFromDispatch {
-    fetchRequest: typeof fetchRequest;
-    // filterMembers: typeof filterMembers;
+    squadronsFetchRequest: typeof squadronsFetchRequest;
+    flightsFetchRequest: typeof flightsFetchRequest;
+    AETsFetchRequest: typeof AETsFetchRequest;
+    showSquadronInput: typeof showSquadronInput;
+    updateSquadronInputState: typeof updateSquadronInputState;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -27,38 +37,10 @@ type AllProps = PropsFromState & PropsFromDispatch;
 
 class LeftNavBar extends React.Component<AllProps> {
     public componentDidMount() {
-        const {fetchRequest: fr} = this.props;
-        fr();
-    }
-
-    private renderSquadronMenu() {
-        const {squadrons} = this.props;
-        return (
-            <MenuWrapper>
-                <MenuTitle>
-                    <span>{"Squadrons"}</span>
-                    <MenuTitleBar/>
-                </MenuTitle>
-
-                <Menu>
-                    {squadrons.map((squadron, index) =>
-                        <ItemRow
-                            key={index}
-                            item={squadron.squadron}
-                            clickItem={() => {}}
-                        />
-                    )}
-                    {/*{addSquadron && (*/}
-                    {/*    <AddSquadronRow/>*/}
-                    {/*)}*/}
-                </Menu>
-
-                <MenuActionBall>
-                    <GlassBallIcon/>
-                </MenuActionBall>
-
-            </MenuWrapper>
-        )
+        const {squadronsFetchRequest: sfr, flightsFetchRequest: ffr, AETsFetchRequest: afr} = this.props;
+        sfr();
+        ffr();
+        afr();
     }
 
     public render() {
@@ -69,6 +51,8 @@ class LeftNavBar extends React.Component<AllProps> {
                         className="chrome">{"Turbine"}</AppTitle>
                 </LeftNavBarTitle>
                 {this.renderSquadronMenu()}
+                {this.renderflightsMenu()}
+                {this.renderAETsMenu()}
                 <AppButtonSection>
                     <SettingsIcon/>
                 </AppButtonSection>
@@ -77,17 +61,109 @@ class LeftNavBar extends React.Component<AllProps> {
             </Wrapper>
         );
     }
+
+    private renderSquadronMenu() {
+        const {squadrons, squadronsFetchRequest: sfr, showSqInput} = this.props;
+        return (
+            <MenuWrapper>
+                <MenuTitle>
+                    <span>{"Squadrons"}</span>
+                    <MenuTitleBar
+                        clickAction={this.props.showSquadronInput}
+                    />
+                </MenuTitle>
+                <Menu>
+                    {squadrons.map((squadron, index) =>
+                        <ItemRow
+                            key={index}
+                            active={showSqInput}
+                            column1={squadron.squadron}
+                            column2={squadron.pas_Code}
+                            clickItem={() => {}}
+                        />
+                    )}
+                </Menu>
+                    {showSqInput && (
+                        <StyledAddSquadronBar
+                        />
+                    )}
+            </MenuWrapper>
+        )
+    }
+
+    private renderflightsMenu() {
+        const {flights} = this.props;
+        return (
+            <MenuWrapper>
+                <MenuTitle>
+                    <span>{"Flights"}</span>
+                    {/*<MenuTitleBar/>*/}
+                </MenuTitle>
+                <Menu>
+
+                    {flights.map((flight, index) =>
+                        <ItemRow
+                            key={index}
+                            active={true}
+                            column1={flight.org_id}
+                            clickItem={() => {}}
+                        />
+                    )}
+                    {/*{addFlights && (*/}
+                    {/*    <AddFlightRow/>*/}
+                    {/*)}*/}
+                </Menu>
+            </MenuWrapper>
+        )
+    }
+
+    private renderAETsMenu() {
+        const {AETs} = this.props;
+        return (
+            <MenuWrapper>
+                <MenuTitle>
+                    <span>{"AETs"}</span>
+                    {/*<MenuTitleBar/>*/}
+                </MenuTitle>
+
+                <Menu>
+
+                    {AETs.map((AET, index) =>
+                        <ItemRow
+                            key={index}
+                            active={true}
+                            column1={AET.org_id}
+                            clickItem={() => {}}
+                        />
+                    )}
+
+                    {/*{addAET && (*/}
+                    {/*    <AddAETRow/>*/}
+                    {/*)}*/}
+                </Menu>
+            </MenuWrapper>
+        )
+    }
 }
 
-const mapStateToProps = ({squadrons}: ApplicationState) => ({
-    loading: squadrons.loading,
-    errors: squadrons.errors,
+const mapStateToProps = ({squadrons, flights, AETs}: ApplicationState) => ({
+    sqLoading: squadrons.loading,
+    sqErrors: squadrons.errors,
     squadrons: squadrons.squadrons,
+    postNewSq: squadrons.posting,
+    newInput: squadrons.newInput,
+    showSqInput: squadrons.showInput,
+    flights: flights.flights,
+    AETs: AETs.AETs,
 });
 
 
 const mapDispatchToProps = {
-    fetchRequest,
+    squadronsFetchRequest,
+    showSquadronInput,
+    updateSquadronInputState,
+    flightsFetchRequest,
+    AETsFetchRequest,
 };
 
 export default connect(
@@ -100,29 +176,37 @@ display: block;
 width: 100%;
   font-family: ${props => props.theme.fonts.headings};
   font-size: large;
+  margin-bottom: 1px;
+  .MenuItemRow {
+  :hover {
+   background: #333;
+   color: ${props => props.theme.colors.textLight};
+}
+  }
 `;
 
 const Menu = styled('div')`
 width: inherit;
+margin-top: 5px;
 `;
 
-const MenuActionBall = styled('div')`
-cursor: pointer;
-position: absolute;
-right: 6px;
-top: 50px;
-`;
 
 const MenuTitle = styled('div')`
-  height: 100%;
+  width: 100%;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   
 span {
-    width: 90%;
-    height: 24px;
-    position: absolute;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding-left: 10px;
+    width: 100%;
+    font-size: 22px;
+    font-weight: bold;
+    height: 29px;
 }
 
 `;
@@ -133,7 +217,6 @@ display: flex;
 flex-direction: row;
 justify-content: flex-start;
 align-items: center;
-padding-left: 10px;
 position: fixed;
 bottom: 0;
 height: 45px;
@@ -170,12 +253,11 @@ margin: 0 auto;
 .chrome {
 background: #222 -webkit-linear-gradient(-40deg, transparent 0%, transparent 40%, #fff 50%, transparent 60%, transparent 100%) no-repeat 0 0;
 -webkit-background-size: 200px;
-color: rgba(255, 255, 255, 0.3);
+color: white;
 -webkit-background-clip: text;
 -webkit-animation-name: ${shine};
 -webkit-animation-duration: 20s;
 -webkit-animation-iteration-count: infinite;
-text-shadow: 0 0 0 rgba(255, 255, 255, 0.5);
 }
 
 `;
@@ -190,7 +272,7 @@ width: 1px;
 height: 100%;
 left: 198px;
 top: 0px;
-background: #949494;
+background: rgba(148,148,148,0.38);
 /* Borders */
 
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);

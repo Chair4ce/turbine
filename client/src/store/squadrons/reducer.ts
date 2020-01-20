@@ -1,12 +1,16 @@
 import { Reducer } from 'redux';
 import { SquadronsState, SquadronActionTypes } from './types';
 import SquadronModel from "./SquadronModel";
+import {postNewSquadron} from "./sagas";
 
 // Type-safe initialState!
 export const initialState: SquadronsState = {
     squadrons: [] as SquadronModel[],
+    newInput: {} as SquadronModel,
     errors: undefined,
     loading: false,
+    showInput: false,
+    posting: false,
 };
 
 // Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
@@ -24,6 +28,28 @@ const reducer: Reducer<SquadronsState> = (state = initialState, action) => {
         }
         case SquadronActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };
+        }
+        case SquadronActionTypes.SHOW_INPUT: {
+            return {
+                ...state,
+                showInput: !state.showInput
+            };
+        }
+        case SquadronActionTypes.POST_REQUEST: {
+            console.log("POST_REQUEST");
+            postNewSquadron(action.payload);
+            return {
+                ...state,
+                posting: true
+            };
+        }
+        case SquadronActionTypes.POST_SUCCESS: {
+            console.log("POST_SUCCESS");
+            return {
+                ...state,
+                showInput: false,
+                posting: false
+            };
         }
         default: {
             return state;

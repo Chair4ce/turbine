@@ -1,5 +1,5 @@
 import { Reducer } from 'redux';
-import { MembersState, MembersActionTypes } from './types';
+import { MembersState, MemberActionTypes } from './types';
 import MemberModel from "./MemberModel";
 
 // Type-safe initialState!
@@ -13,16 +13,16 @@ export const initialState: MembersState = {
 // everything will remain type-safe.
 const reducer: Reducer<MembersState> = (state = initialState, action) => {
     switch (action.type) {
-        case MembersActionTypes.FETCH_REQUEST: {
+        case MemberActionTypes.FETCH_REQUEST: {
             return {
                 ...state,
                 loading: true
             };
         }
-        case MembersActionTypes.FETCH_SUCCESS: {
+        case MemberActionTypes.FETCH_SUCCESS: {
             return { ...state, loading: false, data: action.payload };
         }
-        case MembersActionTypes.FETCH_ERROR: {
+        case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };
         }
         default: {

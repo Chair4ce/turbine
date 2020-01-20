@@ -4,8 +4,8 @@ import brandColors from '../colors/brandColors';
 
 const lightTheme: Theme = {
     colors: {
-        background: brandColors.darkGrey,
-        MenuBackground: brandColors.darkGrey,
+        background: brandColors.turbine_gray,
+        MenuBackground: brandColors.background_sheen,
         textLight: brandColors.gray60,
         body: brandColors.gray10,
         headings: brandColors.gray5,
@@ -14,7 +14,7 @@ const lightTheme: Theme = {
         borders: lighten(0.05, brandColors.gray75),
         tableOdd: lighten(0.025, brandColors.gray75),
         brand: brandColors.steelteal,
-        menuTitleBar: brandColors.selected,
+        menuTitleBar: brandColors.turbine_light_gray,
     },
     fonts: {
         headings:

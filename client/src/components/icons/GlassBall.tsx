@@ -8,75 +8,80 @@ const pathF2 = "M15.975 3.88535C14.9886 2.55193 13.7069 1.80684 12.1818 1.56719C
 const GlassBallIcon = () => {
     return (
         <Wrapper
+            className="GlassBall"
         >
             <div
             className="GlassShine">
             </div>
-        <svg
-            width="21"
-            height="21"
-            viewBox="0 0 21 21"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-        >
-            <g filter="url(#filter0_c)">
-                <path
-                    d={pathD1}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
-            <g filter="url(#filter1_d)">
-                <path
-                    d={pathF1}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
-            <g filter="url(#filter2_e)">
-                <path
-                    d={pathF2}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
-            <g filter="url(#filter3_f)">
-                <ellipse cx="6.18262" cy="7.08311" rx="2.00974" ry="1.35485" transform="rotate(128.307 6.18262 7.08311)" fill="white" fillOpacity="0.59"/>
-            </g>
+        {/*<svg*/}
+        {/*    width="21"*/}
+        {/*    height="21"*/}
+        {/*    viewBox="0 0 21 21"*/}
+        {/*    fill="none"*/}
+        {/*    xmlns="http://www.w3.org/2000/svg"*/}
+        {/*>*/}
+        {/*    /!*<g filter="url(#filter0_c)">*!/*/}
+        {/*    /!*    <path*!/*/}
+        {/*    /!*        d={pathD1}*!/*/}
+        {/*    /!*        fill='#FFFFFF'*!/*/}
+        {/*    /!*        fillRule="evenodd"*!/*/}
+        {/*    /!*        clipRule="evenodd"*!/*/}
+        {/*    /!*    />*!/*/}
+        {/*    /!*</g>*!/*/}
+        {/*    /!*<g filter="url(#filter1_d)">*!/*/}
+        {/*    /!*    <path*!/*/}
+        {/*    /!*        d={pathF1}*!/*/}
+        {/*    /!*        fill='#FFFFFF'*!/*/}
+        {/*    /!*        fillRule="evenodd"*!/*/}
+        {/*    /!*        clipRule="evenodd"*!/*/}
+        {/*    /!*    />*!/*/}
+        {/*    /!*</g>*!/*/}
+        {/*    /!*<g filter="url(#filter2_e)">*!/*/}
+        {/*    /!*    <path*!/*/}
+        {/*    /!*        d={pathF2}*!/*/}
+        {/*    /!*        fill='#FFFFFF'*!/*/}
+        {/*    /!*        fillRule="evenodd"*!/*/}
+        {/*    /!*        clipRule="evenodd"*!/*/}
+        {/*    /!*    />*!/*/}
+        {/*    /!*</g>*!/*/}
+        {/*    <g filter="url(#filter3_f)">*/}
+        {/*        <ellipse cx="6.18262" cy="7.08311" rx="2.00974" ry="1.35485" transform="rotate(128.307 6.18262 7.08311)" fill="white" fillOpacity="0.59"/>*/}
+        {/*    </g>*/}
 
-            <defs>
-                <filter id="filter0_c" x="0" y="0" width="21" height="21" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
-                    <feOffset dy="1"/>
-                    <feGaussianBlur stdDeviation="1"/>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0"/>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
-                </filter>
-                <filter id="filter1_d" x="6.43935" y="7.10266" width="12.0078" height="10.2039" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                    <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>
-                </filter>
-                <filter id="filter2_e" x="4.04015" y="0.826538" width="13.1034" height="6.66496" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                    <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>
-                </filter>
-                <filter id="filter3_f" x="3.37369" y="4.16626" width="5.61786" height="5.83376" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-                    <feFlood floodOpacity="0" result="BackgroundImageFix"/>
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-                    <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>
-                </filter>
-            </defs>
-        </svg>
+        {/*    <defs>*/}
+        {/*        <filter id="filter0_c" x="0" y="0" width="21" height="21" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">*/}
+        {/*            <feFlood floodOpacity="0" result="BackgroundImageFix"/>*/}
+        {/*            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>*/}
+        {/*            <feOffset dy="1"/>*/}
+        {/*            <feGaussianBlur stdDeviation="1"/>*/}
+        {/*            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.9 0"/>*/}
+        {/*            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>*/}
+        {/*            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>*/}
+        {/*        </filter>*/}
+        {/*        <filter id="filter1_d" x="6.43935" y="7.10266" width="12.0078" height="10.2039" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">*/}
+        {/*            <feFlood floodOpacity="0" result="BackgroundImageFix"/>*/}
+        {/*            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>*/}
+        {/*            <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>*/}
+        {/*        </filter>*/}
+        {/*        <filter id="filter2_e" x="4.04015" y="0.826538" width="13.1034" height="6.66496" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">*/}
+        {/*            <feFlood floodOpacity="0" result="BackgroundImageFix"/>*/}
+        {/*            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>*/}
+        {/*            <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>*/}
+        {/*        </filter>*/}
+        {/*        <filter id="filter3_f" x="3.37369" y="4.16626" width="5.61786" height="5.83376" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">*/}
+        {/*            <feFlood floodOpacity="0" result="BackgroundImageFix"/>*/}
+        {/*            <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>*/}
+        {/*            <feGaussianBlur stdDeviation="0.25" result="effect1_foregroundBlur"/>*/}
+        {/*        </filter>*/}
+        {/*    </defs>*/}
+        {/*</svg>*/}
             <GlassAddIcon/>
+            <div className={"box"}>
+
             <div
                 className="Dimple">
+
+            </div>
             </div>
         </Wrapper>
     );
@@ -86,18 +91,25 @@ export default GlassBallIcon;
 
 const Wrapper = styled('div')`
 
+.GlassBall {
+width: 21px;
+height: 21px;
+position: absolute;
+right: 6px;
+}
+
 .GlassShine {
   position: absolute;
   top: 1px;
   right: 2px;
   height: 17px;
-  width: 16px;
+  width: 17px;
   margin:0;
   border-radius: 50%;
   overflow:hidden;
   z-index: 107;
   
-  :hover:after {
+:hover:after {
 content:'';
 top:0;
 transform:translateX(100%);
@@ -124,10 +136,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 
 .Dimple {
 position: absolute;
-width: 15px;
-height: 15px;
-top: 2px;
-right: 3px;
+width: 17px;
+height: 17px;
+top: 1px;
+right: 2px;
 border-radius: 8px;
 background: linear-gradient(191.77deg, #373737 8.62%, rgba(55, 55, 55, 0) 50.14%, rgba(255, 255, 255, 0.3) 88.33%);
 z-index: 100
@@ -135,10 +147,15 @@ z-index: 100
 }
 
 .GlassAddIcon {
-top: 3px;
-right: 4px;
-z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  right: 0;
+  z-index: 101;
 }
+
+
 
 
 

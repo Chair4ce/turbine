@@ -27,7 +27,7 @@ import Page from '../../components/layout/Page';
 import PageContainer from '../../components/layout/PageContainer';
 
 import { ApplicationState } from '../../store';
-import { fetchRequest } from '../../store/members/actions';
+import { membersFetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
@@ -43,7 +43,7 @@ interface PropsFromState {
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface PropsFromDispatch {
-    fetchMembers: typeof fetchRequest;
+    membersFetchRequest: typeof membersFetchRequest;
 }
 
 interface RouteParams {
@@ -71,10 +71,10 @@ class ShowMembersPage extends React.Component<AllProps, State> {
     }
 
     public componentDidMount() {
-        const { data, fetchMembers } = this.props;
+        const { data, membersFetchRequest } = this.props;
 
         if (!data || data.length === 0) {
-            fetchMembers();
+            membersFetchRequest();
         }
     }
 
@@ -142,7 +142,7 @@ const mapStateToProps = ({ members }: ApplicationState) => ({
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.
 const mapDispatchToProps = {
-    fetchMembers: fetchRequest,
+    membersFetchRequest: membersFetchRequest,
 };
 
 // Now let's connect our component!

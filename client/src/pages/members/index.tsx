@@ -9,7 +9,7 @@ import DataTable from '../../components/layout/DataTable';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 
 import { ApplicationState } from '../../store';
-import { fetchRequest } from '../../store/members/actions';
+import { membersFetchRequest } from '../../store/members/actions';
 import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 import MemberModel from "../../store/members/MemberModel";
 import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
@@ -23,7 +23,7 @@ interface PropsFromState {
 
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface PropsFromDispatch {
-    fetchRequest: typeof fetchRequest;
+    membersFetchRequest: typeof membersFetchRequest;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -31,7 +31,7 @@ type AllProps = PropsFromState & PropsFromDispatch;
 
 class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
-        const { fetchRequest: fr } = this.props;
+        const { membersFetchRequest: fr } = this.props;
         fr();
     }
 
@@ -97,7 +97,7 @@ const mapStateToProps = ({ members }: ApplicationState) => ({
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
 // You can access these via `this.props`.
 const mapDispatchToProps = {
-    fetchRequest,
+    membersFetchRequest,
 };
 
 // Now let's connect our component!

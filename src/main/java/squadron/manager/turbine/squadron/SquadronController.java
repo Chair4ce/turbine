@@ -23,7 +23,7 @@ public class SquadronController {
 
 
     @CrossOrigin
-    @PostMapping
+    @PostMapping(path = "/add")
     public Squadron create(@Valid @RequestBody SquadronJSON squadronJSON){
         Squadron squadron = new Squadron(squadronJSON.getSquadron(),
                 squadronJSON.getPas_Code(), squadronJSON.getGroup_PAS());
