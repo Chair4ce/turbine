@@ -43,7 +43,14 @@ export default GlassAddIcon;
 
 const Wrapper = styled('div')`
 position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 1px;
+height: 100%;
+width:100%;
 .GlassAddIconPathD1 {
+position: absolute;
  fill: ${props => props.theme.colors.brand};
 }
 `;

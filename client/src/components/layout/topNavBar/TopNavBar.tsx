@@ -14,7 +14,7 @@ position: absolute;
 width: 100%;
 height: 1px;
 top: 46px;
-background: #949494;
+background: rgba(148,148,148,0.38);
 box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25)`;
 
 

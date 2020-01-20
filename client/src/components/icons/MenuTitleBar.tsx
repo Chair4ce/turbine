@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from '../../utils/styled';
+import GlassBallIcon from "./GlassBall";
 const pathD1 = "M198 0H0V27H198V0ZM182.5 23C187.747 23 192 18.7467 192 13.5C192 8.25329 187.747 4 182.5 4C177.253 4 173 8.25329 173 13.5C173 18.7467 177.253 23 182.5 23Z";
 
 const MenuTitleBar = () => {
@@ -34,6 +35,9 @@ const MenuTitleBar = () => {
                 </filter>
             </defs>
         </svg>
+            <ActionBall>
+                <GlassBallIcon/>
+            </ActionBall>
         </Wrapper>
     );
 };
@@ -43,12 +47,25 @@ export default MenuTitleBar;
 
 
 const Wrapper = styled('div')`
-display: inline-flex;
 width: 100%;
+height: 29px;
+ display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
 .MenuTitleBarPathD1 {
 fill: ${props => props.theme.colors.menuTitleBar};
 }
 
+`;
 
-
+const ActionBall = styled('div')`
+position: absolute;
+right: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+cursor: pointer;
+width: 21px;
+height: 21px;
 `;

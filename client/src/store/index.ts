@@ -11,12 +11,20 @@ import { MembersState } from './members/types';
 import { SquadronsState } from "./squadrons/types";
 import { squadronsReducer } from "./squadrons/reducer";
 import squadronSaga from "./squadrons/sagas";
+import {FlightsState} from "./flights/types";
+import {AETsState} from "./AETs/types";
+import {flightsReducer} from "./flights/reducer";
+import {AETsReducer} from "./AETs/reducer";
+import flightSaga from "./flights/sagas";
+import AETSaga from "./AETs/sagas";
 
 // The top-level state object
 export interface ApplicationState {
     layout: LayoutState;
     members: MembersState;
-    squadrons: SquadronsState
+    squadrons: SquadronsState;
+    flights: FlightsState;
+    AETs: AETsState;
     router: RouterState;
 }
 
@@ -27,6 +35,8 @@ export const createRootReducer = (history: History) =>
     combineReducers({
         layout: layoutReducer,
         squadrons: squadronsReducer,
+        flights: flightsReducer,
+        AETs: AETsReducer,
         members: membersReducer,
         router: connectRouter(history),
     });
@@ -35,5 +45,5 @@ export const createRootReducer = (history: History) =>
 // "generator function", which you can read about here:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
 export function* rootSaga() {
-    yield all([fork(membersSaga),fork(squadronSaga)]);
+    yield all([fork(membersSaga),fork(squadronSaga),fork(flightSaga), fork(AETSaga)]);
 }

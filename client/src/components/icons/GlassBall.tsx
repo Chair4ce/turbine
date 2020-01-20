@@ -8,6 +8,7 @@ const pathF2 = "M15.975 3.88535C14.9886 2.55193 13.7069 1.80684 12.1818 1.56719C
 const GlassBallIcon = () => {
     return (
         <Wrapper
+            className="GlassBall"
         >
             <div
             className="GlassShine">
@@ -19,30 +20,30 @@ const GlassBallIcon = () => {
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
-            <g filter="url(#filter0_c)">
-                <path
-                    d={pathD1}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
-            <g filter="url(#filter1_d)">
-                <path
-                    d={pathF1}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
-            <g filter="url(#filter2_e)">
-                <path
-                    d={pathF2}
-                    fill='#FFFFFF'
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                />
-            </g>
+            {/*<g filter="url(#filter0_c)">*/}
+            {/*    <path*/}
+            {/*        d={pathD1}*/}
+            {/*        fill='#FFFFFF'*/}
+            {/*        fillRule="evenodd"*/}
+            {/*        clipRule="evenodd"*/}
+            {/*    />*/}
+            {/*</g>*/}
+            {/*<g filter="url(#filter1_d)">*/}
+            {/*    <path*/}
+            {/*        d={pathF1}*/}
+            {/*        fill='#FFFFFF'*/}
+            {/*        fillRule="evenodd"*/}
+            {/*        clipRule="evenodd"*/}
+            {/*    />*/}
+            {/*</g>*/}
+            {/*<g filter="url(#filter2_e)">*/}
+            {/*    <path*/}
+            {/*        d={pathF2}*/}
+            {/*        fill='#FFFFFF'*/}
+            {/*        fillRule="evenodd"*/}
+            {/*        clipRule="evenodd"*/}
+            {/*    />*/}
+            {/*</g>*/}
             <g filter="url(#filter3_f)">
                 <ellipse cx="6.18262" cy="7.08311" rx="2.00974" ry="1.35485" transform="rotate(128.307 6.18262 7.08311)" fill="white" fillOpacity="0.59"/>
             </g>
@@ -86,18 +87,25 @@ export default GlassBallIcon;
 
 const Wrapper = styled('div')`
 
+.GlassBall {
+width: 21px;
+height: 21px;
+position: absolute;
+right: 6px;
+}
+
 .GlassShine {
   position: absolute;
   top: 1px;
   right: 2px;
   height: 17px;
-  width: 16px;
+  width: 17px;
   margin:0;
   border-radius: 50%;
   overflow:hidden;
   z-index: 107;
   
-  :hover:after {
+:hover:after {
 content:'';
 top:0;
 transform:translateX(100%);
@@ -124,10 +132,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', e
 
 .Dimple {
 position: absolute;
-width: 15px;
-height: 15px;
-top: 2px;
-right: 3px;
+width: 17px;
+height: 17px;
+top: 1px;
+right: 2px;
 border-radius: 8px;
 background: linear-gradient(191.77deg, #373737 8.62%, rgba(55, 55, 55, 0) 50.14%, rgba(255, 255, 255, 0.3) 88.33%);
 z-index: 100
@@ -135,9 +143,11 @@ z-index: 100
 }
 
 .GlassAddIcon {
-top: 2px;
-right: 4px;
-z-index: 101;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  z-index: 101;
 }
 
 
