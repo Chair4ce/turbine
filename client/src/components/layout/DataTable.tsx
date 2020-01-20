@@ -25,27 +25,22 @@ const DataTable: React.FC<DataTableProps> = ({ children, widths, columns }) => (
 export default DataTable;
 
 const Wrapper = styled('table')`
-    margin-bottom: 0;
     color: ${props => props.theme.colors.textLight};
-
     thead {
-
         tr {
-
             th {
                 width: 100%;
                 padding: 1rem;
                 text-align: left;
-                    }
+               }
         }
     }
 
     tbody {
         tr {
- 
-              td {
-                padding: 0.5rem 1rem;
-                font-size: 0.85rem;
+         td {
+          padding: 0.5rem 1rem;
+          font-size: 0.85rem;
             }
         }
     }

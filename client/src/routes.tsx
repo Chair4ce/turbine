@@ -7,7 +7,6 @@ import Main from './pages/index'
 import MembersPage from './pages/members'
 import normalize from './styles/normalize'
 import globals from './styles/globals'
-import LeftNavBar from "./components/layout/leftNavBar/LeftNavBar";
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -22,7 +21,7 @@ const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
         <Global styles={globals} />
-        <LeftNavBar title="Turbine" />
+
         <Switch>
             <Route exact path="/" component={Main} />
             <Route path="/members" component={MembersPage} />

@@ -4,19 +4,20 @@ import { connect } from 'react-redux';
 
 import styled from '../../utils/styled';
 import Page from '../../components/layout/Page';
-import Container from '../../components/layout/Container';
+import PageContainer from '../../components/layout/PageContainer';
 import DataTable from '../../components/layout/DataTable';
 import LoadingSpinner from '../../components/data/LoadingSpinner';
 
 import { ApplicationState } from '../../store';
-import { Member } from '../../store/members/types';
 import { fetchRequest } from '../../store/members/actions';
 import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
+import MemberModel from "../../store/members/MemberModel";
+import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
     loading: boolean;
-    data: Member[];
+    data: MemberModel[];
     errors?: string;
 }
 
@@ -66,16 +67,19 @@ class MembersIndexPage extends React.Component<AllProps> {
         const { loading } = this.props;
 
         return (
-            <Page>
+            <Page
+            className="Page">
                 <TopNavBar/>
-                <Container>
+                <LeftNavBar/>
+                <PageContainer
+                className="PageContainer">
                     <TableWrapper>
                         {loading && (
                                     <LoadingSpinner />
                         )}
                         {this.renderData()}
                     </TableWrapper>
-                </Container>
+                </PageContainer>
             </Page>
         );
     }

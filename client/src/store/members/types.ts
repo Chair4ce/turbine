@@ -2,19 +2,21 @@
 
 // Response object for GET /members
 
-export interface Member extends ApiResponse {
-    id: string;
-    full_name: string;
-    grade: string;
-    assigned_pas: string;
-    dafsc: string;
-    office_symbol: string;
-    duty_title: string;
-    duty_start_date: string;
-    duty_phone: string;
-    awardec_status: string;
-    epr_opr_status: string;
-}
+import MemberModel from "./MemberModel";
+
+// export interface Member extends ApiResponse {
+//     id: string;
+//     full_name: string;
+//     grade: string;
+//     assigned_pas: string;
+//     dafsc: string;
+//     office_symbol: string;
+//     duty_title: string;
+//     duty_start_date: string;
+//     duty_phone: string;
+//     awardec_status: string;
+//     epr_opr_status: string;
+// }
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
 // the expected return type of your API response.
@@ -38,6 +40,6 @@ export enum MembersActionTypes {
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface MembersState {
     readonly loading: boolean;
-    readonly data: Member[];
+    readonly data: MemberModel[];
     readonly errors?: string;
 }

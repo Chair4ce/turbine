@@ -1,5 +1,6 @@
 import { action } from 'typesafe-actions';
-import { MembersActionTypes, Member } from './types';
+import { MembersActionTypes} from './types';
+import MemberModel from "./MemberModel";
 
 // Here we use the `action` helper function provided by `typesafe-actions`.
 // This library provides really useful helpers for writing Redux actions in a type-safe manner.
@@ -8,5 +9,5 @@ export const fetchRequest = () => action(MembersActionTypes.FETCH_REQUEST);
 
 // Remember, you can also pass parameters into an action creator. Make sure to
 // type them properly as well.
-export const fetchSuccess = (payload: Member[]) => action(MembersActionTypes.FETCH_SUCCESS, payload);
+export const fetchSuccess = (payload: MemberModel[]) => action(MembersActionTypes.FETCH_SUCCESS, payload);
 export const fetchError = (message: string) => action(MembersActionTypes.FETCH_ERROR, message);

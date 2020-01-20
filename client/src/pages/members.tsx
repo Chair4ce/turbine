@@ -6,12 +6,12 @@ import MembersIndexPage from './members/index';
 import ShowMembersPage from './members/show';
 
 import { ApplicationState } from '../store';
-import { Member } from '../store/members/types';
+import MemberModel from "../store/members/MemberModel";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
     loading: boolean;
-    data: Member[];
+    data: MemberModel[];
     errors?: string;
 }
 
