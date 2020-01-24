@@ -4,7 +4,6 @@ import {keyframes} from "@emotion/core";
 
 export const EaseIn = keyframes`
   0% {
-  display: none;
   opacity: 0 ;
   } 100% {
     opacity: 1;

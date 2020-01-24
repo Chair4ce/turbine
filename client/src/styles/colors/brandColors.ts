@@ -16,7 +16,9 @@ const brandColors = {
     darkGrey: '#232323',
     lightGrey: '#464646',
     paper: '#CBCBCB',
-    selected: 'rgba(255, 255, 255, 0.15)'
+    turbine_gray: '#212121',
+    turbine_light_gray: 'rgba(95,99,104,1)',
+    background_sheen: 'rgba(255, 255, 255, .06)'
 };
 
 export default brandColors;
