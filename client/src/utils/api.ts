@@ -1,5 +1,5 @@
-export async function callApi(method: string, url: string, path: string, data?: any) {
-    const res = await fetch(`${url}/${path}`, {
+export async function callApi(method: string, path: string, data?: any) {
+    const res = await fetch(`/${path}`, {
         method,
         headers: {
             'Accept': 'application/json',
@@ -7,5 +7,7 @@ export async function callApi(method: string, url: string, path: string, data?: 
         },
         body: JSON.stringify(data),
     });
-    return res.json();
+    if (res.ok) {
+        return res.json();
+    }
 }

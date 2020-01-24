@@ -15,6 +15,11 @@ export enum SquadronActionTypes {
     FETCH_REQUEST = '@@squadrons/FETCH_REQUEST',
     FETCH_SUCCESS = '@@squadrons/FETCH_SUCCESS',
     FETCH_ERROR = '@@squadrons/FETCH_ERROR',
+    POST_REQUEST = '@@squadrons/POST_REQUEST',
+    POST_SUCCESS = '@@squadrons/POST_SUCCESS',
+    POST_ERROR = '@@squadrons/POST_ERROR',
+    SHOW_INPUT = '@@squadrons/SHOW_INPUT',
+    UPDATE_INPUT = '@@squadrons/UPDATE_INPUT'
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.
@@ -22,5 +27,8 @@ export enum SquadronActionTypes {
 export interface SquadronsState {
     readonly loading: boolean;
     readonly squadrons: SquadronModel[];
+    readonly showInput: boolean;
+    readonly newInput: SquadronModel | undefined;
+    readonly posting: boolean;
     readonly errors?: string;
 }

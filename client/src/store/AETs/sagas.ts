@@ -3,12 +3,10 @@ import { AETActionTypes } from './types';
 import { AETsFetchError, AETsFetchSuccess } from './actions';
 import { callApi } from '../../utils/api';
 
-const API_ENDPOINT = 'http://localhost:8080';
-
 function *handleFetch() {
     try {
         // To call async functions, use redux-saga's `call()`.
-        const res = yield call(callApi, 'get', API_ENDPOINT, 'api/AETs');
+        const res = yield call(callApi, 'get','api/AETs');
 
         if (res.error) {
             yield put(AETsFetchError(res.error));

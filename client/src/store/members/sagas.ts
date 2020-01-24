@@ -3,12 +3,11 @@ import { MemberActionTypes } from './types';
 import { membersFetchError, membersFetchSuccess } from './actions';
 import { callApi } from '../../utils/api';
 
-const API_ENDPOINT = 'http://localhost:8080';
 
 function *handleFetch() {
     try {
         // To call async functions, use redux-saga's `call()`.
-        const res = yield call(callApi, 'get', API_ENDPOINT, 'api/members');
+        const res = yield call(callApi, 'get', 'api/members');
 
         if (res.error) {
             yield put(membersFetchError(res.error));

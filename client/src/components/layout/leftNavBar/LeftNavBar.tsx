@@ -3,32 +3,33 @@ import SettingsIcon from "../../icons/SettingsIcon";
 import styled from "../../../utils/styled";
 import {shine} from "../../animations/transitions";
 import {connect} from "react-redux";
-import {squadronsFetchRequest} from "../../../store/squadrons/actions";
+import {showSquadronInput, squadronsFetchRequest, updateSquadronInputState} from "../../../store/squadrons/actions";
 import {ApplicationState} from "../../../store";
-import MenuTitleBar from "../../icons/MenuTitleBar";
-import GlassBallIcon from "../../icons/GlassBall";
 import SquadronModel from "../../../store/squadrons/SquadronModel";
-import ItemRow from "../LeftNavMenu";
 import FlightModel from "../../../store/flights/FlightModel";
 import AETModel from "../../../store/AETs/AETModel";
 import {flightsFetchRequest} from "../../../store/flights/actions";
 import {AETsFetchRequest} from "../../../store/AETs/actions";
+import {StyledAddSquadronBar} from "./AddSquadronBar";
+import MenuTitleBar from "./MenuTitleBar";
+import ItemRow from "./ItemRow";
 
 interface PropsFromState {
-    squadronsLoading: boolean;
+    sqLoading: boolean;
     squadrons: SquadronModel[];
+    newInput: SquadronModel | undefined;
+    showSqInput: boolean;
+    sqErrors?: string;
     flights: FlightModel[];
     AETs: AETModel[];
-    addSquadron?: boolean;
-    addFlight?: boolean;
-    addAET?: boolean;
-    squadronsErrors?: string;
 }
 
 interface PropsFromDispatch {
     squadronsFetchRequest: typeof squadronsFetchRequest;
     flightsFetchRequest: typeof flightsFetchRequest;
     AETsFetchRequest: typeof AETsFetchRequest;
+    showSquadronInput: typeof showSquadronInput;
+    updateSquadronInputState: typeof updateSquadronInputState;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -62,24 +63,28 @@ class LeftNavBar extends React.Component<AllProps> {
     }
 
     private renderSquadronMenu() {
-        const {squadrons} = this.props;
+        const {squadrons, squadronsFetchRequest: sfr, showSqInput} = this.props;
         return (
             <MenuWrapper>
                 <MenuTitle>
                     <span>{"Squadrons"}</span>
-                    <MenuTitleBar/>
+                    <MenuTitleBar
+                        clickAction={this.props.showSquadronInput}
+                    />
                 </MenuTitle>
                 <Menu>
                     {squadrons.map((squadron, index) =>
                         <ItemRow
                             key={index}
-                            item={squadron.squadron}
+                            column1={squadron.squadron}
+                            column2={squadron.pas_Code}
                             clickItem={() => {}}
                         />
                     )}
-                    {/*{addSquadron && (*/}
-                    {/*    <AddSquadronRow/>*/}
-                    {/*)}*/}
+                    {showSqInput && (
+                        <StyledAddSquadronBar
+                        />
+                    )}
                 </Menu>
             </MenuWrapper>
         )
@@ -91,14 +96,14 @@ class LeftNavBar extends React.Component<AllProps> {
             <MenuWrapper>
                 <MenuTitle>
                     <span>{"Flights"}</span>
-                    <MenuTitleBar/>
+                    {/*<MenuTitleBar/>*/}
                 </MenuTitle>
                 <Menu>
 
                     {flights.map((flight, index) =>
                         <ItemRow
                             key={index}
-                            item={flight.org_id}
+                            column1={flight.org_id}
                             clickItem={() => {}}
                         />
                     )}
@@ -116,7 +121,7 @@ class LeftNavBar extends React.Component<AllProps> {
             <MenuWrapper>
                 <MenuTitle>
                     <span>{"AETs"}</span>
-                    <MenuTitleBar/>
+                    {/*<MenuTitleBar/>*/}
                 </MenuTitle>
 
                 <Menu>
@@ -124,7 +129,7 @@ class LeftNavBar extends React.Component<AllProps> {
                     {AETs.map((AET, index) =>
                         <ItemRow
                             key={index}
-                            item={AET.org_id}
+                            column1={AET.org_id}
                             clickItem={() => {}}
                         />
                     )}
@@ -139,20 +144,21 @@ class LeftNavBar extends React.Component<AllProps> {
 }
 
 const mapStateToProps = ({squadrons, flights, AETs}: ApplicationState) => ({
-    squadronsLoading: squadrons.loading,
-    squadronsErrors: squadrons.errors,
+    sqLoading: squadrons.loading,
+    sqErrors: squadrons.errors,
     squadrons: squadrons.squadrons,
-    flightsLoading: flights.loading,
-    flightsErrors: flights.errors,
+    postNewSq: squadrons.posting,
+    newInput: squadrons.newInput,
+    showSqInput: squadrons.showInput,
     flights: flights.flights,
-    AETsLoading: AETs.loading,
-    AETsErrors: AETs.errors,
     AETs: AETs.AETs,
 });
 
 
 const mapDispatchToProps = {
     squadronsFetchRequest,
+    showSquadronInput,
+    updateSquadronInputState,
     flightsFetchRequest,
     AETsFetchRequest,
 };
@@ -242,12 +248,11 @@ margin: 0 auto;
 .chrome {
 background: #222 -webkit-linear-gradient(-40deg, transparent 0%, transparent 40%, #fff 50%, transparent 60%, transparent 100%) no-repeat 0 0;
 -webkit-background-size: 200px;
-color: rgba(255, 255, 255, 0.3);
+color: white;
 -webkit-background-clip: text;
 -webkit-animation-name: ${shine};
 -webkit-animation-duration: 20s;
 -webkit-animation-iteration-count: infinite;
-text-shadow: 0 0 0 rgba(255, 255, 255, 0.5);
 }
 
 `;

@@ -1,14 +1,14 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { SquadronActionTypes } from './types';
-import { squadronsFetchError, squadronsFetchSuccess } from './actions';
+import {squadronPostError, squadronPostSuccess, squadronsFetchError, squadronsFetchSuccess} from './actions';
 import { callApi } from '../../utils/api';
+import SquadronModel from "./SquadronModel";
 
-const API_ENDPOINT = 'http://localhost:8080';
 
 function *handleFetch() {
     try {
         // To call async functions, use redux-saga's `call()`.
-        const res = yield call(callApi, 'get', API_ENDPOINT, 'api/squadrons');
+        const res = yield call(callApi, 'get', 'api/squadrons');
 
         if (res.error) {
             yield put(squadronsFetchError(res.error));
@@ -21,6 +21,14 @@ function *handleFetch() {
         } else {
             yield put(squadronsFetchError('An unknown error occured.'));
         }
+    }
+}
+
+export async function postNewSquadron(data: SquadronModel) {
+        // To call async functions, use redux-saga's `call()`.
+        const res = await callApi('post', 'api/squadrons/add', data);
+    if (await res.json) {
+        squadronPostSuccess();
     }
 }
 
