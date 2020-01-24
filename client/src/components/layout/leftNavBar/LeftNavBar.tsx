@@ -76,16 +76,17 @@ class LeftNavBar extends React.Component<AllProps> {
                     {squadrons.map((squadron, index) =>
                         <ItemRow
                             key={index}
+                            active={showSqInput}
                             column1={squadron.squadron}
                             column2={squadron.pas_Code}
                             clickItem={() => {}}
                         />
                     )}
+                </Menu>
                     {showSqInput && (
                         <StyledAddSquadronBar
                         />
                     )}
-                </Menu>
             </MenuWrapper>
         )
     }
@@ -103,6 +104,7 @@ class LeftNavBar extends React.Component<AllProps> {
                     {flights.map((flight, index) =>
                         <ItemRow
                             key={index}
+                            active={true}
                             column1={flight.org_id}
                             clickItem={() => {}}
                         />
@@ -129,6 +131,7 @@ class LeftNavBar extends React.Component<AllProps> {
                     {AETs.map((AET, index) =>
                         <ItemRow
                             key={index}
+                            active={true}
                             column1={AET.org_id}
                             clickItem={() => {}}
                         />
@@ -174,16 +177,17 @@ width: 100%;
   font-family: ${props => props.theme.fonts.headings};
   font-size: large;
   margin-bottom: 1px;
-  
   .MenuItemRow {
   :hover {
    background: #333;
+   color: ${props => props.theme.colors.textLight};
 }
   }
 `;
 
 const Menu = styled('div')`
 width: inherit;
+margin-top: 5px;
 `;
 
 
@@ -200,6 +204,8 @@ span {
     align-items: center;
     padding-left: 10px;
     width: 100%;
+    font-size: 22px;
+    font-weight: bold;
     height: 29px;
 }
 
@@ -211,7 +217,6 @@ display: flex;
 flex-direction: row;
 justify-content: flex-start;
 align-items: center;
-padding-left: 10px;
 position: fixed;
 bottom: 0;
 height: 45px;
