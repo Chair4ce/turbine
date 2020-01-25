@@ -13,6 +13,8 @@ import { membersFetchRequest } from '../../store/members/actions';
 import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 import MemberModel from "../../store/members/MemberModel";
 import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
+import EnhancedTable from "../../components/layout/MiTable";
+import {Paper} from "@material-ui/core";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -64,7 +66,7 @@ class MembersIndexPage extends React.Component<AllProps> {
     }
 
     public render() {
-        const { loading } = this.props;
+        const { loading, data } = this.props;
 
         return (
             <Page
@@ -73,12 +75,17 @@ class MembersIndexPage extends React.Component<AllProps> {
                 <LeftNavBar/>
                 <PageContainer
                 className="PageContainer">
-                    <TableWrapper>
+                    {/*<TableWrapper>*/}
                         {loading && (
                                     <LoadingSpinner />
                         )}
-                        {this.renderData()}
-                    </TableWrapper>
+                        <TableBorder>
+
+                        <EnhancedTable
+                        members={data}
+                        />
+                        </TableBorder>
+                    {/*</TableWrapper>*/}
                 </PageContainer>
             </Page>
         );
@@ -106,6 +113,19 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(MembersIndexPage);
+
+
+const TableBorder = styled('div')`
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+position: relative;
+top: 80px;
+margin-top: 30px;
+padding: 60px;
+width: 100%;
+height: 100vh;
+`;
 
 const TableWrapper = styled('div')`
     position: relative;

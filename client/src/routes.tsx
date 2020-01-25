@@ -7,6 +7,7 @@ import Main from './pages/index'
 import MembersPage from './pages/members'
 import normalize from './styles/normalize'
 import globals from './styles/globals'
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -16,6 +17,7 @@ import globals from './styles/globals'
 //
 // The given `pages/` directory provides an example of a directory structure that's easily
 // code-splittable.
+
 
 const Routes: React.FC = () => (
     <Root>
@@ -28,6 +30,7 @@ const Routes: React.FC = () => (
             <Route component={() => <div>Not Found</div>} />
         </Switch>
     </Root>
+
 )
 
 export default Routes

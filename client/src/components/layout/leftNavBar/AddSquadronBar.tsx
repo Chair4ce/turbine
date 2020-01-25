@@ -32,9 +32,9 @@ const AddSquadronBar: React.FC<AllProps> = props => {
 
         if (newSqName.length > 0 && newSqPAS.length > 0) {
             updateValidInput("");
-        await postNewSquadron(new SquadronModel(newSqName.toUpperCase(), newSqPAS.toUpperCase()));
-        await props.fetchSquadrons();
-        await toggleForm();
+            await postNewSquadron(new SquadronModel(newSqName.toUpperCase(), newSqPAS.toUpperCase()));
+            await props.fetchSquadrons();
+            await toggleForm();
         } else {
             updateValidInput("Please fill in both fields")
         }
@@ -48,43 +48,43 @@ const AddSquadronBar: React.FC<AllProps> = props => {
     return (
         <Wrapper>
             <span
-            className={"title"}>
+                className={"title"}>
                 Enter New Squadron
             </span>
-            <InputGrp>
-            <input
-                onChange={(e: any) => updateSqName(e.target.value)}
-                className={"SquadronInput"}
-                placeholder={"Name"}>
-            </input>
-            <input
-                onChange={(e: any) => updatePAS(e.target.value)}
-                className={"PASInput"}
-                placeholder={"PAS Code"}>
-            </input>
-            </InputGrp>
-            <div
-                className={"btn-box"}>
-                    <button
-                        className={"Btn hvr-grow"}
-                        onClick={() => {
-                            handleClick();
-                        }}
-                    >
-                        SAVE
-                    </button>
-                <button
-                    className={"Btn hvr-grow"}
-                    onClick={() => {
-                        toggleForm();
-                    }}
-                >
-                    CANCEL
-                </button>
+                    <InputGrp>
+                        <input
+                            onChange={(e: any) => updateSqName(e.target.value)}
+                            className={"SquadronInput"}
+                            placeholder={"Name"}>
+                        </input>
+                        <input
+                            onChange={(e: any) => updatePAS(e.target.value)}
+                            className={"PASInput"}
+                            placeholder={"PAS Code"}>
+                        </input>
+                    </InputGrp>
+                    <div
+                        className={"btn-box"}>
+                        <button
+                            className={"Btn hvr-grow"}
+                            onClick={() => {
+                                handleClick();
+                            }}
+                        >
+                            SAVE
+                        </button>
+                        <button
+                            className={"Btn hvr-grow"}
+                            onClick={() => {
+                                toggleForm();
+                            }}
+                        >
+                            CANCEL
+                        </button>
 
-            </div>
-            {validInput.length > 0 && (<span
-            className={"validText"}>
+                    </div>
+                    {validInput.length > 0 && (<span
+                        className={"validText"}>
                     {validInput}
                 </span>)}
         </Wrapper>
@@ -116,9 +116,8 @@ const Wrapper = styled('div')`
   width: 100%;
   font-family: ${props => props.theme.fonts.headings};
   font-size: 16px;
-  -webkit-animation: ${EaseIn} 1s;
   margin-top: 5px;
-  
+   box-shadow: 0 0 3px rgba(0, 0, 0, 0);
   .title {
   display: flex;
   flex-direction: row;

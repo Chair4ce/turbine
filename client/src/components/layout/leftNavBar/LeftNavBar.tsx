@@ -1,7 +1,7 @@
 import * as React from 'react';
 import SettingsIcon from "../../icons/SettingsIcon";
 import styled from "../../../utils/styled";
-import {shine} from "../../animations/transitions";
+import {EaseIn, shine} from "../../animations/transitions";
 import {connect} from "react-redux";
 import {showSquadronInput, squadronsFetchRequest, updateSquadronInputState} from "../../../store/squadrons/actions";
 import {ApplicationState} from "../../../store";
@@ -13,6 +13,9 @@ import {AETsFetchRequest} from "../../../store/AETs/actions";
 import {StyledAddSquadronBar} from "./AddSquadronBar";
 import MenuTitleBar from "./MenuTitleBar";
 import ItemRow from "./ItemRow";
+import {createStyles, Paper, Theme} from "@material-ui/core";
+import Zoom from "@material-ui/core/Zoom";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 interface PropsFromState {
     sqLoading: boolean;
@@ -41,18 +44,24 @@ class LeftNavBar extends React.Component<AllProps> {
         sfr();
         ffr();
         afr();
+
     }
 
     public render() {
+
         return (
             <Wrapper>
                 <LeftNavBarTitle>
                     <AppTitle
                         className="chrome">{"Turbine"}</AppTitle>
                 </LeftNavBarTitle>
+
+
+                <MenuGroup>
                 {this.renderSquadronMenu()}
-                {this.renderflightsMenu()}
-                {this.renderAETsMenu()}
+                {/*{this.renderflightsMenu()}*/}
+                {/*<StickyList squadron={this.props.squadrons}/>*/}
+                </MenuGroup>
                 <AppButtonSection>
                     <SettingsIcon/>
                 </AppButtonSection>
@@ -62,8 +71,12 @@ class LeftNavBar extends React.Component<AllProps> {
         );
     }
 
+
+
     private renderSquadronMenu() {
         const {squadrons, squadronsFetchRequest: sfr, showSqInput} = this.props;
+
+
         return (
             <MenuWrapper>
                 <MenuTitle>
@@ -72,6 +85,9 @@ class LeftNavBar extends React.Component<AllProps> {
                         clickAction={this.props.showSquadronInput}
                     />
                 </MenuTitle>
+                {showSqInput && (
+                    <StyledAddSquadronBar/>
+                )}
                 <Menu>
                     {squadrons.map((squadron, index) =>
                         <ItemRow
@@ -83,13 +99,12 @@ class LeftNavBar extends React.Component<AllProps> {
                         />
                     )}
                 </Menu>
-                    {showSqInput && (
-                        <StyledAddSquadronBar
-                        />
-                    )}
+
             </MenuWrapper>
         )
     }
+
+
 
     private renderflightsMenu() {
         const {flights} = this.props;
@@ -171,9 +186,16 @@ export default connect(
     mapDispatchToProps,
 )(LeftNavBar);
 
+
+const MenuGroup = styled('div')`
+   margin-top: 46px;
+`;
+
+
 const MenuWrapper = styled('div')`
-display: block;
-width: 100%;
+  display: block;
+  width: 100%;
+
   font-family: ${props => props.theme.fonts.headings};
   font-size: large;
   margin-bottom: 1px;
@@ -188,6 +210,7 @@ width: 100%;
 const Menu = styled('div')`
 width: inherit;
 margin-top: 5px;
+-webkit-animation: ${EaseIn} 1s;
 `;
 
 
@@ -219,6 +242,7 @@ justify-content: flex-start;
 align-items: center;
 position: fixed;
 bottom: 0;
+margin-left: 10px;
 height: 45px;
 `;
 
@@ -226,6 +250,7 @@ const Wrapper = styled('div')`
     position: fixed;
     display: block;
     width: 198px;
+    overflow-y: auto;
     height: 100vh;
     background: ${props => props.theme.colors.MenuBackground};
     color: ${props => props.theme.colors.brand};
@@ -271,13 +296,15 @@ position: absolute;
 width: 1px;
 height: 100%;
 left: 198px;
-top: 0px;
+top: 0;
 background: rgba(148,148,148,0.38);
 /* Borders */
 
 box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.25);
 
 `;
+
+
 
 
 
