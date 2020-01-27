@@ -26,7 +26,6 @@ interface Data {
     full_name: number;
     grade: number;
     dafsc: number;
-    duty_title: string;
     office_symbol: number;
 }
 
@@ -68,10 +67,9 @@ interface HeadCell {
 
 const headCells: HeadCell[] = [
     { id: 'full_name', numeric: false, disablePadding: true, label: 'Full Name' },
-    { id: 'grade', numeric: false, disablePadding: false, label: 'Rank' },
-    { id: 'dafsc', numeric: false, disablePadding: false, label: 'AFSC' },
-    { id: 'duty_title', numeric: false, disablePadding: false, label: 'Duty Title' },
-    { id: 'office_symbol', numeric: false, disablePadding: false, label: 'Office Symbol' },
+    { id: 'grade', numeric: true, disablePadding: false, label: 'Rank' },
+    { id: 'dafsc', numeric: true, disablePadding: false, label: 'AFSC' },
+    { id: 'office_symbol', numeric: true, disablePadding: false, label: 'Office Symbol' },
 ];
 
 interface EnhancedTableProps {
@@ -288,7 +286,7 @@ const EnhancedTable: React.FC<Props> = props => {
                     <Table
                         className={classes.table}
                         aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
+                        size={'small'}
                         aria-label="enhanced table"
                     >
                         <EnhancedTableHead
@@ -328,7 +326,6 @@ const EnhancedTable: React.FC<Props> = props => {
                                             </TableCell>
                                             <TableCell align="right">{member.grade}</TableCell>
                                             <TableCell align="right">{member.dafsc}</TableCell>
-                                            <TableCell align="right">{member.duty_title}</TableCell>
                                             <TableCell align="right">{member.office_symbol}</TableCell>
                                         </TableRow>
                                     );
@@ -351,10 +348,6 @@ const EnhancedTable: React.FC<Props> = props => {
                     onChangeRowsPerPage={handleChangeRowsPerPage}
                 />
             </Paper>
-            <FormControlLabel
-                control={<Switch checked={dense} onChange={handleChangeDense} />}
-                label="Dense padding"
-            />
         </div>
     );
 };

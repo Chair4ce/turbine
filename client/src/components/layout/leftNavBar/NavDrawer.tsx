@@ -21,6 +21,7 @@ import EnhancedTable from "../MiTable";
 import MemberModel from "../../../store/members/MemberModel";
 import LoadingSpinner from "../../data/LoadingSpinner";
 import {Box} from "@material-ui/core";
+import SpeedDialBtn from "../button/SpeedDialBtn";
 
 const drawerWidth = 240;
 
@@ -183,6 +184,7 @@ const NavDrawer: React.FC<Props> = props => {
             </Drawer>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
+
                 <h1>Welcome to Turbine!</h1>
                 {props.loading ? (
                     <Box component={'div'} className={classes.loadingSpinner}>
