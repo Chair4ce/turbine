@@ -51,6 +51,6 @@ height: 100%;
 width:100%;
 .GlassAddIconPathD1 {
 position: absolute;
- fill: ${props => props.theme.colors.brand};
+ fill: gray;
 }
 `;

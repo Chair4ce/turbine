@@ -2,11 +2,11 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps, Route, Switch } from 'react-router-dom';
 
-import MembersIndexPage from './members/index';
 import ShowMembersPage from './members/show';
 
 import { ApplicationState } from '../store';
 import MemberModel from "../store/members/MemberModel";
+import MembersIndexPage from "./members";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {

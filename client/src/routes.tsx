@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Global } from '@emotion/core'
-
 import Root from './components/layout/Root'
 import Main from './pages/index'
-import MembersPage from './pages/members'
 import normalize from './styles/normalize'
-import globals from './styles/globals'
-import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import MembersIndexPage from "./pages/members/index";
+import {darktheme} from "./styles/theme/dark";
+import {ThemeProvider} from "@material-ui/styles";
+
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -22,12 +22,10 @@ import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
 const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
-        <Global styles={globals} />
-
         <Switch>
             <Route exact path="/" component={Main} />
-            <Route path="/members" component={MembersPage} />
-            <Route component={() => <div>Not Found</div>} />
+            <Route path="/members" component={MembersIndexPage} />
+            {/*<Route component={() => <div>Not Found</div>} />*/}
         </Switch>
     </Root>
 

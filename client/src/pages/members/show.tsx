@@ -1,38 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-
-import {
-    MemberInfobox,
-    // MemberInfoboxImage,
-    MemberInfoboxHeading,
-    MemberInfoboxInner,
-    // MemberInfoboxBlurBackground,
-    MemberName,
-    // MemberRoles,
-} from '../../components/members/MemberInfobox';
-import {
-    MemberStats,
-    MemberStatsInner,
-    // StatAttribute,
-    // Bullet
-} from '../../components/members/MemberStats';
-import {
-    MemberDetails,
-    MemberDetailsColumn,
-    MemberDetailsRow,
-    MemberDetailsAttrName,
-} from '../../components/members/MemberDetails';
-import Page from '../../components/layout/Page';
-import PageContainer from '../../components/layout/PageContainer';
-
 import { ApplicationState } from '../../store';
 import { membersFetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
-import LoadingSpinner from '../../components/data/LoadingSpinner';
-import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 import MemberModel from "../../store/members/MemberModel";
-import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
+import Page from "../../components/layout/Page";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -84,47 +57,44 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
         return (
             <Page>
-                <TopNavBar/>
-                <LeftNavBar/>
-                <PageContainer>
-                    <Wrapper>
-                        {loading && (
-                                    <LoadingSpinner />
-                        )}
-                        {selected && (
-                            <>
-                                <MemberInfobox>
-                                    <MemberInfoboxInner>
-                                        <MemberInfoboxHeading>
-                                            <MemberName>{selected.full_name}</MemberName>
-                                        </MemberInfoboxHeading>
-                                        <MemberStats>
-                                            <MemberStatsInner>
-                                                <MemberDetailsRow>{selected.dafsc}</MemberDetailsRow>
-                                            </MemberStatsInner>
-                                        </MemberStats>
-                                    </MemberInfoboxInner>
-                                </MemberInfobox>
-                                <MemberDetails>
-                                    <MemberDetailsColumn>
-                                        <MemberDetailsRow>
-                                            <MemberDetailsAttrName>DUTY TITLE:</MemberDetailsAttrName> {selected.duty_title}
-                                        </MemberDetailsRow>
-                                        <MemberDetailsRow>
-                                            <MemberDetailsAttrName>Grade:</MemberDetailsAttrName> {selected.grade}
-                                        </MemberDetailsRow>
-                                    </MemberDetailsColumn>
-                                    <MemberDetailsColumn>
-                                        <MemberDetailsRow>
-                                            <MemberDetailsAttrName>Office Symbol:</MemberDetailsAttrName>{' '}
-                                            {selected.office_symbol}
-                                        </MemberDetailsRow>
-                                    </MemberDetailsColumn>
-                                </MemberDetails>
-                            </>
-                        )}
-                    </Wrapper>
-                </PageContainer>
+                {/*<TopNavBar/>*/}
+                {/*<PageContainer>*/}
+                {/*    <Wrapper>*/}
+
+                {/*        {selected && (*/}
+                {/*            <>*/}
+                {/*                <MemberInfobox>*/}
+                {/*                    <MemberInfoboxInner>*/}
+                {/*                        <MemberInfoboxHeading>*/}
+                {/*                            <MemberName>{selected.full_name}</MemberName>*/}
+                {/*                        </MemberInfoboxHeading>*/}
+                {/*                        <MemberStats>*/}
+                {/*                            <MemberStatsInner>*/}
+                {/*                                <MemberDetailsRow>{selected.dafsc}</MemberDetailsRow>*/}
+                {/*                            </MemberStatsInner>*/}
+                {/*                        </MemberStats>*/}
+                {/*                    </MemberInfoboxInner>*/}
+                {/*                </MemberInfobox>*/}
+                {/*                <MemberDetails>*/}
+                {/*                    <MemberDetailsColumn>*/}
+                {/*                        <MemberDetailsRow>*/}
+                {/*                            <MemberDetailsAttrName>DUTY TITLE:</MemberDetailsAttrName> {selected.duty_title}*/}
+                {/*                        </MemberDetailsRow>*/}
+                {/*                        <MemberDetailsRow>*/}
+                {/*                            <MemberDetailsAttrName>Grade:</MemberDetailsAttrName> {selected.grade}*/}
+                {/*                        </MemberDetailsRow>*/}
+                {/*                    </MemberDetailsColumn>*/}
+                {/*                    <MemberDetailsColumn>*/}
+                {/*                        <MemberDetailsRow>*/}
+                {/*                            <MemberDetailsAttrName>Office Symbol:</MemberDetailsAttrName>{' '}*/}
+                {/*                            {selected.office_symbol}*/}
+                {/*                        </MemberDetailsRow>*/}
+                {/*                    </MemberDetailsColumn>*/}
+                {/*                </MemberDetails>*/}
+                {/*            </>*/}
+                {/*        )}*/}
+                {/*    </Wrapper>*/}
+                {/*</PageContainer>*/}
             </Page>
         );
     }

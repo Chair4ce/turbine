@@ -1,21 +1,22 @@
 import * as React from 'react'
-import Page from '../components/layout/Page'
-
-import PageContainer from "../components/layout/PageContainer";
-import TopNavBar from "../components/layout/topNavBar/TopNavBar";
-import LeftNavBar from "../components/layout/leftNavBar/LeftNavBar";
+import styled from "styled-components";
+import NavDrawer from "../components/layout/leftNavBar/NavDrawer";
 
 function Main() {
     return (
         <Page>
-            <LeftNavBar/>
-            <TopNavBar/>
-                    <PageContainer>
-                        <h1>Welcome to Turbine!</h1>
-                    </PageContainer>
+            <NavDrawer loading={true}/>
+
         </Page>
     )
 }
 
-export default Main
+export default Main;
+
+
+const Page = styled('div')`
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+`;
 

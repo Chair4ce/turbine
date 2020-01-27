@@ -1,6 +1,5 @@
 import { transparentize } from 'polished';
 import styled from '../../utils/styled';
-import {EaseIn} from "../animations/transitions";
 
 export const MemberDetailsAttrName = styled('span')`
     color: ${props => transparentize(0.25, props.theme.colors.body)};
@@ -39,5 +38,4 @@ export const MemberDetails = styled('div')`
     margin-top: 10px;
     margin-left: -8px;
     margin-right: -8px;
-    -webkit-animation: ${EaseIn} .5s;
 `;

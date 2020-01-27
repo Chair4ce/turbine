@@ -21,6 +21,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import MemberModel from "../../store/members/MemberModel";
 
+
 interface Data {
     full_name: number;
     grade: number;
@@ -28,32 +29,6 @@ interface Data {
     duty_title: string;
     office_symbol: number;
 }
-
-// function createData(
-//     name: string,
-//     calories: number,
-//     fat: number,
-//     carbs: number,
-//     protein: number,
-// ): Data {
-//     return { name, calories, fat, carbs, protein };
-// }
-//
-// const rows = [
-//     createData('Cupcake', 305, 3.7, 67, 4.3),
-//     createData('Donut', 452, 25.0, 51, 4.9),
-//     createData('Eclair', 262, 16.0, 24, 6.0),
-//     createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-//     createData('Gingerbread', 356, 16.0, 49, 3.9),
-//     createData('Honeycomb', 408, 3.2, 87, 6.5),
-//     createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-//     createData('Jelly Bean', 375, 0.0, 94, 0.0),
-//     createData('KitKat', 518, 26.0, 65, 7.0),
-//     createData('Lollipop', 392, 0.2, 98, 0.0),
-//     createData('Marshmallow', 318, 0, 81, 2.0),
-//     createData('Nougat', 360, 19.0, 9, 37.0),
-//     createData('Oreo', 437, 18.0, 63, 4.0),
-// ];
 
 function desc<T>(a: T, b: T, orderBy: keyof T) {
     if (b[orderBy] < a[orderBy]) {
@@ -241,7 +216,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    members: MemberModel[];
+    members?: MemberModel[];
 }
 
 const EnhancedTable: React.FC<Props> = props => {
@@ -261,7 +236,7 @@ const EnhancedTable: React.FC<Props> = props => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelecteds = props.members.map(n => n.full_name);
+            const newSelecteds = props.members!.map(n => n.full_name);
             setSelected(newSelecteds);
             return;
         }
@@ -303,7 +278,7 @@ const EnhancedTable: React.FC<Props> = props => {
 
     const isSelected = (full_name: string) => selected.indexOf(full_name) !== -1;
 
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.members.length - page * rowsPerPage);
+    const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.members!.length - page * rowsPerPage);
 
     return (
         <div className={classes.root}>
@@ -323,10 +298,10 @@ const EnhancedTable: React.FC<Props> = props => {
                             orderBy={orderBy}
                             onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={props.members.length}
+                            rowCount={props.members!.length}
                         />
                         <TableBody>
-                            {stableSort(props.members, getSorting(order, orderBy))
+                            {stableSort(props.members!, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((member: MemberModel, index: number) => {
                                     const isItemSelected = isSelected(member.full_name);
@@ -367,9 +342,9 @@ const EnhancedTable: React.FC<Props> = props => {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 25, 50, 100, { value: -1, label: 'All' }]}
                     component="div"
-                    count={props.members.length}
+                    count={props.members!.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onChangePage={handleChangePage}
