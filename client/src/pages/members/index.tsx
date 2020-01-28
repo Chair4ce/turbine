@@ -5,7 +5,6 @@ import { membersFetchRequest } from '../../store/members/actions';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
 import NavDrawer from "../../components/layout/leftNavBar/NavDrawer";
-import LoadingSpinner from "../../components/data/LoadingSpinner";
 import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
 
 // Separate state props + dispatch props to their own interfaces.

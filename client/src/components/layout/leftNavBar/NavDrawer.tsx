@@ -21,7 +21,7 @@ import EnhancedTable from "../MiTable";
 import MemberModel from "../../../store/members/MemberModel";
 import LoadingSpinner from "../../data/LoadingSpinner";
 import {Box} from "@material-ui/core";
-import SpeedDialBtn from "../button/SpeedDialBtn";
+import EditMemberTable from "../../table/MaterialTable";
 
 const drawerWidth = 240;
 
@@ -99,11 +99,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    members?: MemberModel[];
+    members: MemberModel[];
     loading: boolean
     className?: string;
 }
-
 
 const NavDrawer: React.FC<Props> = props => {
     const classes = useStyles();
@@ -119,7 +118,6 @@ const NavDrawer: React.FC<Props> = props => {
     };
 
     return (
-
         <div className={classes.root}>
             <CssBaseline />
             <AppBar
@@ -190,7 +188,7 @@ const NavDrawer: React.FC<Props> = props => {
                     <Box component={'div'} className={classes.loadingSpinner}>
                     <LoadingSpinner />
                     </Box>
-                ) : (props.members!.length > 0 && (<EnhancedTable
+                ) : (props.members!.length > 0 && (<EditMemberTable
                         members={props.members}
                     />))}
 

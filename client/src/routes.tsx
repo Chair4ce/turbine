@@ -5,9 +5,6 @@ import Root from './components/layout/Root'
 import Main from './pages/index'
 import normalize from './styles/normalize'
 import MembersIndexPage from "./pages/members/index";
-import {darktheme} from "./styles/theme/dark";
-import {ThemeProvider} from "@material-ui/styles";
-
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -25,7 +22,6 @@ const Routes: React.FC = () => (
         <Switch>
             <Route exact path="/" component={Main} />
             <Route path="/members" component={MembersIndexPage} />
-            {/*<Route component={() => <div>Not Found</div>} />*/}
         </Switch>
     </Root>
 
