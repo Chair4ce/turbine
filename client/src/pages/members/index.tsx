@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { ApplicationState } from '../../store';
-import { membersFetchRequest } from '../../store/members/actions';
+import {membersFetchRequest} from '../../store/members/actions';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
-import NavDrawer from "../../components/layout/leftNavBar/NavDrawer";
+import {ConnectedNavDrawer} from "../../components/layout/leftNavBar/NavDrawer";
 import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
 
 // Separate state props + dispatch props to their own interfaces.
@@ -29,12 +29,12 @@ class MembersIndexPage extends React.Component<AllProps> {
     }
 
     public render() {
-        const { members, loading } = this.props;
+        const { members, loading} = this.props;
 
         return (
             <Page
             className="MembersPage">
-                <NavDrawer
+                <ConnectedNavDrawer
                     members={members}
                     loading={loading}
                 />

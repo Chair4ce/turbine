@@ -6,6 +6,7 @@ import { membersFetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
+import {Box} from "@material-ui/core";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -53,48 +54,11 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
     public render() {
         const { data, loading, match } = this.props;
-        const selected = data.find(member => ((member.id + member.full_name) === match.params.memberId));
+        const selected = data.find(member => ((member.full_name) === match.params.memberId));
 
         return (
             <Page>
-                {/*<TopNavBar/>*/}
-                {/*<PageContainer>*/}
-                {/*    <Wrapper>*/}
-
-                {/*        {selected && (*/}
-                {/*            <>*/}
-                {/*                <MemberInfobox>*/}
-                {/*                    <MemberInfoboxInner>*/}
-                {/*                        <MemberInfoboxHeading>*/}
-                {/*                            <MemberName>{selected.full_name}</MemberName>*/}
-                {/*                        </MemberInfoboxHeading>*/}
-                {/*                        <MemberStats>*/}
-                {/*                            <MemberStatsInner>*/}
-                {/*                                <MemberDetailsRow>{selected.dafsc}</MemberDetailsRow>*/}
-                {/*                            </MemberStatsInner>*/}
-                {/*                        </MemberStats>*/}
-                {/*                    </MemberInfoboxInner>*/}
-                {/*                </MemberInfobox>*/}
-                {/*                <MemberDetails>*/}
-                {/*                    <MemberDetailsColumn>*/}
-                {/*                        <MemberDetailsRow>*/}
-                {/*                            <MemberDetailsAttrName>DUTY TITLE:</MemberDetailsAttrName> {selected.duty_title}*/}
-                {/*                        </MemberDetailsRow>*/}
-                {/*                        <MemberDetailsRow>*/}
-                {/*                            <MemberDetailsAttrName>Grade:</MemberDetailsAttrName> {selected.grade}*/}
-                {/*                        </MemberDetailsRow>*/}
-                {/*                    </MemberDetailsColumn>*/}
-                {/*                    <MemberDetailsColumn>*/}
-                {/*                        <MemberDetailsRow>*/}
-                {/*                            <MemberDetailsAttrName>Office Symbol:</MemberDetailsAttrName>{' '}*/}
-                {/*                            {selected.office_symbol}*/}
-                {/*                        </MemberDetailsRow>*/}
-                {/*                    </MemberDetailsColumn>*/}
-                {/*                </MemberDetails>*/}
-                {/*            </>*/}
-                {/*        )}*/}
-                {/*    </Wrapper>*/}
-                {/*</PageContainer>*/}
+                <div>Members Show Page</div>
             </Page>
         );
     }

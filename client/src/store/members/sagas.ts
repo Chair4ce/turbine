@@ -2,6 +2,7 @@ import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { MemberActionTypes } from './types';
 import { membersFetchError, membersFetchSuccess } from './actions';
 import { callApi } from '../../utils/api';
+import FeedbackModel from "./FeedbackModel";
 
 
 function *handleFetch() {
@@ -23,11 +24,24 @@ function *handleFetch() {
     }
 }
 
+
+export function postFeedback(feedback: FeedbackModel) {
+    try {
+        // To call async functions, use redux-saga's `call()`.
+        callApi( 'POST', 'api/feedback/submit', feedback);
+    } catch (err) {
+        console.log('An unknown error occured.');
+
+    }
+}
+
 // This is our watcher function. We use `take*()` functions to watch Redux for a specific action
 // type, and run our saga, for example the `handleFetch()` saga above.
 function *watchFetchRequest() {
     yield takeEvery(MemberActionTypes.FETCH_REQUEST, handleFetch);
 }
+
+
 
 // We can also use `fork()` here to split our saga into multiple watchers.
 function *membersSaga() {

@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { createStyles, makeStyles, useTheme, Theme } from '@material-ui/core/styles';
+import {createStyles, makeStyles, useTheme, Theme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -17,11 +17,15 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import EnhancedTable from "../MiTable";
 import MemberModel from "../../../store/members/MemberModel";
 import LoadingSpinner from "../../data/LoadingSpinner";
-import {Box} from "@material-ui/core";
-import EditMemberTable from "../../table/MaterialTable";
+import {Box, Button, TextField} from "@material-ui/core";
+import FeedbackIcon from '@material-ui/icons/Feedback';
+import {green} from "@material-ui/core/colors";
+import {connect} from "react-redux";
+import {ConnectedEditMemberTable} from "../../table/MaterialTable";
+import FeedbackModel from "../../../store/members/FeedbackModel";
+import {postFeedback} from "../../../store/members/sagas";
 
 const drawerWidth = 240;
 
@@ -94,20 +98,55 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center'
+        },
+        feedBackInput: {
+            width: '80%',
+        },
+        buttonSuccess: {
+            width: 120,
+            position: 'relative',
+            top: 12,
+            left: 10,
+            backgroundColor: green[500],
+            '&:hover': {
+                backgroundColor: green[700],
+            },
+        },
+        buttonIdle: {
+            position: 'relative',
+            top: 12,
+            left: 10,
+            width: 120,
         }
     }),
 );
 
-interface Props {
+interface PropsFromState {
     members: MemberModel[];
     loading: boolean
     className?: string;
 }
 
-const NavDrawer: React.FC<Props> = props => {
+interface PropsFromDispatch {
+    postFeedback: typeof postFeedback;
+}
+
+type AllProps = PropsFromDispatch & PropsFromState;
+
+const NavDrawer: React.FC<AllProps> = props => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
+    const [success, setSuccess] = React.useState(false);
+    const [btnText, setbtnText] = React.useState("SUBMIT");
+    const [feedBackMsg, setfeedBackMsg] = React.useState("");
+    const timer = React.useRef<number>();
+
+    const buttonClassname = clsx({
+        [classes.buttonIdle]: !success,
+        [classes.buttonSuccess]: success,
+    });
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -117,9 +156,36 @@ const NavDrawer: React.FC<Props> = props => {
         setOpen(false);
     };
 
+    React.useEffect(() => {
+        return () => {
+            clearTimeout(timer.current);
+        };
+    }, []);
+
+    const handleButtonClick = () => {
+        if (!loading) {
+            setSuccess(false);
+            setLoading(true);
+            timer.current = setTimeout(() => {
+                setSuccess(true);
+                setbtnText("THANK YOU!");
+                setLoading(false);
+                postFeedback(new FeedbackModel(feedBackMsg));
+                console.log("FeedBack Submitted: " + feedBackMsg);
+                setfeedBackMsg("")
+            }, 2000);
+        }
+    };
+
+    const handleChange = (e: any) => {
+        if (!loading) {
+            setfeedBackMsg(e.target.value);
+        }
+    };
+
     return (
         <div className={classes.root}>
-            <CssBaseline />
+            <CssBaseline/>
             <AppBar
                 position="fixed"
                 className={clsx(classes.appBar, {
@@ -136,7 +202,7 @@ const NavDrawer: React.FC<Props> = props => {
                             [classes.hide]: open,
                         })}
                     >
-                        <MenuIcon />
+                        <MenuIcon/>
                     </IconButton>
                     <Typography variant="h6" noWrap>
                         Turbine
@@ -158,48 +224,76 @@ const NavDrawer: React.FC<Props> = props => {
             >
                 <div className={classes.toolbar}>
                     <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        {theme.direction === 'rtl' ? <ChevronRightIcon/> : <ChevronLeftIcon/>}
                     </IconButton>
                 </div>
-                <Divider />
+                <Divider/>
                 <List>
                     {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
                         <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                            <ListItemText primary={text}/>
                         </ListItem>
                     ))}
                 </List>
-                <Divider />
+                <Divider/>
                 <List>
                     {['All mail', 'Trash', 'Spam'].map((text, index) => (
                         <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                            <ListItemText primary={text} />
+                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
+                            <ListItemText primary={text}/>
                         </ListItem>
                     ))}
                 </List>
             </Drawer>
             <main className={classes.content}>
-                <div className={classes.toolbar} />
+                <div className={classes.toolbar}/>
 
-                <h1>Welcome to Turbine!</h1>
+                <h1>Welcome to the Turbine Demo! Don't forget to leave feedback!</h1>
                 {props.loading ? (
                     <Box component={'div'} className={classes.loadingSpinner}>
-                    <LoadingSpinner />
+                        <LoadingSpinner/>
                     </Box>
-                ) : (props.members!.length > 0 && (<EditMemberTable
-                        members={props.members}
-                    />))}
+                ) : (props.members!.length > 0 && (<ConnectedEditMemberTable
+                    members={props.members}
+                />))}
+                <Box width={1} display={'block'} position={'relative'} top={30} bottom={30}>
 
-
+                    <TextField
+                        id="outlined-textarea"
+                        className={classes.feedBackInput}
+                        label="Send Feedback"
+                        placeholder="Enter Feedback here and then click SUBMIT"
+                        multiline
+                        variant="outlined"
+                        InputProps={{
+                            startAdornment: <FeedbackIcon/>
+                        }}
+                        onChange={handleChange}
+                        value={feedBackMsg}
+                    />
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        className={buttonClassname}
+                        disabled={loading}
+                        onClick={handleButtonClick}
+                    >
+                        {btnText}
+                    </Button>
+                </Box>
 
             </main>
         </div>
     );
 };
 
-export default NavDrawer;
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  postFeedback,
+};
+export const ConnectedNavDrawer = connect(mapStateToProps, mapDispatchToProps)(NavDrawer);
 
 
 

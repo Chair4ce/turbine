@@ -1,4 +1,5 @@
 export async function callApi(method: string, path: string, data?: any) {
+    console.log("posting: " + data);
     const res = await fetch(`/${path}`, {
         method,
         headers: {

@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping(MemberController.URI)
 public class MemberController {
-    public static final String URI = "/api/members";
+    public static final String URI = "api/members";
 
     @Autowired
     private MemberRepository memberRepository;
@@ -25,7 +25,7 @@ public class MemberController {
     @CrossOrigin
     @PostMapping
     public Member create(@Valid @RequestBody MemberJSON memberJSON) {
-        Member member = new Member(memberJSON.getFull_name(), memberJSON.getGrade(), memberJSON.getAssigned_pas(),
+        Member member = new Member(memberJSON.getId(), memberJSON.getFull_name(), memberJSON.getGrade(), memberJSON.getAssigned_pas(),
                 memberJSON.getDafsc(), memberJSON.getOffice_symbol(), memberJSON.getDuty_title(),
                 memberJSON.getDuty_start_date(), memberJSON.getDuty_phone(), memberJSON.getAwardec_status(), memberJSON.getEpr_opr_status());
         return this.memberRepository.save(member);

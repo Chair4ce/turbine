@@ -7,6 +7,7 @@ export const initialState: MembersState = {
     data: [] as MemberModel[],
     errors: undefined,
     loading: false,
+    feedbacks: 0,
 };
 
 // Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
@@ -22,6 +23,9 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
         }
         case MemberActionTypes.FETCH_SUCCESS: {
             return { ...state, loading: false, data: action.payload };
+        }
+        case MemberActionTypes.SEND_FEEDBACK_SUCCESS: {
+            return {...state, feedbacks: action.payload}
         }
         case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };

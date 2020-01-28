@@ -1,12 +1,11 @@
 import * as React from 'react'
 import styled from "styled-components";
-import NavDrawer from "../components/layout/leftNavBar/NavDrawer";
+import {ConnectedNavDrawer} from "../components/layout/leftNavBar/NavDrawer";
 
 function Main() {
     return (
         <Page>
-            <NavDrawer loading={true}/>
-
+            <ConnectedNavDrawer loading={true} members={[]}/>
         </Page>
     )
 }

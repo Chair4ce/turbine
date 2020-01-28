@@ -18,8 +18,7 @@ export enum MemberActionTypes {
     FETCH_REQUEST = '@@members/FETCH_REQUEST',
     FETCH_SUCCESS = '@@members/FETCH_SUCCESS',
     FETCH_ERROR = '@@members/FETCH_ERROR',
-    SELECT_MEMBER = '@@members/SELECT_MEMBER',
-    SELECTED = '@@members/SELECTED',
+    SEND_FEEDBACK_SUCCESS = '@@members/SEND_FEEDBACK_SUCCESS',
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.
@@ -28,4 +27,5 @@ export interface MembersState {
     readonly loading: boolean;
     readonly data: MemberModel[];
     readonly errors?: string;
+    readonly feedbacks: number;
 }

@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Data
@@ -38,8 +37,9 @@ class Member {
     private String epr_opr_status;
 
 
-    public Member(String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
+    public Member(long id, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
                       String duty_title, String duty_start_date, String duty_phone, String awardec_status, String epr_opr_status) {
+        this.id = id;
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;
