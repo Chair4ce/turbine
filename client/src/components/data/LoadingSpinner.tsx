@@ -1,5 +1,6 @@
 import * as React from 'react';
-import styled from '../../utils/styled';
+import styled from "styled-components";
+
 
 const LoadingSpinner: React.FC = () => (
         <Container>
@@ -16,10 +17,12 @@ export default LoadingSpinner;
 
 const Container = styled('div')`
     display: flex;
+    flex-direction: row;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
-    background-color: ${props => props.theme.colors.background};
+    width: 100%;
+    height: 30vh;
+    background-color: #212121;
 `;
 
 const Loader = styled('svg')`

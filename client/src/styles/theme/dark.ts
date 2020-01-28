@@ -1,53 +1,13 @@
-import { lighten } from 'polished';
-import { Theme } from '../../utils/styled';
-import brandColors from '../colors/brandColors';
 
-const lightTheme: Theme = {
-    colors: {
-        background: brandColors.turbine_gray,
-        MenuBackground: brandColors.background_sheen,
-        textLight: brandColors.gray60,
-        body: brandColors.gray10,
-        headings: brandColors.gray5,
-        black: brandColors.black,
-        white: brandColors.white,
-        borders: lighten(0.05, brandColors.gray75),
-        tableOdd: lighten(0.025, brandColors.gray75),
-        brand: brandColors.steelteal,
-        menuTitleBar: brandColors.turbine_light_gray,
-    },
-    fonts: {
-        headings:
-            // eslint-disable-next-line max-len
-            "'IBM Plex Sans', -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif",
-        body:
-            // eslint-disable-next-line max-len
-            '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, Arial, sans-serif',
-        monospace: "'IBM Plex Mono', Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace, monospace",
-    },
-    fontSizes: {
-        h1: '2.441rem',
-        h2: '1.953rem',
-        h3: '1.563rem',
-        h4: '1.25rem',
-    },
-    containerPadding: '1.5rem',
-    breakpoints: {
-        xs: '0px',
-        sm: '576px',
-        md: '768px',
-        lg: '992px',
-        xl: '1200px',
-    },
-    widths: {
-        sm: '168px',
-        md: '720px',
-        lg: '960px',
-        xl: '1140px',
-    },
-    heights: {
-        header: '60px',
-    },
-};
+import createMuiTheme from "@material-ui/core/styles/createMuiTheme";
+import {blueGrey} from "@material-ui/core/colors";
 
-export default lightTheme;
+export const darktheme = createMuiTheme({
+    palette: {
+        type: 'dark',
+        primary: blueGrey,
+        secondary: {
+            main: '#E5E5E0',
+        },
+    },
+});

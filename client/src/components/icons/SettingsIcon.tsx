@@ -63,7 +63,7 @@ cursor: pointer;
  
  .inner {
  position: absolute;
- fill: ${props => props.theme.colors.brand};
+ fill: gray;
  transform-origin: 50% 14px;
  }
  

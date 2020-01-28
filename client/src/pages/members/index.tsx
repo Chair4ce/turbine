@@ -1,23 +1,17 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
-import styled from '../../utils/styled';
-import Page from '../../components/layout/Page';
-import PageContainer from '../../components/layout/PageContainer';
-import DataTable from '../../components/layout/DataTable';
-import LoadingSpinner from '../../components/data/LoadingSpinner';
-
 import { ApplicationState } from '../../store';
 import { membersFetchRequest } from '../../store/members/actions';
-import TopNavBar from "../../components/layout/topNavBar/TopNavBar";
 import MemberModel from "../../store/members/MemberModel";
-import LeftNavBar from "../../components/layout/leftNavBar/LeftNavBar";
+import Page from "../../components/layout/Page";
+import NavDrawer from "../../components/layout/leftNavBar/NavDrawer";
+import LoadingSpinner from "../../components/data/LoadingSpinner";
+import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
     loading: boolean;
-    data: MemberModel[];
+    members: MemberModel[];
     errors?: string;
 }
 
@@ -35,51 +29,18 @@ class MembersIndexPage extends React.Component<AllProps> {
         fr();
     }
 
-    private renderData() {
-        const { loading, data } = this.props;
-        return (
-            <DataTable
-                columns={['Member Name', 'Grade', 'DAFSC', 'Office']}
-                widths={['auto', 'auto', 'auto', 'auto']}
-            >
-                {loading && data.length === 0 && (
-                    <MemberLoading>
-                        <td colSpan={3}>Loading...</td>
-                    </MemberLoading>
-                )}
-                {!loading && data.length > 0 && (data.map(member => (
-                    <tr key={member.id}>
-                        <MemberDetail>
-                            <MemberName>
-                                <Link to={`/members/${member.id + member.full_name}`}>{member.full_name}</Link>
-                            </MemberName>
-                        </MemberDetail>
-                        <td>{member.grade}</td>
-                        <td>{member.dafsc}</td>
-                        <td>{member.office_symbol}</td>
-                    </tr>
-                )))}
-            </DataTable>
-        );
-    }
-
     public render() {
-        const { loading } = this.props;
+        const { members, loading } = this.props;
 
         return (
             <Page
-            className="Page">
-                <TopNavBar/>
-                <LeftNavBar/>
-                <PageContainer
-                className="PageContainer">
-                    <TableWrapper>
-                        {loading && (
-                                    <LoadingSpinner />
-                        )}
-                        {this.renderData()}
-                    </TableWrapper>
-                </PageContainer>
+            className="MembersPage">
+                <NavDrawer
+                    members={members}
+                    loading={loading}
+                />
+                <SpeedDialBtn
+                />
             </Page>
         );
     }
@@ -91,7 +52,7 @@ class MembersIndexPage extends React.Component<AllProps> {
 const mapStateToProps = ({ members }: ApplicationState) => ({
     loading: members.loading,
     errors: members.errors,
-    data: members.data,
+    members: members.data,
 });
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.
@@ -107,37 +68,6 @@ export default connect(
     mapDispatchToProps,
 )(MembersIndexPage);
 
-const TableWrapper = styled('div')`
-    position: relative;
-    max-width: ${props => props.theme.widths.md};
-    margin: 0 auto;
-    min-height: 200px;
-`;
 
-const MemberDetail = styled('td')`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`;
 
-// const MemberIcon = styled('img')`
-//   width: 32px;
-//   height: 32px;
-// `
 
-const MemberName = styled('div')`
-    flex: 1 1 auto;
-    height: 100%;
-    margin-left: 1rem;
-
-    a {
-        color: ${props => props.theme.colors.textLight};
-    }
-`;
-
-const MemberLoading = styled('tr')`
-    td {
-        height: 48px;
-        text-align: center;
-    }
-`;

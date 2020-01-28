@@ -1,5 +1,6 @@
 import * as React from 'react';
-import styled from "../../../utils/styled";
+import styled from "styled-components";
+
 
 const TopNavBar: React.FC = () => (
     <Wrapper>
@@ -27,9 +28,8 @@ const Wrapper = styled('div')`
     top: 0;
     left: 199px;
     height: 46px;
-    background: ${props => props.theme.colors.background};
-    color: ${props => props.theme.colors.brand};
-    font-family: ${props => props.theme.fonts.headings};
+    background: darkgray;
+    color: darkcyan;
     z-index: 100;
 
 `;

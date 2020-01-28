@@ -1,6 +1,6 @@
 import { all, call, fork, put, takeEvery } from 'redux-saga/effects';
 import { SquadronActionTypes } from './types';
-import {squadronPostError, squadronPostSuccess, squadronsFetchError, squadronsFetchSuccess} from './actions';
+import { squadronPostSuccess, squadronsFetchError, squadronsFetchSuccess} from './actions';
 import { callApi } from '../../utils/api';
 import SquadronModel from "./SquadronModel";
 
