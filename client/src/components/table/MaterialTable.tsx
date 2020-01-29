@@ -2,7 +2,6 @@ import React from 'react';
 import MaterialTable, { Column } from 'material-table';
 import MemberModel from "../../store/members/MemberModel";
 import {Box} from "@material-ui/core";
-import {connect} from "react-redux";
 
 interface Row {
      id: number;
@@ -23,16 +22,12 @@ interface TableState {
     data: Row[];
 }
 
-interface PropsFromState {
+interface Props {
     members: MemberModel[];
 }
 
 
-
-
-type AllProps = PropsFromState
-
-const EditMemberTable: React.FC<AllProps> = props => {
+const EditMemberTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
 
         columns: [
@@ -156,8 +151,5 @@ const EditMemberTable: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = () => ({});
 
-const mapDispatchToProps = {
-};
-export const ConnectedEditMemberTable = connect(mapStateToProps, mapDispatchToProps)(EditMemberTable);
+export default EditMemberTable;
