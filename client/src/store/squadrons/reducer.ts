@@ -36,7 +36,6 @@ const reducer: Reducer<SquadronsState> = (state = initialState, action) => {
             };
         }
         case SquadronActionTypes.POST_REQUEST: {
-            console.log("POST_REQUEST");
             postNewSquadron(action.payload);
             return {
                 ...state,
@@ -44,7 +43,6 @@ const reducer: Reducer<SquadronsState> = (state = initialState, action) => {
             };
         }
         case SquadronActionTypes.POST_SUCCESS: {
-            console.log("POST_SUCCESS");
             return {
                 ...state,
                 showInput: false,

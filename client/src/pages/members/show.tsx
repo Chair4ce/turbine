@@ -6,7 +6,6 @@ import { membersFetchRequest } from '../../store/members/actions';
 import styled from '../../utils/styled';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
-import {Box} from "@material-ui/core";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {

@@ -6,6 +6,8 @@ import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
 import {ConnectedNavDrawer} from "../../components/layout/leftNavBar/NavDrawer";
 import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
+import {ConnectedInProcessingContainer} from "../../components/InProcessingContainer";
+import {ConnectedFeedbackInput} from "../../components/layout/input/Feedback";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -38,6 +40,10 @@ class MembersIndexPage extends React.Component<AllProps> {
                     members={members}
                     loading={loading}
                 />
+                <ConnectedInProcessingContainer
+                loading={false} members={members}
+                />
+                <ConnectedFeedbackInput/>
                 <SpeedDialBtn
                 />
             </Page>
