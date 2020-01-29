@@ -5,5 +5,5 @@ Feature('Home Page');
 Scenario ('should see a home page', (I) => {
     I.amOnPage('/');
     I.see("Turbine");
-    I.waitForText('Welcome to Turbine!', 10);
+    I.waitForText('Welcome to the Turbine Demo!', 10);
 });

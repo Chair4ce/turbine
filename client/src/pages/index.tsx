@@ -5,7 +5,7 @@ import {ConnectedNavDrawer} from "../components/layout/leftNavBar/NavDrawer";
 function Main() {
     return (
         <Page>
-            <ConnectedNavDrawer loading={true} members={[]}/>
+            <ConnectedNavDrawer loading={false} members={[]}/>
         </Page>
     )
 }

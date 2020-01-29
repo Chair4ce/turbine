@@ -173,12 +173,14 @@ const NavDrawer: React.FC<AllProps> = props => {
                 postFeedback(new FeedbackModel(feedBackMsg));
                 console.log("FeedBack Submitted: " + feedBackMsg);
                 setfeedBackMsg("")
-            }, 2000);
+            }, 500);
         }
     };
 
     const handleChange = (e: any) => {
         if (!loading) {
+            setSuccess(false);
+            setbtnText("SUBMIT");
             setfeedBackMsg(e.target.value);
         }
     };

@@ -27,9 +27,6 @@ interface PropsFromState {
     members: MemberModel[];
 }
 
-
-
-
 type AllProps = PropsFromState
 
 const EditMemberTable: React.FC<AllProps> = props => {

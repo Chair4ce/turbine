@@ -7,7 +7,7 @@ describe('reducer', () => {
 
     beforeEach(() => {
         memberList = [
-                new MemberModel('1', 'Hoag, Jacy L', 'TSgt',
+                new MemberModel(1, 'Hoag, Jacy L', 'TSgt',
                     '10IS',
                     '3D1X2',
                     'SXCP',
@@ -17,7 +17,7 @@ describe('reducer', () => {
                     '',
                     ''),
                 new MemberModel(
-                    '2',
+                    2,
                     'Hoag, Jacy L',
                     'TSgt',
                     '10IS',
@@ -29,7 +29,7 @@ describe('reducer', () => {
                     '',
                     ''),
                 new MemberModel(
-                    '3',
+                    3,
                     'Hoag, Jacy L',
                     'TSgt',
                     '10IS',
@@ -50,7 +50,7 @@ describe('reducer', () => {
         };
 
         let members = [
-            new MemberModel('1', 'Hoag, Jacy L', 'TSgt',
+            new MemberModel(1, 'Hoag, Jacy L', 'TSgt',
                 '10IS',
                 '3D1X2',
                 'SXCP',
@@ -60,7 +60,7 @@ describe('reducer', () => {
                 '',
                 ''),
             new MemberModel(
-                '2',
+                2,
                 'Hoag, Jacy L',
                 'TSgt',
                 '10IS',
@@ -72,7 +72,7 @@ describe('reducer', () => {
                 '',
                 ''),
             new MemberModel(
-                '3',
+                3,
                 'Hoag, Jacy L',
                 'TSgt',
                 '10IS',
