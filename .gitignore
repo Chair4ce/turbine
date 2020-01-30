@@ -30,6 +30,5 @@ build/
 ### VS Code ###
 .vscode/
 
-src/main/resources/static/
 tmp/
 acceptance/node_modules/
