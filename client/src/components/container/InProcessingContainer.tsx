@@ -5,7 +5,7 @@ import LoadingSpinner from "../data/LoadingSpinner";
 import {connect} from "react-redux";
 import MemberModel from "../../store/members/MemberModel";
 import { postFeedback } from '../../store/members/sagas';
-import TabbedRosters from "../../pages/Rosters";
+import TabbedRosters from "../TabbedRosters";
 
 
 

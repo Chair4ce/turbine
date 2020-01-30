@@ -2,7 +2,6 @@ import * as React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Global } from '@emotion/core'
 import Root from './components/layout/Root'
-import Main from './pages/home'
 import normalize from './styles/normalize'
 import MembersIndexPage from "./pages/members/index";
 
@@ -20,8 +19,8 @@ const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
         <Switch>
-            <Route exact path="/" component={Main} />
-            <Route path="/members" component={MembersIndexPage} />
+            <Route exact path="/" component={MembersIndexPage} />
+            {/*<Route path="/members" component={MembersIndexPage} />*/}
         </Switch>
     </Root>
 

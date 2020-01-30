@@ -1,14 +1,11 @@
 import * as React from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Box, Button, TextField} from "@material-ui/core";
-import FeedbackIcon from "@material-ui/icons/Feedback";
 import {postFeedback} from "../../../store/members/sagas";
 import {connect} from "react-redux";
 import clsx from "clsx";
 import FeedbackModel from "../../../store/members/FeedbackModel";
 import {green} from "@material-ui/core/colors";
-
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -19,9 +16,6 @@ const useStyles = makeStyles((theme: Theme) =>
             bottom: 0,
             justifyContent: 'center',
             left: 40,
-        },
-        section: {
-            backgroundColor: 'inherit',
         },
         feedBackInput: {
             width: '80%',
@@ -63,32 +57,38 @@ const FeedbackInput: React.FC<Props> = props => {
     const [loading, setLoading] = React.useState(false);
     const timer = React.useRef<number>();
 
-
     const buttonClassname = clsx({
         [classes.buttonIdle]: !success,
         [classes.buttonSuccess]: success,
     });
 
-    const handleButtonClick = () => {
+    const handleButtonClick = async() => {
         if (!loading) {
             setSuccess(false);
             setLoading(true);
-            timer.current = setTimeout(() => {
-                setSuccess(true);
-                setbtnText("THANK YOU!");
-                setLoading(false);
-                postFeedback(new FeedbackModel(feedBackMsg));
-
-                setfeedBackMsg("")
-            }, 500);
+           await submitFeedback();
         }
     };
 
+    const submitFeedback = () => {
+        timer.current = setTimeout(() => {
+            setLoading(false);
+            postFeedback(new FeedbackModel(feedBackMsg));
+            setSuccess(true);
+            setbtnText("THANK YOU!");
+            setfeedBackMsg("")
+        }, 500);
+    };
+
+
     const handleChange = (e: any) => {
         if (!loading) {
-            setSuccess(false);
-            setbtnText("SUBMIT");
             setfeedBackMsg(e.target.value);
+            if (btnText === "THANK YOU!") {
+                setbtnText("SUBMIT")
+                setSuccess(false);
+                setLoading(false);
+            }
         }
     };
     return (
@@ -101,11 +101,8 @@ const FeedbackInput: React.FC<Props> = props => {
                     placeholder="Enter Feedback here and then click SUBMIT"
                     multiline
                     variant="filled"
-                    InputProps={{
-                        startAdornment: <FeedbackIcon/>
-                    }}
                     onChange={handleChange}
-                    value={feedBackMsg}
+                    value={feedBackMsg.length === 0 ? "" : feedBackMsg}
                 />
                 <Button
                     variant="contained"
@@ -117,8 +114,6 @@ const FeedbackInput: React.FC<Props> = props => {
                     {btnText}
                 </Button>
             </Box>
-            <div className={classes.section}>
-            </div>
         </div>
     );
 };
