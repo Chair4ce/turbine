@@ -21,7 +21,7 @@ type AllProps = PropsFromState & RouteComponentProps;
 const MembersPage: React.FC<AllProps> = ({ match }) => {
     return (
         <Switch>
-            <Route exact path={`${match.path}/`} component={MembersIndexPage} />
+            <Route exact path={`${match.path}/members`} component={MembersIndexPage} />
             <Route path={`${match.path}/:Id`} component={ShowMembersPage} />
         </Switch>
     );

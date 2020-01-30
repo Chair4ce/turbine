@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            position: 'absolute',
+            position: 'fixed',
             padding: 40,
             bottom: 0,
             justifyContent: 'center',
@@ -100,7 +100,7 @@ const FeedbackInput: React.FC<Props> = props => {
                     label="Send Feedback"
                     placeholder="Enter Feedback here and then click SUBMIT"
                     multiline
-                    variant="outlined"
+                    variant="filled"
                     InputProps={{
                         startAdornment: <FeedbackIcon/>
                     }}
