@@ -24,6 +24,7 @@ interface TableState {
 
 interface Props {
     members: MemberModel[];
+    title: string;
 }
 
 
@@ -50,7 +51,7 @@ const EditTable: React.FC<Props> = props => {
     return (
         <Box width={1200}>
         <MaterialTable
-            title="In Processing"
+            title={props.title}
 
             columns={state.columns}
             data={state.data}

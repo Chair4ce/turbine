@@ -14,10 +14,11 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {connect} from "react-redux";
 import {postFeedback} from "../../store/members/sagas";
-import {Box, ListItem, ListItemIcon, ListItemText, Zoom} from "@material-ui/core";
+import {Box, Container, ListItem, ListItemIcon, ListItemText, Zoom} from "@material-ui/core";
 import MemberModel from "../../store/members/MemberModel";
 import EditTable from "../table/EditTable";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import GroupIcon from '@material-ui/icons/Group';
 
 const drawerWidth = 240;
 
@@ -73,9 +74,13 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         content: {
-            display: 'block',
+            display: 'flex',
+            position: 'relative',
+            flexDirection: 'column',
+            justifyContent: 'space around',
             Height: '100%',
             padding: theme.spacing(3),
+            top: 80,
         },
         toolbar: {
             display: 'flex',
@@ -105,10 +110,14 @@ const NavDrawer: React.FC<AllProps> = props => {
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [alphaTable, showAlphaTable] = React.useState(false);
     const [gainTable, showGainTable] = React.useState(false);
 
 const handleGainBtnClick = () => {
     showGainTable(prev => !prev)
+};
+const handleAlphaBtnClick = () => {
+    showAlphaTable(prev => !prev)
 };
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -172,6 +181,10 @@ const handleGainBtnClick = () => {
                         <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>
                         <ListItemText primary="In Processing"/>
                     </ListItem>
+                    <ListItem button onClick={handleAlphaBtnClick}>
+                        <ListItemIcon>{<GroupIcon/>}</ListItemIcon>
+                        <ListItemText primary="Alpha Roster"/>
+                    </ListItem>
                     {/*{['Members', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
                     {/*    <ListItem button key={text}>*/}
                     {/*        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>*/}
@@ -189,15 +202,24 @@ const handleGainBtnClick = () => {
                 {/*    ))}*/}
                 {/*</List>*/}
             </Drawer>
-
+            <Container className={classes.content}>
+            <Box display={'flex'} flexDirection={'column'} justifyContent={'space-around'}  >
             {gainTable &&
                 <Zoom in={gainTable} style={{ transitionDelay: gainTable ? '100ms' : '0ms' }} >
-                    <Box component={'div'} position={'relative'} top={120} left={60} >
-                        <EditTable members={props.members}/>
+                    <Box component={'div'} paddingBottom={10} >
+                        <EditTable members={props.members} title={"In Processing"}/>
                     </Box>
                 </Zoom>
             }
-
+            {alphaTable &&
+            <Zoom in={alphaTable} style={{ transitionDelay: alphaTable ? '100ms' : '0ms' }} >
+                <Box component={'div'} paddingBottom={10}>
+                    <EditTable members={props.members} title={"Alpha Roster"}/>
+                </Box>
+            </Zoom>
+            }
+            </Box>
+            </Container>
         </div>
     );
 };
