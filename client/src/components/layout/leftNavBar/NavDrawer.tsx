@@ -12,14 +12,12 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
 import MemberModel from "../../../store/members/MemberModel";
 import {connect} from "react-redux";
 import {postFeedback} from "../../../store/members/sagas";
+import {Box, Link, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+
 
 const drawerWidth = 240;
 
@@ -28,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             display: 'flex',
             height: '100%',
+            top: 120,
         },
         appBar: {
             zIndex: theme.zIndex.drawer + 1,
@@ -162,23 +161,39 @@ const NavDrawer: React.FC<AllProps> = props => {
                 </div>
                 <Divider/>
                 <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                            <ListItemText primary={text}/>
+                    {/*<ListItem button>*/}
+                    {/*    <ListItemIcon>{<FiberNewIcon/>}</ListItemIcon>*/}
+                    {/*    <ListItemText primary="Members"/>*/}
+                    {/*</ListItem>*/}
+                    <Link href={'/members'}>
+                        <ListItem button>
+                            <ListItemIcon>{<SupervisedUserCircleIcon/>}</ListItemIcon>
+                            <ListItemText primary="Roster"/>
                         </ListItem>
-                    ))}
+                    </Link>
+
+
+                    {/*{['Members', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
+                    {/*    <ListItem button key={text}>*/}
+                    {/*        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>*/}
+                    {/*        <ListItemText primary={text}/>*/}
+                    {/*    </ListItem>*/}
+                    {/*))}*/}
                 </List>
                 <Divider/>
-                <List>
-                    {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                        <ListItem button key={text}>
-                            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>
-                            <ListItemText primary={text}/>
-                        </ListItem>
-                    ))}
-                </List>
+
+                {/*<List>*/}
+                {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
+                {/*        <ListItem button key={text}>*/}
+                {/*            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>*/}
+                {/*            <ListItemText primary={text}/>*/}
+                {/*        </ListItem>*/}
+                {/*    ))}*/}
+                {/*</List>*/}
             </Drawer>
+            <Box position={'relative'} top={120} left={60}>
+                <h1>Welcome to the Turbine Demo!</h1>
+            </Box>
         </div>
     );
 };
@@ -186,7 +201,7 @@ const NavDrawer: React.FC<AllProps> = props => {
 const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
-  postFeedback,
+    postFeedback,
 };
 export const ConnectedNavDrawer = connect(mapStateToProps, mapDispatchToProps)(NavDrawer);
 

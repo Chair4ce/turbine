@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { Global } from '@emotion/core'
 import Root from './components/layout/Root'
-import Main from './pages/index'
+import Main from './pages/home'
 import normalize from './styles/normalize'
 import MembersIndexPage from "./pages/members/index";
 

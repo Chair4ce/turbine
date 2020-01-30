@@ -4,10 +4,11 @@ import { ApplicationState } from '../../store';
 import {membersFetchRequest} from '../../store/members/actions';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
-import {ConnectedNavDrawer} from "../../components/layout/leftNavBar/NavDrawer";
 import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
-import {ConnectedInProcessingContainer} from "../../components/InProcessingContainer";
+
 import {ConnectedFeedbackInput} from "../../components/layout/input/Feedback";
+import {ConnectedInProcessingContainer} from "../../components/container/InProcessingContainer";
+import {Link} from "react-router-dom";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -36,10 +37,6 @@ class MembersIndexPage extends React.Component<AllProps> {
         return (
             <Page
             className="MembersPage">
-                <ConnectedNavDrawer
-                    members={members}
-                    loading={loading}
-                />
                 <ConnectedInProcessingContainer
                 loading={false} members={members}
                 />
