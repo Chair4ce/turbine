@@ -28,6 +28,7 @@ class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
         const { membersFetchRequest: fr } = this.props;
         fr();
+        console.log("fetching members")
     }
 
     public render() {

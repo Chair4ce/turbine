@@ -24,6 +24,7 @@ interface TableState {
 
 interface Props {
     members: MemberModel[];
+    loading: boolean;
     title: string;
 }
 
@@ -121,7 +122,7 @@ const EditTable: React.FC<Props> = props => {
                                 data.push(newData);
                                 return { ...prevState, data };
                             });
-                        }, 600);
+                        }, 300);
                     }),
                 onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
@@ -134,7 +135,7 @@ const EditTable: React.FC<Props> = props => {
                                     return { ...prevState, data };
                                 });
                             }
-                        }, 600);
+                        }, 300);
                     }),
                 onRowDelete: oldData =>
                     new Promise(resolve => {
@@ -145,7 +146,7 @@ const EditTable: React.FC<Props> = props => {
                                 data.splice(data.indexOf(oldData), 1);
                                 return { ...prevState, data };
                             });
-                        }, 600);
+                        }, 300);
                     }),
             }}
         />

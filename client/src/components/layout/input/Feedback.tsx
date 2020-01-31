@@ -76,7 +76,7 @@ const FeedbackInput: React.FC<Props> = props => {
             postFeedback(new FeedbackModel(feedBackMsg));
             setSuccess(true);
             setbtnText("THANK YOU!");
-            setfeedBackMsg("")
+            setfeedBackMsg("");
         }, 500);
     };
 
@@ -85,7 +85,7 @@ const FeedbackInput: React.FC<Props> = props => {
         if (!loading) {
             setfeedBackMsg(e.target.value);
             if (btnText === "THANK YOU!") {
-                setbtnText("SUBMIT")
+                setbtnText("SUBMIT");
                 setSuccess(false);
                 setLoading(false);
             }
