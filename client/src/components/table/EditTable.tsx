@@ -1,7 +1,6 @@
 import React from 'react';
 import MaterialTable, { Column } from 'material-table';
 import MemberModel from "../../store/members/MemberModel";
-import {Box} from "@material-ui/core";
 
 interface Row {
      id: number;
@@ -26,6 +25,7 @@ interface Props {
     members: MemberModel[];
     loading: boolean;
     title: string;
+    className?: string;
 }
 
 
@@ -48,12 +48,12 @@ const EditTable: React.FC<Props> = props => {
         data: props.members,
     });
 
+    const timer = React.useRef<number>();
 
     return (
-        <Box width={1200}>
+
         <MaterialTable
             title={props.title}
-
             columns={state.columns}
             data={state.data}
             actions={[
@@ -104,7 +104,7 @@ const EditTable: React.FC<Props> = props => {
                 filtering: true,
                 grouping: true,
                 search: true,
-                selection: true,
+                // selection: true,
                 exportButton: true,
                 // selectionProps: (rowData: MemberModel) => ({
                 //     disabled: rowData.full_name === 'ABRAMS, JOSEPH L',
@@ -150,7 +150,6 @@ const EditTable: React.FC<Props> = props => {
                     }),
             }}
         />
-        </Box>
     );
 };
 

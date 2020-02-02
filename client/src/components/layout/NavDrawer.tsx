@@ -14,14 +14,15 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {connect} from "react-redux";
 import {postFeedback} from "../../store/members/sagas";
-import {Box, Container, ListItem, ListItemIcon, ListItemText, Zoom} from "@material-ui/core";
+import {Box, Container, Grow, ListItem, ListItemIcon, ListItemText, Zoom} from "@material-ui/core";
 import MemberModel from "../../store/members/MemberModel";
 import EditTable from "../table/EditTable";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import GroupIcon from '@material-ui/icons/Group';
-import CloseIcon from '@material-ui/icons/Close';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import PowerIcon from '@material-ui/icons/Power';
+
+
 const drawerWidth = 240;
 
 
@@ -83,7 +84,8 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'space around',
             Height: '100%',
             padding: theme.spacing(3),
-            top: 80,
+            top: 65,
+            marginBottom: 42,
         },
         toolbar: {
             display: 'flex',
@@ -92,13 +94,23 @@ const useStyles = makeStyles((theme: Theme) =>
             padding: theme.spacing(0, 1),
             ...theme.mixins.toolbar,
         },
-        gainTableOff: {
+        selected: {
+            backgroundColor: '#DD7373',
+            // opacity: '.8',
+        },
+        unselected: {
+
+        },
+        table: {
+          paddingBottom: 20,
+        },
+        gainTableDisplay: {
             display: 'none'
         },
-        alphaTableOff: {
+        lossTableDisplay: {
             display: 'none'
         },
-        lossTableOff: {
+        alphaTableDisplay: {
             display: 'none'
         },
     }),
@@ -123,39 +135,29 @@ const NavDrawer: React.FC<AllProps> = props => {
     const classes = useStyles();
     const theme = useTheme();
 
-
-
     const [open, setOpen] = React.useState(false);
+
     const [alphaTable, showAlphaTable] = React.useState(false);
     const [gainTable, showGainTable] = React.useState(false);
     const [lossTable, showLossTable] = React.useState(false);
+
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
 
-    const gainTableClassname = clsx({
-        [classes.gainTableOff]: !gainTable,
-    });
-    const alphaTableClassname = clsx({
-        [classes.alphaTableOff]: !alphaTable,
-    });
-    const lossTableClassname = clsx({
-        [classes.lossTableOff]: !lossTable,
-    });
-
 
     const handleAlphaBtnClick = () => {
         handleTableOrder("alpha");
-        showAlphaTable(true)
+        showAlphaTable(prev => !prev)
     };
     const handleGainBtnClick = () => {
         handleTableOrder("gain");
-        showGainTable(true)
+        showGainTable(prev => !prev)
     };
 
     const handleLossBtnClick = () => {
         handleTableOrder("loss");
-        showLossTable(true)
+        showLossTable(prev => !prev)
     };
 
     const handleDrawerOpen = () => {
@@ -165,6 +167,7 @@ const NavDrawer: React.FC<AllProps> = props => {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
 
     const handleTableOrder = (table: string) => {
         switch (table) {
@@ -203,7 +206,6 @@ const NavDrawer: React.FC<AllProps> = props => {
     //             });
     //         }, 300);
     //     })
-
 
 
     return (
@@ -256,15 +258,24 @@ const NavDrawer: React.FC<AllProps> = props => {
                     {/*    <ListItemIcon>{<FiberNewIcon/>}</ListItemIcon>*/}
                     {/*    <ListItemText primary="Members"/>*/}
                     {/*</ListItem>*/}
-                    <ListItem button onClick={handleGainBtnClick}>
+                    <ListItem button onClick={handleGainBtnClick} className={clsx( {
+                        [classes.selected]: gainTable,
+                        [classes.unselected]: !gainTable,
+                    })}>
                         <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>
                         <ListItemText primary="In Processing"/>
                     </ListItem>
-                    <ListItem button onClick={handleAlphaBtnClick}>
+                    <ListItem button onClick={handleAlphaBtnClick} className={clsx( {
+                        [classes.selected]: alphaTable,
+                        [classes.unselected]: !alphaTable,
+                    })}>
                         <ListItemIcon>{<GroupIcon/>}</ListItemIcon>
                         <ListItemText primary="Alpha Roster"/>
                     </ListItem>
-                    <ListItem button onClick={handleLossBtnClick}>
+                    <ListItem button onClick={handleLossBtnClick} className={clsx( {
+                        [classes.selected]: lossTable,
+                        [classes.unselected]: !lossTable,
+                    })}>
                         <ListItemIcon>{<PeopleOutlineIcon/>}</ListItemIcon>
                         <ListItemText primary="Loss Roster"/>
                     </ListItem>
@@ -276,7 +287,7 @@ const NavDrawer: React.FC<AllProps> = props => {
                     {/*))}*/}
                 </List>
                 <Divider/>
-                <ListItem button onClick={handleLossBtnClick}>
+                <ListItem button>
                     <ListItemIcon>{<PowerIcon/>}</ListItemIcon>
                     <ListItemText primary="Man Power Positions"/>
                 </ListItem>
@@ -290,37 +301,47 @@ const NavDrawer: React.FC<AllProps> = props => {
                 {/*</List>*/}
             </Drawer>
             <Container className={classes.content}>
-                <Box display={'flex'} flexDirection={'column'} justifyContent={'space-around'}>
-                    {!props.loading &&  <Zoom in={gainTable} style={{transitionDelay: gainTable ? '100ms' : '0ms'}}>
-                        <Box component={'div'} paddingBottom={10} order={gainTableOrder} className={gainTableClassname}>
-                        <CloseIcon onClick={() => {showGainTable(false)}} cursor={'pointer'}/>
-                        <EditTable members={props.members} loading={props.loading} title={"In Processing"}/>
-                        </Box>
-                        </Zoom> }
 
-                    {!props.loading &&
-                    <Zoom in={alphaTable} style={{transitionDelay: alphaTable ? '100ms' : '0ms'}}>
-                        <Box component={'div'} paddingBottom={10} order={alphaTableOrder}
-                             className={alphaTableClassname}>
-                            <CloseIcon onClick={() => {
-                                showAlphaTable(false)
-                            }} cursor={'pointer'}/>
-                            <EditTable members={props.members} loading={props.loading} title={"Alpha Roster"}/>
+                <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
+                     position={'relative'}>
+
+                    {gainTable &&
+                    <Grow in={gainTable}>
+                        <Box width={1200} order={gainTableOrder} className={classes.table}>
+                            <EditTable
+                                members={props.members}
+                                loading={props.loading}
+                                title={"In Processing"}
+                            />
                         </Box>
-                    </Zoom>
+                    </Grow>
                     }
-                    {!props.loading &&
-                    <Zoom in={lossTable} style={{transitionDelay: alphaTable ? '100ms' : '0ms'}}>
-                        <Box component={'div'} paddingBottom={10} order={lossTableOrder}
-                             className={lossTableClassname}>
-                            <CloseIcon onClick={() => {
-                                showLossTable(false)
-                            }} cursor={'pointer'}/>
-                            <EditTable members={props.members} loading={props.loading} title={"Loss Roster"}/>
+                    {alphaTable &&
+                    <Grow in={alphaTable}>
+                        <Box width={1200} order={alphaTableOrder} className={classes.table}>
+                    <EditTable
+                        members={props.members}
+                        loading={props.loading}
+                        title={"Alpha Roster"}
+                        // className={alphaTableClassname}
+                    />
                         </Box>
-                    </Zoom>
+                    </Grow>
+                    }
+                    {lossTable &&
+                    <Grow in={lossTable}>
+                        <Box width={1200} order={lossTableOrder} className={classes.table}>
+                    <EditTable
+                        members={props.members}
+                        loading={props.loading}
+                        title={"Loss Roster"}
+                    />
+                        </Box>
+                    </Grow>
                     }
                 </Box>
+
+
             </Container>
         </div>
     );

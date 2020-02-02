@@ -10,12 +10,13 @@ import {green} from "@material-ui/core/colors";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            width: '100%',
+            width: 800,
             position: 'fixed',
             padding: 40,
             bottom: 0,
             justifyContent: 'center',
-            left: 40,
+            left: 55,
+            opacity: 1,
         },
         feedBackInput: {
             width: '80%',

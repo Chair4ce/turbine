@@ -32,10 +32,6 @@ type AllProps = PropsFromState & PropsFromDispatch & RouteComponentProps<RoutePa
 
 // const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT || 'https://api.opendota.com';
 
-const Wrapper = styled('div')`
-    position: relative;
-`;
-
 class ShowMembersPage extends React.Component<AllProps, State> {
     constructor(props: AllProps) {
         super(props);
