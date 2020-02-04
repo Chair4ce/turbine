@@ -13,15 +13,30 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {connect} from "react-redux";
+import Button from "@material-ui/core/Button";
 import {postFeedback} from "../../store/members/sagas";
-import {Box, Container, Grow, ListItem, ListItemIcon, ListItemText, Zoom} from "@material-ui/core";
+import {
+    Box,
+    Container,
+    Grow,
+    ListItem,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+    Zoom
+} from "@material-ui/core";
 import MemberModel from "../../store/members/MemberModel";
 import EditTable from "../table/EditTable";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import GroupIcon from '@material-ui/icons/Group';
 import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import PowerIcon from '@material-ui/icons/Power';
-
+import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
+import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
+import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
+import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
+import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
+import {ApplicationState} from "../../store";
 
 const drawerWidth = 240;
 
@@ -113,12 +128,27 @@ const useStyles = makeStyles((theme: Theme) =>
         alphaTableDisplay: {
             display: 'none'
         },
+        csvInput: {
+            background: 'black',
+            width: 700,
+            height: 700,
+            top: 200,
+            left: 400,
+        },
+        button: {
+
+        },
+        input: {
+
+
+        }
     }),
 );
 
 interface PropsFromState {
     members: MemberModel[];
     loading: boolean;
+    csvInputModal: boolean;
     className?: string;
 }
 
@@ -193,7 +223,49 @@ const NavDrawer: React.FC<AllProps> = props => {
                 break;
             }
         }
-    }
+    };
+    const doUpload = (e: any) => {
+        e.preventDefault();
+        let formData = new FormData();
+        e.persist();
+        if (e.type === 'change') {
+            const element = document.querySelector('#browseInput')! as HTMLInputElement;
+            if (element != null && element.files) {
+                formData.append('file', element.files[0]);
+            }
+        } else {
+            formData.append('file', e.dataTransfer.files[0]);
+        }
+        let file: File = formData.get('file') as File;
+        if (file) {
+            let fileName = file.name;
+            if (fileName.toLowerCase().endsWith('ppt')) {
+                (document.querySelector('#browseInput') as HTMLInputElement).value = '';
+                // Toast.create(
+                //     5000,
+                //     'errorToast',
+                //     'The file format .ppt is not compatible with Fritz. File must be saved as .pdf.'
+                // );
+            }
+            if (fileName.toLowerCase().endsWith('csv')) {
+                console.log(formData);
+                // await this.props.uploadActions!.upload(formData);
+                // let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
+                // let ele2 = document.querySelector('.helpMessage') as HTMLElement;
+                // if (ele1 && ele2) {
+                //     ele1.style.border = 'none';
+                //     ele2.style.display = 'none';
+                // }
+            } else if (!fileName.toLowerCase().endsWith('ppt')) {
+                // (document.querySelector('#browseInput') as HTMLInputElement).value = '';
+                // Toast.create(
+                //     5000,
+                //     'errorToast',
+                //     '<b>Error:</b> File must be a PDF(<b>.pdf</b>)'
+                // );
+            }
+        }
+    };
 
     // onRowAdd: newData =>
     //     new Promise(resolve => {
@@ -207,6 +279,9 @@ const NavDrawer: React.FC<AllProps> = props => {
     //         }, 300);
     //     })
 
+    const handleFile = (e: any) => {
+        console.log(e.target.value)
+    };
 
     return (
         <div className={classes.root}>
@@ -232,6 +307,15 @@ const NavDrawer: React.FC<AllProps> = props => {
                     <Typography variant="h6" noWrap>
                         Turbine
                     </Typography>
+                    <ListItemSecondaryAction>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            // onClick={handleDrawerOpen}
+                            edge="end">
+                            <AccountCircleOutlinedIcon/>
+                        </IconButton>
+                    </ListItemSecondaryAction>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -289,7 +373,24 @@ const NavDrawer: React.FC<AllProps> = props => {
                 <Divider/>
                 <ListItem button>
                     <ListItemIcon>{<PowerIcon/>}</ListItemIcon>
-                    <ListItemText primary="Man Power Positions"/>
+                    <ListItemText primary="Positions"/>
+                </ListItem>
+
+                <ListItem button>
+                    <ListItemIcon>{<DirectionsRunIcon/>}</ListItemIcon>
+                    <ListItemText primary="Fitness"/>
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon>{<DescriptionOutlinedIcon/>}</ListItemIcon>
+                    <ListItemText primary="Evaluations"/>
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon>{<EmojiEventsOutlinedIcon/>}</ListItemIcon>
+                    <ListItemText primary="Awards & Decs"/>
+                </ListItem>
+                <ListItem button>
+                    <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>
+                    <ListItemText primary="Supervisors"/>
                 </ListItem>
                 {/*<List>*/}
                 {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
@@ -304,6 +405,24 @@ const NavDrawer: React.FC<AllProps> = props => {
 
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
                      position={'relative'}>
+                    {props.csvInputModal &&
+                    <Box className={classes.csvInput} >
+                        <input
+                            accept="text/csv/*"
+                            className={classes.input}
+                            style={{ display: 'none' }}
+                            id="raised-button-file"
+                            multiple
+                            type="file"
+                            onChange={handleFile}
+                        />
+                        <label htmlFor="raised-button-file">
+                           <Button component="span" className={classes.button}>
+                                Upload
+                            </Button>
+                        </label>
+                    </Box>
+                    }
 
                     {gainTable &&
                     <Grow in={gainTable}>
@@ -345,9 +464,14 @@ const NavDrawer: React.FC<AllProps> = props => {
             </Container>
         </div>
     );
+
+
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({showModal}: ApplicationState) => ({
+    csvInputModal: showModal.csvInput
+
+});
 
 const mapDispatchToProps = {
     postFeedback,
