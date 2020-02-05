@@ -48,7 +48,7 @@ const EditTable: React.FC<Props> = props => {
         data: props.members,
     });
 
-    const timer = React.useRef<number>();
+    // const timer = React.useRef<number>();
 
     return (
 

@@ -6,6 +6,9 @@ import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
+import {Box} from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import CsvInput from "../modal/CsvInput";
 
 interface Props {
 }
@@ -24,22 +27,20 @@ const useStyles = makeStyles((theme: Theme) =>
             pointerEvents: 'none',
         },
         speedDial: {
-            position: 'absolute',
+            position: 'fixed',
             bottom: theme.spacing(2),
             right: theme.spacing(2),
         },
     }),
 );
 
-const actions = [
-    { icon: <FileCopyIcon />, name: 'Upload' },
-    { icon: <SaveIcon />, name: 'Task' },
-];
+
 
 const SpeedDialBtn: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [hidden] = React.useState(false);
+    const [showCsvInputModal, setShowCsvInputModal] = React.useState(false);
 
     const handleOpen = () => {
         setOpen(true);
@@ -49,8 +50,20 @@ const SpeedDialBtn: React.FC<Props> = props => {
         setOpen(false);
     };
 
+    const handleUploadAction = () => {
+        setShowCsvInputModal(true);
+    };
+
+    const actions = [
+        { icon: <FileCopyIcon onClick={handleUploadAction}/>, name: 'Upload' },
+        { icon: <SaveIcon />, name: 'Task' },
+    ];
+
     return (
         <div className={classes.root}>
+            {showCsvInputModal &&
+            <CsvInput/>
+            }
             {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
             <Backdrop open={open}  timeout={10}/>
             <SpeedDial

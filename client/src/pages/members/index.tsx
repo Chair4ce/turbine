@@ -28,7 +28,6 @@ class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
         const { membersFetchRequest: fr } = this.props;
         fr();
-        console.log("fetching members")
     }
 
     public render() {
@@ -39,8 +38,6 @@ class MembersIndexPage extends React.Component<AllProps> {
             className="MembersPage">
                 <ConnectedNavDrawer members={members} loading={loading}/>
                 <ConnectedFeedbackInput/>
-                <SpeedDialBtn
-                />
             </Page>
         );
     }

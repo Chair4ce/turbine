@@ -16,6 +16,7 @@ import {connect} from "react-redux";
 import Button from "@material-ui/core/Button";
 import {postFeedback} from "../../store/members/sagas";
 import {
+    Backdrop,
     Box,
     Container,
     Grow,
@@ -23,7 +24,6 @@ import {
     ListItemIcon,
     ListItemSecondaryAction,
     ListItemText,
-    Zoom
 } from "@material-ui/core";
 import MemberModel from "../../store/members/MemberModel";
 import EditTable from "../table/EditTable";
@@ -39,6 +39,8 @@ import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined'
 import {ApplicationState} from "../../store";
 
 import { JsonToTable } from "react-json-to-table";
+import SpeedDialBtn from "./button/SpeedDialBtn";
+
 
 const drawerWidth = 240;
 
@@ -137,22 +139,6 @@ const useStyles = makeStyles((theme: Theme) =>
             top: 200,
             left: 400,
         },
-        button: {
-
-        },
-        input: {
-
-
-        },
-        fileDropArea: {
-            position: 'relative',
-            height: 100,
-            width: 100,
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            border: '2px dashed white',
-        }
     }),
 );
 
@@ -186,6 +172,7 @@ const NavDrawer: React.FC<AllProps> = props => {
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
     const [reviewUploadData, setReviewUploadData] = React.useState({});
+    const [showCSVInputModal, setShowCSVInputMoal] = React.useState(false);
 
 
     const handleAlphaBtnClick = () => {
@@ -208,6 +195,10 @@ const NavDrawer: React.FC<AllProps> = props => {
 
     const handleDrawerClose = () => {
         setOpen(false);
+    };
+
+    const handleClose = () => {
+     setShowCSVInputMoal(false);
     };
 
 
@@ -237,84 +228,6 @@ const NavDrawer: React.FC<AllProps> = props => {
         }
     };
 
-function csvJSON(csv: any) {
-        let lines = csv.split("\n");
-
-        let result = [];
-
-        let headers = lines[0].split(",");
-
-        for (let i = 1; i < lines.length; i++) {
-
-            let obj: any = {};
-            let currentline = lines[i].split(",");
-
-            for (let j = 0; j < headers.length; j++) {
-                obj[headers[j]] = currentline[j];
-            }
-
-            result.push(obj);
-
-        }
-        //return result; //JavaScript object
-        return JSON.stringify(result); //JSON
-    }
-
-
-    const doUpload = () => {
-        let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
-        const reader = new FileReader();
-        reader.onload = () => {
-            let text = reader.result;
-            if (text !== null) {
-                if (typeof text === "string") {
-                    console.log('CSV: ', text.substring(0, 200) + '...');
-                }
-
-            }
-
-            //convert text to json here
-            let json = csvJSON(text);
-            console.log(json);
-            setReviewUploadData(json);
-        };
-        if (input.files !== null) {
-        reader.readAsText(input.files[0]);
-
-        }
-        // if (file) {
-        //     let fileName = file.name;
-        //     // let json = csvToJson.getJsonFromCsv(fileName);
-        //     // for(let i=0; i<json.length;i++){
-        //     //     console.log(json[i]);
-        //     // }
-        //     // if (fileName.toLowerCase().endsWith('ppt')) {
-        //     //     (document.querySelector('#browseInput') as HTMLInputElement).value = '';
-        //     //     // Toast.create(
-        //     //     //     5000,
-        //     //     //     'errorToast',
-        //     //     //     'The file format .ppt is not compatible with Fritz. File must be saved as .pdf.'
-        //     //     // );
-        //     // }
-        //     if (fileName.toLowerCase().endsWith('csv')) {
-        //           console.log(file)
-        //         // await this.props.uploadActions!.upload(formData);
-        //         // let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
-        //         // let ele2 = document.querySelector('.helpMessage') as HTMLElement;
-        //         // if (ele1 && ele2) {
-        //         //     ele1.style.border = 'none';
-        //         //     ele2.style.display = 'none';
-        //         // }
-        //     } else {
-        //         // (document.querySelector('#browseInput') as HTMLInputElement).value = '';
-        //         // Toast.create(
-        //         //     5000,
-        //         //     'errorToast',
-        //         //     '<b>Error:</b> File must be a PDF(<b>.pdf</b>)'
-        //         // );
-        //    }
-        // }
-    };
 
     // onRowAdd: newData =>
     //     new Promise(resolve => {
@@ -383,10 +296,6 @@ function csvJSON(csv: any) {
                 </div>
                 <Divider/>
                 <List>
-                    {/*<ListItem button>*/}
-                    {/*    <ListItemIcon>{<FiberNewIcon/>}</ListItemIcon>*/}
-                    {/*    <ListItemText primary="Members"/>*/}
-                    {/*</ListItem>*/}
                     <ListItem button onClick={handleGainBtnClick} className={clsx( {
                         [classes.selected]: gainTable,
                         [classes.unselected]: !gainTable,
@@ -408,12 +317,6 @@ function csvJSON(csv: any) {
                         <ListItemIcon>{<PeopleOutlineIcon/>}</ListItemIcon>
                         <ListItemText primary="Loss Roster"/>
                     </ListItem>
-                    {/*{['Members', 'Starred', 'Send email', 'Drafts'].map((text, index) => (*/}
-                    {/*    <ListItem button key={text}>*/}
-                    {/*        <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>*/}
-                    {/*        <ListItemText primary={text}/>*/}
-                    {/*    </ListItem>*/}
-                    {/*))}*/}
                 </List>
                 <Divider/>
                 <ListItem button>
@@ -437,42 +340,11 @@ function csvJSON(csv: any) {
                     <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>
                     <ListItemText primary="Supervisors"/>
                 </ListItem>
-                {/*<List>*/}
-                {/*    {['All mail', 'Trash', 'Spam'].map((text, index) => (*/}
-                {/*        <ListItem button key={text}>*/}
-                {/*            <ListItemIcon>{index % 2 === 0 ? <InboxIcon/> : <MailIcon/>}</ListItemIcon>*/}
-                {/*            <ListItemText primary={text}/>*/}
-                {/*        </ListItem>*/}
-                {/*    ))}*/}
-                {/*</List>*/}
             </Drawer>
             <Container className={classes.content}>
 
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
                      position={'relative'}>
-                    <JsonToTable json={reviewUploadData}/>
-                    {props.csvInputModal &&
-                    <Box className={classes.csvInput} >
-
-                        <Box className={classes.fileDropArea}>
-                        <input
-                            accept="text/csv/*"
-                            className={classes.input}
-                            style={{ display: 'none' }}
-                            id="raised-button-file"
-                            multiple
-                            type="file"
-                            onChange={doUpload}
-                        />
-                        <label htmlFor="raised-button-file">
-                           <Button component={"span"} className={classes.button}>
-                                Upload
-                            </Button>
-                        </label>
-                        </Box>
-                    </Box>
-                    }
-
                     {gainTable &&
                     <Grow in={gainTable}>
                         <Box width={1200} order={gainTableOrder} className={classes.table}>
@@ -508,8 +380,8 @@ function csvJSON(csv: any) {
                     </Grow>
                     }
                 </Box>
-
-
+                <SpeedDialBtn
+                />
             </Container>
         </div>
     );
