@@ -38,6 +38,8 @@ import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountO
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
 
+import { JsonToTable } from "react-json-to-table";
+
 const drawerWidth = 240;
 
 
@@ -141,6 +143,15 @@ const useStyles = makeStyles((theme: Theme) =>
         input: {
 
 
+        },
+        fileDropArea: {
+            position: 'relative',
+            height: 100,
+            width: 100,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            border: '2px dashed white',
         }
     }),
 );
@@ -174,6 +185,7 @@ const NavDrawer: React.FC<AllProps> = props => {
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
+    const [reviewUploadData, setReviewUploadData] = React.useState({});
 
 
     const handleAlphaBtnClick = () => {
@@ -224,47 +236,84 @@ const NavDrawer: React.FC<AllProps> = props => {
             }
         }
     };
-    const doUpload = (e: any) => {
-        e.preventDefault();
-        let formData = new FormData();
-        e.persist();
-        if (e.type === 'change') {
-            const element = document.querySelector('#browseInput')! as HTMLInputElement;
-            if (element != null && element.files) {
-                formData.append('file', element.files[0]);
+
+function csvJSON(csv: any) {
+        let lines = csv.split("\n");
+
+        let result = [];
+
+        let headers = lines[0].split(",");
+
+        for (let i = 1; i < lines.length; i++) {
+
+            let obj: any = {};
+            let currentline = lines[i].split(",");
+
+            for (let j = 0; j < headers.length; j++) {
+                obj[headers[j]] = currentline[j];
             }
-        } else {
-            formData.append('file', e.dataTransfer.files[0]);
+
+            result.push(obj);
+
         }
-        let file: File = formData.get('file') as File;
-        if (file) {
-            let fileName = file.name;
-            if (fileName.toLowerCase().endsWith('ppt')) {
-                (document.querySelector('#browseInput') as HTMLInputElement).value = '';
-                // Toast.create(
-                //     5000,
-                //     'errorToast',
-                //     'The file format .ppt is not compatible with Fritz. File must be saved as .pdf.'
-                // );
+        //return result; //JavaScript object
+        return JSON.stringify(result); //JSON
+    }
+
+
+    const doUpload = () => {
+        let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
+        const reader = new FileReader();
+        reader.onload = () => {
+            let text = reader.result;
+            if (text !== null) {
+                if (typeof text === "string") {
+                    console.log('CSV: ', text.substring(0, 200) + '...');
+                }
+
             }
-            if (fileName.toLowerCase().endsWith('csv')) {
-                console.log(formData);
-                // await this.props.uploadActions!.upload(formData);
-                // let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
-                // let ele2 = document.querySelector('.helpMessage') as HTMLElement;
-                // if (ele1 && ele2) {
-                //     ele1.style.border = 'none';
-                //     ele2.style.display = 'none';
-                // }
-            } else if (!fileName.toLowerCase().endsWith('ppt')) {
-                // (document.querySelector('#browseInput') as HTMLInputElement).value = '';
-                // Toast.create(
-                //     5000,
-                //     'errorToast',
-                //     '<b>Error:</b> File must be a PDF(<b>.pdf</b>)'
-                // );
-            }
+
+            //convert text to json here
+            let json = csvJSON(text);
+            console.log(json);
+            setReviewUploadData(json);
+        };
+        if (input.files !== null) {
+        reader.readAsText(input.files[0]);
+
         }
+        // if (file) {
+        //     let fileName = file.name;
+        //     // let json = csvToJson.getJsonFromCsv(fileName);
+        //     // for(let i=0; i<json.length;i++){
+        //     //     console.log(json[i]);
+        //     // }
+        //     // if (fileName.toLowerCase().endsWith('ppt')) {
+        //     //     (document.querySelector('#browseInput') as HTMLInputElement).value = '';
+        //     //     // Toast.create(
+        //     //     //     5000,
+        //     //     //     'errorToast',
+        //     //     //     'The file format .ppt is not compatible with Fritz. File must be saved as .pdf.'
+        //     //     // );
+        //     // }
+        //     if (fileName.toLowerCase().endsWith('csv')) {
+        //           console.log(file)
+        //         // await this.props.uploadActions!.upload(formData);
+        //         // let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
+        //         // let ele2 = document.querySelector('.helpMessage') as HTMLElement;
+        //         // if (ele1 && ele2) {
+        //         //     ele1.style.border = 'none';
+        //         //     ele2.style.display = 'none';
+        //         // }
+        //     } else {
+        //         // (document.querySelector('#browseInput') as HTMLInputElement).value = '';
+        //         // Toast.create(
+        //         //     5000,
+        //         //     'errorToast',
+        //         //     '<b>Error:</b> File must be a PDF(<b>.pdf</b>)'
+        //         // );
+        //    }
+        // }
     };
 
     // onRowAdd: newData =>
@@ -278,10 +327,6 @@ const NavDrawer: React.FC<AllProps> = props => {
     //             });
     //         }, 300);
     //     })
-
-    const handleFile = (e: any) => {
-        console.log(e.target.value)
-    };
 
     return (
         <div className={classes.root}>
@@ -405,8 +450,11 @@ const NavDrawer: React.FC<AllProps> = props => {
 
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
                      position={'relative'}>
+                    <JsonToTable json={reviewUploadData}/>
                     {props.csvInputModal &&
                     <Box className={classes.csvInput} >
+
+                        <Box className={classes.fileDropArea}>
                         <input
                             accept="text/csv/*"
                             className={classes.input}
@@ -414,13 +462,14 @@ const NavDrawer: React.FC<AllProps> = props => {
                             id="raised-button-file"
                             multiple
                             type="file"
-                            onChange={handleFile}
+                            onChange={doUpload}
                         />
                         <label htmlFor="raised-button-file">
-                           <Button component="span" className={classes.button}>
+                           <Button component={"span"} className={classes.button}>
                                 Upload
                             </Button>
                         </label>
+                        </Box>
                     </Box>
                     }
 

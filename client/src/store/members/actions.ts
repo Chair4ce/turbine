@@ -13,3 +13,5 @@ export const membersFetchRequest = () => action(MemberActionTypes.FETCH_REQUEST)
 export const membersFetchSuccess = (payload: MemberModel[]) => action(
     MemberActionTypes.FETCH_SUCCESS, MemberDeserializer.deserialize(payload));
 export const membersFetchError = (message: string) => action(MemberActionTypes.FETCH_ERROR, message);
+
+
