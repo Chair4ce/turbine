@@ -11,15 +11,17 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: 800,
-            position: 'fixed',
+            position: 'relative',
             padding: 40,
             bottom: 0,
             justifyContent: 'center',
             left: 55,
-            opacity: 1,
+
+
         },
         feedBackInput: {
             width: '80%',
+            backgroundColor: 'black',
         },
         buttonSuccess: {
             width: 120,

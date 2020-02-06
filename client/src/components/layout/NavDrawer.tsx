@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import {createStyles, makeStyles, useTheme, Theme} from '@material-ui/core/styles';
+import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -13,18 +13,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {connect} from "react-redux";
-import Button from "@material-ui/core/Button";
 import {postFeedback} from "../../store/members/sagas";
-import {
-    Backdrop,
-    Box,
-    Container,
-    Grow,
-    ListItem,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-} from "@material-ui/core";
+import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
 import MemberModel from "../../store/members/MemberModel";
 import EditTable from "../table/EditTable";
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
@@ -37,9 +27,9 @@ import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
-
-import { JsonToTable } from "react-json-to-table";
+import CsvInput from "./modal/CsvInput";
 import SpeedDialBtn from "./button/SpeedDialBtn";
+import {ConnectedFeedbackInput} from "./input/Feedback";
 
 
 const drawerWidth = 240;
@@ -171,8 +161,7 @@ const NavDrawer: React.FC<AllProps> = props => {
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
-    const [reviewUploadData, setReviewUploadData] = React.useState({});
-    const [showCSVInputModal, setShowCSVInputMoal] = React.useState(false);
+    const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
 
 
     const handleAlphaBtnClick = () => {
@@ -197,8 +186,8 @@ const NavDrawer: React.FC<AllProps> = props => {
         setOpen(false);
     };
 
-    const handleClose = () => {
-     setShowCSVInputMoal(false);
+    const toggleCSVInputModal = () => {
+     setShowCSVInputModal(prev => !prev);
     };
 
 
@@ -342,7 +331,10 @@ const NavDrawer: React.FC<AllProps> = props => {
                 </ListItem>
             </Drawer>
             <Container className={classes.content}>
-
+                {showCSVInputModal &&
+                <CsvInput
+                    toggleCSVInputModal={toggleCSVInputModal}/>
+                }
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
                      position={'relative'}>
                     {gainTable &&
@@ -380,7 +372,9 @@ const NavDrawer: React.FC<AllProps> = props => {
                     </Grow>
                     }
                 </Box>
+                <ConnectedFeedbackInput/>
                 <SpeedDialBtn
+                toggleCSVInputModal={toggleCSVInputModal}
                 />
             </Container>
         </div>

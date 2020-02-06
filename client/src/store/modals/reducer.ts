@@ -3,12 +3,14 @@ import {Reducer} from "redux";
 
 
 export const initialState: ShowModalState= {
-    csvInput: true,
+    csvInput: false,
 };
 
 const reducer: Reducer<ShowModalState> = (state = initialState, action: any) => {
     switch (action.type) {
         case ShowModalActionTypes.SHOW_CSV_INPUT: {
+
+            console.log("changing state: " + state + " to: " + action.payload);
             return {
                 ...state,
                 csvInput: action.payload

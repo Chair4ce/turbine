@@ -4,9 +4,7 @@ import { ApplicationState } from '../../store';
 import {membersFetchRequest} from '../../store/members/actions';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
-import {ConnectedFeedbackInput} from "../../components/layout/input/Feedback";
 import {ConnectedNavDrawer} from "../../components/layout/NavDrawer";
-import SpeedDialBtn from "../../components/layout/button/SpeedDialBtn";
 
 
 // Separate state props + dispatch props to their own interfaces.
@@ -37,7 +35,7 @@ class MembersIndexPage extends React.Component<AllProps> {
             <Page
             className="MembersPage">
                 <ConnectedNavDrawer members={members} loading={loading}/>
-                <ConnectedFeedbackInput/>
+
             </Page>
         );
     }
