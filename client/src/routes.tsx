@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom'
 import { Global } from '@emotion/core'
 import Root from './components/layout/Root'
 import normalize from './styles/normalize'
-import MembersIndexPage from "./pages/members/index";
+import MembersIndexPage from "./views/members/index";
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.

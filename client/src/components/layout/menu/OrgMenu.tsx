@@ -12,7 +12,6 @@ import FlightModel from "../../../store/flights/FlightModel";
 import {Box, ListItemIcon, Paper} from "@material-ui/core";
 import SubList from "./SubList";
 
-
 interface PropsFromState {
     squadrons: SquadronModel[];
     flights: FlightModel[];
@@ -110,9 +109,7 @@ const mapStateToProps = ({squadrons, flights}: ApplicationState) => ({
     flights: flights.flights
 });
 
-
 const mapDispatchToProps = {
-
 
 };
 

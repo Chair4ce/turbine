@@ -7,8 +7,6 @@ import MemberModel from "../../store/members/MemberModel";
 import { postFeedback } from '../../store/members/sagas';
 import TabbedRosters from "../TabbedRosters";
 
-
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {

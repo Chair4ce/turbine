@@ -27,110 +27,10 @@ import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
-import CsvInput from "./modal/CsvInput";
 import SpeedDialBtn from "./button/SpeedDialBtn";
 import {ConnectedFeedbackInput} from "./input/Feedback";
+import {ConnectedCsvInput} from "./modal/CsvInput";
 
-
-const drawerWidth = 240;
-
-
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        root: {
-            display: 'flex',
-            height: '100%',
-            top: 120,
-        },
-        appBar: {
-            zIndex: theme.zIndex.drawer + 1,
-            transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-        },
-        appBarShift: {
-            marginLeft: drawerWidth,
-            width: `calc(100% - ${drawerWidth}px)`,
-            transition: theme.transitions.create(['width', 'margin'], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        },
-        menuButton: {
-            marginRight: 36,
-        },
-        hide: {
-            display: 'none',
-        },
-        drawer: {
-            width: drawerWidth,
-            flexShrink: 0,
-            whiteSpace: 'nowrap',
-        },
-        drawerOpen: {
-            width: drawerWidth,
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-            }),
-        },
-        drawerClose: {
-            transition: theme.transitions.create('width', {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.leavingScreen,
-            }),
-            overflowX: 'hidden',
-            width: theme.spacing(7) + 1,
-            [theme.breakpoints.up('sm')]: {
-                width: theme.spacing(9) + 1,
-            },
-        },
-        content: {
-            display: 'flex',
-            position: 'relative',
-            flexDirection: 'column',
-            justifyContent: 'space around',
-            Height: '100%',
-            padding: theme.spacing(3),
-            top: 65,
-            marginBottom: 42,
-        },
-        toolbar: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            padding: theme.spacing(0, 1),
-            ...theme.mixins.toolbar,
-        },
-        selected: {
-            backgroundColor: '#DD7373',
-            // opacity: '.8',
-        },
-        unselected: {
-
-        },
-        table: {
-          paddingBottom: 20,
-        },
-        gainTableDisplay: {
-            display: 'none'
-        },
-        lossTableDisplay: {
-            display: 'none'
-        },
-        alphaTableDisplay: {
-            display: 'none'
-        },
-        csvInput: {
-            background: 'black',
-            width: 700,
-            height: 700,
-            top: 200,
-            left: 400,
-        },
-    }),
-);
 
 interface PropsFromState {
     members: MemberModel[];
@@ -143,26 +43,19 @@ interface PropsFromDispatch {
     postFeedback: typeof postFeedback;
 }
 
-
 type AllProps = PropsFromDispatch & PropsFromState;
-
-// const tableOrder: TableOrder = TableOrder[{gain: 1},{alpha: 2},{loss: 3}];
 
 const NavDrawer: React.FC<AllProps> = props => {
     const classes = useStyles();
     const theme = useTheme();
-
     const [open, setOpen] = React.useState(false);
-
     const [alphaTable, showAlphaTable] = React.useState(false);
     const [gainTable, showGainTable] = React.useState(false);
     const [lossTable, showLossTable] = React.useState(false);
-
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
     const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
-
 
     const handleAlphaBtnClick = () => {
         handleTableOrder("alpha");
@@ -190,7 +83,6 @@ const NavDrawer: React.FC<AllProps> = props => {
      setShowCSVInputModal(prev => !prev);
     };
 
-
     const handleTableOrder = (table: string) => {
         switch (table) {
             case "alpha": {
@@ -216,7 +108,6 @@ const NavDrawer: React.FC<AllProps> = props => {
             }
         }
     };
-
 
     // onRowAdd: newData =>
     //     new Promise(resolve => {
@@ -332,7 +223,7 @@ const NavDrawer: React.FC<AllProps> = props => {
             </Drawer>
             <Container className={classes.content}>
                 {showCSVInputModal &&
-                <CsvInput
+                <ConnectedCsvInput
                     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
                 <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
@@ -379,19 +270,115 @@ const NavDrawer: React.FC<AllProps> = props => {
             </Container>
         </div>
     );
-
-
 };
 
 const mapStateToProps = ({showModal}: ApplicationState) => ({
     csvInputModal: showModal.csvInput
-
 });
 
 const mapDispatchToProps = {
     postFeedback,
 };
 export const ConnectedNavDrawer = connect(mapStateToProps, mapDispatchToProps)(NavDrawer);
+
+const drawerWidth = 240;
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            display: 'flex',
+            height: '100%',
+            top: 120,
+        },
+        appBar: {
+            zIndex: theme.zIndex.drawer + 1,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+        },
+        appBarShift: {
+            marginLeft: drawerWidth,
+            width: `calc(100% - ${drawerWidth}px)`,
+            transition: theme.transitions.create(['width', 'margin'], {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        menuButton: {
+            marginRight: 36,
+        },
+        hide: {
+            display: 'none',
+        },
+        drawer: {
+            width: drawerWidth,
+            flexShrink: 0,
+            whiteSpace: 'nowrap',
+        },
+        drawerOpen: {
+            width: drawerWidth,
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+            }),
+        },
+        drawerClose: {
+            transition: theme.transitions.create('width', {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.leavingScreen,
+            }),
+            overflowX: 'hidden',
+            width: theme.spacing(7) + 1,
+            [theme.breakpoints.up('sm')]: {
+                width: theme.spacing(9) + 1,
+            },
+        },
+        content: {
+            display: 'flex',
+            position: 'relative',
+            flexDirection: 'column',
+            justifyContent: 'space around',
+            Height: '100%',
+            padding: theme.spacing(3),
+            top: 65,
+            marginBottom: 42,
+        },
+        toolbar: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            padding: theme.spacing(0, 1),
+            ...theme.mixins.toolbar,
+        },
+        selected: {
+            backgroundColor: '#DD7373',
+            // opacity: '.8',
+        },
+        unselected: {
+
+        },
+        table: {
+            paddingBottom: 20,
+        },
+        gainTableDisplay: {
+            display: 'none'
+        },
+        lossTableDisplay: {
+            display: 'none'
+        },
+        alphaTableDisplay: {
+            display: 'none'
+        },
+        csvInput: {
+            background: 'black',
+            width: 700,
+            height: 700,
+            top: 200,
+            left: 400,
+        },
+    }),
+);
+
 
 
 

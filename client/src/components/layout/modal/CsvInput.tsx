@@ -7,6 +7,13 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
+import MemberModel from "../../../store/members/MemberModel";
+import {Deserializer} from "v8";
+import {MemberDeserializer} from "../../../utils/MemberDeserializer";
+import {ApplicationState} from "../../../store";
+import {postFeedback, saveMembersFromCsv} from "../../../store/members/sagas";
+import {connect} from "react-redux";
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -75,24 +82,23 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-// function csvJSON(csv: any) {
-//     let lines = csv.split("\n");
-//     let result = [];
-//     let headers = lines[0].split(",");
-//
-//     for (let i = 1; i < lines.length; i++) {
-//         let obj: any = {};
-//         let currentline = lines[i].split(",");
-//
-//         for (let j = 0; j < headers.length; j++) {
-//             obj[headers[j]] = currentline[j];
-//         }
-//         result.push(obj);
-//     }
-//     //return result; //JavaScript object
-//     return JSON.stringify(result); //JSON
-// }
+function csvJSON(csv: any) {
+    let lines = csv.split("\n");
+    let result = [];
+    let headers = lines[0].split(",");
 
+    for (let i = 1; i < lines.length; i++) {
+        let obj: any = {};
+        let currentline = lines[i].split(",");
+
+        for (let j = 0; j < headers.length; j++) {
+            obj[headers[j]] = currentline[j];
+        }
+        result.push(obj);
+    }
+    //return result; //JavaScript object
+    return JSON.stringify(result); //JSON
+}
 
 const doUpload = async (e: any) => {
 
@@ -131,23 +137,28 @@ const doUpload = async (e: any) => {
     }
 
 
-    // let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
-    // const reader = new FileReader();
-    // reader.onload = () => {
-    //     let text = reader.result;
-    //     if (text !== null) {
-    //         if (typeof text === "string") {
-    //             console.log('CSV: ', text.substring(0, 3000) + '...');
-    //         }
-    //     }
-    //     //convert text to json here
-    //     let json = csvJSON(text);
-    //     console.log(json);
-    // };
-    // if (input.files !== null) {
-    //     reader.readAsText(input.files[0]);
-    //
-    // }
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        let text = reader.result;
+
+        if (text !== null) {
+            if (typeof text === "string") {
+                console.log('CSV: ', text.substring(0, 3000) + '...');
+            }
+        }
+        //convert text to json here
+        saveMembersFromCsv(csvJSON(text)) ;
+
+
+    };
+
+    let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
+
+    if (input.files !== null) {
+        reader.readAsText(input.files[0]);
+
+    }
 };
 function getModalStyle() {
     const top = 50;
@@ -160,11 +171,17 @@ function getModalStyle() {
     };
 }
 
-interface Props {
+interface PropsFromState {
     toggleCSVInputModal: () => void;
 }
 
-const CsvInput: React.FC<Props> = props => {
+interface PropsFromDispatch {
+    saveMembersFromCsv: typeof saveMembersFromCsv
+}
+
+type AllProps = PropsFromState & PropsFromDispatch;
+
+const CsvInput: React.FC<AllProps> = props => {
 
     const classes = useStyles();
     const [modalStyle] = React.useState(getModalStyle);
@@ -271,7 +288,10 @@ const CsvInput: React.FC<Props> = props => {
 //     }
     };
 
+const mapStateToProps = ({}: ApplicationState) => ({
+});
 
-
-
-export default CsvInput;
+const mapDispatchToProps = {
+    saveMembersFromCsv
+};
+export const ConnectedCsvInput = connect(mapStateToProps, mapDispatchToProps)(CsvInput);

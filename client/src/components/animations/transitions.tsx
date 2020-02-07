@@ -1,7 +1,5 @@
 import {keyframes} from "@emotion/core";
 
-
-
 export const EaseIn = keyframes`
   0% {
   opacity: 0 ;

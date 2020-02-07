@@ -7,7 +7,6 @@ import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
 
-
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -84,6 +83,5 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
         </div>
     );
 };
-
 
 export default SpeedDialBtn;

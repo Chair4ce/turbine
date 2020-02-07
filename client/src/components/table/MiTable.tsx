@@ -19,7 +19,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import MemberModel from "../../store/members/MemberModel";
 
-
 interface Data {
     full_name: number;
     grade: number;

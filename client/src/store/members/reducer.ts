@@ -1,6 +1,7 @@
 import { Reducer } from 'redux';
 import { MembersState, MemberActionTypes } from './types';
 import MemberModel from "./MemberModel";
+import {MemberDeserializer} from "../../utils/MemberDeserializer";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
@@ -20,7 +21,7 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             };
         }
         case MemberActionTypes.FETCH_SUCCESS: {
-            return { ...state, loading: false, data: action.payload };
+            return { ...state, loading: false, data: MemberDeserializer.deserialize(action.payload)};
         }
         case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };

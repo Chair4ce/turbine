@@ -1,6 +1,5 @@
 import * as React from 'react';
-import styled from "../../utils/styled";
-
+import styled from "styled-components";
 
 const DimpleIcon = () => {
     return (

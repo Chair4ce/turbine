@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from "styled-components";
 
-
 const LoadingSpinner: React.FC = () => (
         <Container>
             <Loader xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 340">

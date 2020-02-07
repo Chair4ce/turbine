@@ -153,5 +153,4 @@ const EditTable: React.FC<Props> = props => {
     );
 };
 
-
 export default EditTable;

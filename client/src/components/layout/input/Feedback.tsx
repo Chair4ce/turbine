@@ -83,7 +83,6 @@ const FeedbackInput: React.FC<Props> = props => {
         }, 500);
     };
 
-
     const handleChange = (e: any) => {
         if (!loading) {
             setfeedBackMsg(e.target.value);
@@ -120,7 +119,6 @@ const FeedbackInput: React.FC<Props> = props => {
         </div>
     );
 };
-
 
 const mapStateToProps = () => ({});
 

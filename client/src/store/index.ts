@@ -1,19 +1,17 @@
-import { combineReducers } from 'redux';
-import { all, fork } from 'redux-saga/effects';
-import { connectRouter, RouterState } from 'connected-react-router';
-import { History } from 'history';
-
-import { LayoutState, layoutReducer } from './layout';
-
+import {combineReducers} from 'redux';
+import {all, fork} from 'redux-saga/effects';
+import {connectRouter, RouterState} from 'connected-react-router';
+import {History} from 'history';
+import {layoutReducer, LayoutState} from './layout';
 import membersSaga from './members/sagas';
-import { membersReducer } from './members/reducer';
-import { MembersState } from './members/types';
-import { SquadronsState } from "./squadrons/types";
-import { squadronsReducer } from "./squadrons/reducer";
+import {membersReducer} from './members/reducer';
+import {MembersState} from './members';
+import {SquadronsState} from "./squadrons";
+import {squadronsReducer} from "./squadrons/reducer";
 import squadronSaga from "./squadrons/sagas";
-import {FlightsState} from "./flights/types";
+import {FlightsState} from "./flights";
 import {AETsState} from "./AETs/types";
-import {flightsReducer} from "./flights/reducer";
+import {flightsReducer} from "./flights/index";
 import {AETsReducer} from "./AETs/reducer";
 import flightSaga from "./flights/sagas";
 import AETSaga from "./AETs/sagas";

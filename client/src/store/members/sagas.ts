@@ -3,6 +3,9 @@ import { MemberActionTypes } from './types';
 import { membersFetchError, membersFetchSuccess } from './actions';
 import { callApi } from '../../utils/api';
 import FeedbackModel from "./FeedbackModel";
+import MemberModel from "./MemberModel";
+import {Serializer} from "../../utils/Serializer";
+import {MemberSerializer} from "../../utils/MemberSerializer";
 
 
 function *handleFetch() {
@@ -29,6 +32,18 @@ export function postFeedback(feedback: FeedbackModel) {
     try {
         // To call async functions, use redux-saga's `call()`.
         callApi( 'POST', 'api/feedback/submit', feedback);
+    } catch (err) {
+        console.log('An unknown error occured.');
+
+    }
+}
+export function saveMembersFromCsv(members: string) {
+
+    const body = JSON.stringify(MemberSerializer.serialize(members));
+    console.log(body);
+    try {
+        // To call async functions, use redux-saga's `call()`.
+        callApi( 'POST', 'api/members/save', body);
     } catch (err) {
         console.log('An unknown error occured.');
 

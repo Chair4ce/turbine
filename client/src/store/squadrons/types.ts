@@ -25,10 +25,7 @@ export enum SquadronActionTypes {
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface SquadronsState {
-    readonly loading: boolean;
     readonly squadrons: SquadronModel[];
-    readonly showInput: boolean;
-    readonly newInput: SquadronModel | undefined;
-    readonly posting: boolean;
+    readonly loading: boolean;
     readonly errors?: string;
 }
