@@ -7,8 +7,3 @@ CREATE TABLE squadron
     PRIMARY KEY (id)
 );
 
-
-INSERT INTO squadron (squadron, pas_Code, group_PAS) VALUES
-('10 IS', 'QAZWSXEDC', 'OKMIJNUHB'),
-('45 IS','WSXEDCRFV','IJNUHBYGV'),
-('30 IS','EDCRFVTGB','UHBYGVTFC');

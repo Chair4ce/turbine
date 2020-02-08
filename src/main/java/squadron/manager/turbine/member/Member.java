@@ -1,6 +1,5 @@
 package squadron.manager.turbine.member;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,7 @@ public
 class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     private String full_name;
 
@@ -37,9 +36,9 @@ class Member {
     private String epr_opr_status;
 
 
-    public Member(long id, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
+    public Member( String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
                       String duty_title, String duty_start_date, String duty_phone, String awardec_status, String epr_opr_status) {
-        this.id = id;
+
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;
@@ -50,5 +49,20 @@ class Member {
         this.duty_phone = duty_phone;
         this.awardec_status = awardec_status;
         this.epr_opr_status = epr_opr_status;
+    }
+
+    public Member update(MemberJSON json) {
+        this.setId(json.getId());
+        this.setFull_name(json.getFull_name());
+        this.setGrade(json.getGrade());
+        this.setAssigned_pas(json.getAssigned_pas());
+        this.setOffice_symbol(json.getOffice_symbol());
+        this.setDafsc(json.getDafsc());
+        this.setDuty_phone(json.getDuty_phone());
+        this.setDuty_start_date(json.getDuty_start_date());
+        this.setDuty_title(json.getDuty_title());
+        this.setAwardec_status(json.getAwardec_status());
+        this.setEpr_opr_status(json.getEpr_opr_status());
+        return this;
     }
 }

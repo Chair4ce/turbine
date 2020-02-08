@@ -6,10 +6,3 @@ CREATE TABLE flight
     PRIMARY KEY (id)
 );
 
-
-INSERT INTO flight (org_id, pas_Code) VALUES
-('SCXP', 'QAZWSXEDC'),
-('SCPM','QAZWSXEDC'),
-('SCOI','QAZWSXEDC'),
-('SCXP', 'WSXEDCRFV'),
-('SCPM','WSXEDCRFV');

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -19,12 +20,30 @@ public class MemberController {
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    Iterable<Member> getAllMembers() { return memberRepository.findAll(); }
+    Iterable<Member> getAllMembers() {
+        return memberRepository.findAll(); }
 
     @CrossOrigin
     @PostMapping(path = "/save")
-    public List<Member> create(@Valid @RequestBody MemberJSON[] memberJSONs) throws Exception {
-        return this.memberRepository.saveAll(create(memberJSONs));
+    public Iterable<Member> addMembers(@Valid @RequestBody  Iterable<MemberJSON> json) throws Exception {
+        List<Member> members = new ArrayList();
+        json.forEach((item -> {
+            members.add(
+                    new Member(
+                            item.getFull_name(),
+                            item.getGrade(),
+                            item.getAssigned_pas(),
+                            item.getDafsc(),
+                            item.getOffice_symbol(),
+                            item.getDuty_title(),
+                            item.getDuty_start_date(),
+                            item.getDuty_phone(),
+                            item.getAwardec_status(),
+                            item.getEpr_opr_status()
+                    )
+            );
+        }));
+        return this.memberRepository.saveAll(members);
     }
 
     @CrossOrigin

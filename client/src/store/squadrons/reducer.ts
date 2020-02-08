@@ -1,7 +1,6 @@
-import { Reducer } from 'redux';
-import { SquadronsState, SquadronActionTypes } from './types';
+import {Reducer} from 'redux';
+import {SquadronActionTypes, SquadronsState} from './types';
 import SquadronModel from "./SquadronModel";
-import {postNewSquadron} from "./sagas";
 
 // Type-safe initialState!
 export const initialState: SquadronsState = {

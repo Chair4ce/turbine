@@ -7,12 +7,11 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import MemberModel from "../../../store/members/MemberModel";
-import {Deserializer} from "v8";
-import {MemberDeserializer} from "../../../utils/MemberDeserializer";
 import {ApplicationState} from "../../../store";
-import {postFeedback, saveMembersFromCsv} from "../../../store/members/sagas";
+import {saveMembersFromCsv} from "../../../store/members/sagas";
 import {connect} from "react-redux";
+import uploadMemberModel from "../../../store/members/uploadMemberModel";
+import {UploadMemberDeserializer} from "../../../utils/uploadMemberSerializer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,8 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 400,
             border: '2px dashed white',
         },
-        input: {
-        },
+        input: {},
 
         paper: {
             position: 'absolute',
@@ -44,9 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
         },
 
-        uploadIcon: {
-
-        },
+        uploadIcon: {},
         fileDropDialog: {
             marginLeft: 20,
         },
@@ -85,19 +81,41 @@ const useStyles = makeStyles((theme: Theme) =>
 function csvJSON(csv: any) {
     let lines = csv.split("\n");
     let result = [];
-    let headers = lines[0].split(",");
-
+    let commaRegex = /,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g;
+    let quotesRegex = /^"(.*)"$/g;
+    let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
+    let lowerHeaders = lower(headers);
     for (let i = 1; i < lines.length; i++) {
         let obj: any = {};
-        let currentline = lines[i].split(",");
+        let currentline = lines[i].split(commaRegex);
 
         for (let j = 0; j < headers.length; j++) {
-            obj[headers[j]] = currentline[j];
+            // if (lowerHeaders[j] == "FOR OFFICIAL USE ONLY") {
+            //     continue;
+            // } else if (lowerHeaders[j].contains("As of")) {
+            //     continue;
+            // } else if (lowerHeaders[j].contains("The information herein is For Official Use Only")) {
+            //     continue;
+            // }
+            obj[lowerHeaders[j]] = currentline[j].replace(quotesRegex, "$1");
+
         }
         result.push(obj);
     }
     //return result; //JavaScript object
-    return JSON.stringify(result); //JSON
+    return result; //JSON
+}
+
+function lower(obj: any) {
+    for (let prop in obj) {
+        if (typeof obj[prop] === 'string') {
+            obj[prop] = obj[prop].toLowerCase();
+        }
+        if (typeof obj[prop] === 'object') {
+            lower(obj[prop]);
+        }
+    }
+    return obj;
 }
 
 const doUpload = async (e: any) => {
@@ -118,48 +136,31 @@ const doUpload = async (e: any) => {
     let file: File = formData.get('file') as File;
     if (file) {
         let fileName = file.name;
-        if (fileName.toLowerCase().endsWith('ppt')) {
-            (document.querySelector('#raised-button-file') as HTMLInputElement).value = '';
-        }
         if (fileName.toLowerCase().endsWith('csv')) {
-            // await this.props.uploadActions!.upload(formData);
             console.log('its a csv!!');
+            let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
+            const reader = new FileReader();
 
-            // let ele1 = document.querySelector('.uploadContainer') as HTMLElement;
-            // let ele2 = document.querySelector('.helpMessage') as HTMLElement;
-            // if (ele1 && ele2) {
-            //     ele1.style.border = 'none';
-            //     ele2.style.display = 'none';
-            // }
-        } else if (!fileName.toLowerCase().endsWith('ppt')) {
-            (document.querySelector('#browseInput') as HTMLInputElement).value = '';
-        }
-    }
-
-
-    const reader = new FileReader();
-
-    reader.onload = () => {
-        let text = reader.result;
-
-        if (text !== null) {
-            if (typeof text === "string") {
-                console.log('CSV: ', text.substring(0, 3000) + '...');
+            if (input.files !== null) {
+                reader.readAsText(input.files[0]);
             }
+
+            reader.onload = () => {
+                let csv = reader.result;
+                if (csv !== null) {
+                    if (typeof csv === "string") {
+                        let members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
+                        saveMembersFromCsv(members);
+                        // console.log('CSV: ', csv.substring(0, 3000) + '...');
+                    }
+                }
+            };
+        } else {
+            console.log("not a csv")
         }
-        //convert text to json here
-        saveMembersFromCsv(csvJSON(text)) ;
-
-
-    };
-
-    let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
-
-    if (input.files !== null) {
-        reader.readAsText(input.files[0]);
-
     }
 };
+
 function getModalStyle() {
     const top = 50;
     const left = 50;
@@ -215,70 +216,71 @@ const CsvInput: React.FC<AllProps> = props => {
         props.toggleCSVInputModal();
         setOpen(false);
     };
-        return (
-            <div className={classes.root}>
-                {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
-                <Modal
-                    aria-labelledby="simple-modal-title"
-                    aria-describedby="simple-modal-description"
-                    open={open}
-                    onClose={handleClose}
-                >
-                    <div style={modalStyle} className={classes.paper}>
-                        <h2 id="simple-modal-title">Upload .csv from BLSDM</h2>
-                        <Container className={classes.fileDropArea}
-                                   onDragEnter={(e: any) => {
-                                       let evt = e as Event;
-                                       evt.preventDefault();
-                                   }}
-                                   onDragOver={(e: any) => {
-                                       let evt = e as Event;
-                                       evt.preventDefault();
-                                   }}
-                                   onDrop={doUpload}>
-                            <input
-                                accept="text/csv/*"
-                                className={classes.input}
-                                style={{display: 'none'}}
-                                id="raised-button-file"
-                                multiple
-                                type="file"
-                                onChange={(file) => {
-                                    doUpload(file);
-                                    handleButtonClick();
-                                }}
-                                ref={browseInputRef}
-                            />
-                            <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                {(loading || success) &&
-                                <div className={classes.wrapper}>
-                                    <Fab
-                                        aria-label="save"
-                                        color="primary"
-                                        className={buttonClassname}
-                                        onClick={handleButtonClick}
-                                    >
-                                        {success ? <CheckIcon /> : <SaveIcon />}
-                                    </Fab>
-                                    {loading && <CircularProgress size={68} className={classes.fabProgress} />}
-                                </div>
-                                }
-                                {(!loading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>}
-                                {(!loading && !success) &&
-                                <span id="simple-modal-dialog"
-                                      className={classes.fileDropDialog}>Drag and drop or</span>
-                                }
-                                {(!loading && !success) &&
-                                < Button variant={"outlined"} component={"span"} className={classes.button}>
-                                    Browse
-                                    </Button>
-                                }
-                            </label>
-                        </Container>
-                    </div>
-                </Modal>
-            </div>
-        );
+    return (
+        <div className={classes.root}>
+            {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
+            <Modal
+                aria-labelledby="simple-modal-title"
+                aria-describedby="simple-modal-description"
+                open={open}
+                onClose={handleClose}
+            >
+                <div style={modalStyle} className={classes.paper}>
+                    <h2 id="simple-modal-title">Upload .csv from BLSDM</h2>
+                    <Container className={classes.fileDropArea}
+                               onDragEnter={(e: any) => {
+                                   let evt = e as Event;
+                                   evt.preventDefault();
+                               }}
+                               onDragOver={(e: any) => {
+                                   let evt = e as Event;
+                                   evt.preventDefault();
+                               }}
+                               onDrop={doUpload}>
+                        <input
+                            accept="text/csv/*"
+                            className={classes.input}
+                            style={{display: 'none'}}
+                            id="raised-button-file"
+                            multiple
+                            type="file"
+                            onChange={(file) => {
+                                doUpload(file);
+                                handleButtonClick();
+                            }}
+                            ref={browseInputRef}
+                        />
+                        <label htmlFor="raised-button-file" className={classes.fileDropContents}>
+                            {(loading || success) &&
+                            <div className={classes.wrapper}>
+                                <Fab
+                                    aria-label="save"
+                                    color="primary"
+                                    className={buttonClassname}
+                                    onClick={handleButtonClick}
+                                >
+                                    {success ? <CheckIcon/> : <SaveIcon/>}
+                                </Fab>
+                                {loading && <CircularProgress size={68} className={classes.fabProgress}/>}
+                            </div>
+                            }
+                            {(!loading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
+                                                                                className={classes.uploadIcon}/>}
+                            {(!loading && !success) &&
+                            <span id="simple-modal-dialog"
+                                  className={classes.fileDropDialog}>Drag and drop or</span>
+                            }
+                            {(!loading && !success) &&
+                            < Button variant={"outlined"} component={"span"} className={classes.button}>
+                                Browse
+                            </Button>
+                            }
+                        </label>
+                    </Container>
+                </div>
+            </Modal>
+        </div>
+    );
 // function browseViaInput() {
 //         return () => {
 //             if (browseInputRef !== null) {
@@ -286,10 +288,9 @@ const CsvInput: React.FC<AllProps> = props => {
 //             }
 //         };
 //     }
-    };
+};
 
-const mapStateToProps = ({}: ApplicationState) => ({
-});
+const mapStateToProps = ({}: ApplicationState) => ({});
 
 const mapDispatchToProps = {
     saveMembersFromCsv

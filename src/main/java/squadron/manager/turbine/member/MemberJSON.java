@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 
@@ -12,7 +12,7 @@ public class MemberJSON {
 
     private static final String emptyFieldMessage = "This is required";
 
-    private long id;
+    private Long id;
 
     private String full_name;
 
@@ -35,9 +35,8 @@ public class MemberJSON {
     private String epr_opr_status;
 
 
-    public MemberJSON(long id, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
+    public MemberJSON(String full_name, String grade, String assigned_pas, String dafsc, String office_symbol,
                       String duty_title, String duty_start_date, String duty_phone, String awardec_status, String epr_opr_status) {
-        this.id = id;
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;

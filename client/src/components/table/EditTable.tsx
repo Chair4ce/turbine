@@ -36,8 +36,7 @@ const EditTable: React.FC<Props> = props => {
             { title: 'Name', field: 'full_name' },
             { title: 'Rank', field: 'grade' },
             { title: 'DAFSC', field: 'dafsc' },
-            { title: 'Office', field: 'office_symbol',
-                lookup: {'DOM': 'DOM', 'SCOI': 'SCOI'}
+            { title: 'Office', field: 'office_symbol'
                 },
             // {
             //     title: 'Birth Place',
@@ -57,11 +56,11 @@ const EditTable: React.FC<Props> = props => {
             columns={state.columns}
             data={state.data}
             actions={[
-                {
-                    tooltip: 'Remove All Selected Users',
-                    icon: 'delete',
-                    onClick: (evt, data) => alert('You want to delete ' + state.data.length + ' rows')
-                }
+                // {
+                //     tooltip: 'Remove All Selected Users',
+                //     icon: 'delete',
+                //     onClick: (evt, data) => alert('You want to delete ' + state.data.length + ' rows')
+                // }
             ]}
             detailPanel={[
                 {
@@ -104,7 +103,7 @@ const EditTable: React.FC<Props> = props => {
                 filtering: true,
                 grouping: true,
                 search: true,
-                // selection: true,
+                selection: true,
                 exportButton: true,
                 // selectionProps: (rowData: MemberModel) => ({
                 //     disabled: rowData.full_name === 'ABRAMS, JOSEPH L',
