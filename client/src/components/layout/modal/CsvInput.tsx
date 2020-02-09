@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import {ApplicationState} from "../../../store";
 import {saveMembersFromCsv} from "../../../store/members/sagas";
 import {connect} from "react-redux";
 import uploadMemberModel from "../../../store/members/uploadMemberModel";
@@ -81,7 +80,13 @@ const useStyles = makeStyles((theme: Theme) =>
 function csvJSON(csv: any) {
     let lines = csv.split("\n");
     let result = [];
-    let commaRegex = /,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/g;
+    if (lines[0].startsWith("FOR OFFICIAL USE ONLY")) {
+        lines.shift();
+        lines.shift();
+        lines.pop();
+    };
+
+    let commaRegex = /,(?=(?:[^"]*"[^"]*")*[^"]*$)/g;
     let quotesRegex = /^"(.*)"$/g;
     let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
     let lowerHeaders = lower(headers);
@@ -90,13 +95,6 @@ function csvJSON(csv: any) {
         let currentline = lines[i].split(commaRegex);
 
         for (let j = 0; j < headers.length; j++) {
-            // if (lowerHeaders[j] == "FOR OFFICIAL USE ONLY") {
-            //     continue;
-            // } else if (lowerHeaders[j].contains("As of")) {
-            //     continue;
-            // } else if (lowerHeaders[j].contains("The information herein is For Official Use Only")) {
-            //     continue;
-            // }
             obj[lowerHeaders[j]] = currentline[j].replace(quotesRegex, "$1");
 
         }
@@ -226,7 +224,15 @@ const CsvInput: React.FC<AllProps> = props => {
                 onClose={handleClose}
             >
                 <div style={modalStyle} className={classes.paper}>
-                    <h2 id="simple-modal-title">Upload .csv from BLSDM</h2>
+                    <h2 id="simple-modal-title">
+                        Wait, before you upload! Please use Excel to save your Alpha Roster as a .csv file.
+                    </h2>
+                    <h4>
+                       > Click 'Save As'
+                    </h4>
+                    <h4>
+                        > Under 'File Format' Select 'CSV UTF-8 (Comma Delimited) (.csv)'
+                    </h4>
                     <Container className={classes.fileDropArea}
                                onDragEnter={(e: any) => {
                                    let evt = e as Event;
@@ -236,7 +242,10 @@ const CsvInput: React.FC<AllProps> = props => {
                                    let evt = e as Event;
                                    evt.preventDefault();
                                }}
-                               onDrop={doUpload}>
+                               // onDrop={(event) => {
+                               //     doUpload(event)
+                               // }}
+                    >
                         <input
                             accept="text/csv/*"
                             className={classes.input}
@@ -244,8 +253,8 @@ const CsvInput: React.FC<AllProps> = props => {
                             id="raised-button-file"
                             multiple
                             type="file"
-                            onChange={(file) => {
-                                doUpload(file);
+                            onChange={(event) => {
+                                doUpload(event);
                                 handleButtonClick();
                             }}
                             ref={browseInputRef}
@@ -290,7 +299,7 @@ const CsvInput: React.FC<AllProps> = props => {
 //     }
 };
 
-const mapStateToProps = ({}: ApplicationState) => ({});
+const mapStateToProps = () => ({});
 
 const mapDispatchToProps = {
     saveMembersFromCsv

@@ -3,8 +3,6 @@ import {MemberActionTypes} from './types';
 import {membersFetchError, membersFetchSuccess} from './actions';
 import {callApi} from '../../utils/api';
 import FeedbackModel from "./FeedbackModel";
-import uploadMemberModel from "./uploadMemberModel";
-import {UploadMemberDeserializer} from "../../utils/uploadMemberSerializer";
 
 
 function* handleFetch() {
@@ -38,7 +36,6 @@ export function postFeedback(feedback: FeedbackModel) {
 }
 
 export function saveMembersFromCsv(members: any) {
-
     try {
         // To call async functions, use redux-saga's `call()`.
         callApi('POST', 'api/members/save', members);

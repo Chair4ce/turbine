@@ -1,6 +1,4 @@
 import uploadMemberModel from "../store/members/uploadMemberModel";
-import {Serializer} from "./Serializer";
-import MemberModel from "../store/members/MemberModel";
 
 
 export class UploadMemberDeserializer {
