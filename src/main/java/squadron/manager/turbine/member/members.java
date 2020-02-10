@@ -9,12 +9,13 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @Data
-public
-class UploadSqMemberModel {
-
+@Table(name = "members")
+class members {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
+
     private String ssan;
 
     private String full_name;
@@ -41,7 +42,8 @@ class UploadSqMemberModel {
 
     private Date dor;
 
-    public UploadSqMemberModel(String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+    public members(Long id, String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+        this.id = id;
         this.ssan = ssan;
         this.full_name = full_name;
         this.grade = grade;
@@ -55,21 +57,5 @@ class UploadSqMemberModel {
         this.supv_begin_date = supv_begin_date;
         this.date_arrived_station = date_arrived_station;
         this.dor = dor;
-    }
-
-    public UploadSqMemberModel update(SqMemberJSON json) {
-        this.setSsan(json.getSsan());
-        this.setFull_name(json.getFull_name());
-        this.setGrade(json.getGrade());
-        this.setAssigned_pas(json.getAssigned_pas());
-        this.setOffice_symbol(json.getOffice_symbol());
-        this.setDafsc(json.getDafsc());
-        this.setDuty_phone(json.getDuty_phone());
-        this.setDuty_start_date(json.getDuty_start_date());
-        this.setDuty_title(json.getDuty_title());
-        this.setSupv_name(json.getSupv_name());
-        this.setSupv_begin_date(json.getSupv_begin_date());
-        this.setDate_arrived_station(json.getDate_arrived_station());
-        return this;
     }
 }

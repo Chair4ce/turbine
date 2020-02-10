@@ -1,8 +1,6 @@
 
 
-
-export default class MemberModel {
-        public id: number;
+export default class UploadMemberModel {
     public ssan: string;
     public full_name: string;
     public grade: string;
@@ -18,8 +16,7 @@ export default class MemberModel {
     public dor: string;
 
 
-    constructor(id: number, ssan: string, full_name: string, grade: string, assigned_pas: string, dafsc: string, office_symbol: string, duty_title: string, duty_start_date: string, duty_phone: string, supv_name: string, supv_begin_date: string, date_arrived_station: string, dor: string) {
-        this.id = id;
+    constructor(ssan: string, full_name: string, grade: string, assigned_pas: string, dafsc: string, office_symbol: string, duty_title: string, duty_start_date: string, duty_phone: string, supv_name: string, supv_begin_date: string, date_arrived_station: string, dor: string) {
         this.ssan = ssan;
         this.full_name = full_name;
         this.grade = grade;
@@ -35,6 +32,3 @@ export default class MemberModel {
         this.dor = dor;
     }
 }
-
-
-

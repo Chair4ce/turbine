@@ -232,7 +232,7 @@ const NavDrawer: React.FC<AllProps> = props => {
                      position={'relative'}>
                     {gainTable &&
                     <Grow in={gainTable}>
-                        <Box width={1200} order={gainTableOrder} className={classes.table}>
+                        <Box order={gainTableOrder} className={classes.table}>
                             <EditTable
                                 members={props.members}
                                 loading={props.loading}
@@ -243,7 +243,7 @@ const NavDrawer: React.FC<AllProps> = props => {
                     }
                     {alphaTable &&
                     <Grow in={alphaTable}>
-                        <Box width={1200} order={alphaTableOrder} className={classes.table}>
+                        <Box order={alphaTableOrder} className={classes.table}>
                     <EditTable
                         members={props.members}
                         loading={props.loading}
@@ -255,7 +255,7 @@ const NavDrawer: React.FC<AllProps> = props => {
                     }
                     {lossTable &&
                     <Grow in={lossTable}>
-                        <Box width={1200} order={lossTableOrder} className={classes.table}>
+                        <Box order={lossTableOrder} className={classes.table}>
                     <EditTable
                         members={props.members}
                         loading={props.loading}
@@ -341,8 +341,10 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
             justifyContent: 'space around',
             Height: '100%',
+            maxWidth: 'none',
             padding: theme.spacing(3),
             top: 65,
+
             marginBottom: 42,
         },
         toolbar: {
@@ -360,7 +362,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
         },
         table: {
-            paddingBottom: 20,
+            width: 'calc(100% - 30px)',
         },
         gainTableDisplay: {
             display: 'none'

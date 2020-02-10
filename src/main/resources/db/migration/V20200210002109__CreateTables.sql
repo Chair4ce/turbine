@@ -1,14 +1,14 @@
-CREATE TABLE Metric
+CREATE TABLE metric
 (
-    id      INT(11) NOT NULL AUTO_INCREMENT,
+    id      INT NOT NULL AUTO_INCREMENT,
     action  TEXT,
     context TEXT,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE SqMember
+CREATE TABLE members
 (
-    id                   INT(11) NOT NULL AUTO_INCREMENT,
+    id                   INT NOT NULL AUTO_INCREMENT,
     ssan                 TEXT,
     full_name            TEXT,
     grade                TEXT,
@@ -25,18 +25,18 @@ CREATE TABLE SqMember
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Squadron
+CREATE TABLE squadron
 (
-    id      INT(11) NOT NULL AUTO_INCREMENT,
+    id      INT NOT NULL AUTO_INCREMENT,
     squadron  TEXT,
     pas TEXT,
     group_pas TEXT,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE Feedback
+CREATE TABLE feedback
 (
-    id      INT(11) NOT NULL AUTO_INCREMENT,
+    id      INT NOT NULL AUTO_INCREMENT,
     feedback_entry  TEXT,
     date_time TEXT,
     PRIMARY KEY (id)

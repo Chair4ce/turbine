@@ -4,42 +4,45 @@ import MemberModel from "./MemberModel";
 
 describe('reducer', () => {
     let memberList: MemberModel[];
-
+    let date = new Date();
     beforeEach(() => {
+
         memberList = [
-                new MemberModel(1, 'Hoag, Jacy L', 'TSgt',
-                    '10IS',
+                new MemberModel(1, '576-21-2783','Hoag, Jacy L', 'TSgt',
+                    'UHBIJNUG87',
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
+                    date,
                     '',
                     '',
-                    '',
-                    ''),
+                    date,
+                    date,
+                    date),
                 new MemberModel(
-                    2,
-                    'Hoag, Jacy L',
-                    'TSgt',
-                    '10IS',
+                    2,'576-21-2783','Hoag, Jacy L', 'TSgt',
+                    'UHBIJNUG87',
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
+                    date,
                     '',
                     '',
-                    '',
-                    ''),
+                    date,
+                    date,
+                    date),
                 new MemberModel(
-                    3,
-                    'Hoag, Jacy L',
-                    'TSgt',
-                    '10IS',
+                    3,'576-21-2783','Hoag, Jacy L', 'TSgt',
+                    'UHBIJNUG87',
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
+                    date,
                     '',
                     '',
-                    '',
-                    '')
+                    date,
+                    date,
+                    date),
         ];
     });
 
@@ -50,39 +53,41 @@ describe('reducer', () => {
         };
 
         let members = [
-            new MemberModel(1, 'Hoag, Jacy L', 'TSgt',
-                '10IS',
+            new MemberModel(1, '576-21-2783','Hoag, Jacy L', 'TSgt',
+                'UHBIJNUG87',
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
+                date,
                 '',
                 '',
-                '',
-                ''),
+                date,
+                date,
+                date),
             new MemberModel(
-                2,
-                'Hoag, Jacy L',
-                'TSgt',
-                '10IS',
+                2,'576-21-2783','Hoag, Jacy L', 'TSgt',
+                'UHBIJNUG87',
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
+                date,
                 '',
                 '',
-                '',
-                ''),
+                date,
+                date,
+                date),
             new MemberModel(
-                3,
-                'Hoag, Jacy L',
-                'TSgt',
-                '10IS',
+                3,'576-21-2783','Hoag, Jacy L', 'TSgt',
+                'UHBIJNUG87',
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
+                date,
                 '',
                 '',
-                '',
-                ''),
+                date,
+                date,
+                date),
         ];
 
         expect(

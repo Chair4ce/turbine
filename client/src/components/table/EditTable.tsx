@@ -1,19 +1,21 @@
 import React from 'react';
 import MaterialTable, { Column } from 'material-table';
 import MemberModel from "../../store/members/MemberModel";
+import moment, {Moment} from "moment";
 
 interface Row {
      id: number;
-     fullName: string;
+     full_name: string;
      grade: string;
-     assignedPas: string;
+     assigned_pas: string;
      dafsc: string;
-     officeSymbol: string;
-     dutyTitle: string;
-     dutyStartDate: string;
-     dutyPhone: string;
-     awardecStatus: string;
-     eprOprStatus: string;
+     office_symbol: string;
+     duty_title: string;
+     duty_start_date: string;
+     duty_phone: string;
+     supv_name: string;
+     supv_begin_date: string;
+     dor: string;
 }
 
 interface TableState {
@@ -33,11 +35,17 @@ const EditTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
 
         columns: [
-            { title: 'Name', field: 'fullName' },
+            { title: 'Name', field: 'full_name' },
             { title: 'Rank', field: 'grade' },
             { title: 'DAFSC', field: 'dafsc' },
-            { title: 'Office', field: 'officeSymbol'
-                },
+            { title: 'Office', field: 'office_symbol'},
+            { title: 'Duty Title', field: 'duty_title'},
+            { title: 'Start Date', field: 'duty_start_date'},
+            { title: 'Phone', field: 'duty_phone'},
+            { title: 'Supervisor', field: 'supv_name'},
+            { title: 'Sup Start', field: 'supv_begin_date'},
+            { title: 'Arrived', field: 'date_arrived_station'},
+            { title: 'DOR', field: 'dor'},
             // {
             //     title: 'Birth Place',
             //     field: 'birthCity',
@@ -75,7 +83,7 @@ const EditTable: React.FC<Props> = props => {
                                     backgroundColor: '#43A047',
                                 }}
                             >
-                                {rowData.assignedPas}
+                                {rowData.assigned_pas}
                             </div>
                         )
                     },

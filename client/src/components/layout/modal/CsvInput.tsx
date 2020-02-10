@@ -19,7 +19,7 @@ import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import {saveMembersFromCsv} from "../../../store/members/sagas";
 import {connect} from "react-redux";
-import uploadMemberModel from "../../../store/members/uploadMemberModel";
+import uploadMemberModel from "../../../store/members/UploadMemberModel";
 import {UploadMemberDeserializer} from "../../../utils/uploadMemberSerializer";
 import {ApplicationState} from "../../../store";
 import SquadronModel from "../../../store/squadrons/SquadronModel";
@@ -125,9 +125,8 @@ function csvJSON(csv: any) {
     return result; //JSON
 }
 
-function camelize(str: string) {
-    let newStr = str.replace(/_/g, "");
-    return newStr.toLowerCase().replace(/\W+(.)/g, function(match, chr)
+function snake_case(str: string) {
+    return str.toLowerCase().replace(/\W+(.)/g, function(match, chr)
     {
         return chr.toUpperCase();
     });
@@ -136,7 +135,7 @@ function camelize(str: string) {
 function lower(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
-            obj[prop] = camelize(obj[prop]);
+            obj[prop] = snake_case(obj[prop]);
         }
         if (typeof obj[prop] === 'object') {
             lower(obj[prop]);
@@ -145,7 +144,7 @@ function lower(obj: any) {
     return obj;
 }
 
-const doUpload = async (e: any, sq: string) => {
+const doUpload = async (e: any, squadron: string) => {
 
     e.preventDefault();
     let formData = new FormData();
@@ -177,7 +176,7 @@ const doUpload = async (e: any, sq: string) => {
                 if (csv !== null) {
                     if (typeof csv === "string") {
                         let members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
-                        saveMembersFromCsv(members, sq);
+                        saveMembersFromCsv(members);
                         // console.log('CSV: ', csv.substring(0, 3000) + '...');
                     }
                 }
@@ -255,8 +254,8 @@ const CsvInput: React.FC<AllProps> = props => {
         return (props.squadronList.map((item: any, index) =>
             <MenuItem
             key={index}
-            value={item.pas_Code}>
-                {item.pas_Code}
+            value={item.pas}>
+                {item.squadron}
             </MenuItem>
             )
 
@@ -351,13 +350,6 @@ const CsvInput: React.FC<AllProps> = props => {
             </Modal>
         </div>
     );
-// function browseViaInput() {
-//         return () => {
-//             if (browseInputRef !== null) {
-//             browseInputRef.current.click();
-//             }
-//         };
-//     }
 };
 
 const mapStateToProps = ({squadrons}: ApplicationState) => ({

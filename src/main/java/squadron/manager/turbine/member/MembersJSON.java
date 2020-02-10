@@ -1,21 +1,20 @@
 package squadron.manager.turbine.member;
 
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
-import java.util.Date;
+import java.sql.Timestamp;
+
 
 @NoArgsConstructor
-@Entity
 @Data
-@Table(name = "SqMember")
-class SqMember {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
+public class MembersJSON {
+
+    private static final String emptyFieldMessage = "This is required";
 
     private Long id;
-
     private String ssan;
 
     private String full_name;
@@ -30,19 +29,20 @@ class SqMember {
 
     private String duty_title;
 
-    private Date duty_start_date;
+    private Timestamp duty_start_date;
 
     private String duty_phone;
 
     private String supv_name;
 
-    private Date supv_begin_date;
+    private Timestamp supv_begin_date;
 
-    private Date date_arrived_station;
+    private Timestamp date_arrived_station;
 
-    private Date dor;
+    private Timestamp dor;
 
-    public SqMember(String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+    public MembersJSON(Long id, String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Timestamp duty_start_date, String duty_phone, String supv_name, Timestamp supv_begin_date, Timestamp date_arrived_station, Timestamp dor) {
+        this.id = id;
         this.ssan = ssan;
         this.full_name = full_name;
         this.grade = grade;

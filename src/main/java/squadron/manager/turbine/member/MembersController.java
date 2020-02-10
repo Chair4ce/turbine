@@ -9,12 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(SqMemberController.URI)
-public class SqMemberController {
-    public static final String URI = "api/sqMembers";
+@RequestMapping(MembersController.URI)
+public class MembersController {
+    public static final String URI = "api/members";
 
     @Autowired
-    private SqMemberRepository sqMemberRepository;
+    private membersRepository membersRepository;
 
     @Autowired
     private UploadSqMemberRepository uploadSqMemberRepository;
@@ -22,18 +22,17 @@ public class SqMemberController {
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    Iterable<SqMember> getMembers() {
-        return sqMemberRepository.findAll();
+    Iterable<members> getMembers() {
+        return membersRepository.findAll();
     }
 
     @CrossOrigin
-    @PostMapping(path = "/{sq_PAS}/save")
-    public Iterable<UploadSqMemberModel> addMembers(@PathVariable(value = "sq_PAS") @Valid @RequestBody  Iterable<SqMemberJSON> json, String sq_PAS) throws Exception {
-
-        List<UploadSqMemberModel> members = new ArrayList();
+    @PostMapping(path = "/save")
+    public Iterable<UploadmembersModel> addMembers( @Valid @RequestBody  Iterable<MembersJSON> json) throws Exception {
+        List<UploadmembersModel> members = new ArrayList();
         json.forEach((item -> {
             members.add(
-                    new UploadSqMemberModel(
+                    new UploadmembersModel(
                             item.getSsan(),
                             item.getFull_name(),
                             item.getGrade(),

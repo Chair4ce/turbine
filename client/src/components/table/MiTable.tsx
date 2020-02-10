@@ -20,10 +20,10 @@ import FilterListIcon from '@material-ui/icons/FilterList';
 import MemberModel from "../../store/members/MemberModel";
 
 interface Data {
-    fullName: number;
+    full_name: number;
     grade: number;
     dafsc: number;
-    officeSymbol: number;
+    office_symbol: number;
 }
 
 function desc<T>(a: T, b: T, orderBy: keyof T) {
@@ -63,10 +63,10 @@ interface HeadCell {
 }
 
 const headCells: HeadCell[] = [
-    { id: 'fullName', numeric: false, disablePadding: true, label: 'Full Name' },
+    { id: 'full_name', numeric: false, disablePadding: true, label: 'Full Name' },
     { id: 'grade', numeric: true, disablePadding: false, label: 'Rank' },
     { id: 'dafsc', numeric: true, disablePadding: false, label: 'AFSC' },
-    { id: 'officeSymbol', numeric: true, disablePadding: false, label: 'Office Symbol' },
+    { id: 'office_symbol', numeric: true, disablePadding: false, label: 'Office Symbol' },
 ];
 
 interface EnhancedTableProps {
@@ -231,19 +231,19 @@ const InProcessingTable: React.FC<Props> = props => {
 
     const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.checked) {
-            const newSelecteds = props.members!.map(n => n.fullName);
+            const newSelecteds = props.members!.map(n => n.full_name);
             setSelected(newSelecteds);
             return;
         }
         setSelected([]);
     };
 
-    const handleClick = (event: React.MouseEvent<unknown>, fullName: string) => {
-        const selectedIndex = selected.indexOf(fullName);
+    const handleClick = (event: React.MouseEvent<unknown>, full_name: string) => {
+        const selectedIndex = selected.indexOf(full_name);
         let newSelected: string[] = [];
 
         if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, fullName);
+            newSelected = newSelected.concat(selected, full_name);
         } else if (selectedIndex === 0) {
             newSelected = newSelected.concat(selected.slice(1));
         } else if (selectedIndex === selected.length - 1) {
@@ -267,7 +267,7 @@ const InProcessingTable: React.FC<Props> = props => {
         setPage(0);
     };
 
-    const isSelected = (fullName: string) => selected.indexOf(fullName) !== -1;
+    const isSelected = (full_name: string) => selected.indexOf(full_name) !== -1;
 
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.members!.length - page * rowsPerPage);
 
@@ -295,17 +295,17 @@ const InProcessingTable: React.FC<Props> = props => {
                             {stableSort(props.members!, getSorting(order, orderBy))
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((member: MemberModel, index: number) => {
-                                    const isItemSelected = isSelected(member.fullName);
+                                    const isItemSelected = isSelected(member.full_name);
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={event => handleClick(event, member.fullName)}
+                                            onClick={event => handleClick(event, member.full_name)}
                                             role="checkbox"
                                             aria-checked={isItemSelected}
                                             tabIndex={-1}
-                                            key={member.fullName}
+                                            key={member.full_name}
                                             selected={isItemSelected}
                                         >
                                             <TableCell padding="checkbox">
@@ -315,11 +315,11 @@ const InProcessingTable: React.FC<Props> = props => {
                                                 />
                                             </TableCell>
                                             <TableCell component="th" id={labelId} scope="row" padding="none">
-                                                {member.fullName}
+                                                {member.full_name}
                                             </TableCell>
                                             <TableCell align="right">{member.grade}</TableCell>
                                             <TableCell align="right">{member.dafsc}</TableCell>
-                                            <TableCell align="right">{member.officeSymbol}</TableCell>
+                                            <TableCell align="right">{member.office_symbol}</TableCell>
                                         </TableRow>
                                     );
                                 })}
