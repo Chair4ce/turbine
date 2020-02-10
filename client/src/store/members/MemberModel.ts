@@ -3,30 +3,36 @@
 
 export default class MemberModel {
         public id: number;
-        public full_name: string;
+        public ssan: string;
+        public fullName: string;
         public grade: string;
-        public assigned_pas: string;
+        public assignedPas: string;
+        public officeSymbol: string;
+        public dutyTitle: string;
+        public dutyStartDate: Date;
         public dafsc: string;
-        public office_symbol: string;
-        public duty_title: string;
-        public duty_start_date: string;
-        public duty_phone: string;
-        public awardec_status: string;
-        public epr_opr_status: string;
+        public dutyPhone: string;
+        public supv_name: string;
+        public supv_begin_date: Date;
+        public dor: Date;
+        public date_arrived_station: Date;
 
 
-    constructor(id: number, full_name: string, grade: string, assigned_pas: string, dafsc: string, office_symbol: string, duty_title: string, duty_start_date: string, duty_phone: string, awardec_status: string, epr_opr_status: string) {
+    constructor(id: number, ssan: string, fullName: string, grade: string, assignedPas: string, officeSymbol: string, dutyTitle: string, dutyStartDate: Date, dafsc: string, dutyPhone: string, supv_name: string, supv_begin_date: Date, dor: Date, date_arrived_station: Date) {
         this.id = id;
-        this.full_name = full_name;
+        this.ssan = ssan;
+        this.fullName = fullName;
         this.grade = grade;
-        this.assigned_pas = assigned_pas;
+        this.assignedPas = assignedPas;
+        this.officeSymbol = officeSymbol;
+        this.dutyTitle = dutyTitle;
+        this.dutyStartDate = dutyStartDate;
         this.dafsc = dafsc;
-        this.office_symbol = office_symbol;
-        this.duty_title = duty_title;
-        this.duty_start_date = duty_start_date;
-        this.duty_phone = duty_phone;
-        this.awardec_status = awardec_status;
-        this.epr_opr_status = epr_opr_status;
+        this.dutyPhone = dutyPhone;
+        this.supv_name = supv_name;
+        this.supv_begin_date = supv_begin_date;
+        this.dor = dor;
+        this.date_arrived_station = date_arrived_station;
     }
 }
 

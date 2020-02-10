@@ -5,6 +5,7 @@ import {membersFetchRequest} from '../../store/members/actions';
 import MemberModel from "../../store/members/MemberModel";
 import Page from "../../components/layout/Page";
 import {ConnectedNavDrawer} from "../../components/layout/NavDrawer";
+import {squadronsFetchRequest} from "../../store/squadrons";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
@@ -16,6 +17,7 @@ interface PropsFromState {
 // We can use `typeof` here to map our dispatch types to the props, like so.
 interface PropsFromDispatch {
     membersFetchRequest: typeof membersFetchRequest;
+    squadronsFetchRequest: typeof squadronsFetchRequest;
 }
 
 // Combine both state + dispatch props - as well as any props we want to pass - in a union type.
@@ -23,8 +25,9 @@ type AllProps = PropsFromState & PropsFromDispatch;
 
 class MembersIndexPage extends React.Component<AllProps> {
     public componentDidMount() {
-        const { membersFetchRequest: fr } = this.props;
+        const { membersFetchRequest: fr , squadronsFetchRequest: sr } = this.props;
         fr();
+        sr();
     }
 
     public render() {
@@ -52,6 +55,7 @@ const mapStateToProps = ({ members }: ApplicationState) => ({
 // You can access these via `this.props`.
 const mapDispatchToProps = {
     membersFetchRequest,
+    squadronsFetchRequest
 };
 
 // Now let's connect our component!

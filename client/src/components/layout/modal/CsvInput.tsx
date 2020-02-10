@@ -1,6 +1,16 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
-import {CircularProgress, Container, Fab, Modal} from "@material-ui/core";
+import {
+    CircularProgress,
+    Container,
+    Fab,
+    FormControl,
+    FormHelperText,
+    InputLabel,
+    MenuItem,
+    Modal,
+    Select
+} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import clsx from 'clsx';
@@ -11,6 +21,8 @@ import {saveMembersFromCsv} from "../../../store/members/sagas";
 import {connect} from "react-redux";
 import uploadMemberModel from "../../../store/members/uploadMemberModel";
 import {UploadMemberDeserializer} from "../../../utils/uploadMemberSerializer";
+import {ApplicationState} from "../../../store";
+import SquadronModel from "../../../store/squadrons/SquadronModel";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -74,6 +86,13 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: -12,
             marginLeft: -12,
         },
+        formControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        selectEmpty: {
+            marginTop: theme.spacing(2),
+        },
     }),
 );
 
@@ -90,6 +109,8 @@ function csvJSON(csv: any) {
     let quotesRegex = /^"(.*)"$/g;
     let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
     let lowerHeaders = lower(headers);
+
+
     for (let i = 1; i < lines.length; i++) {
         let obj: any = {};
         let currentline = lines[i].split(commaRegex);
@@ -104,10 +125,18 @@ function csvJSON(csv: any) {
     return result; //JSON
 }
 
+function camelize(str: string) {
+    let newStr = str.replace(/_/g, "");
+    return newStr.toLowerCase().replace(/\W+(.)/g, function(match, chr)
+    {
+        return chr.toUpperCase();
+    });
+}
+
 function lower(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
-            obj[prop] = obj[prop].toLowerCase();
+            obj[prop] = camelize(obj[prop]);
         }
         if (typeof obj[prop] === 'object') {
             lower(obj[prop]);
@@ -116,7 +145,7 @@ function lower(obj: any) {
     return obj;
 }
 
-const doUpload = async (e: any) => {
+const doUpload = async (e: any, sq: string) => {
 
     e.preventDefault();
     let formData = new FormData();
@@ -148,7 +177,7 @@ const doUpload = async (e: any) => {
                 if (csv !== null) {
                     if (typeof csv === "string") {
                         let members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
-                        saveMembersFromCsv(members);
+                        saveMembersFromCsv(members, sq);
                         // console.log('CSV: ', csv.substring(0, 3000) + '...');
                     }
                 }
@@ -172,6 +201,7 @@ function getModalStyle() {
 
 interface PropsFromState {
     toggleCSVInputModal: () => void;
+    squadronList: SquadronModel[];
 }
 
 interface PropsFromDispatch {
@@ -188,6 +218,7 @@ const CsvInput: React.FC<AllProps> = props => {
     const [open, setOpen] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+    const [squadron, setSquadron] = React.useState('');
     const timer = React.useRef<number>();
 
     const buttonClassname = clsx({
@@ -214,6 +245,24 @@ const CsvInput: React.FC<AllProps> = props => {
         props.toggleCSVInputModal();
         setOpen(false);
     };
+
+    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+        setSquadron(event.target.value as string);
+    };
+
+
+    function renderSquadronList() {
+        return (props.squadronList.map((item: any, index) =>
+            <MenuItem
+            key={index}
+            value={item.pas_Code}>
+                {item.pas_Code}
+            </MenuItem>
+            )
+
+        )
+    }
+
     return (
         <div className={classes.root}>
             {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
@@ -224,6 +273,18 @@ const CsvInput: React.FC<AllProps> = props => {
                 onClose={handleClose}
             >
                 <div style={modalStyle} className={classes.paper}>
+                    <FormControl className={classes.formControl}>
+                        <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+                        <Select
+                            labelId="demo-simple-select-helper-label"
+                            id="demo-simple-select-helper"
+                            value={squadron}
+                            onChange={handleChange}
+                        >
+                            {renderSquadronList()}
+                        </Select>
+                        <FormHelperText>Some important helper text</FormHelperText>
+                    </FormControl>
                     <h2 id="simple-modal-title">
                         Wait, before you upload! Please use Excel to save your Alpha Roster as a .csv file.
                     </h2>
@@ -254,7 +315,7 @@ const CsvInput: React.FC<AllProps> = props => {
                             multiple
                             type="file"
                             onChange={(event) => {
-                                doUpload(event);
+                                doUpload(event, squadron);
                                 handleButtonClick();
                             }}
                             ref={browseInputRef}
@@ -299,7 +360,9 @@ const CsvInput: React.FC<AllProps> = props => {
 //     }
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = ({squadrons}: ApplicationState) => ({
+    squadronList: squadrons.squadrons
+});
 
 const mapDispatchToProps = {
     saveMembersFromCsv

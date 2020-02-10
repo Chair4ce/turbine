@@ -4,16 +4,16 @@ import MemberModel from "../../store/members/MemberModel";
 
 interface Row {
      id: number;
-     full_name: string;
+     fullName: string;
      grade: string;
-     assigned_pas: string;
+     assignedPas: string;
      dafsc: string;
-     office_symbol: string;
-     duty_title: string;
-     duty_start_date: string;
-     duty_phone: string;
-     awardec_status: string;
-     epr_opr_status: string;
+     officeSymbol: string;
+     dutyTitle: string;
+     dutyStartDate: string;
+     dutyPhone: string;
+     awardecStatus: string;
+     eprOprStatus: string;
 }
 
 interface TableState {
@@ -33,10 +33,10 @@ const EditTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
 
         columns: [
-            { title: 'Name', field: 'full_name' },
+            { title: 'Name', field: 'fullName' },
             { title: 'Rank', field: 'grade' },
             { title: 'DAFSC', field: 'dafsc' },
-            { title: 'Office', field: 'office_symbol'
+            { title: 'Office', field: 'officeSymbol'
                 },
             // {
             //     title: 'Birth Place',
@@ -75,14 +75,14 @@ const EditTable: React.FC<Props> = props => {
                                     backgroundColor: '#43A047',
                                 }}
                             >
-                                {rowData.assigned_pas}
+                                {rowData.assignedPas}
                             </div>
                         )
                     },
                 },
                 // {
                 //     icon: 'account_circle',
-                //     tooltip: 'Show Member Details',
+                //     tooltip: 'Show Members Details',
                 //     render: rowData => {
                 //         return (
                 //             <div
@@ -93,7 +93,7 @@ const EditTable: React.FC<Props> = props => {
                 //                     backgroundColor: '#E53935',
                 //                 }}
                 //             >
-                //                 {rowData.duty_title}
+                //                 {rowData.dutyTitle}
                 //             </div>
                 //         )
                 //     },
@@ -106,7 +106,7 @@ const EditTable: React.FC<Props> = props => {
                 selection: true,
                 exportButton: true,
                 // selectionProps: (rowData: MemberModel) => ({
-                //     disabled: rowData.full_name === 'ABRAMS, JOSEPH L',
+                //     disabled: rowData.fullName === 'ABRAMS, JOSEPH L',
                 //     color: 'primary'
                 // })
             }}

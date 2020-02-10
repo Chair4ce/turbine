@@ -14,12 +14,12 @@ public class SquadronJSON {
 
     private long id;
     private String squadron;
-    private String pas_Code;
-    private String group_PAS;
+    private String pas;
+    private String group_pas;
 
-    public SquadronJSON(String squadron, String pas_Code, String group_PAS) {
+    public SquadronJSON(String squadron, String pas, String group_pas) {
         this.squadron = squadron;
-        this.pas_Code = pas_Code;
-        this.group_PAS = group_PAS;
+        this.pas = pas;
+        this.group_pas = group_pas;
     }
 }

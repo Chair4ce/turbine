@@ -77,7 +77,7 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
                         tooltipTitle={action.name}
                         tooltipOpen
                         onClick={handleClose}
-                        title={'Member Actions'}/>
+                        title={'Members Actions'}/>
                 ))}
             </SpeedDial>
         </div>

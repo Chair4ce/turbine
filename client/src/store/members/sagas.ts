@@ -35,13 +35,13 @@ export function postFeedback(feedback: FeedbackModel) {
     }
 }
 
-export function saveMembersFromCsv(members: any) {
+export function saveMembersFromCsv(members: any, sq_PAS: String) {
+
     try {
         // To call async functions, use redux-saga's `call()`.
-        callApi('POST', 'api/members/save', members);
+        callApi('POST', 'api/members/'+ sq_PAS +'/save', members);
     } catch (err) {
         console.log('An unknown error occured.');
-
     }
 }
 

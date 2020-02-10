@@ -9,6 +9,7 @@ spring:
     baseline-version: 0
   jpa:
     hibernate:
+#      namingStrategy: org.hibernate.cfg.EJB3NamingStrategy
       dialect: org.hibernate.dialect.MySQL5Dialect
       hbm2ddl:
         auto: create-drop

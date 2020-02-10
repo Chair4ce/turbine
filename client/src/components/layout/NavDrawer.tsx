@@ -30,6 +30,7 @@ import {ApplicationState} from "../../store";
 import SpeedDialBtn from "./button/SpeedDialBtn";
 import {ConnectedFeedbackInput} from "./input/Feedback";
 import {ConnectedCsvInput} from "./modal/CsvInput";
+import {squadronsFetchRequest} from "../../store/squadrons";
 
 
 interface PropsFromState {
@@ -41,6 +42,7 @@ interface PropsFromState {
 
 interface PropsFromDispatch {
     postFeedback: typeof postFeedback;
+    squadronsFetchRequest: typeof squadronsFetchRequest;
 }
 
 type AllProps = PropsFromDispatch & PropsFromState;
@@ -277,7 +279,7 @@ const mapStateToProps = ({showModal}: ApplicationState) => ({
 });
 
 const mapDispatchToProps = {
-    postFeedback,
+    postFeedback, squadronsFetchRequest
 };
 export const ConnectedNavDrawer = connect(mapStateToProps, mapDispatchToProps)(NavDrawer);
 

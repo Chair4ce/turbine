@@ -2,7 +2,6 @@ package squadron.manager.turbine.feedback;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import squadron.manager.turbine.member.MemberController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.validation.Valid;

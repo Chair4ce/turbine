@@ -48,7 +48,7 @@ class ShowMembersPage extends React.Component<AllProps, State> {
 
     public render() {
         const { data, loading, match } = this.props;
-        const selected = data.find(member => ((member.full_name) === match.params.memberId));
+        const selected = data.find(member => ((member.fullName) === match.params.memberId));
 
         return (
             <Page>
