@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             position: "fixed",
             bottom: 0,
-            right: 0,
+            left: 0,
             width: '100vw',
             height: '100vh',
             transform: 'translateZ(0px)',
@@ -23,9 +23,9 @@ const useStyles = makeStyles((theme: Theme) =>
             pointerEvents: 'none',
         },
         speedDial: {
-            position: 'fixed',
+            position: 'absolute',
             bottom: theme.spacing(2),
-            right: theme.spacing(2),
+            left: theme.spacing(1),
         },
     }),
 );
@@ -62,12 +62,13 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
     return (
         <div className={classes.root}>
             {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
-            <Backdrop open={open} timeout={10}  />
+            <Backdrop open={open} timeout={10}/>
             <SpeedDial
-                ariaLabel="SpeedDial tooltip example"
+                ariaLabel="SpeedDial example"
                 className={classNames(classes.speedDial, 'DialIcon')}
                 hidden={hidden}
                 icon={<TurbineIcon/>}
+                direction={"right"}
                 onClose={handleClose}
                 onOpen={handleOpen}
                 open={open}
@@ -76,10 +77,9 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
                     <SpeedDialAction
                         key={action.name}
                         icon={action.icon}
-                        tooltipTitle={action.name}
-                        tooltipOpen
                         // onClick={handleClose}
-                        title={'Members Actions'}/>
+                    tooltipTitle={action.name}
+                    tooltipPlacement={"top"}/>
                 ))}
             </SpeedDial>
         </div>

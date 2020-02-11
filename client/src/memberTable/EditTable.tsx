@@ -7,16 +7,12 @@ interface Row {
     id: number;
     full_name: string;
     grade: string;
-    assigned_pas: string;
     dafsc: string;
     office_symbol: string;
-    duty_title: string;
     duty_start_date: string;
     duty_phone: string;
     supv_name: string;
-    supv_begin_date: string;
     date_arrived_station: string;
-    dor: string;
 }
 
 interface TableState {
@@ -31,10 +27,8 @@ interface Props {
     className?: string;
 }
 
-
 const EditTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
-
         columns: [
             {title: 'Avatar', field: 'url', render: () => <EmojiEmotionsTwoToneIcon/>},
             {title: 'Name', field: 'full_name'},
@@ -45,9 +39,7 @@ const EditTable: React.FC<Props> = props => {
             {title: 'Start Date', field: 'duty_start_date'},
             {title: 'Phone', field: 'duty_phone'},
             {title: 'Supervisor', field: 'supv_name'},
-            {title: 'Sup Start', field: 'supv_begin_date'},
             {title: 'Arrived', field: 'date_arrived_station'},
-            {title: 'DOR', field: 'dor'}
 
             //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
             // {
@@ -66,7 +58,7 @@ const EditTable: React.FC<Props> = props => {
             title={props.title}
             columns={state.columns}
             data={state.data}
-            isLoading={true}
+            isLoading={props.loading}
             actions={[
                 // {
                 //     tooltip: 'Remove All Selected Users',
@@ -87,7 +79,7 @@ const EditTable: React.FC<Props> = props => {
                                     backgroundColor: '#43A047',
                                 }}
                             >
-                                {rowData.assigned_pas}
+                                {rowData.supv_name}
                             </div>
                         )
                     },

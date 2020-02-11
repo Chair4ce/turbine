@@ -47,11 +47,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface Props {
+interface PropsFromDispatch {
     postFeedback: typeof postFeedback;
 }
 
-const FeedbackInput: React.FC<Props> = props => {
+type AllProps = PropsFromDispatch;
+
+const FeedbackInput: React.FC<AllProps> = props => {
     const classes = useStyles();
     const [success, setSuccess] = React.useState(false);
     const [btnText, setbtnText] = React.useState("SUBMIT");
@@ -66,7 +68,7 @@ const FeedbackInput: React.FC<Props> = props => {
     });
 
     const handleButtonClick = async() => {
-        if (!loading) {
+        if (!loading && feedBackMsg.length > 0) {
             setSuccess(false);
             setLoading(true);
            await submitFeedback();

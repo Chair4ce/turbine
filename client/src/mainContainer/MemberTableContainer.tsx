@@ -227,13 +227,16 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                     <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>
                     <ListItemText primary="Supervisors"/>
                 </ListItem>
+                <SpeedDialBtn
+                    toggleCSVInputModal={toggleCSVInputModal}
+                />
             </Drawer>
             <Container className={classes.content}>
                 {showCSVInputModal &&
                 <ConnectedCsvInput
                     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
-                <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'} height={'100%'}
+                <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
                     {gainTable &&
                     <Grow in={gainTable}>
@@ -271,9 +274,7 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                     {/*}*/}
                 </Box>
                 <ConnectedFeedbackInput/>
-                <SpeedDialBtn
-                toggleCSVInputModal={toggleCSVInputModal}
-                />
+
             </Container>
         </div>
     );
@@ -344,12 +345,13 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             position: 'relative',
             flexDirection: 'column',
-            justifyContent: 'space around',
+            justifyContent: 'space-around',
             Height: '100%',
             maxWidth: 'none',
-            marginLeft: 21,
-            marginRight: 21,
-            top: 105,
+            minWidth: 200,
+            paddingLeft: 16,
+            paddingRight: 16,
+            top: 80,
         },
         toolbar: {
             display: 'flex',
@@ -367,6 +369,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         table: {
             width: '100%',
+            minWidth: 200,
             marginBottom: 20,
         },
         gainTableDisplay: {

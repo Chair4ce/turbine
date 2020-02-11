@@ -15,12 +15,12 @@ export class MemberDeserializer {
                     item.dafsc,
                     item.office_symbol,
                     item.duty_title,
-                    moment(item.duty_start_date).utc().format('MMM Do YY'),
+                    moment(item.duty_start_date).utc().format('DD MMM YY'),
                     item.duty_phone,
                     item.supv_name,
-                    moment(item.supv_begin_date).utc().format('MMM Do YY'),
-                    moment(item.date_arrived_station).utc().format('MMM Do YY'),
-                    moment(item.dor).utc().format('MMM Do YY'),
+                    moment(item.supv_begin_date).utc().format('DD MMM YY'),
+                    moment(item.date_arrived_station).utc().format('DD MMM YY'),
+                    moment(item.dor).utc().format('DD MMM YY'),
             )
                 ;
             });

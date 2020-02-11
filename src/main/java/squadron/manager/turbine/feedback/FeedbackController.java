@@ -1,5 +1,7 @@
 package squadron.manager.turbine.feedback;
 
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -33,7 +35,7 @@ public class FeedbackController {
     public Feedback create(@Valid @RequestBody FeedbackJSON feedbackJSON) {
 
             Feedback feedback = new Feedback(
-                    new Date(),
+                    new LocalDateTime().toDate(),
                     feedbackJSON.getFeedback_entry()
             );
 
