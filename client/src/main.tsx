@@ -5,8 +5,8 @@ import { Store } from 'redux';
 import { History } from 'history';
 import { ThemeProvider } from '@material-ui/styles';
 import Routes from './routes';
-import { ApplicationState } from './store';
-import {darktheme} from "./styles/theme/dark";
+import { ApplicationState } from './dispatchAndState';
+import {darktheme} from "./style/theme/dark";
 
 // Any additional component props go here.
 interface MainProps {
