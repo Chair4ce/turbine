@@ -1,11 +1,13 @@
 import * as React from 'react';
-import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Backdrop from '@material-ui/core/Backdrop';
 import SpeedDial from '@material-ui/lab/SpeedDial';
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
 import SaveIcon from '@material-ui/icons/Save';
+import TurbineIcon from "../../icons/TurbineLogo";
+import classNames from "classnames";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,12 +62,12 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
     return (
         <div className={classes.root}>
             {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
-            <Backdrop open={open} timeout={10}/>
+            <Backdrop open={open} timeout={10}  />
             <SpeedDial
                 ariaLabel="SpeedDial tooltip example"
-                className={classes.speedDial}
+                className={classNames(classes.speedDial, 'DialIcon')}
                 hidden={hidden}
-                icon={<SpeedDialIcon/>}
+                icon={<TurbineIcon/>}
                 onClose={handleClose}
                 onOpen={handleOpen}
                 open={open}
@@ -76,7 +78,7 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
                         icon={action.icon}
                         tooltipTitle={action.name}
                         tooltipOpen
-                        onClick={handleClose}
+                        // onClick={handleClose}
                         title={'Members Actions'}/>
                 ))}
             </SpeedDial>

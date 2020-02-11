@@ -1,10 +1,11 @@
 import {MemberActionTypes} from "./types";
 import {membersReducer} from "./reducer";
 import MemberModel from "./MemberModel";
+import moment from "moment";
 
 describe('reducer', () => {
     let memberList: MemberModel[];
-    let date = new Date();
+    let date = new Date;
     beforeEach(() => {
 
         memberList = [
@@ -13,36 +14,36 @@ describe('reducer', () => {
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
-                    date,
+                    moment(date).utc(true).format(),
                     '',
                     '',
-                    date,
-                    date,
-                    date),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format()),
                 new MemberModel(
                     2,'576-21-2783','Hoag, Jacy L', 'TSgt',
                     'UHBIJNUG87',
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
-                    date,
+                    moment(date).utc(true).format(),
                     '',
                     '',
-                    date,
-                    date,
-                    date),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format()),
                 new MemberModel(
                     3,'576-21-2783','Hoag, Jacy L', 'TSgt',
                     'UHBIJNUG87',
                     '3D1X2',
                     'SXCP',
                     'NCOIC, SDT',
-                    date,
+                    moment(date).utc(true).format(),
                     '',
                     '',
-                    date,
-                    date,
-                    date),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format(),
+                    moment(date).utc(true).format()),
         ];
     });
 
@@ -58,36 +59,36 @@ describe('reducer', () => {
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
-                date,
+                moment(date).utc(true).format('MMM Do YY'),
                 '',
                 '',
-                date,
-                date,
-                date),
+                moment(date).utc(true).format('MMM Do YY'),
+                moment(date).utc(true).format('MMM Do YY'),
+                moment(date).utc(true).format('MMM Do YY')),
             new MemberModel(
                 2,'576-21-2783','Hoag, Jacy L', 'TSgt',
                 'UHBIJNUG87',
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
-                date,
+                moment(date).utc(true).format('MMM Do YY'),
                 '',
                 '',
-                date,
-                date,
-                date),
+                moment(date).utc(true).format('MMM Do YY'),
+                moment(date).utc(true).format('MMM Do YY'),
+                moment(date).utc(true).format('MMM Do YY')),
             new MemberModel(
                 3,'576-21-2783','Hoag, Jacy L', 'TSgt',
                 'UHBIJNUG87',
                 '3D1X2',
                 'SXCP',
                 'NCOIC, SDT',
-                date,
+                moment(date).format('MMM Do YY'),
                 '',
                 '',
-                date,
-                date,
-                date),
+                moment(date).format('MMM Do YY'),
+                moment(date).format('MMM Do YY'),
+                moment(date).format('MMM Do YY')),
         ];
 
         expect(

@@ -27,11 +27,10 @@ import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
-import SpeedDialBtn from "./button/SpeedDialBtn";
 import {ConnectedFeedbackInput} from "./input/Feedback";
 import {ConnectedCsvInput} from "./modal/CsvInput";
 import {squadronsFetchRequest} from "../../store/squadrons";
-
+import SpeedDialBtn from "./button/SpeedDialBtn";
 
 interface PropsFromState {
     members: MemberModel[];

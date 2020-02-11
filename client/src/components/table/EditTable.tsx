@@ -1,7 +1,6 @@
 import React from 'react';
-import MaterialTable, { Column } from 'material-table';
+import MaterialTable, {Column} from 'material-table';
 import MemberModel from "../../store/members/MemberModel";
-import moment, {Moment} from "moment";
 
 interface Row {
      id: number;

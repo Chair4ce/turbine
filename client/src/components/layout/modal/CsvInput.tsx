@@ -273,7 +273,7 @@ const CsvInput: React.FC<AllProps> = props => {
             >
                 <div style={modalStyle} className={classes.paper}>
                     <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-helper-label">Age</InputLabel>
+                        <InputLabel id="demo-simple-select-helper-label">Select Squadron to Update</InputLabel>
                         <Select
                             labelId="demo-simple-select-helper-label"
                             id="demo-simple-select-helper"
