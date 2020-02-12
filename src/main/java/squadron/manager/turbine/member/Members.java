@@ -10,13 +10,15 @@ import java.util.Date;
 @Entity
 @Data
 @Table(name = "members")
-class members {
+class Members {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
 
-    private String ssan;
+    private Integer sqid;
+
+    private Date tafmsd;
 
     private String full_name;
 
@@ -42,9 +44,10 @@ class members {
 
     private Date dor;
 
-    public members(Long id, String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+    public Members(Long id, Date tafmsd, Integer sqid, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
         this.id = id;
-        this.ssan = ssan;
+        this.sqid = sqid;
+        this.tafmsd = tafmsd;
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;

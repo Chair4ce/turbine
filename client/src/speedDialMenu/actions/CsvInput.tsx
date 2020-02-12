@@ -18,6 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             zIndex: 1500,
             outline: 'none',
+            margin: 6,
         },
         fileDropArea: {
             height: 250,
@@ -125,7 +126,7 @@ function lower(obj: any) {
     return obj;
 }
 
-const doUpload = async (e: any, squadron: string) => {
+const doUpload = async (e: any, squadron: string, uploadType: string) => {
 
     e.preventDefault();
     let formData = new FormData();
@@ -154,8 +155,17 @@ const doUpload = async (e: any, squadron: string) => {
                 let csv = reader.result;
                 if (csv !== null) {
                     if (typeof csv === "string") {
-                        let members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
+                        switch (uploadType) {
+                            case 'Gaining':
+                                break;
+                            case 'Alpha':
+                        const members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
                         saveMembersFromCsv(members);
+                                 break;
+                            case 'UPMR':
+                            case 'Losing':
+                            default : break;
+                        }
                         // console.log('CSV: ', csv.substring(0, 3000) + '...');
                     }
                 }
@@ -170,6 +180,7 @@ const doUpload = async (e: any, squadron: string) => {
 
 interface PropsFromState {
     squadron?: string
+    uploadType: string
 }
 
 interface PropsFromDispatch {
@@ -206,7 +217,7 @@ const CsvInput: React.FC<AllProps> = props => {
             setSuccess(false);
             setLoading(true);
             if (props.squadron){
-            doUpload(e, props.squadron);
+            doUpload(e, props.squadron, props.uploadType);
             }
             timer.current = setTimeout(() => {
                 setSuccess(true);

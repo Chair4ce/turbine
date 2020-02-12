@@ -9,19 +9,20 @@ CREATE TABLE metric
 CREATE TABLE members
 (
     id                   INT NOT NULL AUTO_INCREMENT,
-    ssan                 TEXT,
+    sqid                INTEGER,
+    tafmsd               DATE,
     full_name            TEXT,
     grade                TEXT,
     assigned_pas         TEXT,
     office_symbol        TEXT,
     duty_title           TEXT,
-    duty_start_date      TEXT,
+    duty_start_date      DATE,
     dafsc                TEXT,
     duty_phone           TEXT,
     supv_name            TEXT,
-    supv_begin_date      TEXT,
-    dor                  TEXT,
-    date_arrived_station TEXT,
+    supv_begin_date      DATE,
+    dor                  DATE,
+    date_arrived_station DATE,
     PRIMARY KEY (id)
 );
 

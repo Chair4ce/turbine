@@ -8,19 +8,20 @@ export class MemberDeserializer {
             return items.map((item: any) => {
                 return new MemberModel(
                     item.id,
-                    item.ssan,
+                    item.sq_id,
+                    item.tafmsd,
                     item.full_name,
                     item.grade,
                     item.assigned_pas,
                     item.dafsc,
                     item.office_symbol,
                     item.duty_title,
-                    moment(item.duty_start_date).utc().format('DD MMM YY'),
+                    item.duty_start_date,
                     item.duty_phone,
                     item.supv_name,
-                    moment(item.supv_begin_date).utc().format('DD MMM YY'),
-                    moment(item.date_arrived_station).utc().format('DD MMM YY'),
-                    moment(item.dor).utc().format('DD MMM YY'),
+                    item.supv_begin_date,
+                    item.date_arrived_station,
+                    item.dor,
             )
                 ;
             });
@@ -30,7 +31,6 @@ export class MemberDeserializer {
 
     static serialize(item: any): {} {
             return {
-                ssan: item.SSAN,
                 full_name: item.FULL_NAME,
                 grade: item.GRADE,
                 assigned_pas: item.ASSIGNED_PAS,

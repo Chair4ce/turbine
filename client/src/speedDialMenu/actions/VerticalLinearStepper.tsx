@@ -172,11 +172,12 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                             </Button>
                                         </div>
+                                        <ConnectedCsvInput squadron={squadron} uploadType={label}/>
                                     </div>
                                 </StepContent>
                             </Step>
                         ))}
-                        <ConnectedCsvInput squadron={squadron}/>
+
                     </Stepper>
                     {activeStep === steps.length && (
                         <Paper square elevation={0} className={classes.resetContainer}>

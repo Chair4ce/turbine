@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import javax.persistence.Transient;
+import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +16,7 @@ public class MembersController {
     public static final String URI = "api/members";
 
     @Autowired
-    private membersRepository membersRepository;
+    private MembersRepository membersRepository;
 
     @Autowired
     private UploadSqMemberRepository uploadSqMemberRepository;
@@ -22,18 +24,20 @@ public class MembersController {
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    Iterable<members> getMembers() {
+    Iterable<Members> getMembers() {
         return membersRepository.findAll();
     }
 
     @CrossOrigin
+    @Transactional
     @PostMapping(path = "/save")
-    public Iterable<UploadmembersModel> addMembers( @Valid @RequestBody  Iterable<MembersJSON> json) throws Exception {
-        List<UploadmembersModel> members = new ArrayList();
+    public Iterable<UploadmembersModel> addMembers(@Valid @RequestBody Iterable<MembersJSON> json) {
+        List<UploadmembersModel> newMembers = new ArrayList();
         json.forEach((item -> {
-            members.add(
+            newMembers.add(
                     new UploadmembersModel(
-                            item.getSsan(),
+                            verifyDuplicateSqid(item),
+                            item.getTafmsd(),
                             item.getFull_name(),
                             item.getGrade(),
                             item.getAssigned_pas(),
@@ -49,8 +53,26 @@ public class MembersController {
                     )
             );
         }));
-        return this.uploadSqMemberRepository.saveAll(members);
+        return this.uploadSqMemberRepository.saveAll(newMembers);
     }
+   private int verifyDuplicateSqid(MembersJSON item) {
+
+        int newSqidHash = createSqidHash(item);
+        if (!this.membersRepository.findAllBySqid(newSqidHash).isEmpty()) {
+            this.membersRepository.deleteAllBySqid(newSqidHash);
+        }
+
+        return newSqidHash;
+    }
+
+    private int createSqidHash(MembersJSON item) {
+        if (item.getTafmsd() != null) {
+            return (item.getFull_name() + item.getTafmsd()).hashCode();
+        } else {
+            return 0;
+        }
+    }
+}
 
 //    @CrossOrigin
 //    @GetMapping("/{id}")
@@ -68,5 +90,3 @@ public class MembersController {
 //        return ResponseEntity.ok().body(member);
 //    }
 
-
-}

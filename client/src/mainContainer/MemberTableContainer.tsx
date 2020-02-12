@@ -17,8 +17,8 @@ import {postFeedback} from "../dispatchAndState/members/sagas";
 import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
 import MemberModel from "../dispatchAndState/members/MemberModel";
 import EditTable from "../memberTable/EditTable";
-import GroupAddIcon from '@material-ui/icons/GroupAdd';
-// import GroupIcon from '@material-ui/icons/Group';
+// import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import GroupIcon from '@material-ui/icons/Group';
 // import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import PowerIcon from '@material-ui/icons/Power';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
@@ -55,17 +55,17 @@ const MemberTableContainer: React.FC<AllProps> = props => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [gainTable, showGainTable] = React.useState(false);
-    // const [alphaTable, showAlphaTable] = React.useState(false);
+    const [alphaTable, showAlphaTable] = React.useState(false);
     // const [lossTable, showLossTable] = React.useState(false);
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
     const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
 
-    // const handleAlphaBtnClick = () => {
-    //     handleTableOrder("alpha");
-    //     showAlphaTable(prev => !prev)
-    // };
+    const handleAlphaBtnClick = () => {
+        handleTableOrder("alpha");
+        showAlphaTable(prev => !prev)
+    };
     const handleGainBtnClick = () => {
         handleTableOrder("gain");
         showGainTable(prev => !prev)
@@ -183,20 +183,20 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                 </div>
                 <Divider/>
                 <List>
-                    <ListItem button onClick={handleGainBtnClick} className={clsx( {
-                        [classes.selected]: gainTable,
-                        [classes.unselected]: !gainTable,
-                    })}>
-                        <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>
-                        <ListItemText primary="In Processing"/>
-                    </ListItem>
-                    {/*<ListItem button onClick={handleAlphaBtnClick} className={clsx( {*/}
-                    {/*    [classes.selected]: alphaTable,*/}
-                    {/*    [classes.unselected]: !alphaTable,*/}
+                    {/*<ListItem button onClick={handleGainBtnClick} className={clsx( {*/}
+                    {/*    [classes.selected]: gainTable,*/}
+                    {/*    [classes.unselected]: !gainTable,*/}
                     {/*})}>*/}
-                    {/*    <ListItemIcon>{<GroupIcon/>}</ListItemIcon>*/}
-                    {/*    <ListItemText primary="Alpha Roster"/>*/}
+                    {/*    <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>*/}
+                    {/*    <ListItemText primary="In Processing"/>*/}
                     {/*</ListItem>*/}
+                    <ListItem button onClick={handleAlphaBtnClick} className={clsx( {
+                        [classes.selected]: alphaTable,
+                        [classes.unselected]: !alphaTable,
+                    })}>
+                        <ListItemIcon>{<GroupIcon/>}</ListItemIcon>
+                        <ListItemText primary="Alpha Roster"/>
+                    </ListItem>
                     {/*<ListItem button onClick={handleLossBtnClick} className={clsx( {*/}
                     {/*    [classes.selected]: lossTable,*/}
                     {/*    [classes.unselected]: !lossTable,*/}
@@ -240,29 +240,39 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                 }
                 <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
-                    {gainTable &&
-                    <Grow in={gainTable}>
-                        <Box order={gainTableOrder} className={classes.table}>
-                            <EditTable
-                                members={props.members}
-                                loading={props.loading}
-                                title={"In Processing"}
-                            />
-                        </Box>
-                    </Grow>
-                    }
-                    {/*{alphaTable &&*/}
-                    {/*<Grow in={alphaTable}>*/}
-                    {/*    <Box order={alphaTableOrder} className={classes.table}>*/}
-                    {/*<EditTable*/}
-                    {/*    members={props.members}*/}
-                    {/*    loading={props.loading}*/}
-                    {/*    title={"Alpha Roster"}*/}
-                    {/*    // className={alphaTableClassname}*/}
-                    {/*/>*/}
+                    {/*{gainTable &&*/}
+                    {/*<Grow in={gainTable}>*/}
+                    {/*    <Box order={gainTableOrder} className={classes.table}>*/}
+                    {/*        <EditTable*/}
+                    {/*            members={props.members}*/}
+                    {/*            loading={props.loading}*/}
+                    {/*            title={"In Processing"}*/}
+                    {/*            filtering={true}*/}
+                    {/*            grouping={true}*/}
+                    {/*            search={true}*/}
+                    {/*            selection={true}*/}
+                    {/*            exportButton={true}*/}
+                    {/*        />*/}
                     {/*    </Box>*/}
                     {/*</Grow>*/}
                     {/*}*/}
+                    {alphaTable &&
+                    <Grow in={alphaTable}>
+                        <Box order={alphaTableOrder} className={classes.table}>
+                    <EditTable
+                        members={props.members}
+                        loading={props.loading}
+                        title={"Alpha Roster"}
+                        filtering={true}
+                        grouping={true}
+                        search={true}
+                        selection={true}
+                        exportButton={true}
+                        // className={alphaTableClassname}
+                    />
+                        </Box>
+                    </Grow>
+                    }
                     {/*{lossTable &&*/}
                     {/*<Grow in={lossTable}>*/}
                     {/*    <Box order={lossTableOrder} className={classes.table}>*/}
@@ -351,9 +361,9 @@ const useStyles = makeStyles((theme: Theme) =>
             Height: '100%',
             maxWidth: 'none',
             minWidth: 200,
-            paddingLeft: 16,
-            paddingRight: 16,
-            top: 80,
+            paddingLeft: 8,
+            paddingRight: 8,
+            top: 73,
         },
         toolbar: {
             display: 'flex',

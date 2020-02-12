@@ -1,23 +1,23 @@
 
 
 export default class UploadMemberModel {
-    public ssan: string;
+    public tafmsd: string | null;
     public full_name: string;
     public grade: string;
     public assigned_pas: string;
     public dafsc: string;
-    public office_symbol: string;
-    public duty_title: string;
-    public duty_start_date: string;
-    public duty_phone: string;
-    public supv_name: string;
-    public supv_begin_date: string;
-    public date_arrived_station: string;
-    public dor: string;
+    public office_symbol: string | null;
+    public duty_title: string | null;
+    public duty_start_date: string | null;
+    public duty_phone: string | null;
+    public supv_name: string | null;
+    public supv_begin_date: string | null;
+    public date_arrived_station: string | null;
+    public dor: string | null;
 
 
-    constructor(ssan: string, full_name: string, grade: string, assigned_pas: string, dafsc: string, office_symbol: string, duty_title: string, duty_start_date: string, duty_phone: string, supv_name: string, supv_begin_date: string, date_arrived_station: string, dor: string) {
-        this.ssan = ssan;
+    constructor(tafmsd: string | null, full_name: string, grade: string, assigned_pas: string, dafsc: string, office_symbol: string | null, duty_title: string | null, duty_start_date: string | null, duty_phone: string | null, supv_name: string | null, supv_begin_date: string | null, date_arrived_station: string | null, dor: string | null) {
+        this.tafmsd = tafmsd;
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;

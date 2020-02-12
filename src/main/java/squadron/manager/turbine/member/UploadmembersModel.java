@@ -8,8 +8,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @NoArgsConstructor
-@Entity
 @Data
+@Entity
 @Table(name = "members")
 public
 class UploadmembersModel {
@@ -18,7 +18,9 @@ class UploadmembersModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String ssan;
+    private Integer sqid;
+
+    private Date tafmsd;
 
     private String full_name;
 
@@ -42,26 +44,28 @@ class UploadmembersModel {
 
     private Date date_arrived_station;
 
-    private Date dor;
+    private Date dor ;
 
-    public UploadmembersModel(String ssan, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
-        this.ssan = ssan;
+    public UploadmembersModel(Integer sqid, Date tafmsd, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+        this.sqid = sqid;
+        this.tafmsd = verifyDate(tafmsd);
         this.full_name = full_name;
         this.grade = grade;
         this.assigned_pas = assigned_pas;
         this.dafsc = dafsc;
         this.office_symbol = office_symbol;
         this.duty_title = duty_title;
-        this.duty_start_date = new LocalDate(duty_start_date).toDate();
+        this.duty_start_date = verifyDate(duty_start_date);
         this.duty_phone = duty_phone;
         this.supv_name = supv_name;
-        this.supv_begin_date = new LocalDate(supv_begin_date).toDate();
-        this.date_arrived_station = new LocalDate(date_arrived_station).toDate();
-        this.dor = new LocalDate(dor).toDate();
+        this.supv_begin_date = verifyDate(supv_begin_date);
+        this.date_arrived_station = verifyDate(date_arrived_station);
+        this.dor = verifyDate(dor);
     }
 
     public UploadmembersModel update(MembersJSON json) {
-        this.setSsan(json.getSsan());
+        this.setSqid(json.getSqid());
+        this.setTafmsd(json.getTafmsd());
         this.setFull_name(json.getFull_name());
         this.setGrade(json.getGrade());
         this.setAssigned_pas(json.getAssigned_pas());
@@ -74,5 +78,14 @@ class UploadmembersModel {
         this.setSupv_begin_date(json.getSupv_begin_date());
         this.setDate_arrived_station(json.getDate_arrived_station());
         return this;
+    }
+
+
+    private Date verifyDate(Date item) {
+        if (item != null){
+            return new LocalDate(item).toDate();
+        } else {
+            return null;
+        }
     }
 }
