@@ -1,6 +1,6 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
-import {CircularProgress, Container, Fab, FormControl, InputLabel, MenuItem, Modal, Select} from "@material-ui/core";
+import {CircularProgress, Container, Fab} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import clsx from 'clsx';
@@ -11,8 +11,6 @@ import {saveMembersFromCsv} from "../../dispatchAndState/members/sagas";
 import {connect} from "react-redux";
 import uploadMemberModel from "../../dispatchAndState/members/UploadMemberModel";
 import {UploadMemberDeserializer} from "../../util/uploadMemberSerializer";
-import {ApplicationState} from "../../dispatchAndState";
-import SquadronModel from "../../dispatchAndState/squadrons/SquadronModel";
 import classNames from "classnames";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -27,15 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
             border: '2px dashed white',
         },
         input: {},
-
-        paper: {
-            position: 'absolute',
-            outline: 'none',
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
         fileDropContents: {
             width: '100%',
             height: '100%',
@@ -78,10 +67,6 @@ const useStyles = makeStyles((theme: Theme) =>
             marginTop: -12,
             marginLeft: -12,
 
-        },
-        formControl: {
-            margin: theme.spacing(1),
-            minWidth: 160,
         },
         selectEmpty: {
             marginTop: theme.spacing(2),
@@ -181,20 +166,10 @@ const doUpload = async (e: any, squadron: string) => {
     }
 };
 
-function getModalStyle() {
-    const top = 50;
-    const left = 50;
 
-    return {
-        top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
-    };
-}
 
 interface PropsFromState {
-    toggleCSVInputModal: () => void;
-    squadronList: SquadronModel[];
+    squadron?: string
 }
 
 interface PropsFromDispatch {
@@ -206,12 +181,10 @@ type AllProps = PropsFromState & PropsFromDispatch;
 const CsvInput: React.FC<AllProps> = props => {
 
     const classes = useStyles();
-    const [modalStyle] = React.useState(getModalStyle);
+
     const browseInputRef: any = React.createRef();
-    const [open, setOpen] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
-    const [squadron, setSquadron] = React.useState('');
     const timer = React.useRef<number>();
 
     const buttonClassname = clsx({
@@ -232,65 +205,18 @@ const CsvInput: React.FC<AllProps> = props => {
         if (!loading && !success) {
             setSuccess(false);
             setLoading(true);
-            doUpload(e, squadron);
+            if (props.squadron){
+            doUpload(e, props.squadron);
+            }
             timer.current = setTimeout(() => {
                 setSuccess(true);
                 setLoading(false);
             }, 2000);
         }
     };
-    const handleClose = () => {
-        props.toggleCSVInputModal();
-        setOpen(false);
-    };
-
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSquadron(event.target.value as string);
-    };
-
-
-    function renderSquadronList() {
-        return (props.squadronList.map((item: any, index) =>
-            <MenuItem
-            key={index}
-            value={item.pas}>
-                {item.squadron}
-            </MenuItem>
-            )
-        )
-    }
 
     return (
         <div className={classes.root}>
-            {/*<Button onClick={handleVisibility}>Toggle Speed Dial</Button>*/}
-            <Modal
-                aria-labelledby="simple-modal-title"
-                aria-describedby="simple-modal-description"
-                open={open}
-                onClose={handleClose}
-            >
-                <div style={modalStyle} className={classes.paper}>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-helper-label">Select Squadron</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-helper-label"
-                            id="demo-simple-select-helper"
-                            value={squadron}
-                            onChange={handleChange}
-                        >
-                            {renderSquadronList()}
-                        </Select>
-                        {/*<FormHelperText></FormHelperText>*/}
-                    </FormControl>
-                    <h2 id="simple-modal-title">
-                        Please use Excel to save your Alpha Roster as a .csv file.
-                    </h2>
-                    <h4>
-                       > Click 'Save As'
-                    </h4>
-                    <h4>
-                        > Under 'File Format' Select 'CSV UTF-8 (Comma Delimited) (.csv)'
-                    </h4>
                     <Container className={classNames(classes.fileDropArea, FileDropClassname)}
                                onDragEnter={(e: any) => {
                                    let evt = e as Event;
@@ -338,15 +264,11 @@ const CsvInput: React.FC<AllProps> = props => {
                             }
                         </label>
                     </Container>
-                </div>
-            </Modal>
         </div>
     );
 };
 
-const mapStateToProps = ({squadrons}: ApplicationState) => ({
-    squadronList: squadrons.squadrons
-});
+const mapStateToProps = ({}) => ({});
 
 const mapDispatchToProps = {
     saveMembersFromCsv

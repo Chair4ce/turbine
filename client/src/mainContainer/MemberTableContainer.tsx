@@ -28,9 +28,9 @@ import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountO
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../dispatchAndState";
 import {ConnectedFeedbackInput} from "../feedBack/Feedback";
-import {ConnectedCsvInput} from "../speedDialMenu/actions/CsvInput";
 import {squadronsFetchRequest} from "../dispatchAndState/squadrons";
 import SpeedDialBtn from "../speedDialMenu/SpeedDialBtn";
+import {ConnectedVerticalLinearStepper} from "../speedDialMenu/actions/VerticalLinearStepper";
 
 interface PropsFromState {
     members: MemberModel[];
@@ -233,8 +233,10 @@ const MemberTableContainer: React.FC<AllProps> = props => {
             </Drawer>
             <Container className={classes.content}>
                 {showCSVInputModal &&
-                <ConnectedCsvInput
-                    toggleCSVInputModal={toggleCSVInputModal}/>
+                    <ConnectedVerticalLinearStepper
+                        toggleCSVInputModal={toggleCSVInputModal}/>
+                // <ConnectedCsvInput
+                //     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
                 <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
