@@ -31,9 +31,12 @@ import {ConnectedFeedbackInput} from "../feedBack/Feedback";
 import {squadronsFetchRequest} from "../dispatchAndState/squadrons";
 import SpeedDialBtn from "../speedDialMenu/SpeedDialBtn";
 import {ConnectedVerticalLinearStepper} from "../speedDialMenu/actions/VerticalLinearStepper";
+import SquadronModel from "../dispatchAndState/squadrons/SquadronModel";
+import {setCSVModalDisplay} from "../dispatchAndState/modals";
 
 interface PropsFromState {
     members: MemberModel[];
+    squadrons: SquadronModel[];
     loading: boolean;
     csvInputModal: boolean;
     className?: string;
@@ -42,15 +45,23 @@ interface PropsFromState {
 interface PropsFromDispatch {
     postFeedback: typeof postFeedback;
     squadronsFetchRequest: typeof squadronsFetchRequest;
+    setCSVModalDisplay: typeof setCSVModalDisplay;
+}
+
+function renderUploadStepper(handleFetch: any, toggleCSVInputModal: any ) {
+    return (
+        <ConnectedVerticalLinearStepper
+            toggleCSVInputModal={toggleCSVInputModal}
+            fetchSquadrons={handleFetch}
+        />
+    )
 }
 
 
 type AllProps = PropsFromDispatch & PropsFromState;
 
-
-
-
 const MemberTableContainer: React.FC<AllProps> = props => {
+
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -85,7 +96,8 @@ const MemberTableContainer: React.FC<AllProps> = props => {
     };
 
     const toggleCSVInputModal = () => {
-     setShowCSVInputModal(prev => !prev);
+        props.setCSVModalDisplay(!props.csvInputModal);
+        console.log("triggered");
     };
 
     const handleTableOrder = (table: string) => {
@@ -114,6 +126,10 @@ const MemberTableContainer: React.FC<AllProps> = props => {
         }
     };
 
+    function handleFetch() {
+        squadronsFetchRequest();
+    }
+
     // onRowAdd: newData =>
     //     new Promise(resolve => {
     //         setTimeout(() => {
@@ -125,8 +141,6 @@ const MemberTableContainer: React.FC<AllProps> = props => {
     //             });
     //         }, 300);
     //     })
-
-
 
     return (
         <div className={classes.root}>
@@ -232,9 +246,8 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                 />
             </Drawer>
             <Container className={classes.content}>
-                {showCSVInputModal &&
-                    <ConnectedVerticalLinearStepper
-                        toggleCSVInputModal={toggleCSVInputModal}/>
+                {props.csvInputModal &&
+                   renderUploadStepper(handleFetch, toggleCSVInputModal)
                 // <ConnectedCsvInput
                 //     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
@@ -292,12 +305,15 @@ const MemberTableContainer: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = ({showModal}: ApplicationState) => ({
-    csvInputModal: showModal.csvInput
+const mapStateToProps = ({showModal, squadrons, members}: ApplicationState) => ({
+    csvInputModal: showModal.csvInput,
+    squadrons: squadrons.squadrons,
+    members: members.data,
+    loading: members.loading
 });
 
 const mapDispatchToProps = {
-    postFeedback, squadronsFetchRequest
+    postFeedback, squadronsFetchRequest, setCSVModalDisplay
 };
 export const ConnectedMemberTableContainer = connect(mapStateToProps, mapDispatchToProps)(MemberTableContainer);
 

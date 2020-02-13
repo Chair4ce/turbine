@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -13,6 +13,8 @@ import {ApplicationState} from "../../dispatchAndState";
 import {connect} from "react-redux";
 import {ConnectedCsvInput} from "./CsvInput";
 import AddIcon from '@material-ui/icons/Add';
+import {squadronsFetchRequest} from "../../dispatchAndState/squadrons";
+import {postNewSquadron} from "../../dispatchAndState/squadrons/sagas";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -120,16 +122,21 @@ function getModalStyle() {
 }
 
 interface PropsFromState {
+    fetchSquadrons: () => void;
     toggleCSVInputModal: () => void;
     squadronList: SquadronModel[];
 }
 
 interface PropsFromDispatch {
+    postNewSquadron: typeof postNewSquadron;
+    squadronsFetchRequest: typeof squadronsFetchRequest;
 }
 
 type AllProps = PropsFromState & PropsFromDispatch;
 
 const VerticalLinearStepper: React.FC<AllProps> = props => {
+
+
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
@@ -137,14 +144,34 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
     const [squadron, setSquadron] = React.useState('');
+    const [newPasCode, setNewPasCode] = React.useState('');
+    const [newSquadron, setNewSquadron] = React.useState('');
     const [checked, setChecked] = React.useState(false);
+    const timer = React.useRef<number>();
 
-    const handleAddSquadronBtn = () => {
+
+
+    const handleAddSquadronBtn = async () => {
+        await postNewSquadron(new SquadronModel(newSquadron, newPasCode));
+        setNewSquadron('');
+        setNewPasCode('');
+        setChecked(prev => !prev);
+        props.fetchSquadrons();
+    };
+
+    const handleShowAddSquadronBtn = () => {
         setChecked(prev => !prev);
     };
     const handleClose = () => {
         props.toggleCSVInputModal();
         setOpen(false);
+    };
+
+    const handleNewSquadronInputChange = (e: any) => {
+        setNewSquadron(e.target.value)
+    };
+    const handleNewPasCodeInputChange = (e: any) => {
+        setNewPasCode(e.target.value)
     };
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -195,7 +222,7 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                                     color="primary"
                                     aria-label="add new Squadron"
                                     className={classes.addBtn}
-                                    onClick={handleAddSquadronBtn}>
+                                    onClick={handleShowAddSquadronBtn}>
                                     <AddIcon/>
                                 </IconButton>
                             </div>
@@ -212,14 +239,18 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                         <Fade
                             in={checked}
                             style={{transformOrigin: '0 0 0'}}
-                            {...(checked ? {timeout: 1000} : {})}
+                            {...(checked ? {timeout: 100} : {})}
                         >
-                            <Paper className={classes.addSqPaper}>
+                            <Paper elevation={0} className={classes.addSqPaper}>
                                 <form className={classes.addSquadronFormGrp} autoComplete="off">
                                     <TextField error={false} id="squadron-standard" label="Squadron"
-                                               variant="outlined" className={classes.addSquadronInput}/>
-                                    <TextField error={false} id="squadron-standard" label="PAS Code"
-                                               variant="outlined" className={classes.addSquadronInput}/>
+                                               variant="outlined" className={classes.addSquadronInput}
+                                    onChange={handleNewSquadronInputChange}
+                                    value={newSquadron ? newSquadron : ''}/>
+                                    <TextField error={false} id="pasCode-standard" label="PAS Code"
+                                               variant="outlined" className={classes.addSquadronInput}
+                                    onChange={handleNewPasCodeInputChange}
+                                    value={newPasCode ? newPasCode : ''}/>
                                     <Button size="small" className={classes.margin} onClick={handleAddSquadronBtn}>
                                         Save
                                     </Button>
@@ -279,6 +310,8 @@ const mapStateToProps = ({squadrons}: ApplicationState) => ({
     squadronList: squadrons.squadrons
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+    postNewSquadron, squadronsFetchRequest
+};
 
 export const ConnectedVerticalLinearStepper = connect(mapStateToProps, mapDispatchToProps)(VerticalLinearStepper);

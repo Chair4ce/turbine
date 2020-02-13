@@ -10,7 +10,7 @@ import {squadronsFetchRequest} from "../../dispatchAndState/squadrons";
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {
     loading: boolean;
-    members: MemberModel[];
+    csvInput: boolean;
     errors?: string;
 }
 
@@ -24,19 +24,31 @@ interface PropsFromDispatch {
 type AllProps = PropsFromState & PropsFromDispatch;
 
 class MembersIndexPage extends React.Component<AllProps> {
-    public componentDidMount() {
+    componentDidMount(): void {
+        setInterval(() => {
+            this.refreshMembers();
+        }, 5000);
         const { membersFetchRequest: fr , squadronsFetchRequest: sr } = this.props;
         fr();
         sr();
     }
 
-    public render() {
-        const { members, loading } = this.props;
+    private refreshMembers() {
+        if (this.props.csvInput){
+        this.props.membersFetchRequest();
+        console.log("fired");
+        }
+    }
 
+    private refreshSquadrons() {
+        this.props.squadronsFetchRequest();
+    }
+
+    public render() {
         return (
             <Page
             className="MembersPage">
-                <ConnectedMemberTableContainer members={members} loading={loading}/>
+                <ConnectedMemberTableContainer updateSquadrons={this.refreshSquadrons()}/>
             </Page>
         );
     }
@@ -45,10 +57,8 @@ class MembersIndexPage extends React.Component<AllProps> {
 // It's usually good practice to only include one context at a time in a connected component.
 // Although if necessary, you can always include multiple contexts. Just make sure to
 // separate them from each other to prevent prop conflicts.
-const mapStateToProps = ({ members }: ApplicationState) => ({
-    loading: members.loading,
-    errors: members.errors,
-    members: members.data,
+const mapStateToProps = ({ showModal }: ApplicationState) => ({
+csvInput: showModal.csvInput
 });
 
 // mapDispatchToProps is especially useful for constraining our actions to the connected component.

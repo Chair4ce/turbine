@@ -24,10 +24,13 @@ public class SquadronController {
 
     @CrossOrigin
     @PostMapping(path = "/add")
-    public Squadron create(@Valid @RequestBody SquadronJSON squadronJSON){
+    List<Squadron> save(@Valid @RequestBody SquadronJSON squadronJSON){
         Squadron squadron = new Squadron(squadronJSON.getSquadron(),
                 squadronJSON.getPas(), squadronJSON.getGroup_pas());
-        return this.squadronRepository.save(squadron);
+        System.out.println("Saving: " + squadron);
+        this.squadronRepository.save( squadron);
+        System.out.println("Found: " + this.squadronRepository.findAll());
+        return this.squadronRepository.findAll();
     }
 
     @CrossOrigin

@@ -77,8 +77,8 @@ const EditTable: React.FC<Props> = props => {
                                 style={{
                                     fontSize: 100,
                                     textAlign: 'center',
-                                    color: 'white',
-                                    backgroundColor: '#43A047',
+                                    color: 'black',
+                                    backgroundColor: '#8d8891',
                                 }}
                             >
                                 {rowData.supv_name}
