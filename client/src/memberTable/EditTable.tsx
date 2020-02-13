@@ -114,7 +114,7 @@ const EditTable: React.FC<Props> = props => {
                 pageSizeOptions: [5,10,50,100,200,300],
                 columnsButton: true,
                 emptyRowsWhenPaging: false,
-                exportAllData: true,
+
                 // selectionProps: (rowData: MemberModel) => ({
                 //     disabled: rowData.fullName === 'ABRAMS, JOSEPH L',
                 //     color: 'primary'

@@ -8,20 +8,20 @@ export class MemberDeserializer {
             return items.map((item: any) => {
                 return new MemberModel(
                     item.id,
-                    item.sq_id,
-                    item.tafmsd,
+                    item.sqid,
+                    moment(item.tafmsd).utc(true).toDate(),
                     item.full_name,
                     item.grade,
                     item.assigned_pas,
                     item.dafsc,
                     item.office_symbol,
                     item.duty_title,
-                    item.duty_start_date,
+                    moment(item.duty_start_date).utc(true).toDate(),
                     item.duty_phone,
                     item.supv_name,
-                    item.supv_begin_date,
-                    item.date_arrived_station,
-                    item.dor,
+                    moment(item.supv_begin_date).utc(true).toDate(),
+                    moment(item.date_arrived_station).utc(true).toDate(),
+                    moment(item.dor).utc(true).toDate(),
             )
                 ;
             });

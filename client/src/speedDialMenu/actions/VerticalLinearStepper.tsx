@@ -7,11 +7,12 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {FormControl, InputLabel, MenuItem, Modal, Select} from "@material-ui/core";
+import {Divider, Fade, FormControl, IconButton, MenuItem, Modal, Select, TextField} from "@material-ui/core";
 import SquadronModel from "../../dispatchAndState/squadrons/SquadronModel";
 import {ApplicationState} from "../../dispatchAndState";
 import {connect} from "react-redux";
 import {ConnectedCsvInput} from "./CsvInput";
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,10 +39,53 @@ const useStyles = makeStyles((theme: Theme) =>
             boxShadow: theme.shadows[5],
             padding: theme.spacing(2, 4, 3),
         },
-        formControl: {
-            margin: theme.spacing(1),
-            minWidth: 160,
+        squadronFormControl: {
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
         },
+        selectSquadronGrp: {
+            flexDirection: 'column',
+            justifyContent: 'center',
+            width: 200,
+            position: 'relative',
+        },
+        addSquadronFormGrp: {
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+        },
+        addSquadronInput: {
+            margin: 10,
+            minWidth: 100,
+        },
+        selectSquadron: {
+            width: 160,
+        },
+        selectSquadronLabel: {
+            width: '100%',
+            padding: 10,
+            paddingTop: 0,
+            paddingBottom: 0,
+        },
+        margin: {
+            margin: theme.spacing(1),
+        },
+        addBtn: {
+            position: 'relative',
+            left: 15,
+            padding: 0,
+
+        },
+        addSqPaper: {
+            position: 'absolute',
+            margin: theme.spacing(1)
+        },
+        divider: {
+            margin: theme.spacing(5)
+        }
     }),
 );
 
@@ -93,7 +137,11 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
     const [squadron, setSquadron] = React.useState('');
+    const [checked, setChecked] = React.useState(false);
 
+    const handleAddSquadronBtn = () => {
+        setChecked(prev => !prev);
+    };
     const handleClose = () => {
         props.toggleCSVInputModal();
         setOpen(false);
@@ -101,6 +149,9 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
         setSquadron(event.target.value as string);
+        if (activeStep > 0) {
+            setActiveStep(0);
+        }
     };
 
 
@@ -136,18 +187,49 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                 onClose={handleClose}
             >
                 <div style={modalStyle} className={classes.paper}>
-                    <FormControl className={classes.formControl}>
-                        <InputLabel id="demo-simple-select-helper-label">Select Squadron</InputLabel>
-                        <Select
-                            labelId="demo-simple-select-helper-label"
-                            id="demo-simple-select-helper"
-                            value={squadron}
-                            onChange={handleChange}
+                    <FormControl className={classes.squadronFormControl}>
+                        <div className={classes.selectSquadronGrp}>
+                            <div className={classes.selectSquadronLabel}>
+                                <label>Select a Squadron</label>
+                                <IconButton
+                                    color="primary"
+                                    aria-label="add new Squadron"
+                                    className={classes.addBtn}
+                                    onClick={handleAddSquadronBtn}>
+                                    <AddIcon/>
+                                </IconButton>
+                            </div>
+                            <Select
+                                labelId="demo-simple-select-helper-label"
+                                id="selectSquadron"
+                                value={squadron}
+                                onChange={handleChange}
+                                className={classes.selectSquadron}
+                            >
+                                {renderSquadronList()}
+                            </Select>
+                        </div>
+                        <Fade
+                            in={checked}
+                            style={{transformOrigin: '0 0 0'}}
+                            {...(checked ? {timeout: 1000} : {})}
                         >
-                            {renderSquadronList()}
-                        </Select>
+                            <Paper className={classes.addSqPaper}>
+                                <form className={classes.addSquadronFormGrp} autoComplete="off">
+                                    <TextField error={false} id="squadron-standard" label="Squadron"
+                                               variant="outlined" className={classes.addSquadronInput}/>
+                                    <TextField error={false} id="squadron-standard" label="PAS Code"
+                                               variant="outlined" className={classes.addSquadronInput}/>
+                                    <Button size="small" className={classes.margin} onClick={handleAddSquadronBtn}>
+                                        Save
+                                    </Button>
+                                </form>
+                            </Paper>
+                        </Fade>
+
                         {/*<FormHelperText></FormHelperText>*/}
                     </FormControl>
+                    <Divider light variant="middle" className={classes.divider}/>
                     <Stepper activeStep={activeStep} orientation="vertical">
                         {steps.map((label, index) => (
                             <Step key={label}>
