@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -17,6 +17,7 @@ import {squadronsFetchRequest} from "../../dispatchAndState/squadrons";
 import {postNewSquadron} from "../../dispatchAndState/squadrons/sagas";
 import {toggleUploadModal} from "../../dispatchAndState/modals";
 import CsvInput from "./CsvInput";
+import {membersFetchRequest} from "../../dispatchAndState/members";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -185,6 +186,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
     };
     const handleClose = () => {
         dispatch(toggleUploadModal(false));
+        dispatch(membersFetchRequest());
         setOpen(false);
     };
 
