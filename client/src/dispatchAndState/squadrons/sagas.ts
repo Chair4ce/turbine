@@ -1,6 +1,6 @@
 import {all, call, fork, put, takeEvery} from 'redux-saga/effects';
 import {SquadronActionTypes} from './types';
-import {squadronPostSuccess, squadronsFetchError, squadronsFetchRequest, squadronsFetchSuccess} from './actions';
+import {squadronsFetchError, squadronsFetchRequest, squadronsFetchSuccess} from './actions';
 import {callApi} from '../../util/api';
 import SquadronModel from "./SquadronModel";
 
@@ -8,7 +8,6 @@ import SquadronModel from "./SquadronModel";
 function *handleFetch() {
     try {
         // To call async functions, use redux-saga's `call()`.
-        console.log("fetching new Squadrons");
         const res = yield call(callApi, 'get', 'api/squadrons');
 
         if (res.error) {
@@ -29,7 +28,6 @@ export async function postNewSquadron(data: SquadronModel) {
         // To call async functions, use redux-saga's `call()`.
         const res = await callApi('post', 'api/squadrons/add', data);
     if (await res.json) {
-        console.log('fired');
         squadronsFetchRequest();
     }
 }

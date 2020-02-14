@@ -1,8 +1,6 @@
 import React from 'react';
 import MaterialTable, {Column} from 'material-table';
 import MemberModel from "../dispatchAndState/members/MemberModel";
-import EmojiEmotionsTwoToneIcon from '@material-ui/icons/EmojiEmotionsTwoTone';
-import {Moment} from "moment";
 
 interface Row {
     id: number;
@@ -120,6 +118,43 @@ const EditTable: React.FC<Props> = props => {
                 //     color: 'primary'
                 // })
             }}
+            editable={{
+                onRowAdd: newData =>
+                    new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve();
+                            setState(prevState => {
+                                const data = [...prevState.data];
+                                data.push(newData);
+                                return {...prevState, data};
+                            });
+                        }, 300);
+                    }),
+                    onRowUpdate: (newData, oldData) =>
+                    new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve();
+                            if (oldData) {
+                                setState(prevState => {
+                                    const data = [...prevState.data];
+                                    data[data.indexOf(oldData)] = newData;
+                                    return {...prevState, data};
+                                });
+                            }
+                        }, 300);
+                    }),
+                    onRowDelete: oldData =>
+                    new Promise(resolve => {
+                        setTimeout(() => {
+                            resolve();
+                            setState(prevState => {
+                                const data = [...prevState.data];
+                                data.splice(data.indexOf(oldData), 1);
+                                return {...prevState, data};
+                            });
+                        }, 300);
+                    }),
+            }}
 
 
         />
@@ -130,40 +165,4 @@ const EditTable: React.FC<Props> = props => {
 export default EditTable;
 
 
-// editable={{
-//     onRowAdd: newData =>
-//         new Promise(resolve => {
-//             setTimeout(() => {
-//                 resolve();
-//                 setState(prevState => {
-//                     const data = [...prevState.data];
-//                     data.push(newData);
-//                     return {...prevState, data};
-//                 });
-//             }, 300);
-//         }),
-//         onRowUpdate: (newData, oldData) =>
-//         new Promise(resolve => {
-//             setTimeout(() => {
-//                 resolve();
-//                 if (oldData) {
-//                     setState(prevState => {
-//                         const data = [...prevState.data];
-//                         data[data.indexOf(oldData)] = newData;
-//                         return {...prevState, data};
-//                     });
-//                 }
-//             }, 300);
-//         }),
-//         onRowDelete: oldData =>
-//         new Promise(resolve => {
-//             setTimeout(() => {
-//                 resolve();
-//                 setState(prevState => {
-//                     const data = [...prevState.data];
-//                     data.splice(data.indexOf(oldData), 1);
-//                     return {...prevState, data};
-//                 });
-//             }, 300);
-//         }),
-// }}
+

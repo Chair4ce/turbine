@@ -52,7 +52,6 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
 
     const handleUploadAction = () => {
         props.toggleCSVInputModal();
-        console.log("fired");
     };
 
     const actions = [

@@ -8,10 +8,9 @@ import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import {saveMembersFromCsv} from "../../dispatchAndState/members/sagas";
-import {connect} from "react-redux";
-import uploadMemberModel from "../../dispatchAndState/members/UploadMemberModel";
 import {UploadMemberDeserializer} from "../../util/uploadMemberSerializer";
 import classNames from "classnames";
+import UploadMemberModel from "../../dispatchAndState/members/UploadMemberModel";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -126,73 +125,19 @@ function lower(obj: any) {
     return obj;
 }
 
-const doUpload = async (e: any, squadron: string, uploadType: string) => {
-
-    e.preventDefault();
-    let formData = new FormData();
-    e.persist();
-
-    if (e.type === 'change') {
-        const element = document.querySelector('#raised-button-file')! as HTMLInputElement;
-        if (element != null && element.files) {
-            formData.append('file', element.files[0]);
-        }
-    } else {
-        formData.append('file', e.dataTransfer.files[0]);
-    }
-
-    let file: File = formData.get('file') as File;
-    if (file) {
-        let fileName = file.name;
-        if (fileName.toLowerCase().endsWith('csv')) {
-            // let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
-
-            const reader = new FileReader();
-
-            reader.readAsText(file);
-
-            reader.onload = () => {
-                let csv = reader.result;
-                if (csv !== null) {
-                    if (typeof csv === "string") {
-                        switch (uploadType) {
-                            case 'Gaining':
-                                break;
-                            case 'Alpha':
-                        const members: uploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
-                        saveMembersFromCsv(members);
-                                 break;
-                            case 'UPMR':
-                            case 'Losing':
-                            default : break;
-                        }
-                        // console.log('CSV: ', csv.substring(0, 3000) + '...');
-                    }
-                }
-            };
-        } else {
-            console.log("not a csv")
-        }
-    }
-};
 
 
 
-interface PropsFromState {
+
+interface Props {
     squadron?: string
     uploadType: string
 }
 
-interface PropsFromDispatch {
-    saveMembersFromCsv: typeof saveMembersFromCsv
-}
 
-type AllProps = PropsFromState & PropsFromDispatch;
-
-const CsvInput: React.FC<AllProps> = props => {
+const CsvInput: React.FC<Props> = props => {
 
     const classes = useStyles();
-
     const browseInputRef: any = React.createRef();
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
@@ -217,13 +162,68 @@ const CsvInput: React.FC<AllProps> = props => {
             setSuccess(false);
             setLoading(true);
             if (props.squadron){
-            doUpload(e, props.squadron, props.uploadType);
+            doUpload(e);
             }
             timer.current = setTimeout(() => {
                 setSuccess(true);
                 setLoading(false);
             }, 2000);
         }
+    };
+
+    function doUpload(e: any){
+
+        e.preventDefault();
+        let formData = new FormData();
+        e.persist();
+
+        if (e.type === 'change') {
+            const element = document.querySelector('#raised-button-file')! as HTMLInputElement;
+            if (element != null && element.files) {
+                formData.append('file', element.files[0]);
+            }
+        } else {
+            formData.append('file', e.dataTransfer.files[0]);
+        }
+
+        let file: File = formData.get('file') as File;
+        if (file) {
+            let fileName = file.name;
+            if (fileName.toLowerCase().endsWith('csv')) {
+                // let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
+
+                const reader = new FileReader();
+
+                reader.readAsText(file);
+
+                reader.onload = () => {
+                    let csv = reader.result;
+                    if (csv !== null) {
+                        if (typeof csv === "string") {
+                            switch (props.uploadType) {
+                                case 'Gaining':
+                                    break;
+                                case 'Alpha':
+                                    let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
+                                    saveMembersFromCsv(members);
+                                    break;
+                                case 'UPMR':
+                                    break;
+                                case 'Losing':
+                                    break;
+                                default : break;
+                            }
+                            // console.log('CSV: ', csv.substring(0, 3000) + '...');
+                        }
+                    }
+                };
+            } else {
+                console.log("not a csv")
+            }
+
+        }
+
+
     };
 
     return (
@@ -279,9 +279,4 @@ const CsvInput: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = ({}) => ({});
-
-const mapDispatchToProps = {
-    saveMembersFromCsv
-};
-export const ConnectedCsvInput = connect(mapStateToProps, mapDispatchToProps)(CsvInput);
+export default CsvInput;

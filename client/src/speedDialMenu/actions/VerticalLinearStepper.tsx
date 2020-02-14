@@ -10,11 +10,13 @@ import Typography from '@material-ui/core/Typography';
 import {Divider, Fade, FormControl, IconButton, MenuItem, Modal, Select, TextField} from "@material-ui/core";
 import SquadronModel from "../../dispatchAndState/squadrons/SquadronModel";
 import {ApplicationState} from "../../dispatchAndState";
-import {connect} from "react-redux";
-import {ConnectedCsvInput} from "./CsvInput";
+import {useDispatch, useSelector} from "react-redux";
+
 import AddIcon from '@material-ui/icons/Add';
 import {squadronsFetchRequest} from "../../dispatchAndState/squadrons";
 import {postNewSquadron} from "../../dispatchAndState/squadrons/sagas";
+import {toggleUploadModal} from "../../dispatchAndState/modals";
+import CsvInput from "./CsvInput";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -121,22 +123,15 @@ function getModalStyle() {
     };
 }
 
-interface PropsFromState {
-    fetchSquadrons: () => void;
-    toggleCSVInputModal: () => void;
-    squadronList: SquadronModel[];
+
+interface Props {
+    classname?: string;
 }
 
-interface PropsFromDispatch {
-    postNewSquadron: typeof postNewSquadron;
-    squadronsFetchRequest: typeof squadronsFetchRequest;
-}
 
-type AllProps = PropsFromState & PropsFromDispatch;
-
-const VerticalLinearStepper: React.FC<AllProps> = props => {
-
-
+const VerticalLinearStepper: React.FC<Props> = props => {
+    const squadrons = useSelector(({squadrons}: ApplicationState) => squadrons.squadrons);
+    const dispatch = useDispatch();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
     const steps = getSteps();
@@ -147,31 +142,57 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
     const [newPasCode, setNewPasCode] = React.useState('');
     const [newSquadron, setNewSquadron] = React.useState('');
     const [checked, setChecked] = React.useState(false);
-    const timer = React.useRef<number>();
+    const [sqInputError, setSqInputError] = React.useState(false);
+    const [pasCodeInputError, setPasCodeInputError] = React.useState(false);
+    const [errState, setErrState] = React.useState(false);
 
+    React.useEffect(() => {
+            if (errState) {
+                if (newSquadron.length > 0) {
+                    setSqInputError(false);
+                } else {
+                    setSqInputError(true);
+                }
+                if (newPasCode.length === 8) {
+                    setPasCodeInputError(false);
+                } else {
+                    setPasCodeInputError(true);
+                }
+            }
+    }, [newPasCode,newSquadron,errState]);
+
+    // const timer = React.useRef<number>();
 
 
     const handleAddSquadronBtn = async () => {
-        await postNewSquadron(new SquadronModel(newSquadron, newPasCode));
-        setNewSquadron('');
-        setNewPasCode('');
-        setChecked(prev => !prev);
-        props.fetchSquadrons();
+        if (newSquadron.length > 0 && newPasCode.length === 8) {
+            await postNewSquadron(new SquadronModel(newSquadron, newPasCode));
+            setNewSquadron('');
+            setNewPasCode('');
+            setErrState(false);
+            setSqInputError(false);
+            setPasCodeInputError(false);
+            setErrState(false);
+            setChecked(prev => !prev);
+            await dispatch(squadronsFetchRequest());
+        } else {
+            setErrState(true);
+        }
     };
 
     const handleShowAddSquadronBtn = () => {
         setChecked(prev => !prev);
     };
     const handleClose = () => {
-        props.toggleCSVInputModal();
+        dispatch(toggleUploadModal(false));
         setOpen(false);
     };
 
     const handleNewSquadronInputChange = (e: any) => {
-        setNewSquadron(e.target.value)
+        setNewSquadron(e.target.value);
     };
     const handleNewPasCodeInputChange = (e: any) => {
-        setNewPasCode(e.target.value)
+        setNewPasCode(e.target.value);
     };
 
     const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -183,7 +204,7 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
 
 
     function renderSquadronList() {
-        return (props.squadronList.map((item: any, index) =>
+        return (squadrons.map((item: any, index) =>
                 <MenuItem
                     key={index}
                     value={item.pas}>
@@ -243,14 +264,14 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                         >
                             <Paper elevation={0} className={classes.addSqPaper}>
                                 <form className={classes.addSquadronFormGrp} autoComplete="off">
-                                    <TextField error={false} id="squadron-standard" label="Squadron"
+                                    <TextField error={sqInputError} id="squadron-standard" label="Squadron"
                                                variant="outlined" className={classes.addSquadronInput}
-                                    onChange={handleNewSquadronInputChange}
-                                    value={newSquadron ? newSquadron : ''}/>
-                                    <TextField error={false} id="pasCode-standard" label="PAS Code"
+                                               onChange={handleNewSquadronInputChange}
+                                               value={newSquadron}/>
+                                    <TextField error={pasCodeInputError} id="pasCode-standard" label="PAS Code"
                                                variant="outlined" className={classes.addSquadronInput}
-                                    onChange={handleNewPasCodeInputChange}
-                                    value={newPasCode ? newPasCode : ''}/>
+                                               onChange={handleNewPasCodeInputChange}
+                                               value={newPasCode}/>
                                     <Button size="small" className={classes.margin} onClick={handleAddSquadronBtn}>
                                         Save
                                     </Button>
@@ -285,7 +306,7 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
                                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                             </Button>
                                         </div>
-                                        <ConnectedCsvInput squadron={squadron} uploadType={label}/>
+                                        <CsvInput squadron={squadron} uploadType={label}/>
                                     </div>
                                 </StepContent>
                             </Step>
@@ -304,14 +325,7 @@ const VerticalLinearStepper: React.FC<AllProps> = props => {
             </Modal>
         </div>
     );
-}
-
-const mapStateToProps = ({squadrons}: ApplicationState) => ({
-    squadronList: squadrons.squadrons
-});
-
-const mapDispatchToProps = {
-    postNewSquadron, squadronsFetchRequest
 };
 
-export const ConnectedVerticalLinearStepper = connect(mapStateToProps, mapDispatchToProps)(VerticalLinearStepper);
+
+export default VerticalLinearStepper;

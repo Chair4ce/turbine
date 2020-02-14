@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import clsx from 'clsx';
 import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -12,10 +12,8 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import {connect} from "react-redux";
-import {postFeedback} from "../dispatchAndState/members/sagas";
+import {useDispatch, useSelector} from "react-redux";
 import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
-import MemberModel from "../dispatchAndState/members/MemberModel";
 import EditTable from "../memberTable/EditTable";
 // import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import GroupIcon from '@material-ui/icons/Group';
@@ -30,57 +28,44 @@ import {ApplicationState} from "../dispatchAndState";
 import {ConnectedFeedbackInput} from "../feedBack/Feedback";
 import {squadronsFetchRequest} from "../dispatchAndState/squadrons";
 import SpeedDialBtn from "../speedDialMenu/SpeedDialBtn";
-import {ConnectedVerticalLinearStepper} from "../speedDialMenu/actions/VerticalLinearStepper";
-import SquadronModel from "../dispatchAndState/squadrons/SquadronModel";
-import {setCSVModalDisplay} from "../dispatchAndState/modals";
+import {membersFetchRequest} from "../dispatchAndState/members";
+import VerticalLinearStepper from "../speedDialMenu/actions/VerticalLinearStepper";
+import {toggleUploadModal} from "../dispatchAndState/modals";
 
-interface PropsFromState {
-    members: MemberModel[];
-    squadrons: SquadronModel[];
-    loading: boolean;
-    csvInputModal: boolean;
+interface Props{
     className?: string;
 }
 
-interface PropsFromDispatch {
-    postFeedback: typeof postFeedback;
-    squadronsFetchRequest: typeof squadronsFetchRequest;
-    setCSVModalDisplay: typeof setCSVModalDisplay;
-}
 
-function renderUploadStepper(handleFetch: any, toggleCSVInputModal: any ) {
-    return (
-        <ConnectedVerticalLinearStepper
-            toggleCSVInputModal={toggleCSVInputModal}
-            fetchSquadrons={handleFetch}
-        />
-    )
-}
-
-
-type AllProps = PropsFromDispatch & PropsFromState;
-
-const MemberTableContainer: React.FC<AllProps> = props => {
-
+const MemberTableContainer: React.FC<Props> = props => {
+    const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
+    const members = useSelector(({members}: ApplicationState) => members.data);
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
+    const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
-    const [gainTable, showGainTable] = React.useState(false);
+    // const [gainTable, showGainTable] = React.useState(false);
     const [alphaTable, showAlphaTable] = React.useState(false);
     // const [lossTable, showLossTable] = React.useState(false);
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
     const [gainTableOrder, setGainTableOrder] = React.useState(1);
     const [lossTableOrder, setLossTableOrder] = React.useState(3);
-    const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
+    // const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
+
+    useEffect(() => {
+        dispatch(membersFetchRequest());
+        dispatch(squadronsFetchRequest());
+    }, [dispatch]);
 
     const handleAlphaBtnClick = () => {
         handleTableOrder("alpha");
         showAlphaTable(prev => !prev)
     };
-    const handleGainBtnClick = () => {
-        handleTableOrder("gain");
-        showGainTable(prev => !prev)
-    };
+    // const handleGainBtnClick = () => {
+    //     handleTableOrder("gain");
+    //     showGainTable(prev => !prev)
+    // };
 
     // const handleLossBtnClick = () => {
     //     handleTableOrder("loss");
@@ -95,9 +80,8 @@ const MemberTableContainer: React.FC<AllProps> = props => {
         setOpen(false);
     };
 
-    const toggleCSVInputModal = () => {
-        props.setCSVModalDisplay(!props.csvInputModal);
-        console.log("triggered");
+    const showCSVInputModal = () => {
+        dispatch(toggleUploadModal(true));
     };
 
     const handleTableOrder = (table: string) => {
@@ -126,9 +110,9 @@ const MemberTableContainer: React.FC<AllProps> = props => {
         }
     };
 
-    function handleFetch() {
-        squadronsFetchRequest();
-    }
+    // function handleFetch() {
+    //     dispatch(squadronsFetchRequest());
+    // }
 
     // onRowAdd: newData =>
     //     new Promise(resolve => {
@@ -242,12 +226,12 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                     <ListItemText primary="Supervisors"/>
                 </ListItem>
                 <SpeedDialBtn
-                    toggleCSVInputModal={toggleCSVInputModal}
+                    toggleCSVInputModal={showCSVInputModal}
                 />
             </Drawer>
             <Container className={classes.content}>
-                {props.csvInputModal &&
-                   renderUploadStepper(handleFetch, toggleCSVInputModal)
+                {showUploadModal &&
+                <VerticalLinearStepper/>
                 // <ConnectedCsvInput
                 //     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
@@ -273,8 +257,8 @@ const MemberTableContainer: React.FC<AllProps> = props => {
                     <Grow in={alphaTable}>
                         <Box order={alphaTableOrder} className={classes.table}>
                     <EditTable
-                        members={props.members}
-                        loading={props.loading}
+                        members={members}
+                        loading={loading}
                         title={"Alpha Roster"}
                         filtering={true}
                         grouping={true}
@@ -305,17 +289,7 @@ const MemberTableContainer: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = ({showModal, squadrons, members}: ApplicationState) => ({
-    csvInputModal: showModal.csvInput,
-    squadrons: squadrons.squadrons,
-    members: members.data,
-    loading: members.loading
-});
-
-const mapDispatchToProps = {
-    postFeedback, squadronsFetchRequest, setCSVModalDisplay
-};
-export const ConnectedMemberTableContainer = connect(mapStateToProps, mapDispatchToProps)(MemberTableContainer);
+export default MemberTableContainer;
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
