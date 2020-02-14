@@ -274,7 +274,10 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                                                variant="outlined" className={classes.addSquadronInput}
                                                onChange={handleNewPasCodeInputChange}
                                                value={newPasCode}/>
-                                    <Button size="small" className={classes.margin} onClick={handleAddSquadronBtn}>
+                                    <Button size="small"  color={"inherit"} className={classes.margin} onClick={handleShowAddSquadronBtn}>
+                                        Cancel
+                                    </Button>
+                                    <Button size="small" color={"primary"} className={classes.margin} onClick={handleAddSquadronBtn}>
                                         Save
                                     </Button>
                                 </form>

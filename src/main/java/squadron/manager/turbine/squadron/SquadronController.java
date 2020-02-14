@@ -27,9 +27,7 @@ public class SquadronController {
     List<Squadron> save(@Valid @RequestBody SquadronJSON squadronJSON){
         Squadron squadron = new Squadron(squadronJSON.getSquadron(),
                 squadronJSON.getPas(), squadronJSON.getGroup_pas());
-        System.out.println("Saving: " + squadron);
-        this.squadronRepository.save( squadron);
-        System.out.println("Found: " + this.squadronRepository.findAll());
+        this.squadronRepository.save(squadron);
         return this.squadronRepository.findAll();
     }
 
