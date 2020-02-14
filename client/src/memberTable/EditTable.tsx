@@ -4,13 +4,13 @@ import MemberModel from "../dispatchAndState/members/MemberModel";
 
 interface Row {
     id: number;
-    full_name: string;
+    fullName: string;
     grade: string;
     dafsc: string;
-    office_symbol: string | null;
-    duty_title: string | null;
-    duty_phone: string | null;
-    supv_name: string | null;
+    officeSymbol: string | null;
+    dutyTitle: string | null;
+    dutyPhone: string | null;
+    supvName: string | null;
 }
 
 interface TableState {
@@ -33,13 +33,13 @@ interface Props {
 const EditTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
         columns: [
-            {title: 'Name', field: 'full_name'},
+            {title: 'Name', field: 'fullName'},
             {title: 'Rank', field: 'grade'},
             {title: 'DAFSC', field: 'dafsc'},
-            {title: 'Office', field: 'office_symbol'},
-            {title: 'Duty Title', field: 'duty_title'},
-            {title: 'Phone', field: 'duty_phone'},
-            {title: 'Supervisor', field: 'supv_name'}
+            {title: 'Office', field: 'officeSymbol'},
+            {title: 'Duty Title', field: 'dutyTitle'},
+            {title: 'Phone', field: 'dutyPhone'},
+            {title: 'Supervisor', field: 'supvName'}
 
             //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
             // {
@@ -79,7 +79,7 @@ const EditTable: React.FC<Props> = props => {
                                     backgroundColor: '#8d8891',
                                 }}
                             >
-                                {rowData.supv_name}
+                                {rowData.supvName}
                             </div>
                         )
                     },

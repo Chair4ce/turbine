@@ -106,17 +106,16 @@ function csvJSON(csv: any) {
     return result; //JSON
 }
 
-function snake_case(str: string) {
-    return str.toLowerCase().replace(/\W+(.)/g, function(match, chr)
-    {
-        return chr.toUpperCase();
-    });
-}
+function snakeToCamel(str: string) {
+    let newStr = str.toLowerCase();
+    return newStr.replace(/([-_]\w)/g, g => g[1].toUpperCase());
+};
 
 function lower(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
-            obj[prop] = snake_case(obj[prop]);
+            console.log(snakeToCamel(obj[prop]));
+            obj[prop] = snakeToCamel(obj[prop]);
         }
         if (typeof obj[prop] === 'object') {
             lower(obj[prop]);

@@ -17,6 +17,6 @@ public class MemberControllerTest extends BaseIntegrationTest {
                 .get(MembersController.URI)
                 .then()
                 .statusCode(200)
-                .body("[0].full_name", equalTo("ABRAMS, JOSEPH L"));
+                .body("[0].fullName", equalTo("ABRAMS, JOSEPH L"));
     }
 }

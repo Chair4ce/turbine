@@ -36,6 +36,7 @@ export function postFeedback(feedback: FeedbackModel) {
 }
 
 export function saveMembersFromCsv(members: any) {
+    console.log(members);
     try {
         // To call async functions, use redux-saga's `call()`.
         callApi('POST', 'api/members/save', members);

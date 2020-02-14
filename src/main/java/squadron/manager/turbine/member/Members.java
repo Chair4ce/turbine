@@ -20,45 +20,44 @@ class Members {
 
     private Date tafmsd;
 
-    private String full_name;
+    private String fullName;
 
     private String grade;
 
-    private String assigned_pas;
+    private String assignedPas;
 
     private String dafsc;
 
-    private String office_symbol;
+    private String officeSymbol;
 
-    private String duty_title;
+    private String dutyTitle;
 
-    private Date duty_start_date;
+    private Date dutyStartDate;
 
-    private String duty_phone;
+    private String dutyPhone;
 
-    private String supv_name;
+    private String supvName;
 
-    private Date supv_begin_date;
+    private Date supvBeginDate;
 
-    private Date date_arrived_station;
+    private Date dateArrivedStation;
 
     private Date dor;
 
-    public Members(Long id, Date tafmsd, Integer sqid, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
-        this.id = id;
+    public Members(Integer sqid, Date tafmsd, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date dor) {
         this.sqid = sqid;
         this.tafmsd = tafmsd;
-        this.full_name = full_name;
+        this.fullName = fullName;
         this.grade = grade;
-        this.assigned_pas = assigned_pas;
+        this.assignedPas = assignedPas;
         this.dafsc = dafsc;
-        this.office_symbol = office_symbol;
-        this.duty_title = duty_title;
-        this.duty_start_date = duty_start_date;
-        this.duty_phone = duty_phone;
-        this.supv_name = supv_name;
-        this.supv_begin_date = supv_begin_date;
-        this.date_arrived_station = date_arrived_station;
+        this.officeSymbol = officeSymbol;
+        this.dutyTitle = dutyTitle;
+        this.dutyStartDate = dutyStartDate;
+        this.dutyPhone = dutyPhone;
+        this.supvName = supvName;
+        this.supvBeginDate = supvBeginDate;
+        this.dateArrivedStation = dateArrivedStation;
         this.dor = dor;
     }
 }

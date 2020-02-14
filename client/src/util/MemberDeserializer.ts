@@ -10,17 +10,17 @@ export class MemberDeserializer {
                     item.id,
                     item.sqid,
                     moment(item.tafmsd).utc(true).toDate(),
-                    item.full_name,
+                    item.fullName,
                     item.grade,
-                    item.assigned_pas,
+                    item.assignedPas,
                     item.dafsc,
-                    item.office_symbol,
-                    item.duty_title,
-                    moment(item.duty_start_date).utc(true).toDate(),
-                    item.duty_phone,
-                    item.supv_name,
-                    moment(item.supv_begin_date).utc(true).toDate(),
-                    moment(item.date_arrived_station).utc(true).toDate(),
+                    item.officeSymbol,
+                    item.dutyTitle,
+                    moment(item.dutyStartDate).utc(true).toDate(),
+                    item.dutyPhone,
+                    item.supvName,
+                    moment(item.supvBeginDate).utc(true).toDate(),
+                    moment(item.dateArrivedStation).utc(true).toDate(),
                     moment(item.dor).utc(true).toDate(),
             )
                 ;
@@ -31,17 +31,17 @@ export class MemberDeserializer {
 
     static serialize(item: any): {} {
             return {
-                full_name: item.FULL_NAME,
+                fullName: item.FULL_NAME,
                 grade: item.GRADE,
-                assigned_pas: item.ASSIGNED_PAS,
+                assignedPas: item.ASSIGNED_PAS,
                 dafsc: item.DAFSC,
-                office_symbol: item.OFFICE_SYMBOL,
-                duty_title: item.DUTY_TITLE,
-                duty_start_date: item.DUTY_START_DATE,
-                duty_phone: item.DUTY_PHONE,
-                supv_name: item.SUPV_NAME,
-                supv_begin_date: item.SUPV_BEGIN_DATE,
-                date_arrived_station: item.DATE_ARRIVED_STATION,
+                officeSymbol: item.OFFICE_SYMBOL,
+                dutyTitle: item.DUTY_TITLE,
+                dutyStartDate: item.DUTY_START_DATE,
+                dutyPhone: item.DUTY_PHONE,
+                supvName: item.SUPV_NAME,
+                supvBeginDate: item.SUPV_BEGIN_DATE,
+                dateArrivedStation: item.DATE_ARRIVED_STATION,
                 dor: item.DOR
             }
     }

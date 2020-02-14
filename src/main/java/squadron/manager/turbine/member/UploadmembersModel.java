@@ -22,61 +22,61 @@ class UploadmembersModel {
 
     private Date tafmsd;
 
-    private String full_name;
+    private String fullName;
 
     private String grade;
 
-    private String assigned_pas;
+    private String assignedPas;
 
     private String dafsc;
 
-    private String office_symbol;
+    private String officeSymbol;
 
-    private String duty_title;
+    private String dutyTitle;
 
-    private Date duty_start_date;
+    private Date dutyStartDate;
 
-    private String duty_phone;
+    private String dutyPhone;
 
-    private String supv_name;
+    private String supvName;
 
-    private Date supv_begin_date;
+    private Date supvBeginDate;
 
-    private Date date_arrived_station;
+    private Date dateArrivedStation;
 
     private Date dor ;
 
-    public UploadmembersModel(Integer sqid, Date tafmsd, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+    public UploadmembersModel(Integer sqid, Date tafmsd, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date dor) {
         this.sqid = sqid;
-        this.tafmsd = verifyDate(tafmsd);
-        this.full_name = full_name;
+        this.tafmsd = tafmsd;
+        this.fullName = fullName;
         this.grade = grade;
-        this.assigned_pas = assigned_pas;
+        this.assignedPas = assignedPas;
         this.dafsc = dafsc;
-        this.office_symbol = office_symbol;
-        this.duty_title = duty_title;
-        this.duty_start_date = verifyDate(duty_start_date);
-        this.duty_phone = duty_phone;
-        this.supv_name = supv_name;
-        this.supv_begin_date = verifyDate(supv_begin_date);
-        this.date_arrived_station = verifyDate(date_arrived_station);
-        this.dor = verifyDate(dor);
+        this.officeSymbol = officeSymbol;
+        this.dutyTitle = dutyTitle;
+        this.dutyStartDate = dutyStartDate;
+        this.dutyPhone = dutyPhone;
+        this.supvName = supvName;
+        this.supvBeginDate = supvBeginDate;
+        this.dateArrivedStation = dateArrivedStation;
+        this.dor = dor;
     }
 
     public UploadmembersModel update(MembersJSON json) {
         this.setSqid(json.getSqid());
         this.setTafmsd(json.getTafmsd());
-        this.setFull_name(json.getFull_name());
+        this.setFullName(json.getFullName());
         this.setGrade(json.getGrade());
-        this.setAssigned_pas(json.getAssigned_pas());
-        this.setOffice_symbol(json.getOffice_symbol());
+        this.setAssignedPas(json.getAssignedPas());
+        this.setOfficeSymbol(json.getOfficeSymbol());
         this.setDafsc(json.getDafsc());
-        this.setDuty_phone(json.getDuty_phone());
-        this.setDuty_start_date(json.getDuty_start_date());
-        this.setDuty_title(json.getDuty_title());
-        this.setSupv_name(json.getSupv_name());
-        this.setSupv_begin_date(json.getSupv_begin_date());
-        this.setDate_arrived_station(json.getDate_arrived_station());
+        this.setDutyPhone(json.getDutyPhone());
+        this.setDutyStartDate(json.getDutyStartDate());
+        this.setDutyTitle(json.getDutyTitle());
+        this.setSupvName(json.getSupvName());
+        this.setSupvBeginDate(json.getSupvBeginDate());
+        this.setDateArrivedStation(json.getDateArrivedStation());
         return this;
     }
 

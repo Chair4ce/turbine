@@ -19,27 +19,27 @@ public class MembersJSON {
 
     private Date tafmsd;
 
-    private String full_name;
+    private String fullName;
 
     private String grade;
 
-    private String assigned_pas;
+    private String assignedPas;
 
     private String dafsc;
 
-    private String office_symbol;
+    private String officeSymbol;
 
-    private String duty_title;
+    private String dutyTitle;
 
-    private Date duty_start_date;
+    private Date dutyStartDate;
 
-    private String duty_phone;
+    private String dutyPhone;
 
-    private String supv_name;
+    private String supvName;
 
-    private Date supv_begin_date;
+    private Date supvBeginDate;
 
-    private Date date_arrived_station;
+    private Date dateArrivedStation;
 
     private Date dor;
 }

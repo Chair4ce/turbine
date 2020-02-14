@@ -1,10 +1,10 @@
 package squadron.manager.turbine.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -38,17 +38,17 @@ public class MembersController {
                     new UploadmembersModel(
                             verifyDuplicateSqid(item),
                             item.getTafmsd(),
-                            item.getFull_name(),
+                            item.getFullName(),
                             item.getGrade(),
-                            item.getAssigned_pas(),
+                            item.getAssignedPas(),
                             item.getDafsc(),
-                            item.getOffice_symbol(),
-                            item.getDuty_title(),
-                            item.getDuty_start_date(),
-                            item.getDuty_phone(),
-                            item.getSupv_name(),
-                            item.getSupv_begin_date(),
-                            item.getDate_arrived_station(),
+                            item.getOfficeSymbol(),
+                            item.getDutyTitle(),
+                            item.getDutyStartDate(),
+                            item.getDutyPhone(),
+                            item.getSupvName(),
+                            item.getSupvBeginDate(),
+                            item.getDateArrivedStation(),
                             item.getDor()
                     )
             );
@@ -67,26 +67,25 @@ public class MembersController {
 
     private int createSqidHash(MembersJSON item) {
         if (item.getTafmsd() != null) {
-            return (item.getFull_name() + item.getTafmsd()).hashCode();
+            return (item.getFullName() + item.getTafmsd()).hashCode();
         } else {
             return 0;
         }
     }
-}
+    @CrossOrigin
+    @GetMapping("/{id}")
+    public ResponseEntity<Members> getMemberById(@PathVariable(value = "id") Long id) throws Exception {
+        System.out.println("getting member with id: " + id);
+        Members member = membersRepository.findById(id).orElseThrow(() -> new Exception("Members not found with id ::" + id));
+        return ResponseEntity.ok().body(member);
+    }
 
-//    @CrossOrigin
-//    @GetMapping("/{id}")
-//    public ResponseEntity<SqMember> getMemberById(@PathVariable(value = "id") Long id) throws Exception {
-//        System.out.println("getting member with id: " + id);
-//        SqMember member = sqMemberRepository.findById(id).orElseThrow(() -> new Exception("Members not found with id ::" + id));
-//        return ResponseEntity.ok().body(member);
-//    }
+    @CrossOrigin
+    @GetMapping("/list/{pas}")
+    public ResponseEntity<List<Members>> getMembersAssignedtoPAS(@PathVariable(value = "pas") String pas) throws Exception {
+        System.out.println("getting member with id: " + pas);
+        return ResponseEntity.ok().body(membersRepository.findAllByAssignedPas(pas));
+    };
+};
 
-//    @CrossOrigin
-//    @GetMapping("/{PAS}")
-//    public ResponseEntity<List<Members>> getMembersAssignedtoPAS(@PathVariable(value = "PAS") String PAS) throws Exception {
-//        System.out.println("getting member with id: " + PAS);
-
-//        return ResponseEntity.ok().body(member);
-//    }
 
