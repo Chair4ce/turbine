@@ -10,10 +10,8 @@ spring:
   jpa:
     hibernate:
 #      namingStrategy: org.hibernate.cfg.EJB3NamingStrategy
-      dialect: org.hibernate.dialect.MySQL5Dialect
-      hbm2ddl:
-        auto: create-drop
       use-new-id-generator-mappings: false
+      ddl-auto: none
   servlet:
     multipart:
       max-file-size: 500MB

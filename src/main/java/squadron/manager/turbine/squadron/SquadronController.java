@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -24,7 +23,7 @@ public class SquadronController {
 
     @CrossOrigin
     @PostMapping(path = "/add")
-    List<Squadron> save(@Valid @RequestBody SquadronJSON squadronJSON){
+    List<Squadron> save( @RequestBody SquadronJSON squadronJSON){
         Squadron squadron = new Squadron(squadronJSON.getSquadron(),
                 squadronJSON.getPas(), squadronJSON.getGroup_pas());
         this.squadronRepository.save(squadron);

@@ -2,11 +2,11 @@ package squadron.manager.turbine.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +31,8 @@ public class MembersController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public Iterable<UploadmembersModel> addMembers(@Valid @RequestBody Iterable<MembersJSON> json) {
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public Iterable<UploadmembersModel> addMembers( @RequestBody Iterable<MembersJSON> json) {
         List<UploadmembersModel> newMembers = new ArrayList();
         json.forEach((item -> {
             newMembers.add(
@@ -74,6 +75,7 @@ public class MembersController {
     }
     @CrossOrigin
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<Members> getMemberById(@PathVariable(value = "id") Long id) throws Exception {
         System.out.println("getting member with id: " + id);
         Members member = membersRepository.findById(id).orElseThrow(() -> new Exception("Members not found with id ::" + id));
@@ -82,6 +84,7 @@ public class MembersController {
 
     @CrossOrigin
     @GetMapping("/list/{pas}")
+    @PreAuthorize("hasRole('ROLE_USER')")
     public ResponseEntity<List<Members>> getMembersAssignedtoPAS(@PathVariable(value = "pas") String pas) throws Exception {
         System.out.println("getting member with id: " + pas);
         return ResponseEntity.ok().body(membersRepository.findAllByAssignedPas(pas));

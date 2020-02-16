@@ -1,13 +1,10 @@
 package squadron.manager.turbine.feedback;
 
-import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.validation.Valid;
-import java.util.Date;
 import java.util.List;
 
 
@@ -32,7 +29,7 @@ public class FeedbackController {
 
     @CrossOrigin
     @PostMapping(path = "/submit")
-    public Feedback create(@Valid @RequestBody FeedbackJSON feedbackJSON) {
+    public Feedback create(@RequestBody FeedbackJSON feedbackJSON) {
 
             Feedback feedback = new Feedback(
                     new LocalDateTime().toDate(),

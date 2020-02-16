@@ -19,14 +19,14 @@ const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
         <Switch>
-            {/*<Route exact path="/" />*/}
-            <Route exact path="/app" component={MembersIndexPage} />
-            {/*<Route path="/home">*/}
-            {/*    <a href={"home.html"}>Redirect</a>*/}
-            {/*</Route>*/}
-            {/*<Route path="/login">*/}
-            {/*    <a href={"login.html"}>Redirect</a>*/}
-            {/*</Route>*/}
+     {/*       <Route exact path="/"/>*/}
+     {/*       <Route path="/members" component={MembersIndexPage}/>*/}
+     {/*       <Route path="/home">*/}
+     {/*           <a href={"home.html"}>Redirect</a>*/}
+     {/*</Route>*/}
+     {/*       <Route path="/login">*/}
+     {/*           <a href={"login.html"}>Redirect</a>*/}
+     {/*       </Route>*/}
         </Switch>
     </Root>
 
