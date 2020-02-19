@@ -1,10 +1,7 @@
 import * as React from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Box, Button, TextField} from "@material-ui/core";
-import {postFeedback} from "../dispatchAndState/members/sagas";
-import {connect} from "react-redux";
 import clsx from "clsx";
-import FeedbackModel from "../dispatchAndState/members/FeedbackModel";
 import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -47,13 +44,13 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface PropsFromDispatch {
-    postFeedback: typeof postFeedback;
+interface Props {
+    postFeedback: (feedBackMsg: string) => void;
 }
 
-type AllProps = PropsFromDispatch;
 
-const FeedbackInput: React.FC<AllProps> = props => {
+
+const FeedbackInput: React.FC<Props> = props => {
     const classes = useStyles();
     const [success, setSuccess] = React.useState(false);
     const [btnText, setbtnText] = React.useState("SUBMIT");
@@ -78,7 +75,7 @@ const FeedbackInput: React.FC<AllProps> = props => {
     const submitFeedback = () => {
         timer.current = setTimeout(() => {
             setLoading(false);
-            postFeedback(new FeedbackModel(feedBackMsg));
+            props.postFeedback(feedBackMsg);
             setSuccess(true);
             setbtnText("THANK YOU!");
             setfeedBackMsg("");
@@ -122,9 +119,5 @@ const FeedbackInput: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = () => ({});
 
-const mapDispatchToProps = {
-    postFeedback,
-};
-export const ConnectedFeedbackInput = connect(mapStateToProps, mapDispatchToProps)(FeedbackInput);
+export default FeedbackInput;

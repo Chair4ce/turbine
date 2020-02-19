@@ -30,17 +30,21 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-interface PropsFromState {
-    toggleCSVInputModal: () => void;
+interface Props {
+    callbackHandler: (type: string, data?: any) => void;
 }
 
-type AllProps = PropsFromState;
 
+const VIEW_CALLBACK_ENUMS = {
+    CHILD_TOGGLE_UPLOAD: 'SPEED_DIAL/SHOW_UPLOAD',
+    CHILD_TOGGLE_TASK: 'SPEED_DIAL/SHOW_TASK',
+};
 
-const SpeedDialBtn: React.FC<AllProps> = props => {
+const SpeedDialBtn: React.FC<Props> = props => {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [hidden] = React.useState(false);
+
 
     const handleOpen = () => {
         setOpen(true);
@@ -50,13 +54,24 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
         setOpen(false);
     };
 
-    const handleUploadAction = () => {
-        props.toggleCSVInputModal();
+    const onShowUploadModalClick = () => {
+        props.callbackHandler(
+            VIEW_CALLBACK_ENUMS.CHILD_TOGGLE_UPLOAD,
+            true
+        )
     };
 
+    const onShowTaskModalClick = () => {
+        props.callbackHandler(
+            VIEW_CALLBACK_ENUMS.CHILD_TOGGLE_TASK,
+            true
+        )
+    };
+
+
     const actions = [
-        {icon: <FileCopyIcon onClick={handleUploadAction}/>, name: 'Upload'},
-        {icon: <SaveIcon/>, name: 'Task'},
+        {icon: <FileCopyIcon onClick={onShowUploadModalClick}/>, name: 'Upload'},
+        {icon: <SaveIcon onClick={onShowTaskModalClick}/>, name: 'Task'},
     ];
 
     return (
@@ -78,8 +93,8 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
                         key={action.name}
                         icon={action.icon}
                         // onClick={handleClose}
-                    tooltipTitle={action.name}
-                    tooltipPlacement={"top"}/>
+                        tooltipTitle={action.name}
+                        tooltipPlacement={"top"}/>
                 ))}
             </SpeedDial>
         </div>
@@ -87,3 +102,7 @@ const SpeedDialBtn: React.FC<AllProps> = props => {
 };
 
 export default SpeedDialBtn;
+
+export {
+    VIEW_CALLBACK_ENUMS as CALLBACK_ENUMS,
+};

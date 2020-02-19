@@ -25,9 +25,8 @@ import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../dispatchAndState";
-import {ConnectedFeedbackInput} from "../feedBack/Feedback";
 import {squadronsFetchRequest} from "../dispatchAndState/squadrons";
-import SpeedDialBtn from "../speedDialMenu/SpeedDialBtn";
+import SpeedDialBtn, {CALLBACK_ENUMS} from "../speedDialMenu/SpeedDialBtn";
 import {membersFetchRequest} from "../dispatchAndState/members";
 import VerticalLinearStepper from "../speedDialMenu/actions/VerticalLinearStepper";
 import {toggleUploadModal} from "../dispatchAndState/modals";
@@ -36,7 +35,10 @@ interface Props{
     className?: string;
 }
 
-
+const VIEW_CALLBACK_ENUMS = {
+    ...CALLBACK_ENUMS,
+    MAIN_VIEW_TASK: 'MY_MAIN_VIEW/MAIN_VIEW_TASK',
+};
 const MemberTableContainer: React.FC<Props> = props => {
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
@@ -80,9 +82,6 @@ const MemberTableContainer: React.FC<Props> = props => {
         setOpen(false);
     };
 
-    const showCSVInputModal = () => {
-        dispatch(toggleUploadModal(true));
-    };
 
     const handleTableOrder = (table: string) => {
         switch (table) {
@@ -110,10 +109,6 @@ const MemberTableContainer: React.FC<Props> = props => {
         }
     };
 
-    // function handleFetch() {
-    //     dispatch(squadronsFetchRequest());
-    // }
-
     // onRowAdd: newData =>
     //     new Promise(resolve => {
     //         setTimeout(() => {
@@ -125,6 +120,17 @@ const MemberTableContainer: React.FC<Props> = props => {
     //             });
     //         }, 300);
     //     })
+
+   const callbackHandler = (type: string, data?: any) => {
+        switch(type) {
+            case CALLBACK_ENUMS.CHILD_TOGGLE_UPLOAD:
+                dispatch(toggleUploadModal(data));
+                break;
+            case CALLBACK_ENUMS.CHILD_TOGGLE_TASK:
+                break;
+        }
+    };
+
 
     return (
         <div className={classes.root}>
@@ -226,7 +232,7 @@ const MemberTableContainer: React.FC<Props> = props => {
                     <ListItemText primary="Supervisors"/>
                 </ListItem>
                 <SpeedDialBtn
-                    toggleCSVInputModal={showCSVInputModal}
+                    callbackHandler={callbackHandler}
                 />
             </Drawer>
             <Container className={classes.content}>
@@ -282,8 +288,7 @@ const MemberTableContainer: React.FC<Props> = props => {
                     {/*</Grow>*/}
                     {/*}*/}
                 </Box>
-                <ConnectedFeedbackInput/>
-
+                {/*<FeedbackInput postFeedback={callbackHandler}/>*/}
             </Container>
         </div>
     );
