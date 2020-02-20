@@ -34,3 +34,4 @@ const reducer: Reducer<FlightsState> = (state = initialState, action) => {
 // Instead of using default export, we use named exports. That way we can group these exports
 // inside the `index.js` folder.
 export { reducer as flightsReducer };
+export { initialState as FlightInitState }

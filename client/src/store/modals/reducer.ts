@@ -22,3 +22,4 @@ const reducer: Reducer<ShowModalState> = (state = initialState, action: any) => 
 
 
 export {reducer as showModalReducer}
+export { initialState as ShowModalInitState }
