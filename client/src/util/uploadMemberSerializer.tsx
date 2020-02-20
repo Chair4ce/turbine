@@ -1,4 +1,4 @@
-import UploadMemberModel from "../dispatchAndState/members/UploadMemberModel";
+import UploadMemberModel from "../store/members/UploadMemberModel";
 import moment from "moment";
 
 export class UploadMemberDeserializer {

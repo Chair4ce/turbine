@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Box} from "@material-ui/core";
-import LoadingSpinner from "../displayLoading/LoadingSpinner";
+import LoadingSpinner from "../component/displayLoading/LoadingSpinner";
 import {connect} from "react-redux";
-import MemberModel from "../dispatchAndState/members/MemberModel";
-import { postFeedback } from '../dispatchAndState/members/sagas';
+import MemberModel from "../store/members/MemberModel";
+import { postFeedback } from '../store/members/sagas';
 import TabbedRosters from "./TabbedRosters";
 
 const useStyles = makeStyles((theme: Theme) =>

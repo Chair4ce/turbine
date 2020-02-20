@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '../../dispatchAndState';
-import { membersFetchRequest } from '../../dispatchAndState/members';
-import MemberModel from "../../dispatchAndState/members/MemberModel";
-import Page from "../../layout/Page";
+import { ApplicationState } from '../../store';
+import { membersFetchRequest } from '../../store/members';
+import MemberModel from "../../store/members/MemberModel";
+import Page from "../../style/layout/Page";
 
 // Separate state props + dispatch props to their own interfaces.
 interface PropsFromState {

@@ -14,32 +14,28 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
-import EditTable from "../memberTable/EditTable";
-// import GroupAddIcon from '@material-ui/icons/GroupAdd';
+import MaterialuiTable from "../../component/materialTable/MaterialuiTable";
 import GroupIcon from '@material-ui/icons/Group';
-// import PeopleOutlineIcon from '@material-ui/icons/PeopleOutline';
 import PowerIcon from '@material-ui/icons/Power';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
 import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
-import {ApplicationState} from "../dispatchAndState";
-import {squadronsFetchRequest} from "../dispatchAndState/squadrons";
-import SpeedDialBtn, {CALLBACK_ENUMS} from "../speedDialMenu/SpeedDialBtn";
-import {membersFetchRequest} from "../dispatchAndState/members";
-import VerticalLinearStepper from "../speedDialMenu/actions/VerticalLinearStepper";
-import {toggleUploadModal} from "../dispatchAndState/modals";
+import {ApplicationState} from "../../store";
+import {squadronsFetchRequest} from "../../store/squadrons";
+import SpeedDialBtn, {CALLBACK_ENUMS} from "../../component/speedDialMenu/SpeedDialBtn";
+import {membersFetchRequest} from "../../store/members";
+import VerticalLinearStepper from "../../component/speedDialMenu/actions/VerticalLinearStepper";
+import {toggleUploadModal} from "../../store/modals";
 
 interface Props{
     className?: string;
 }
 
-const VIEW_CALLBACK_ENUMS = {
-    ...CALLBACK_ENUMS,
-    MAIN_VIEW_TASK: 'MY_MAIN_VIEW/MAIN_VIEW_TASK',
-};
-const MemberTableContainer: React.FC<Props> = props => {
+
+const MemberDashboard: React.FC<Props> = props => {
+
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
     const loading = useSelector(({members}: ApplicationState) => members.loading);
@@ -262,7 +258,7 @@ const MemberTableContainer: React.FC<Props> = props => {
                     {alphaTable &&
                     <Grow in={alphaTable}>
                         <Box order={alphaTableOrder} className={classes.table}>
-                    <EditTable
+                    <MaterialuiTable
                         members={members}
                         loading={loading}
                         title={"Alpha Roster"}
@@ -294,7 +290,7 @@ const MemberTableContainer: React.FC<Props> = props => {
     );
 };
 
-export default MemberTableContainer;
+export default MemberDashboard;
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,7 +1,7 @@
 import * as React from 'react';
 // import MemberModel from "../../dispatchAndState/members/MemberModel";
-import Page from "../../layout/Page";
-import MemberTableContainer from "../../mainContainer/MemberTableContainer";
+import Page from "../../style/layout/Page";
+import MemberDashboard from "./MemberDashboard";
 
 // Separate state props + dispatch props to their own interfaces.
 interface Props{
@@ -16,7 +16,7 @@ class MembersIndexPage extends React.Component<Props> {
         return (
             <Page
             className="MembersPage">
-                <MemberTableContainer />
+                <MemberDashboard />
             </Page>
         );
     }

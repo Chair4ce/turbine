@@ -8,16 +8,16 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {Divider, Fade, FormControl, IconButton, MenuItem, Modal, Select, TextField} from "@material-ui/core";
-import SquadronModel from "../../dispatchAndState/squadrons/SquadronModel";
-import {ApplicationState} from "../../dispatchAndState";
+import SquadronModel from "../../../store/squadrons/SquadronModel";
+import {ApplicationState} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
 
 import AddIcon from '@material-ui/icons/Add';
-import {squadronsFetchRequest} from "../../dispatchAndState/squadrons";
-import {postNewSquadron} from "../../dispatchAndState/squadrons/sagas";
-import {toggleUploadModal} from "../../dispatchAndState/modals";
+import {squadronsFetchRequest} from "../../../store/squadrons";
+import {postNewSquadron} from "../../../store/squadrons/sagas";
+import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
-import {membersFetchRequest} from "../../dispatchAndState/members";
+import {membersFetchRequest} from "../../../store/members";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

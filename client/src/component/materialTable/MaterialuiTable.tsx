@@ -1,6 +1,6 @@
 import React from 'react';
 import MaterialTable, {Column} from 'material-table';
-import MemberModel from "../dispatchAndState/members/MemberModel";
+import MemberModel from "../../store/members/MemberModel";
 
 interface Row {
     id: number;
@@ -30,7 +30,7 @@ interface Props {
     className?: string;
 }
 
-const EditTable: React.FC<Props> = props => {
+const MaterialuiTable: React.FC<Props> = props => {
     const [state, setState] = React.useState<TableState>({
         columns: [
             {title: 'Name', field: 'full_name'},
@@ -162,7 +162,7 @@ const EditTable: React.FC<Props> = props => {
     );
 };
 
-export default EditTable;
+export default MaterialuiTable;
 
 
 

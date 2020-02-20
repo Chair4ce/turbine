@@ -1,14 +1,14 @@
 import * as React from 'react';
-import SquadronModel from "../dispatchAndState/squadrons/SquadronModel";
+import SquadronModel from "../../store/squadrons/SquadronModel";
 import List from "@material-ui/core/List";
 import ListSubheader from "@material-ui/core/ListSubheader";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {ApplicationState} from "../dispatchAndState";
+import {ApplicationState} from "../../store";
 import SendIcon from '@material-ui/icons/Send';
 import {connect} from "react-redux";
-import FlightModel from "../dispatchAndState/flights/FlightModel";
+import FlightModel from "../../store/flights/FlightModel";
 import {Box, ListItemIcon, Paper} from "@material-ui/core";
 import SubList from "./SubList";
 

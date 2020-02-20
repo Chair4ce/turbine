@@ -1,4 +1,4 @@
-import MemberModel from "../dispatchAndState/members/MemberModel";
+import MemberModel from "../store/members/MemberModel";
 import moment from "moment";
 
 

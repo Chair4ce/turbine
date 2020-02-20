@@ -2,7 +2,7 @@ import * as React from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {ExpandLess, ExpandMore, StarBorder} from "@material-ui/icons";
 import {Box, Collapse, ListItemIcon, Paper} from "@material-ui/core";
-import FlightModel from "../dispatchAndState/flights/FlightModel";
+import FlightModel from "../../store/flights/FlightModel";
 import ListItem from "@material-ui/core/ListItem";
 import classNames from "classnames";
 import ListItemText from "@material-ui/core/ListItemText";

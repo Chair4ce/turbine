@@ -7,10 +7,10 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import {saveMembersFromCsv} from "../../dispatchAndState/members/sagas";
-import {UploadMemberDeserializer} from "../../util/uploadMemberSerializer";
+import {saveMembersFromCsv} from "../../../store/members/sagas";
+import {UploadMemberDeserializer} from "../../../util/uploadMemberSerializer";
 import classNames from "classnames";
-import UploadMemberModel from "../../dispatchAndState/members/UploadMemberModel";
+import UploadMemberModel from "../../../store/members/UploadMemberModel";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
