@@ -1,3 +1,4 @@
+import * as React from "react";
 import {shallow} from "enzyme";
 import {initStore} from "../../setupEnzyme";
 import {Provider} from "react-redux";
@@ -20,7 +21,7 @@ describe('Login Page', () => {
     beforeEach(() => {
       let subject = shallow(
             <Provider store={mockStore}>
-            <LoginDashboard />
+            {/*<LoginDashboard />*/}
             </Provider>
         )
     })

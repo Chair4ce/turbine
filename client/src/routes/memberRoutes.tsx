@@ -1,11 +1,5 @@
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { RouteComponentProps, Route, Switch } from 'react-router-dom';
-
-import ShowMembersPage from '../page/members/show';
-
-import { ApplicationState } from '../store';
-import MemberModel from "../store/members/MemberModel";
+import {Route, Switch} from 'react-router-dom';
 import MembersIndexPage from "./memberRoutes";
 
 // Separate state props + dispatch props to their own interfaces.
@@ -18,7 +12,6 @@ const MembersPage: React.FC<Props> = () => {
     return (
         <Switch>
             <Route exact path={`/members`} component={MembersIndexPage} />
-            {/*<Route path={`${match.path}/:Id`} component={ShowMembersPage} />*/}
         </Switch>
     );
 };

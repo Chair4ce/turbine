@@ -10,13 +10,13 @@ interface Props{
 
 // We can use `typeof` here to map our dispatch types to the props, like so
 
-class LoginIndexPage extends React.Component<Props> {
+class InProcessingIndexPage extends React.Component<Props> {
 
     public render() {
         return (
             <Page
-                className="LoginPage">
-                <LoginPage />
+                className="InProcessingPage">
+                {/*<InProcessingPage />*/}
             </Page>
         );
     }
@@ -30,4 +30,4 @@ class LoginIndexPage extends React.Component<Props> {
 // You can access these via `this.props`.
 // Now let's connect our component!
 // With redux v4's improved typings, we can finally omit generics here.
-export default LoginIndexPage;
+export default InProcessingIndexPage;

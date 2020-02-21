@@ -1,7 +1,8 @@
 import * as React from 'react';
 // import MemberModel from "../../dispatchAndState/members/MemberModel";
-import Page from "../../style/layout/Page";
 import MemberDashboard from "./MemberDashboard";
+import {Container} from "@material-ui/core";
+import Page from "../../style/layout/Page";
 
 // Separate state props + dispatch props to their own interfaces.
 interface Props{

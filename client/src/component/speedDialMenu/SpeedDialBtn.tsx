@@ -61,17 +61,17 @@ const SpeedDialBtn: React.FC<Props> = props => {
         )
     };
 
-    const onShowTaskModalClick = () => {
-        props.callbackHandler(
-            VIEW_CALLBACK_ENUMS.CHILD_TOGGLE_TASK,
-            true
-        )
-    };
+    // const onShowTaskModalClick = () => {
+    //     props.callbackHandler(
+    //         VIEW_CALLBACK_ENUMS.CHILD_TOGGLE_TASK,
+    //         true
+    //     )
+    // };
 
 
     const actions = [
         {icon: <FileCopyIcon onClick={onShowUploadModalClick}/>, name: 'Upload'},
-        {icon: <SaveIcon onClick={onShowTaskModalClick}/>, name: 'Task'},
+        // {icon: <SaveIcon onClick={onShowTaskModalClick}/>, name: 'Task'},
     ];
 
     return (

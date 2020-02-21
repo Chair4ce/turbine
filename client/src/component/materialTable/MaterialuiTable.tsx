@@ -23,6 +23,7 @@ interface Props {
     loading: boolean;
     title: string;
     filtering: boolean,
+    edit: boolean,
     grouping: boolean,
     search: boolean,
     selection: boolean,
@@ -109,7 +110,7 @@ const MaterialuiTable: React.FC<Props> = props => {
                 search: props.search,
                 selection: props.selection,
                 exportButton: props.exportButton,
-                pageSizeOptions: [5,10,50,100,200,300],
+                pageSizeOptions: [5,10,50,100],
                 columnsButton: true,
                 emptyRowsWhenPaging: false,
 
@@ -118,7 +119,7 @@ const MaterialuiTable: React.FC<Props> = props => {
                 //     color: 'primary'
                 // })
             }}
-            editable={{
+            editable={props.edit ? {
                 onRowAdd: newData =>
                     new Promise(resolve => {
                         setTimeout(() => {
@@ -154,7 +155,7 @@ const MaterialuiTable: React.FC<Props> = props => {
                             });
                         }, 300);
                     }),
-            }}
+            } : {}}
 
 
         />

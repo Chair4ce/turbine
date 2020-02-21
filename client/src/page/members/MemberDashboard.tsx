@@ -11,6 +11,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
@@ -28,6 +29,7 @@ import SpeedDialBtn, {CALLBACK_ENUMS} from "../../component/speedDialMenu/SpeedD
 import {membersFetchRequest} from "../../store/members";
 import VerticalLinearStepper from "../../component/speedDialMenu/actions/VerticalLinearStepper";
 import {toggleUploadModal} from "../../store/modals";
+import FeedbackInput from "../../component/feedBack/Feedback";
 
 interface Props{
     className?: string;
@@ -42,8 +44,8 @@ const MemberDashboard: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
-    const [open, setOpen] = React.useState(false);
-    // const [gainTable, showGainTable] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
+    const [gainTable, showGainTable] = React.useState(false);
     const [alphaTable, showAlphaTable] = React.useState(false);
     // const [lossTable, showLossTable] = React.useState(false);
     const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
@@ -60,10 +62,10 @@ const MemberDashboard: React.FC<Props> = props => {
         handleTableOrder("alpha");
         showAlphaTable(prev => !prev)
     };
-    // const handleGainBtnClick = () => {
-    //     handleTableOrder("gain");
-    //     showGainTable(prev => !prev)
-    // };
+    const handleGainBtnClick = () => {
+        handleTableOrder("gain");
+        showGainTable(prev => !prev)
+    };
 
     // const handleLossBtnClick = () => {
     //     handleTableOrder("loss");
@@ -183,13 +185,13 @@ const MemberDashboard: React.FC<Props> = props => {
                 </div>
                 <Divider/>
                 <List>
-                    {/*<ListItem button onClick={handleGainBtnClick} className={clsx( {*/}
-                    {/*    [classes.selected]: gainTable,*/}
-                    {/*    [classes.unselected]: !gainTable,*/}
-                    {/*})}>*/}
-                    {/*    <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>*/}
-                    {/*    <ListItemText primary="In Processing"/>*/}
-                    {/*</ListItem>*/}
+                    <ListItem button onClick={handleGainBtnClick} className={clsx( {
+                        [classes.selected]: gainTable,
+                        [classes.unselected]: !gainTable,
+                    })}>
+                        <ListItemIcon>{<GroupAddIcon/>}</ListItemIcon>
+                        <ListItemText primary="In Processing"/>
+                    </ListItem>
                     <ListItem button onClick={handleAlphaBtnClick} className={clsx( {
                         [classes.selected]: alphaTable,
                         [classes.unselected]: !alphaTable,
@@ -239,22 +241,23 @@ const MemberDashboard: React.FC<Props> = props => {
                 }
                 <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
-                    {/*{gainTable &&*/}
-                    {/*<Grow in={gainTable}>*/}
-                    {/*    <Box order={gainTableOrder} className={classes.table}>*/}
-                    {/*        <EditTable*/}
-                    {/*            members={props.members}*/}
-                    {/*            loading={props.loading}*/}
-                    {/*            title={"In Processing"}*/}
-                    {/*            filtering={true}*/}
-                    {/*            grouping={true}*/}
-                    {/*            search={true}*/}
-                    {/*            selection={true}*/}
-                    {/*            exportButton={true}*/}
-                    {/*        />*/}
-                    {/*    </Box>*/}
-                    {/*</Grow>*/}
-                    {/*}*/}
+                    {gainTable &&
+                    <Grow in={gainTable}>
+                        <Box order={gainTableOrder} className={classes.table}>
+                            <MaterialuiTable
+                                members={members}
+                                loading={loading}
+                                title={"In Processing"}
+                                filtering={true}
+                                edit={true}
+                                grouping={true}
+                                search={true}
+                                selection={true}
+                                exportButton={true}
+                            />
+                        </Box>
+                    </Grow>
+                    }
                     {alphaTable &&
                     <Grow in={alphaTable}>
                         <Box order={alphaTableOrder} className={classes.table}>
@@ -262,11 +265,12 @@ const MemberDashboard: React.FC<Props> = props => {
                         members={members}
                         loading={loading}
                         title={"Alpha Roster"}
+                        edit={false}
                         filtering={true}
                         grouping={true}
                         search={true}
-                        selection={true}
-                        exportButton={true}
+                        selection={false}
+                        exportButton={false}
                         // className={alphaTableClassname}
                     />
                         </Box>
@@ -284,7 +288,7 @@ const MemberDashboard: React.FC<Props> = props => {
                     {/*</Grow>*/}
                     {/*}*/}
                 </Box>
-                {/*<FeedbackInput postFeedback={callbackHandler}/>*/}
+                <FeedbackInput postFeedback={callbackHandler}/>
             </Container>
         </div>
     );
