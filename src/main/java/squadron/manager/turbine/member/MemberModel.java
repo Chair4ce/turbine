@@ -8,14 +8,13 @@ import javax.persistence.*;
 import java.util.Date;
 
 @NoArgsConstructor
-@Data
 @Entity
+@Data
 @Table(name = "members")
-public
-class UploadmembersModel {
-
+public class MemberModel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
 
     private Integer sqid;
@@ -44,9 +43,9 @@ class UploadmembersModel {
 
     private Date date_arrived_station;
 
-    private Date dor ;
+    private Date dor;
 
-    public UploadmembersModel(Integer sqid, Date tafmsd, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
+    public MemberModel(Integer sqid, Date tafmsd, String full_name, String grade, String assigned_pas, String dafsc, String office_symbol, String duty_title, Date duty_start_date, String duty_phone, String supv_name, Date supv_begin_date, Date date_arrived_station, Date dor) {
         this.sqid = sqid;
         this.tafmsd = verifyDate(tafmsd);
         this.full_name = full_name;
@@ -63,7 +62,7 @@ class UploadmembersModel {
         this.dor = verifyDate(dor);
     }
 
-    public UploadmembersModel update(MembersJSON json) {
+    public MemberModel update(MembersJSON json) {
         this.setSqid(json.getSqid());
         this.setTafmsd(json.getTafmsd());
         this.setFull_name(json.getFull_name());

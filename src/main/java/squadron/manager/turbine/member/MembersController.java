@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
-import javax.persistence.Transient;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -18,24 +17,22 @@ public class MembersController {
     @Autowired
     private MembersRepository membersRepository;
 
-    @Autowired
-    private UploadSqMemberRepository uploadSqMemberRepository;
 
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    Iterable<Members> getMembers() {
+    Iterable<MemberModel> getMembers() {
         return membersRepository.findAll();
     }
 
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public Iterable<UploadmembersModel> addMembers(@Valid @RequestBody Iterable<MembersJSON> json) {
-        List<UploadmembersModel> newMembers = new ArrayList();
+    public Iterable<MemberModel> addMembers(@Valid @RequestBody Iterable<MembersJSON> json) {
+        List<MemberModel> newMembers = new ArrayList();
         json.forEach((item -> {
             newMembers.add(
-                    new UploadmembersModel(
+                    new MemberModel(
                             verifyDuplicateSqid(item),
                             item.getTafmsd(),
                             item.getFull_name(),
@@ -53,7 +50,7 @@ public class MembersController {
                     )
             );
         }));
-        return this.uploadSqMemberRepository.saveAll(newMembers);
+        return this.membersRepository.saveAll(newMembers);
     }
    private int verifyDuplicateSqid(MembersJSON item) {
 
