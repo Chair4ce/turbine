@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import MemberModel from "../../dispatchAndState/members/MemberModel";
+// import Member from "../../dispatchAndState/members/Member";
 import MemberDashboard from "./MemberDashboard";
 import {Container} from "@material-ui/core";
 import Page from "../../style/layout/Page";

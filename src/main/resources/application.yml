@@ -8,11 +8,8 @@ spring:
     baseline-on-migrate: true
     baseline-version: 0
   jpa:
-    hibernate:
-#      namingStrategy: org.hibernate.cfg.EJB3NamingStrategy
+     hibernate:
       dialect: org.hibernate.dialect.MySQL5Dialect
-      hbm2ddl:
-        auto: create-drop
       use-new-id-generator-mappings: false
   servlet:
     multipart:

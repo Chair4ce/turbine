@@ -3,6 +3,7 @@ package squadron.manager.turbine.feedback;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,7 +11,7 @@ import java.util.Date;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "Feedback")
+@Table(name = "feedback")
 public class Feedback {
 
     @Id

@@ -4,6 +4,7 @@ import { Global } from '@emotion/core'
 import Root from '../style/layout/Root'
 import normalize from '../style/normalize'
 import MembersIndexPage from "../page/members";
+import InProcessingIndexPage from "../page/InProcessing";
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -19,11 +20,10 @@ const Routes: React.FC = () => (
     <Root>
         <Global styles={normalize} />
         <Switch>
-            <Route exact path="/"/>
-            <Route path="/members" component={MembersIndexPage} />
+            <Route exact path="/" component={MembersIndexPage}/>
+            {/*<Route path="/members" component={MembersIndexPage} />*/}
         </Switch>
     </Root>
-
-)
+);
 
 export default Routes

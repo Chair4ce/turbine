@@ -1,28 +1,38 @@
 import UploadMemberModel from "../store/members/UploadMemberModel";
 import moment from "moment";
+const crypto = require('crypto');
+
+
+function convertToHash(sqid: string) {
+    return crypto.createHash('sha1').update(sqid).digest('hex').toString()
+        .match(/\d+/g).map(Number).join("").substring(1,10);
+}
 
 export class UploadMemberDeserializer {
     static deserialize(items: any): UploadMemberModel[] {
 
         if (items.map) {
             return items.map((item: any) => {
+                console.log(item.fullName);
                 return new UploadMemberModel(
+                    convertToHash(item.sqid),
+                    item.fullName,
                     item.tafmsd ? moment(new Date(item.tafmsd)).utc().format(): null ,
-                    item.full_name,
                     item.grade,
-                    item.assigned_pas,
+                    item.assignedPas,
                     item.dafsc,
-                    item.office_symbol ? item.office_symbol : null,
-                    item.duty_title ? item.duty_title : null,
-                    item.duty_start_date ? moment(new Date(item.duty_start_date)).utc().format() : null,
-                    item.duty_phone ? item.duty_phone : null,
-                    item.supv_name ? item.supv_name : null,
-                    item.supv_begin_date ? moment(new Date(item.supv_begin_date)).utc().format() : null,
-                    item.date_arrived_station ? moment(new Date(item.date_arrived_station)).utc().format() : null,
+                    item.officeSymbol ? item.officeSymbol : null,
+                    item.dutyTitle ? item.dutyTitle : null,
+                    item.dutyStartDate ? moment(new Date(item.dutyStartDate)).utc().format() : null,
+                    item.dutyPhone ? item.dutyPhone : null,
+                    item.supvName ? item.supvName : null,
+                    item.supvBeginDate ? moment(new Date(item.supvBeginDate)).utc().format() : null,
+                    item.dateArrivedStation ? moment(new Date(item.dateArrivedStation)).utc().format() : null,
                     item.dor ? moment(new Date(item.dor)).utc().format() : null,
                 );
             });
         }
         return [];
     }
+
 }

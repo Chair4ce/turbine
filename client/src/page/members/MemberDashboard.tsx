@@ -15,7 +15,7 @@ import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useDispatch, useSelector} from "react-redux";
 import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
-import MaterialuiTable from "../../component/materialTable/MaterialuiTable";
+import AlphaRosterTable from "../../component/materialTable/AlphaRosterTable";
 import GroupIcon from '@material-ui/icons/Group';
 import PowerIcon from '@material-ui/icons/Power';
 import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
@@ -30,6 +30,8 @@ import {membersFetchRequest} from "../../store/members";
 import VerticalLinearStepper from "../../component/speedDialMenu/actions/VerticalLinearStepper";
 import {toggleUploadModal} from "../../store/modals";
 import FeedbackInput from "../../component/feedBack/Feedback";
+import GainingTable from "../../component/materialTable/GainingTable";
+import {gainingFetchRequest} from "../../store/gaining";
 
 interface Props{
     className?: string;
@@ -40,7 +42,9 @@ const MemberDashboard: React.FC<Props> = props => {
 
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
-    const loading = useSelector(({members}: ApplicationState) => members.loading);
+    const gaining = useSelector(({gaining}: ApplicationState) => gaining.data);
+    const memberLoading = useSelector(({members}: ApplicationState) => members.loading);
+    const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
     const dispatch = useDispatch();
     const classes = useStyles();
     const theme = useTheme();
@@ -56,6 +60,7 @@ const MemberDashboard: React.FC<Props> = props => {
     useEffect(() => {
         dispatch(membersFetchRequest());
         dispatch(squadronsFetchRequest());
+        dispatch(gainingFetchRequest());
     }, [dispatch]);
 
     const handleAlphaBtnClick = () => {
@@ -244,10 +249,10 @@ const MemberDashboard: React.FC<Props> = props => {
                     {gainTable &&
                     <Grow in={gainTable}>
                         <Box order={gainTableOrder} className={classes.table}>
-                            <MaterialuiTable
-                                members={members}
-                                loading={loading}
-                                title={"In Processing"}
+                            <GainingTable
+                                gaining={gaining}
+                                loading={gainingLoading}
+                                title={"Gaining"}
                                 filtering={true}
                                 edit={true}
                                 grouping={true}
@@ -261,9 +266,9 @@ const MemberDashboard: React.FC<Props> = props => {
                     {alphaTable &&
                     <Grow in={alphaTable}>
                         <Box order={alphaTableOrder} className={classes.table}>
-                    <MaterialuiTable
+                    <AlphaRosterTable
                         members={members}
-                        loading={loading}
+                        loading={memberLoading}
                         title={"Alpha Roster"}
                         edit={false}
                         filtering={true}

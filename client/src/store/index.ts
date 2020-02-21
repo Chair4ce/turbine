@@ -17,11 +17,14 @@ import flightSaga from "./flights/sagas";
 import AETSaga from "./AETs/sagas";
 import {ShowModalState} from "./modals/types";
 import {showModalReducer} from "./modals/reducer";
+import {gainingReducer, GainingState} from "./gaining";
+import gainingSaga from "./gaining/sagas";
 
 // The top-level state object
 export interface ApplicationState {
     layout: LayoutState;
     members: MembersState;
+    gaining: GainingState;
     squadrons: SquadronsState;
     showModal: ShowModalState;
     flights: FlightsState;
@@ -40,6 +43,7 @@ export const createRootReducer = (history: History) =>
         flights: flightsReducer,
         AETs: AETsReducer,
         members: membersReducer,
+        gaining: gainingReducer,
         router: connectRouter(history),
     });
 
@@ -47,5 +51,5 @@ export const createRootReducer = (history: History) =>
 // "generator function", which you can read about here:
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
 export function* rootSaga() {
-    yield all([fork(membersSaga),fork(squadronSaga),fork(flightSaga),fork(AETSaga)]);
+    yield all([fork(membersSaga),fork(squadronSaga),fork(flightSaga),fork(AETSaga), fork(gainingSaga)]);
 }

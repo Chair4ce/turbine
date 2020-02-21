@@ -11,6 +11,9 @@ import {saveMembersFromCsv} from "../../../store/members/sagas";
 import {UploadMemberDeserializer} from "../../../util/uploadMemberSerializer";
 import classNames from "classnames";
 import UploadMemberModel from "../../../store/members/UploadMemberModel";
+import UploadGainingModel from "../../../store/gaining/UploadGainingModel";
+import {UploadGainingDeserializer} from "../../../util/uploadGainingDeserializer";
+import {saveGainingsFromCsv} from "../../../store/gaining/sagas";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -89,16 +92,14 @@ function csvJSON(csv: any) {
     let commaRegex = /,(?=(?:[^"]*"[^"]*")*[^"]*$)/g;
     let quotesRegex = /^"(.*)"$/g;
     let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
-    let lowerHeaders = lower(headers);
-
-
+    let CamelHeaders = convertHeader(headers);
+    console.log(CamelHeaders);
     for (let i = 1; i < lines.length; i++) {
         let obj: any = {};
         let currentline = lines[i].split(commaRegex);
 
         for (let j = 0; j < headers.length; j++) {
-            obj[lowerHeaders[j]] = currentline[j].replace(quotesRegex, "$1");
-
+            obj[CamelHeaders[j]] = currentline[j].replace(quotesRegex, "$1");
         }
         result.push(obj);
     }
@@ -106,20 +107,21 @@ function csvJSON(csv: any) {
     return result; //JSON
 }
 
-function snake_case(str: string) {
-    return str.toLowerCase().replace(/\W+(.)/g, function(match, chr)
-    {
-        return chr.toUpperCase();
-    });
+function snakeToCamel(str: string) {
+    return str.toLowerCase().replace(/([-_]\w)/g, g => g[1].toUpperCase());
 }
 
-function lower(obj: any) {
+
+function convertHeader(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
-            obj[prop] = snake_case(obj[prop]);
-        }
-        if (typeof obj[prop] === 'object') {
-            lower(obj[prop]);
+            if (obj[prop] === 'SSAN') {
+                obj[prop] = 'SQID'
+            }
+            if (obj[prop] === 'SPONSOR_SSAN') {
+                obj[prop] = 'SPONSOR_ID'
+            }
+            obj[prop] = snakeToCamel(obj[prop]);
         }
     }
     return obj;
@@ -202,9 +204,13 @@ const CsvInput: React.FC<Props> = props => {
                         if (typeof csv === "string") {
                             switch (props.uploadType) {
                                 case 'Gaining':
+                                    let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(csvJSON(csv));
+                                    console.log(gaining);
+                                    saveGainingsFromCsv(gaining);
                                     break;
                                 case 'Alpha':
                                     let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
+                                    console.log(members);
                                     saveMembersFromCsv(members);
                                     break;
                                 case 'UPMR':

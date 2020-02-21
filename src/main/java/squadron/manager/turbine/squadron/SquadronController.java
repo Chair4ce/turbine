@@ -34,8 +34,8 @@ public class SquadronController {
     @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Squadron> getSquadronById(@PathVariable(value = "id") Long id) throws Exception {
-        System.out.println("getting squadron with id: " + id);
-        Squadron squadron = squadronRepository.findById(id).orElseThrow(() -> new Exception("Squadron not found with id ::" + id));
+        System.out.println("getting squadronModel with id: " + id);
+        Squadron squadron = squadronRepository.findById(id).orElseThrow(() -> new Exception("SquadronModel not found with id ::" + id));
         return ResponseEntity.ok().body(squadron);
     }
 }

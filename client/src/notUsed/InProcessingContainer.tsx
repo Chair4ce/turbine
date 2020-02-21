@@ -3,9 +3,9 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Box} from "@material-ui/core";
 import LoadingSpinner from "../component/displayLoading/LoadingSpinner";
 import {connect} from "react-redux";
-import MemberModel from "../store/members/MemberModel";
 import { postFeedback } from '../store/members/sagas';
 import TabbedRosters from "./TabbedRosters";
+import MemberModel from "../store/members/MemberModel";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
