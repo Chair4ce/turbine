@@ -6,6 +6,7 @@ import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
 import squadron.manager.turbine.metric.ImportGainingChangeLog;
+import squadron.manager.turbine.metric.ImportGainingChangeLogRepository;
 import squadron.manager.turbine.metric.MetricService;
 
 import javax.transaction.Transactional;
@@ -31,6 +32,10 @@ public class GainingController {
     private MetricService metricService;
 
 
+    @Autowired
+    private ImportGainingChangeLogRepository importGainingChangeLogRepository;
+
+
     @CrossOrigin
     @GetMapping
     public @ResponseBody
@@ -41,41 +46,66 @@ public class GainingController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public Iterable<Gaining> addGaining(@Valid @RequestBody Iterable<GainingJSON> json) {
-        List<Gaining> newGaining = new ArrayList();
+    public Iterable<ImportGainingChangeLog> importGaining(@Valid @RequestBody Iterable<GainingJSON> json) {
         List<Member> members = memberRepository.findAll();
+        Date date = new Date();
+
         json.forEach((newImport -> {
-            String assignedSponsor = returnSponsorName(newImport.getSponsorId(), members);
-            System.out.println("Importing Member: " + newImport.getFullName());
             SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
-            Gaining existingGaining = returnGainingIfExists(sqidModel.getSqid());
 
-            Gaining importingGaining = new Gaining(
-                    sqidModel.getSqid(),
-                    newImport.getFullName(),
-                    sqidModel.getFirstName(),
-                    sqidModel.getLastName(),
-                    newImport.getRnltd(),
-                    newImport.getGrade(),
-                    newImport.getGainingPas(),
-                    newImport.getDafsc(),
-                    newImport.getDor(),
-                    newImport.getDateDepLastDutyStn(),
-                    assignedSponsor,
-                    newImport.getLosingPas(),
-                    new Date()
-            );
+            Gaining importedGaining = buildGainingModel(members, date, newImport, sqidModel);
 
-            if (notNull(existingGaining)) {
-                System.out.println("Found Existing Member");
-                this.gainingRepository.save(logAndUpdateDiff(importingGaining, existingGaining));
-            } else {
-                System.out.println("No Existing Member");
-                newGaining.add(importingGaining);
-            }
+            findExistingOrSaveNew(date, sqidModel, importedGaining);
         }));
-        System.out.println("Saving All New Members");
-        return this.gainingRepository.saveAll(newGaining);
+       return importGainingChangeLogRepository.findAllByImportDateTime(date);
+    }
+
+    private Gaining buildGainingModel(List<Member> members, Date date, GainingJSON newImport, SqidGenerator sqidModel) {
+        String assignedSponsor = returnSponsorName(newImport.getSponsorId(), members);
+        return new Gaining(
+                sqidModel.getSqid(),
+                newImport.getFullName(),
+                sqidModel.getFirstName(),
+                sqidModel.getLastName(),
+                newImport.getRnltd(),
+                newImport.getGrade(),
+                newImport.getGainingPas(),
+                newImport.getDafsc(),
+                newImport.getDor(),
+                newImport.getDateDepLastDutyStn(),
+                assignedSponsor,
+                newImport.getLosingPas(),
+                date
+        );
+    }
+
+    private void findExistingOrSaveNew(Date date, SqidGenerator sqidModel, Gaining importedGaining) {
+        Gaining existingGaining = returnGainingIfExists(sqidModel.getSqid());
+
+        if (notNull(existingGaining)) {
+             logAndSaveChanges(date, importedGaining, existingGaining);
+        } else {
+            this.gainingRepository.save(importedGaining);
+        }
+    }
+
+
+    private Gaining updateExistingGainingData(Gaining existingGaining, Gaining importingGaining) {
+
+            System.out.println("Found Changes for: " + existingGaining.getFullName());
+            existingGaining.setFullName(importingGaining.getFullName());
+            existingGaining.setFirstName(importingGaining.getFirstName());
+            existingGaining.setLastName(importingGaining.getLastName());
+            existingGaining.setRnltd(importingGaining.getRnltd());
+            existingGaining.setGrade(importingGaining.getGrade());
+            existingGaining.setGainingPas(importingGaining.getGainingPas());
+            existingGaining.setDafsc(importingGaining.getDafsc());
+            existingGaining.setDor(importingGaining.getDor());
+            existingGaining.setDateDepLastDutyStn(importingGaining.getDateDepLastDutyStn());
+            existingGaining.setSponsorId(importingGaining.getSponsorId());
+            existingGaining.setLosingPas(importingGaining.getLosingPas());
+            existingGaining.setLastUpdated(new Date());
+return existingGaining;
 
     }
 
@@ -91,29 +121,14 @@ public class GainingController {
         return null;
     }
 
-    private Gaining logAndUpdateDiff(Gaining importingGaining, Gaining oldGaining) {
-        boolean foundChanges = false;
-        for (String field : oldGaining.compare(importingGaining)) {
-            System.out.println("field: " + field);
-            if (field.length() >= 1) foundChanges = true;
-            this.metricService.logGainingFieldChange(new ImportGainingChangeLog(new Date(), importingGaining, oldGaining, field));
+    private void logAndSaveChanges(Date date, Gaining importingGaining, Gaining existingGaining) {
+        List<ImportGainingChangeLog> importGainingChanges = new ArrayList();
+        for (String field : existingGaining.compare(importingGaining)) {
+            importGainingChanges.add(new ImportGainingChangeLog(date, importingGaining, existingGaining, field));
         }
-        if (foundChanges) {
-            System.out.println("Found Changes for: " + oldGaining.getFullName());
-            oldGaining.setFullName(importingGaining.getFullName());
-            oldGaining.setFirstName(importingGaining.getFirstName());
-            oldGaining.setLastName(importingGaining.getLastName());
-            oldGaining.setRnltd(importingGaining.getRnltd());
-            oldGaining.setGrade(importingGaining.getGrade());
-            oldGaining.setGainingPas(importingGaining.getGainingPas());
-            oldGaining.setDafsc(importingGaining.getDafsc());
-            oldGaining.setDor(importingGaining.getDor());
-            oldGaining.setDateDepLastDutyStn(importingGaining.getDateDepLastDutyStn());
-            oldGaining.setSponsorId(importingGaining.getSponsorId());
-            oldGaining.setLosingPas(importingGaining.getLosingPas());
-            oldGaining.setLastUpdated(new Date());
-        }
-        return oldGaining;
+        this.metricService.logGainingFieldChanges(importGainingChanges);
+
+        this.gainingRepository.save(updateExistingGainingData(existingGaining, importingGaining));
     }
 
     private boolean notNull(Gaining existingGaining) {

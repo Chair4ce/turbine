@@ -163,9 +163,7 @@ const CsvInput: React.FC<Props> = props => {
         if (!loading && !success) {
             setSuccess(false);
             setLoading(true);
-            if (props.squadron){
             doUpload(e);
-            }
             timer.current = setTimeout(() => {
                 setSuccess(true);
                 setLoading(false);

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import squadron.manager.turbine.gaining.Gaining;
 import squadron.manager.turbine.metric.ImportMembersChangeLog;
+import squadron.manager.turbine.metric.ImportMembersChangeLogRepository;
 import squadron.manager.turbine.metric.MetricService;
 
 import javax.transaction.Transactional;
@@ -25,6 +25,9 @@ public class MemberController {
     @Autowired
     private MetricService metricService;
 
+    @Autowired
+    private ImportMembersChangeLogRepository importMembersChangeLogRepository;
+
 
     @CrossOrigin
     @GetMapping
@@ -36,72 +39,77 @@ public class MemberController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public Iterable<Member> addMembers(@Valid @RequestBody Iterable<MemberJSON> json) {
-        List<Member> newMembers = new ArrayList();
+    public Iterable<ImportMembersChangeLog> addMembers(@Valid @RequestBody Iterable<MemberJSON> json) {
+        Date date = new Date();
         json.forEach((newImport -> {
-            System.out.println("Importing Member: " + newImport.getFullName());
-            SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
-            Member existingMember = returnMemberIfExists(sqidModel.getSqid());
-            Member importingMember = new Member(
-                    sqidModel.getSqid(),
-                    newImport.getFullName(),
-                    sqidModel.getFirstName(),
-                    sqidModel.getLastName(),
-                    newImport.getTafmsd(),
-                    newImport.getGrade(),
-                    newImport.getAssignedPas(),
-                    newImport.getDafsc(),
-                    newImport.getOfficeSymbol(),
-                    newImport.getDutyTitle(),
-                    newImport.getDutyStartDate(),
-                    newImport.getDutyPhone(),
-                    newImport.getSupvName(),
-                    newImport.getSupvBeginDate(),
-                    newImport.getDateArrivedStation(),
-                    newImport.getDor(),
-                    new Date()
-            );
-
-            if (notNull(existingMember)) {
-                System.out.println("Found Existing Member");
-                this.memberRepository.save(logAndUpdateDiff(importingMember, existingMember));
-            } else {
-                System.out.println("No Existing Member");
-                newMembers.add(importingMember);
-            }
+            findExistingOrSaveNew(date, newImport);
         }));
-        System.out.println("Saving All New Members");
-        return this.memberRepository.saveAll(newMembers);
+        System.out.println(importMembersChangeLogRepository.findAll());
+        return importMembersChangeLogRepository.findAll();
+    }
+
+    private void findExistingOrSaveNew(Date date, MemberJSON newImport) {
+        SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
+        Member existingMember = returnMemberIfExists(sqidModel.getSqid());
+
+        Member importingMember = new Member(
+                sqidModel.getSqid(),
+                newImport.getFullName(),
+                sqidModel.getFirstName(),
+                sqidModel.getLastName(),
+                newImport.getTafmsd(),
+                newImport.getGrade(),
+                newImport.getAssignedPas(),
+                newImport.getDafsc(),
+                newImport.getOfficeSymbol(),
+                newImport.getDutyTitle(),
+                newImport.getDutyStartDate(),
+                newImport.getDutyPhone(),
+                newImport.getSupvName(),
+                newImport.getSupvBeginDate(),
+                newImport.getDateArrivedStation(),
+                newImport.getDor(),
+                date
+        );
+
+        if (notNull(existingMember)) {
+            logAndSaveChanges(date, importingMember, existingMember);
+        } else {
+            this.memberRepository.save(importingMember);
+        }
     }
 
 
-    private Member logAndUpdateDiff(Member importingMember, Member oldMember) {
-        boolean foundChanges = false;
-        for (String field : oldMember.compare(importingMember)) {
-            if (field.length() >= 1) foundChanges = true;
-            this.metricService.logMembersFieldChange(new ImportMembersChangeLog(new Date(), importingMember, oldMember, field));
+    private void logAndSaveChanges(Date date, Member importingMember, Member existingMember) {
+        List<ImportMembersChangeLog> importMemberChanges = new ArrayList();
+        for (String field : existingMember.compare(importingMember)) {
+            importMemberChanges.add(new ImportMembersChangeLog(date, importingMember, existingMember, field));
         }
-        if (foundChanges) {
-            System.out.println("Found Changes for: " + oldMember.getFullName());
-            oldMember.setFullName(importingMember.getFullName());
-            oldMember.setFirstName(importingMember.getFirstName());
-            oldMember.setLastName(importingMember.getLastName());
-            oldMember.setGrade(importingMember.getGrade());
-            oldMember.setAssignedPas(importingMember.getAssignedPas());
-            oldMember.setTafmsd(importingMember.getTafmsd());
-            oldMember.setDafsc(importingMember.getDafsc());
-            oldMember.setOfficeSymbol(importingMember.getOfficeSymbol());
-            oldMember.setDutyTitle(importingMember.getDutyTitle());
-            oldMember.setDutyStartDate(importingMember.getDutyStartDate());
-            oldMember.setDutyPhone(importingMember.getDutyPhone());
-            oldMember.setSupvName(importingMember.getSupvName());
-            oldMember.setSupvBeginDate(importingMember.getSupvBeginDate());
-            oldMember.setDateArrivedStation(importingMember.getDateArrivedStation());
-            oldMember.setDor(importingMember.getDor());
-            oldMember.setLastUpdated(new Date());
-        }
-        return oldMember;
+        this.metricService.logMembersFieldChange(importMemberChanges);
+        this.memberRepository.save(updateExistingMemberData(importingMember, existingMember));
     }
+
+    private Member updateExistingMemberData(Member importingMember, Member existingMember) {
+        existingMember.setFullName(importingMember.getFullName());
+        existingMember.setFirstName(importingMember.getFirstName());
+        existingMember.setLastName(importingMember.getLastName());
+        existingMember.setGrade(importingMember.getGrade());
+        existingMember.setAssignedPas(importingMember.getAssignedPas());
+        existingMember.setTafmsd(importingMember.getTafmsd());
+        existingMember.setDafsc(importingMember.getDafsc());
+        existingMember.setOfficeSymbol(importingMember.getOfficeSymbol());
+        existingMember.setDutyTitle(importingMember.getDutyTitle());
+        existingMember.setDutyStartDate(importingMember.getDutyStartDate());
+        existingMember.setDutyPhone(importingMember.getDutyPhone());
+        existingMember.setSupvName(importingMember.getSupvName());
+        existingMember.setSupvBeginDate(importingMember.getSupvBeginDate());
+        existingMember.setDateArrivedStation(importingMember.getDateArrivedStation());
+        existingMember.setDor(importingMember.getDor());
+        existingMember.setLastUpdated(new Date());
+
+        return existingMember;
+    }
+
 
     private Member returnMemberIfExists(String importingSqid) {
         return memberRepository.findBySqid(importingSqid);

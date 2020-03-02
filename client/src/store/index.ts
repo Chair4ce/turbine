@@ -19,6 +19,7 @@ import {ShowModalState} from "./modals/types";
 import {showModalReducer} from "./modals/reducer";
 import {gainingReducer, GainingState} from "./gaining";
 import gainingSaga from "./gaining/sagas";
+import {importChangesReducer, ImportChangesState} from "./importChanges";
 
 // The top-level state object
 export interface ApplicationState {
@@ -29,6 +30,7 @@ export interface ApplicationState {
     showModal: ShowModalState;
     flights: FlightsState;
     AETs: AETsState;
+    importChanges: ImportChangesState;
     router: RouterState;
 }
 
@@ -44,6 +46,7 @@ export const createRootReducer = (history: History) =>
         AETs: AETsReducer,
         members: membersReducer,
         gaining: gainingReducer,
+        importChanges: importChangesReducer,
         router: connectRouter(history),
     });
 

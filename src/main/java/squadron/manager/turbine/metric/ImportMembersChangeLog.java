@@ -37,7 +37,7 @@ public class ImportMembersChangeLog {
             String newData
     ) {
         this.sqid = sqid;
-        this.importDateTime = importDateTime;
+        this.importDateTime = verifyDate(importDateTime);
         this.field = field;
         this.oldData = oldData;
         this.newData = newData;

@@ -13,11 +13,11 @@ public class MetricService {
     @Autowired
     private ImportMembersChangeLogRepository importMembersChangeLogRepository;
 
-    public void logGainingFieldChange(ImportGainingChangeLog importGainingChangeLog) {
-        this.importGainingChangeLogRepository.save(importGainingChangeLog);
+    public void logGainingFieldChanges(Iterable<ImportGainingChangeLog> importGainingChangeLog) {
+        this.importGainingChangeLogRepository.saveAll(importGainingChangeLog);
     }
 
-    public void logMembersFieldChange(ImportMembersChangeLog importMembersChangeLog) {
-        this.importMembersChangeLogRepository.save(importMembersChangeLog);
+    public void logMembersFieldChange(Iterable<ImportMembersChangeLog> importMembersChangeLog) {
+        this.importMembersChangeLogRepository.saveAll(importMembersChangeLog);
     }
 }

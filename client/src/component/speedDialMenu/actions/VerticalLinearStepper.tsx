@@ -7,17 +7,13 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {Divider, Fade, FormControl, IconButton, MenuItem, Modal, Select, TextField} from "@material-ui/core";
-import SquadronModel from "../../../store/squadrons/SquadronModel";
+import {Divider, Modal} from "@material-ui/core";
 import {ApplicationState} from "../../../store";
 import {useDispatch, useSelector} from "react-redux";
-
-import AddIcon from '@material-ui/icons/Add';
-import {squadronsFetchRequest} from "../../../store/squadrons";
-import {postNewSquadron} from "../../../store/squadrons/sagas";
 import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
 import {membersFetchRequest} from "../../../store/members";
+import {gainingFetchRequest} from "../../../store/gaining";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -90,7 +86,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         divider: {
             margin: theme.spacing(5)
-        }
+        },
+
     }),
 );
 
@@ -98,20 +95,20 @@ function getSteps() {
     return ['Gaining', 'Alpha', 'Losing', 'UPMR'];
 }
 
-function getStepContent(step: number) {
-    switch (step) {
-        case 0:
-            return `Upload your unedited GAINING roster from BLSDM`;
-        case 1:
-            return 'Upload your unedited ALPHA roster from BLSDM';
-        case 2:
-            return `Upload your unedited LOSING roster from BLSDM`;
-        case 3:
-            return `Upload your unedited UPMR roster from BLSDM`;
-        default:
-            return 'finished';
-    }
-}
+// function getStepContent(step: number) {
+//     switch (step) {
+//         case 0:
+//             return 'Upload Gaining roster';
+//         case 1:
+//             return 'Upload ALPHA roster';
+//         case 2:
+//             return 'Upload LOSING roster';
+//         case 3:
+//             return 'Upload UPMR roster';
+//         default:
+//             return 'finished';
+//     }
+// }
 
 function getModalStyle() {
     const top = 50;
@@ -148,73 +145,74 @@ const VerticalLinearStepper: React.FC<Props> = props => {
     const [errState, setErrState] = React.useState(false);
 
     React.useEffect(() => {
-            if (errState) {
-                if (newSquadron.length > 0) {
-                    setSqInputError(false);
-                } else {
-                    setSqInputError(true);
-                }
-                if (newPasCode.length === 8) {
-                    setPasCodeInputError(false);
-                } else {
-                    setPasCodeInputError(true);
-                }
+        if (errState) {
+            if (newSquadron.length > 0) {
+                setSqInputError(false);
+            } else {
+                setSqInputError(true);
             }
-    }, [newPasCode,newSquadron,errState]);
+            if (newPasCode.length === 8) {
+                setPasCodeInputError(false);
+            } else {
+                setPasCodeInputError(true);
+            }
+        }
+    }, [newPasCode, newSquadron, errState]);
 
     // const timer = React.useRef<number>();
 
 
-    const handleAddSquadronBtn = async () => {
-        if (newSquadron.length > 0 && newPasCode.length === 8) {
-            await postNewSquadron(new SquadronModel(newSquadron, newPasCode));
-            setNewSquadron('');
-            setNewPasCode('');
-            setErrState(false);
-            setSqInputError(false);
-            setPasCodeInputError(false);
-            setErrState(false);
-            setChecked(prev => !prev);
-            await dispatch(squadronsFetchRequest());
-        } else {
-            setErrState(true);
-        }
-    };
+    // const handleAddSquadronBtn = async () => {
+    //     if (newSquadron.length > 0 && newPasCode.length === 8) {
+    //         await postNewSquadron(new SquadronModel(newSquadron, newPasCode));
+    //         setNewSquadron('');
+    //         setNewPasCode('');
+    //         setErrState(false);
+    //         setSqInputError(false);
+    //         setPasCodeInputError(false);
+    //         setErrState(false);
+    //         setChecked(prev => !prev);
+    //         await dispatch(squadronsFetchRequest());
+    //     } else {
+    //         setErrState(true);
+    //     }
+    // };
 
-    const handleShowAddSquadronBtn = () => {
-        setChecked(prev => !prev);
-    };
+    // const handleShowAddSquadronBtn = () => {
+    //     setChecked(prev => !prev);
+    // };
     const handleClose = () => {
         dispatch(toggleUploadModal(false));
         dispatch(membersFetchRequest());
+        dispatch(gainingFetchRequest());
         setOpen(false);
     };
 
-    const handleNewSquadronInputChange = (e: any) => {
-        setNewSquadron(e.target.value);
-    };
-    const handleNewPasCodeInputChange = (e: any) => {
-        setNewPasCode(e.target.value);
-    };
+    // const handleNewSquadronInputChange = (e: any) => {
+    //     setNewSquadron(e.target.value);
+    // };
+    // const handleNewPasCodeInputChange = (e: any) => {
+    //     setNewPasCode(e.target.value);
+    // };
 
-    const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-        setSquadron(event.target.value as string);
-        if (activeStep > 0) {
-            setActiveStep(0);
-        }
-    };
+    // const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    //     setSquadron(event.target.value as string);
+    //     if (activeStep > 0) {
+    //         setActiveStep(0);
+    //     }
+    // };
 
 
-    function renderSquadronList() {
-        return (squadrons.map((item: any, index) =>
-                <MenuItem
-                    key={index}
-                    value={item.pas}>
-                    {item.squadron}
-                </MenuItem>
-            )
-        )
-    }
+    // function renderSquadronList() {
+    //     return (squadrons.map((item: any, index) =>
+    //             <MenuItem
+    //                 key={index}
+    //                 value={item.pas}>
+    //                 {item.squadron}
+    //             </MenuItem>
+    //         )
+    //     )
+    // }
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
@@ -237,7 +235,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                 onClose={handleClose}
             >
                 <div style={modalStyle} className={classes.paper}>
-                    <FormControl className={classes.squadronFormControl}>
+                    {/*  <FormControl className={classes.squadronFormControl}>
                         <div className={classes.selectSquadronGrp}>
                             <div className={classes.selectSquadronLabel}>
                                 <label>Select a Squadron</label>
@@ -284,15 +282,16 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                             </Paper>
                         </Fade>
 
-                        {/*<FormHelperText></FormHelperText>*/}
-                    </FormControl>
-                    <Divider light variant="middle" className={classes.divider}/>
+                        <FormHelperText></FormHelperText>
+                    </FormControl>*/}
+                    <Typography align={"center"} variant={"h3"}>Upload Rosters</Typography>
+                    {/*<Divider light variant="middle" className={classes.divider}/>*/}
                     <Stepper activeStep={activeStep} orientation="vertical">
                         {steps.map((label, index) => (
                             <Step key={label}>
                                 <StepLabel>{label}</StepLabel>
                                 <StepContent>
-                                    <Typography>{getStepContent(index)}</Typography>
+                                    {/*<Typography>{getStepContent(index)}</Typography>*/}
                                     <div className={classes.actionsContainer}>
                                         <div>
                                             <Button
@@ -320,7 +319,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                     </Stepper>
                     {activeStep === steps.length && (
                         <Paper square elevation={0} className={classes.resetContainer}>
-                            <Typography>All steps completed - you&apos;re finished</Typography>
+                            <Typography>All rosters uploaded - you&apos;re finished</Typography>
                             <Button onClick={handleReset} className={classes.button}>
                                 Reset
                             </Button>

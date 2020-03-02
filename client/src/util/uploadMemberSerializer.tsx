@@ -13,7 +13,6 @@ export class UploadMemberDeserializer {
 
         if (items.map) {
             return items.map((item: any) => {
-                console.log(item.fullName);
                 return new UploadMemberModel(
                     convertToHash(item.sqid),
                     item.fullName,

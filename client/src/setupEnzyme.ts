@@ -10,6 +10,7 @@ import {FlightInitState} from "./store/flights";
 import {AETsInitState} from "./store/AETs";
 import {ShowModalInitState} from "./store/modals";
 import {GainingInitState} from "./store/gaining";
+import {ImportChangeInitState} from "./store/importChanges";
 configure({ adapter: new EnzymeAdapter() });
 
 
@@ -33,5 +34,6 @@ export const initStore: ApplicationState = {
     showModal: ShowModalInitState,
     members: MemberInitState,
     gaining: GainingInitState,
+    importChanges: ImportChangeInitState,
     router: initRouter,
 };

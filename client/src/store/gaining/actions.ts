@@ -13,4 +13,7 @@ export const gainingFetchSuccess = (payload: GainingModel[]) => action(
     GainingActionTypes.FETCH_SUCCESS, payload);
 export const gainingFetchError = (message: string) => action(GainingActionTypes.FETCH_ERROR, message);
 
+export const gainingPostRequest = () => action(GainingActionTypes.POST_SUCCESS);
+export const gainingPostError = (message: string) => action(GainingActionTypes.POST_ERROR, message);
+
 

@@ -1,8 +1,10 @@
 import {all, call, fork, put, takeEvery} from 'redux-saga/effects';
 import {MemberActionTypes} from './types';
-import {membersFetchError, membersFetchSuccess} from './actions';
+import {membersFetchError, membersFetchSuccess, membersPostError} from './actions';
 import {callApi} from '../../util/api';
 import FeedbackModel from "./FeedbackModel";
+import {membersPostSuccess} from "../importChanges";
+
 
 
 function* handleFetch() {
@@ -38,9 +40,15 @@ export function postFeedback(feedback: FeedbackModel) {
 export function saveMembersFromCsv(members: any) {
     try {
         // To call async functions, use redux-saga's `call()`.
-        callApi('POST', 'api/members/save', members);
-    } catch (err) {
-        console.log('An unknown error occured.');
+        console.log("calling api");
+        callApi('POST', 'api/members/save', members)
+            .then(res => {
+                console.log(res);
+                    membersPostSuccess(res);
+                }
+        );
+    } catch (e) {
+        membersPostError(e);
     }
 }
 
