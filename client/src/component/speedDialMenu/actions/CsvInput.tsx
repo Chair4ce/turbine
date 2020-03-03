@@ -1,5 +1,6 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
+import {useEffect} from "react";
 import {CircularProgress, Container, Fab} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
@@ -7,14 +8,17 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import {saveMembersFromCsv} from "../../../store/members/thunks";
 import {UploadMemberDeserializer} from "../../../util/uploadMemberSerializer";
 import classNames from "classnames";
 import UploadMemberModel from "../../../store/members/UploadMemberModel";
 import UploadGainingModel from "../../../store/gaining/UploadGainingModel";
 import {UploadGainingDeserializer} from "../../../util/uploadGainingDeserializer";
-import {saveGainingsFromCsv} from "../../../store/gaining/thunks";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import {CSVImportModel} from "../../../util/CSVImportModel";
+import ErrorIcon from '@material-ui/icons/Error';
+import {ApplicationState} from "../../../store";
+import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,7 +85,8 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-function csvJSON(csv: any) {
+function csvJSON(csv: any, type: string) {
+
     let lines = csv.split("\n");
     let result = [];
     if (lines[0].startsWith("FOR OFFICIAL USE ONLY")) {
@@ -93,8 +98,11 @@ function csvJSON(csv: any) {
     let commaRegex = /,(?=(?:[^"]*"[^"]*")*[^"]*$)/g;
     let quotesRegex = /^"(.*)"$/g;
     let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
+
+    const csvImportModel: CSVImportModel = new CSVImportModel(type, headers);
+    console.log(csvImportModel.missingHeaders);
     let CamelHeaders = convertHeader(headers);
-    console.log(CamelHeaders);
+
     for (let i = 1; i < lines.length; i++) {
         let obj: any = {};
         let currentline = lines[i].split(commaRegex);
@@ -104,8 +112,10 @@ function csvJSON(csv: any) {
         }
         result.push(obj);
     }
+     csvImportModel.json = result;
+
+    return csvImportModel;
     //return result; //JavaScript object
-    return result; //JSON
 }
 
 function snakeToCamel(str: string) {
@@ -117,6 +127,7 @@ function convertHeader(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
             if (obj[prop] === 'SSAN') {
+                console.log("Found SSAN, assigning to sqid");
                 obj[prop] = 'SQID'
             }
             if (obj[prop] === 'SPONSOR_SSAN') {
@@ -133,8 +144,8 @@ function convertHeader(obj: any) {
 
 
 interface Props {
-    squadron?: string
-    uploadType: string
+    squadron?: string;
+    uploadType: string;
 }
 
 
@@ -144,6 +155,11 @@ const CsvInput: React.FC<Props> = props => {
     const browseInputRef: any = React.createRef();
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
+    const [failure, setFailure] = React.useState(false);
+    const uploading = useSelector(({importChanges}: ApplicationState) => importChanges.membersLoading);
+    const membersPostErrors = useSelector(({importChanges}: ApplicationState) => importChanges.membersError);
+    const [missingGainingHeaders, setMissingGainingHeaders] = React.useState();
+    const [missingAlphaHeaders, setMissingAlphaHeaders] = React.useState();
     const timer = React.useRef<number>();
     const Dispatch = useDispatch();
 
@@ -155,21 +171,31 @@ const CsvInput: React.FC<Props> = props => {
         [classes.fileDropSuccess]: success,
     });
 
+
     React.useEffect(() => {
         return () => {
             clearTimeout(timer.current);
         };
     }, []);
 
+    // useEffect(() => {
+    //             setSuccess(false);
+    // }, [missingGainingHeaders, missingAlphaHeaders]);
+
+    useEffect(() => {
+        console.log("fired");
+        setSuccess(false);
+        setFailure(true);
+    }, [membersPostErrors]);
+
     const handleButtonClick = (e: any) => {
         if (!loading && !success) {
             setSuccess(false);
             setLoading(true);
             doUpload(e);
-            timer.current = setTimeout(() => {
-                setSuccess(true);
-                setLoading(false);
-            }, 2000);
+            // timer.current = setTimeout(() => {
+            //     setLoading(false);
+            // }, 3000);
         }
     };
 
@@ -198,29 +224,48 @@ const CsvInput: React.FC<Props> = props => {
 
                 reader.readAsText(file);
 
-                reader.onload = () => {
+                reader.onload = async () => {
                     let csv = reader.result;
                     if (csv !== null) {
                         if (typeof csv === "string") {
                             switch (props.uploadType) {
                                 case 'Gaining':
-                                    let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(csvJSON(csv));
-                                    Dispatch(saveGainingsFromCsv(gaining));
+                                    const gainingData: CSVImportModel = csvJSON(csv, props.uploadType);
+                                    if (gainingData.missingHeaders.length === 0) {
+                                        let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(gainingData.json);
+
+                                        await Dispatch(saveGainingsFromCsv(gaining));
+                                        setSuccess(true);
+                                    } else {
+                                        console.log("There are missing header in uploaded CSV: " + gainingData.missingHeaders);
+                                        setMissingGainingHeaders(gainingData.missingHeaders);
+                                        setSuccess(false);
+                                    }
                                     break;
                                 case 'Alpha':
-                                    let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
-                                    Dispatch(saveMembersFromCsv(members));
+                                    const alphaData: CSVImportModel = csvJSON(csv, props.uploadType);
+                                    if (alphaData.missingHeaders.length === 0) {
+                                        let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(alphaData.json);
+                                        await Dispatch(saveMembersFromCsv(members));
+                                        setSuccess(true);
+                                    } else {
+                                        console.log("There are missing header in uploaded CSV: " + alphaData.missingHeaders);
+                                        setMissingAlphaHeaders(alphaData.missingHeaders);
+                                        setSuccess(false);
+                                    }
                                     break;
                                 case 'UPMR':
                                     break;
                                 case 'Losing':
                                     break;
-                                default : break;
+                                default :
+                                    break;
                             }
                             // console.log('CSV: ', csv.substring(0, 3000) + '...');
                         }
                     }
                 };
+
             } else {
                 console.log("not a csv")
             }
@@ -254,7 +299,7 @@ const CsvInput: React.FC<Props> = props => {
                             ref={browseInputRef}
                         />
                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                            {(loading || success) &&
+                            {(uploading || success || !failure) &&
                             <div className={classes.wrapper}>
                                 <Fab
                                     aria-label="save"
@@ -263,16 +308,21 @@ const CsvInput: React.FC<Props> = props => {
                                 >
                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                 </Fab>
-                                {loading && <CircularProgress size={68} className={classes.fabProgress}/>}
+                                {uploading && <CircularProgress size={68} className={classes.fabProgress}/>}
                             </div>
                             }
-                            {(!loading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
+                            {(failure) &&
+                            <div className={classes.wrapper}>
+                                    <ErrorIcon/>
+                            </div>
+                            }
+                            {(!uploading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                                 className={classes.uploadIcon}/>}
-                            {(!loading && !success) &&
+                            {(!uploading && !success) &&
                             <span id="simple-modal-dialog"
                                   className={classes.fileDropDialog}>Drag and drop or</span>
                             }
-                            {(!loading && !success) &&
+                            {(!uploading && !success) &&
                             < Button variant={"outlined"} component={"span"} className={classes.button}>
                                 Browse
                             </Button>

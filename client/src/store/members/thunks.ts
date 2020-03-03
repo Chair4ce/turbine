@@ -1,8 +1,6 @@
-import {membersFetchError, membersFetchRequest, membersFetchSuccess, membersPostError} from './actions';
+import {membersFetchError, membersFetchRequest, membersFetchSuccess} from './actions';
 import {callApi} from '../../util/api';
 import FeedbackModel from "./FeedbackModel";
-import {membersPostSuccess} from "../importChanges";
-import UploadMemberModel from "./UploadMemberModel";
 
 
 export const getMembers = () => {
@@ -23,10 +21,4 @@ export const postFeedback = (feedback: FeedbackModel) => {
     };
 };
 
-export const saveMembersFromCsv = (members: UploadMemberModel[]) => {
-return (dispatch: any) => {
-        callApi('POST', 'api/members/save', members)
-            .then(res => dispatch(membersPostSuccess(res)))
-            .catch(e => dispatch(membersPostError(e)))
-    }
-};
+

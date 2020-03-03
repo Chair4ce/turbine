@@ -11,8 +11,6 @@ import {Modal} from "@material-ui/core";
 import {useDispatch} from "react-redux";
 import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
-import {membersFetchRequest} from "../../../store/members";
-import {gainingFetchRequest} from "../../../store/gaining";
 import {getMembers} from "../../../store/members/thunks";
 import {getGainingMembers} from "../../../store/gaining/thunks";
 
@@ -129,7 +127,7 @@ interface Props {
 
 
 const VerticalLinearStepper: React.FC<Props> = props => {
-    // const squadrons = useSelector(({squadrons}: ApplicationState) => squadrons.squadrons);
+
     const dispatch = useDispatch();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
