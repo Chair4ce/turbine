@@ -82,11 +82,16 @@ public class MemberController {
 
     private void logAndSaveChanges(Date date, Member importingMember, Member existingMember) {
         List<ImportMembersChangeLog> importMemberChanges = new ArrayList();
+        Boolean changed = false;
         for (String field : existingMember.compare(importingMember)) {
+            if (field.length() > 0) changed = true;
             importMemberChanges.add(new ImportMembersChangeLog(date, importingMember, existingMember, field));
         }
+
+        if(changed) {
         this.metricService.logMembersFieldChange(importMemberChanges);
         this.memberRepository.save(updateExistingMemberData(importingMember, existingMember));
+        }
     }
 
     private Member updateExistingMemberData(Member importingMember, Member existingMember) {

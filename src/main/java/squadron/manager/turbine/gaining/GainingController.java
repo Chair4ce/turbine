@@ -123,12 +123,15 @@ return existingGaining;
 
     private void logAndSaveChanges(Date date, Gaining importingGaining, Gaining existingGaining) {
         List<ImportGainingChangeLog> importGainingChanges = new ArrayList();
+        Boolean changed = false;
         for (String field : existingGaining.compare(importingGaining)) {
+            if (field.length() > 0) changed = true;
             importGainingChanges.add(new ImportGainingChangeLog(date, importingGaining, existingGaining, field));
         }
+        if (changed) {
         this.metricService.logGainingFieldChanges(importGainingChanges);
-
         this.gainingRepository.save(updateExistingGainingData(existingGaining, importingGaining));
+        }
     }
 
     private boolean notNull(Gaining existingGaining) {

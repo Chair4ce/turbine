@@ -198,12 +198,12 @@ public class Gaining {
         }
 
         try {
-            System.out.println(this.sponsorId + ":" + importingMember.sponsorId);
             if (!this.sponsorId.equals(importingMember.sponsorId))
-                System.out.println(this.sponsorId + ":" + importingMember.sponsorId);
                 diff.add("sponsorId");
         } catch (NullPointerException e) {
-            diff.add("sponsorId");
+            if (!(this.sponsorId == null && importingMember.sponsorId == null)) {
+                diff.add("sponsorId");
+            }
         }
 System.out.println(diff);
         return diff;

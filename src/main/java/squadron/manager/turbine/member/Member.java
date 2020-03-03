@@ -180,14 +180,18 @@ public class Member {
             if (!this.officeSymbol.equals(importingMember.officeSymbol))
                 diff.add("officeSymbol");
         } catch (NullPointerException e) {
+            if (!(this.officeSymbol == null && importingMember.officeSymbol == null)) {
             diff.add("officeSymbol");
+        }
         }
 
         try {
             if (!this.dutyTitle.equals(importingMember.dutyTitle))
                 diff.add("dutyTitle");
         } catch (NullPointerException e) {
-            diff.add("dutyTitle");
+            if (!(this.dutyTitle == null && importingMember.dutyTitle == null)) {
+                diff.add("dutyTitle");
+            }
         }
 
         try {
@@ -201,21 +205,27 @@ public class Member {
             if (!this.dutyPhone.equals(importingMember.dutyPhone))
                 diff.add("dutyPhone");
         } catch (NullPointerException e) {
+            if (!(this.dutyPhone == null && importingMember.dutyPhone == null)){
             diff.add("dutyPhone");
+            }
         }
 
         try {
             if (!this.supvName.equals(importingMember.supvName))
                 diff.add("supvName");
         } catch (NullPointerException e) {
+            if (!(this.supvName == null && importingMember.supvName == null)){
             diff.add("supvName");
+            }
         }
 
         try {
             if (!verifyDate(this.supvBeginDate).equals(verifyDate(importingMember.supvBeginDate)))
                 diff.add("supvBeginDate");
         } catch (NullPointerException e) {
+            if (!(this.supvBeginDate == null && importingMember.supvBeginDate == null)){
             diff.add("supvBeginDate");
+            }
         }
 
         try {
