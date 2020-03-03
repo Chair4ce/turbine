@@ -13,6 +13,8 @@ import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
 import {membersFetchRequest} from "../../../store/members";
 import {gainingFetchRequest} from "../../../store/gaining";
+import {getMembers} from "../../../store/members/thunks";
+import {getGainingMembers} from "../../../store/gaining/thunks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -91,7 +93,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-    return ['Gaining', 'Alpha', 'Losing', 'UPMR'];
+    return ['Alpha', 'Gaining', 'Losing', 'UPMR'];
 }
 
 // function getStepContent(step: number) {
@@ -182,8 +184,8 @@ const VerticalLinearStepper: React.FC<Props> = props => {
     // };
     const handleClose = () => {
         dispatch(toggleUploadModal(false));
-        dispatch(membersFetchRequest());
-        dispatch(gainingFetchRequest());
+        dispatch(getMembers());
+        dispatch(getGainingMembers());
         setOpen(false);
     };
 

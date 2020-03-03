@@ -9,6 +9,7 @@ interface Row {
     grade: string;
     dafsc: string;
     rnltd: Date | null;
+    sponsorId: string | null;
     projectedArrivalDate: Date | null;
     projectedBilletId: string | null;
     dateDepLastDutyStn: Date | null;
@@ -42,6 +43,7 @@ const GainingTable: React.FC<Props> = props => {
             {title: 'RNLTD', field: 'rnltd', type: 'date'},
             {title: 'Projected_Arrival', field: 'projectedArrivalDate', type: 'date'},
             {title: 'Projected_Billet', field: 'projectedBilletId'},
+            {title: 'Sponsor', field: 'sponsorId'},
             {title: 'Departed_Stn', field: 'dateDepLastDutyStn', type: 'date'},
             {title: 'losing PAS', field: 'losingPas'},
 
