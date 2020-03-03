@@ -7,9 +7,8 @@ import StepContent from '@material-ui/core/StepContent';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import {Divider, Modal} from "@material-ui/core";
-import {ApplicationState} from "../../../store";
-import {useDispatch, useSelector} from "react-redux";
+import {Modal} from "@material-ui/core";
+import {useDispatch} from "react-redux";
 import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
 import {membersFetchRequest} from "../../../store/members";
@@ -128,7 +127,7 @@ interface Props {
 
 
 const VerticalLinearStepper: React.FC<Props> = props => {
-    const squadrons = useSelector(({squadrons}: ApplicationState) => squadrons.squadrons);
+    // const squadrons = useSelector(({squadrons}: ApplicationState) => squadrons.squadrons);
     const dispatch = useDispatch();
     const classes = useStyles();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -136,28 +135,28 @@ const VerticalLinearStepper: React.FC<Props> = props => {
 
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
-    const [squadron, setSquadron] = React.useState('');
-    const [newPasCode, setNewPasCode] = React.useState('');
-    const [newSquadron, setNewSquadron] = React.useState('');
-    const [checked, setChecked] = React.useState(false);
-    const [sqInputError, setSqInputError] = React.useState(false);
-    const [pasCodeInputError, setPasCodeInputError] = React.useState(false);
-    const [errState, setErrState] = React.useState(false);
+    // const [squadron, setSquadron] = React.useState('');
+    // const [newPasCode, setNewPasCode] = React.useState('');
+    // const [newSquadron, setNewSquadron] = React.useState('');
+    // const [checked, setChecked] = React.useState(false);
+    // const [sqInputError, setSqInputError] = React.useState(false);
+    // const [pasCodeInputError, setPasCodeInputError] = React.useState(false);
+    // const [errState, setErrState] = React.useState(false);
 
-    React.useEffect(() => {
-        if (errState) {
-            if (newSquadron.length > 0) {
-                setSqInputError(false);
-            } else {
-                setSqInputError(true);
-            }
-            if (newPasCode.length === 8) {
-                setPasCodeInputError(false);
-            } else {
-                setPasCodeInputError(true);
-            }
-        }
-    }, [newPasCode, newSquadron, errState]);
+    // React.useEffect(() => {
+    //     if (errState) {
+    //         if (newSquadron.length > 0) {
+    //             setSqInputError(false);
+    //         } else {
+    //             setSqInputError(true);
+    //         }
+    //         if (newPasCode.length === 8) {
+    //             setPasCodeInputError(false);
+    //         } else {
+    //             setPasCodeInputError(true);
+    //         }
+    //     }
+    // }, [newPasCode, newSquadron, errState]);
 
     // const timer = React.useRef<number>();
 
@@ -310,7 +309,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                             </Button>
                                         </div>
-                                        <CsvInput squadron={squadron} uploadType={label}/>
+                                        <CsvInput uploadType={label}/>
                                     </div>
                                 </StepContent>
                             </Step>

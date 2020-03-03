@@ -20,6 +20,7 @@ export enum GainingActionTypes {
     FETCH_ERROR = '@@gaining/FETCH_ERROR',
     POST_SUCCESS = '@@gaining/POST_SUCCESS',
     POST_ERROR = '@@gaining/POST_ERROR',
+    POST_REQUEST = '@@gaining/POST_REQUEST',
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.

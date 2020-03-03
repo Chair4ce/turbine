@@ -1,4 +1,3 @@
-import MemberModel from "../store/members/MemberModel";
 import moment from "moment";
 import ImportChangeModel from "../store/importChanges/ImportChangeModel";
 

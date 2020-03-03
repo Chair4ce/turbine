@@ -19,6 +19,7 @@ export enum MemberActionTypes {
     FETCH_SUCCESS = '@@members/FETCH_SUCCESS',
     FETCH_ERROR = '@@members/FETCH_ERROR',
     POST_ERROR = '@@members/POST_ERROR',
+    POST_REQUEST = '@@members/POST_REQUEST',
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.

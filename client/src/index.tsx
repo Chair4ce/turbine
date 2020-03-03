@@ -14,7 +14,7 @@ import 'typeface-ibm-plex-sans';
 const history = createBrowserHistory();
 
 const initialState = window.INITIAL_REDUX_STATE;
-const store = configureStore(history, initialState);
+export const store = configureStore(history, initialState);
 
 ReactDOM.render(<Main store={store} history={history} />, document.getElementById('root'));
 

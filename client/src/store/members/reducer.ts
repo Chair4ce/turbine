@@ -26,6 +26,12 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
         case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };
         }
+        case MemberActionTypes.POST_REQUEST: {
+            return {
+                ...state,
+                loading: true
+            };
+        }
         default: {
             return state;
         }

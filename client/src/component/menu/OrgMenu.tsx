@@ -8,13 +8,13 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {ApplicationState} from "../../store";
 import SendIcon from '@material-ui/icons/Send';
 import {connect} from "react-redux";
-import FlightModel from "../../store/flights/FlightModel";
+// import FlightModel from "../../store/flights/FlightModel";
 import {Box, ListItemIcon, Paper} from "@material-ui/core";
 import SubList from "./SubList";
 
 interface PropsFromState {
     squadrons: SquadronModel[];
-    flights: FlightModel[];
+    flights: [];
     isLoading: boolean;
     hasErrors: string | undefined;
     className?: string;
@@ -102,11 +102,10 @@ const OrgMenu: React.FC<AllProps> = props => {
     );
 };
 
-const mapStateToProps = ({squadrons, flights}: ApplicationState) => ({
+const mapStateToProps = ({squadrons}: ApplicationState) => ({
     isLoading: squadrons.loading,
     hasErrors: squadrons.errors,
     squadrons: squadrons.squadrons,
-    flights: flights.flights
 });
 
 const mapDispatchToProps = {

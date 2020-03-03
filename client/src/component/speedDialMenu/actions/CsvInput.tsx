@@ -7,13 +7,14 @@ import clsx from 'clsx';
 import {green} from "@material-ui/core/colors";
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
-import {saveMembersFromCsv} from "../../../store/members/sagas";
+import {saveMembersFromCsv} from "../../../store/members/thunks";
 import {UploadMemberDeserializer} from "../../../util/uploadMemberSerializer";
 import classNames from "classnames";
 import UploadMemberModel from "../../../store/members/UploadMemberModel";
 import UploadGainingModel from "../../../store/gaining/UploadGainingModel";
 import {UploadGainingDeserializer} from "../../../util/uploadGainingDeserializer";
-import {saveGainingsFromCsv} from "../../../store/gaining/sagas";
+import {saveGainingsFromCsv} from "../../../store/gaining/thunks";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -144,6 +145,7 @@ const CsvInput: React.FC<Props> = props => {
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const timer = React.useRef<number>();
+    const Dispatch = useDispatch();
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
@@ -203,13 +205,11 @@ const CsvInput: React.FC<Props> = props => {
                             switch (props.uploadType) {
                                 case 'Gaining':
                                     let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(csvJSON(csv));
-                                    console.log(gaining);
-                                    saveGainingsFromCsv(gaining);
+                                    Dispatch(saveGainingsFromCsv(gaining));
                                     break;
                                 case 'Alpha':
                                     let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(csvJSON(csv));
-                                    console.log(members);
-                                    saveMembersFromCsv(members);
+                                    Dispatch(saveMembersFromCsv(members));
                                     break;
                                 case 'UPMR':
                                     break;

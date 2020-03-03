@@ -24,14 +24,14 @@ import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
 import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
-import {squadronsFetchRequest} from "../../store/squadrons";
 import SpeedDialBtn, {CALLBACK_ENUMS} from "../../component/speedDialMenu/SpeedDialBtn";
-import {membersFetchRequest} from "../../store/members";
 import VerticalLinearStepper from "../../component/speedDialMenu/actions/VerticalLinearStepper";
 import {toggleUploadModal} from "../../store/modals";
 import FeedbackInput from "../../component/feedBack/Feedback";
 import GainingTable from "../../component/materialTable/GainingTable";
-import {gainingFetchRequest} from "../../store/gaining";
+import {getMembers} from "../../store/members/thunks";
+import {getGainingMembers} from "../../store/gaining/thunks";
+import {getSquadrons} from "../../store/squadrons/thunks";
 
 interface Props{
     className?: string;
@@ -58,9 +58,9 @@ const MemberDashboard: React.FC<Props> = props => {
     // const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
 
     useEffect(() => {
-        dispatch(membersFetchRequest());
-        dispatch(squadronsFetchRequest());
-        dispatch(gainingFetchRequest());
+        dispatch(getMembers());
+        dispatch(getSquadrons());
+        dispatch(getGainingMembers());
     }, [dispatch]);
 
     const handleAlphaBtnClick = () => {

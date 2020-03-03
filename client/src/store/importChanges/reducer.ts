@@ -19,8 +19,6 @@ const reducer: Reducer<ImportChangesState> = (state = initialState, action) => {
             return { ...state, gainingImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
         }
         case ImportChangesActionTypes.POST_MEMBER_SUCCESS: {
-
-            console.log(ImportChangesDeserializer.deserialize(action.payload));
             return { ...state, memberImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
         }
         default: {

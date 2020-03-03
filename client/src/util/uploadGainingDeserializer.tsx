@@ -13,7 +13,6 @@ export class UploadGainingDeserializer {
 
         if (items.map) {
             return items.map((item: any) => {
-                console.log(item.fullName);
                 return new UploadGainingModel(
                     convertToHash(item.sqid),
                     item.fullName,

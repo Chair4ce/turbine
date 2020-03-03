@@ -26,6 +26,18 @@ const reducer: Reducer<GainingState> = (state = initialState, action) => {
         case GainingActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };
         }
+        case GainingActionTypes.POST_REQUEST: {
+            return {
+                ...state,
+                loading: true
+            };
+        }
+        case GainingActionTypes.POST_SUCCESS: {
+            return {
+                ...state,
+                loading: false
+            };
+        }
         default: {
             return state;
         }

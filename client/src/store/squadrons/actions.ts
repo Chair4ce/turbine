@@ -12,8 +12,8 @@ export const squadronsFetchRequest = () => action(SquadronActionTypes.FETCH_REQU
 export const squadronsFetchSuccess = (payload: SquadronModel[]) => action(SquadronActionTypes.FETCH_SUCCESS, payload);
 export const squadronsFetchError = (message: string) => action(SquadronActionTypes.FETCH_ERROR, message);
 
-export const squadronPostRequest = (data: SquadronModel) => action(SquadronActionTypes.POST_REQUEST, data);
-export const squadronPostSuccess = () => action(SquadronActionTypes.POST_SUCCESS);
+export const squadronPostSuccess = (data: SquadronModel) => action(SquadronActionTypes.POST_REQUEST, data);
+export const squadronPostRequest = () => action(SquadronActionTypes.POST_SUCCESS);
 export const squadronPostError = (message: string) => action(SquadronActionTypes.POST_ERROR, message);
 
 export const showSquadronInput = () => action(SquadronActionTypes.SHOW_INPUT);
