@@ -15,8 +15,9 @@ import UploadGainingModel from "../../../store/gaining/UploadGainingModel";
 import {UploadGainingDeserializer} from "../../../util/uploadGainingDeserializer";
 import {useDispatch, useSelector} from "react-redux";
 import {CSVImportModel} from "../../../util/CSVImportModel";
-import ErrorIcon from '@material-ui/icons/Error';
+
 import {ApplicationState} from "../../../store";
+import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
 
 
@@ -127,7 +128,6 @@ function convertHeader(obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
             if (obj[prop] === 'SSAN') {
-                console.log("Found SSAN, assigning to sqid");
                 obj[prop] = 'SQID'
             }
             if (obj[prop] === 'SPONSOR_SSAN') {
@@ -153,15 +153,16 @@ const CsvInput: React.FC<Props> = props => {
 
     const classes = useStyles();
     const browseInputRef: any = React.createRef();
-    const [loading, setLoading] = React.useState(false);
-    const [success, setSuccess] = React.useState(false);
-    const [failure, setFailure] = React.useState(false);
-    const uploading = useSelector(({importChanges}: ApplicationState) => importChanges.membersLoading);
-    const membersPostErrors = useSelector(({importChanges}: ApplicationState) => importChanges.membersError);
-    const [missingGainingHeaders, setMissingGainingHeaders] = React.useState();
-    const [missingAlphaHeaders, setMissingAlphaHeaders] = React.useState();
     const timer = React.useRef<number>();
     const Dispatch = useDispatch();
+
+    const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
+    const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
+    const errors = useSelector(({importChanges}: ApplicationState) => importChanges.errors);
+
+
+    const [missingHeaders, setMissingHeaders] = React.useState();
+    const [missingAlphaHeaders, setMissingAlphaHeaders] = React.useState();
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
@@ -182,19 +183,14 @@ const CsvInput: React.FC<Props> = props => {
     //             setSuccess(false);
     // }, [missingGainingHeaders, missingAlphaHeaders]);
 
-    useEffect(() => {
-        console.log("fired");
-        setSuccess(false);
-        setFailure(true);
-    }, [membersPostErrors]);
+
 
     const handleButtonClick = (e: any) => {
         if (!loading && !success) {
-            setSuccess(false);
-            setLoading(true);
+            setMissingHeaders(null);
             doUpload(e);
             // timer.current = setTimeout(() => {
-            //     setLoading(false);
+            //     setSuccess(false);
             // }, 3000);
         }
     };
@@ -218,7 +214,6 @@ const CsvInput: React.FC<Props> = props => {
         if (file) {
             let fileName = file.name;
             if (fileName.toLowerCase().endsWith('csv')) {
-                // let input = document.querySelector('#raised-button-file')! as HTMLInputElement;
 
                 const reader = new FileReader();
 
@@ -233,13 +228,11 @@ const CsvInput: React.FC<Props> = props => {
                                     const gainingData: CSVImportModel = csvJSON(csv, props.uploadType);
                                     if (gainingData.missingHeaders.length === 0) {
                                         let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(gainingData.json);
-
                                         await Dispatch(saveGainingsFromCsv(gaining));
-                                        setSuccess(true);
                                     } else {
-                                        console.log("There are missing header in uploaded CSV: " + gainingData.missingHeaders);
-                                        setMissingGainingHeaders(gainingData.missingHeaders);
-                                        setSuccess(false);
+                                        setMissingHeaders(gainingData.missingHeaders.map((h: string) => {
+                                            return (h + ", ");
+                                        }));
                                     }
                                     break;
                                 case 'Alpha':
@@ -247,11 +240,8 @@ const CsvInput: React.FC<Props> = props => {
                                     if (alphaData.missingHeaders.length === 0) {
                                         let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(alphaData.json);
                                         await Dispatch(saveMembersFromCsv(members));
-                                        setSuccess(true);
                                     } else {
-                                        console.log("There are missing header in uploaded CSV: " + alphaData.missingHeaders);
-                                        setMissingAlphaHeaders(alphaData.missingHeaders);
-                                        setSuccess(false);
+                                        setMissingHeaders(alphaData.missingHeaders);
                                     }
                                     break;
                                 case 'UPMR':
@@ -295,34 +285,42 @@ const CsvInput: React.FC<Props> = props => {
                             id="raised-button-file"
                             multiple
                             type="file"
-                            onChange={handleButtonClick}
+                            onChange={(e) => {
+                                const { target } = e;
+                                if(target.value.length > 0){
+                                    handleButtonClick(e)
+                                } else {
+                                }
+                            }}
                             ref={browseInputRef}
                         />
                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                            {(uploading || success || !failure) &&
+                            {(loading || success) &&
                             <div className={classes.wrapper}>
                                 <Fab
                                     aria-label="save"
                                     color="primary"
                                     className={buttonClassname}
                                 >
-                                    {success ? <CheckIcon/> : <SaveIcon/>}
+                                    {success ? <CheckIcon/> : errors ? <ErrorOutlineOutlinedIcon/> : <SaveIcon/>}
                                 </Fab>
-                                {uploading && <CircularProgress size={68} className={classes.fabProgress}/>}
+                                    {(loading && !errors) && <CircularProgress size={68} className={classes.fabProgress}/>}
                             </div>
                             }
-                            {(failure) &&
-                            <div className={classes.wrapper}>
-                                    <ErrorIcon/>
-                            </div>
-                            }
-                            {(!uploading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
+                            {!success && <div>
+                                {missingHeaders ? "The file is missing the following required headers: " + missingHeaders.map((h: any)=> {
+                                    return " " + h;
+                                }) + "| please add them and try uploading again": errors}
+                            </div>}
+
+
+                            {(!loading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                                 className={classes.uploadIcon}/>}
-                            {(!uploading && !success) &&
+                            {(!loading && !success) &&
                             <span id="simple-modal-dialog"
                                   className={classes.fileDropDialog}>Drag and drop or</span>
                             }
-                            {(!uploading && !success) &&
+                            {(!loading && !success) &&
                             < Button variant={"outlined"} component={"span"} className={classes.button}>
                                 Browse
                             </Button>

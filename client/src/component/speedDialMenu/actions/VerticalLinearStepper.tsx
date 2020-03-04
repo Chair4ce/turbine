@@ -13,6 +13,7 @@ import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
 import {getMembers} from "../../../store/members/thunks";
 import {getGainingMembers} from "../../../store/gaining/thunks";
+import {resetImportError, setImportLoading} from "../../../store/importChanges";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -215,9 +216,12 @@ const VerticalLinearStepper: React.FC<Props> = props => {
 
     const handleNext = () => {
         setActiveStep(prevActiveStep => prevActiveStep + 1);
+        dispatch(setImportLoading(false));
+        dispatch(resetImportError);
     };
 
     const handleBack = () => {
+
         setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
 

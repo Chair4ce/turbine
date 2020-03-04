@@ -8,41 +8,48 @@ import {MemberActionTypes} from "../members";
 // Type-safe initialState!
 export const initialState: ImportChangesState = {
     gainingImportChanges: [] as ImportChangeModel[],
-    gainingLoading: false,
     memberImportChanges: [] as ImportChangeModel[],
-    membersLoading: false,
-    membersError: "",
-    gainingError: "",
+    loading: false,
+    success: undefined,
+    errors: "",
 };
 
 // Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
 // everything will remain type-safe.
 const reducer: Reducer<ImportChangesState> = (state = initialState, action) => {
     switch (action.type) {
-
         case ImportChangesActionTypes.POST_GAINING_SUCCESS: {
-            return { ...state, gainingLoading: false, gainingImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
+            return { ...state, success: true, loading: false, gainingImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
         }
         case ImportChangesActionTypes.POST_MEMBERS_SUCCESS: {
-            return { ...state, membersLoading: false, memberImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
+            return { ...state, success: true, loading: false, memberImportChanges: ImportChangesDeserializer.deserialize(action.payload) };
         }
-        case ImportChangesActionTypes.POST_MEMBERS_REQUEST: {
+        case ImportChangesActionTypes.IMPORT_LOADING: {
             return {
                 ...state,
-                membersLoading: true
+                loading: true
             };
         }
-        case ImportChangesActionTypes.POST_GAINING_REQUEST: {
+        case ImportChangesActionTypes.SET_IMPORT_LOADING: {
             return {
                 ...state,
-                gainingLoading: true
+                success: undefined,
+                loading: action.payload
             };
         }
-        case ImportChangesActionTypes.POST_MEMBERS_ERROR: {
-            return { ...state, membersLoading: false, membersError: action.payload };
+        case ImportChangesActionTypes.RESET_IMPORT_ERROR: {
+            return {
+                ...state,
+                errors: ""
+            };
         }
-        case ImportChangesActionTypes.POST_GAINING_ERROR: {
-            return { ...state, loading: false, gainingError: action.payload };
+        case ImportChangesActionTypes.IMPORT_ERROR: {
+            return {
+                ...state,
+                loading: false,
+                success: false,
+                errors: action.payload
+            };
         }
         default: {
             return state;

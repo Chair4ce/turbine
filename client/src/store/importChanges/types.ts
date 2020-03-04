@@ -12,10 +12,10 @@ import ImportChangeModel from "./ImportChangeModel";
 export enum ImportChangesActionTypes {
     POST_GAINING_SUCCESS = '@@importChanges/POST_GAINING_SUCCESS',
     POST_MEMBERS_SUCCESS = '@@importChanges/POST_MEMBER_SUCCESS',
-    POST_MEMBERS_REQUEST = '@@importChanges/POST_MEMBER_REQUEST',
-    POST_GAINING_REQUEST = '@@importChanges/POST_GAINING_REQUEST',
-    POST_GAINING_ERROR = '@@importChanges/POST_GAINING_ERROR',
-    POST_MEMBERS_ERROR = '@@importChanges/POST_MEMBERS_ERROR'
+    IMPORT_LOADING = '@@importChanges/IMPORT_LOADING',
+    SET_IMPORT_LOADING = '@@importChanges/SET_IMPORT_LOADING',
+    IMPORT_ERROR = '@@importChanges/IMPORT_ERROR',
+    RESET_IMPORT_ERROR = '@@importChanges/SET_IMPORT_ERROR',
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.
@@ -23,8 +23,7 @@ export enum ImportChangesActionTypes {
 export interface ImportChangesState {
     readonly gainingImportChanges: ImportChangeModel[];
     readonly memberImportChanges: ImportChangeModel[];
-    readonly gainingLoading: boolean;
-    readonly membersLoading: boolean;
-    readonly gainingError?: string;
-    readonly membersError?: string;
+    readonly loading: boolean;
+    readonly errors?: string;
+    readonly success?: boolean | undefined;
 }
