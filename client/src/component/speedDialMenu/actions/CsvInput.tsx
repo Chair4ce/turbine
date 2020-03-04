@@ -1,6 +1,5 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
-import {useEffect} from "react";
 import {CircularProgress, Container, Fab} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
@@ -15,12 +14,10 @@ import UploadGainingModel from "../../../store/gaining/UploadGainingModel";
 import {UploadGainingDeserializer} from "../../../util/uploadGainingDeserializer";
 import {useDispatch, useSelector} from "react-redux";
 import {CSVImportModel} from "../../../util/CSVImportModel";
-
+import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import {ApplicationState} from "../../../store";
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
-import Grow from "@material-ui/core/Grow";
-import Box from "@material-ui/core/Box";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -46,9 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
 
         uploadIcon: {},
-        fileDropDialog: {
-
-        },
+        fileDropDialog: {},
         uploadButtonGrp: {
             width: '50%',
             height: '50%',
@@ -95,9 +90,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         missingHeaderMsg: {
             width: '100%',
-            display: 'block',
-            top: 20,
-            position: 'absolute',
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+        },
+        alertIcon: {
+            margin: theme.spacing(1),
         }
     }),
 );
@@ -310,11 +310,12 @@ const CsvInput: React.FC<Props> = props => {
                 />
                 <label htmlFor="raised-button-file" className={classes.fileDropContents}>
                     {!success &&
-                        <div className={classes.missingHeaderMsg}>
-                            {missingHeaders ? "File is missing required headers: " + missingHeaders.map((h: any) => {
-                                return " " + h;
-                            }) + " Please make sure you are uploading the correct roster for: " + props.uploadType : errors}
-                        </div>
+                    <div className={classes.missingHeaderMsg}>
+                        {missingHeaders ? <WarningRoundedIcon fontSize={"large"} color={"primary"} className={classes.alertIcon}/> : ""}
+                        {missingHeaders ? "File is missing required headers: " + missingHeaders.map((h: any) => {
+                            return " " + h;
+                        }) + ". Please make sure you are uploading the correct roster for: " + props.uploadType : errors}
+                    </div>
                     }
                     {(loading || success) &&
                     <div className={classes.wrapper}>
@@ -330,12 +331,12 @@ const CsvInput: React.FC<Props> = props => {
                     }
 
                     {(!loading && !success) && <div className={classes.uploadButtonGrp}>
-                     <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>
-                    <span id="simple-modal-dialog"
-                          className={classes.fileDropDialog}>Drag and drop</span>
-                    < Button variant={"outlined"} component={"span"} className={classes.button}>
-                        Browse
-                    </Button>
+                        <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>
+                        <span id="simple-modal-dialog"
+                              className={classes.fileDropDialog}>Drag and drop</span>
+                        < Button variant={"outlined"} component={"span"} className={classes.button}>
+                            Browse
+                        </Button>
                     </div>}
                 </label>
             </Container>

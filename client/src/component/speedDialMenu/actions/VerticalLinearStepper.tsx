@@ -14,7 +14,6 @@ import CsvInput from "./CsvInput";
 import {getMembers} from "../../../store/members/thunks";
 import {getGainingMembers} from "../../../store/gaining/thunks";
 import {resetImportError, setImportLoading} from "../../../store/importChanges";
-import clsx from "clsx";
 import {ApplicationState} from "../../../store";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -98,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-    return ['Alpha', 'Gaining', 'Losing', 'UPMR'];
+    return ['Alpha', 'Gaining'];
 }
 
 // function getStepContent(step: number) {
