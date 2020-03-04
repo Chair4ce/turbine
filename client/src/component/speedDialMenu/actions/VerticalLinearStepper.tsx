@@ -8,12 +8,14 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import {Modal} from "@material-ui/core";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {toggleUploadModal} from "../../../store/modals";
 import CsvInput from "./CsvInput";
 import {getMembers} from "../../../store/members/thunks";
 import {getGainingMembers} from "../../../store/gaining/thunks";
 import {resetImportError, setImportLoading} from "../../../store/importChanges";
+import clsx from "clsx";
+import {ApplicationState} from "../../../store";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -87,6 +89,10 @@ const useStyles = makeStyles((theme: Theme) =>
         divider: {
             margin: theme.spacing(5)
         },
+        nextBtnLoading: {
+            marginTop: theme.spacing(1),
+            marginRight: theme.spacing(1),
+        }
 
     }),
 );
@@ -136,6 +142,9 @@ const VerticalLinearStepper: React.FC<Props> = props => {
 
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
+
+    const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
+
     // const [squadron, setSquadron] = React.useState('');
     // const [newPasCode, setNewPasCode] = React.useState('');
     // const [newSquadron, setNewSquadron] = React.useState('');
@@ -143,6 +152,9 @@ const VerticalLinearStepper: React.FC<Props> = props => {
     // const [sqInputError, setSqInputError] = React.useState(false);
     // const [pasCodeInputError, setPasCodeInputError] = React.useState(false);
     // const [errState, setErrState] = React.useState(false);
+
+
+
 
     // React.useEffect(() => {
     //     if (errState) {
@@ -298,13 +310,14 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                                     <div className={classes.actionsContainer}>
                                         <div>
                                             <Button
-                                                disabled={activeStep === 0}
+                                                disabled={activeStep === 0 || loading}
                                                 onClick={handleBack}
                                                 className={classes.button}
                                             >
                                                 Back
                                             </Button>
                                             <Button
+                                                disabled={loading}
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={handleNext}

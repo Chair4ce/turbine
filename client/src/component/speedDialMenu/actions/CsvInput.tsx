@@ -19,6 +19,8 @@ import {CSVImportModel} from "../../../util/CSVImportModel";
 import {ApplicationState} from "../../../store";
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
+import Grow from "@material-ui/core/Grow";
+import Box from "@material-ui/core/Box";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,17 +40,25 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             height: '100%',
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
         },
 
         uploadIcon: {},
         fileDropDialog: {
-            marginLeft: 20,
+
+        },
+        uploadButtonGrp: {
+            width: '50%',
+            height: '50%',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-around',
+            alignItems: 'center',
         },
         button: {
             fontWeight: 'bold',
-            marginLeft: 10,
         },
         wrapper: {
             margin: theme.spacing(1),
@@ -82,6 +92,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         fileDropSuccess: {
             pointerEvents: 'none',
+        },
+        missingHeaderMsg: {
+            width: '100%',
+            display: 'block',
+            top: 20,
+            position: 'absolute',
         }
     }),
 );
@@ -94,7 +110,8 @@ function csvJSON(csv: any, type: string) {
         lines.shift();
         lines.shift();
         lines.pop();
-    };
+    }
+    ;
 
     let commaRegex = /,(?=(?:[^"]*"[^"]*")*[^"]*$)/g;
     let quotesRegex = /^"(.*)"$/g;
@@ -113,7 +130,7 @@ function csvJSON(csv: any, type: string) {
         }
         result.push(obj);
     }
-     csvImportModel.json = result;
+    csvImportModel.json = result;
 
     return csvImportModel;
     //return result; //JavaScript object
@@ -140,9 +157,6 @@ function convertHeader(obj: any) {
 }
 
 
-
-
-
 interface Props {
     squadron?: string;
     uploadType: string;
@@ -162,7 +176,6 @@ const CsvInput: React.FC<Props> = props => {
 
 
     const [missingHeaders, setMissingHeaders] = React.useState();
-    const [missingAlphaHeaders, setMissingAlphaHeaders] = React.useState();
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
@@ -171,6 +184,10 @@ const CsvInput: React.FC<Props> = props => {
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
     });
+
+    // const missingHeaderMsg = clsx({
+    //     [classes.missingHeaderMsg]: !success,
+    // });
 
 
     React.useEffect(() => {
@@ -184,7 +201,6 @@ const CsvInput: React.FC<Props> = props => {
     // }, [missingGainingHeaders, missingAlphaHeaders]);
 
 
-
     const handleButtonClick = (e: any) => {
         if (!loading && !success) {
             setMissingHeaders(null);
@@ -195,7 +211,7 @@ const CsvInput: React.FC<Props> = props => {
         }
     };
 
-    function doUpload(e: any){
+    function doUpload(e: any) {
 
         e.preventDefault();
         let formData = new FormData();
@@ -230,9 +246,7 @@ const CsvInput: React.FC<Props> = props => {
                                         let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(gainingData.json);
                                         await Dispatch(saveGainingsFromCsv(gaining));
                                     } else {
-                                        setMissingHeaders(gainingData.missingHeaders.map((h: string) => {
-                                            return (h + ", ");
-                                        }));
+                                        setMissingHeaders(gainingData.missingHeaders);
                                     }
                                     break;
                                 case 'Alpha':
@@ -267,66 +281,64 @@ const CsvInput: React.FC<Props> = props => {
 
     return (
         <div className={classes.root}>
-                    <Container className={classNames(classes.fileDropArea, FileDropClassname)}
-                               onDragEnter={(e: any) => {
-                                   let evt = e as Event;
-                                   evt.preventDefault();
-                               }}
-                               onDragOver={(e: any) => {
-                                   let evt = e as Event;
-                                   evt.preventDefault();
-                               }}
-                               onDrop={handleButtonClick}
-                    >
-                        <input
-                            accept="text/csv/*"
-                            className={classes.input}
-                            style={{display: 'none'}}
-                            id="raised-button-file"
-                            multiple
-                            type="file"
-                            onChange={(e) => {
-                                const { target } = e;
-                                if(target.value.length > 0){
-                                    handleButtonClick(e)
-                                } else {
-                                }
-                            }}
-                            ref={browseInputRef}
-                        />
-                        <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                            {(loading || success) &&
-                            <div className={classes.wrapper}>
-                                <Fab
-                                    aria-label="save"
-                                    color="primary"
-                                    className={buttonClassname}
-                                >
-                                    {success ? <CheckIcon/> : errors ? <ErrorOutlineOutlinedIcon/> : <SaveIcon/>}
-                                </Fab>
-                                    {(loading && !errors) && <CircularProgress size={68} className={classes.fabProgress}/>}
-                            </div>
-                            }
-                            {!success && <div>
-                                {missingHeaders ? "The file is missing the following required headers: " + missingHeaders.map((h: any)=> {
-                                    return " " + h;
-                                }) + "| please add them and try uploading again": errors}
-                            </div>}
+            <Container className={classNames(classes.fileDropArea, FileDropClassname)}
+                       onDragEnter={(e: any) => {
+                           let evt = e as Event;
+                           evt.preventDefault();
+                       }}
+                       onDragOver={(e: any) => {
+                           let evt = e as Event;
+                           evt.preventDefault();
+                       }}
+                       onDrop={handleButtonClick}
+            >
+                <input
+                    accept="text/csv/*"
+                    className={classes.input}
+                    style={{display: 'none'}}
+                    id="raised-button-file"
+                    multiple
+                    type="file"
+                    onChange={(e) => {
+                        const {target} = e;
+                        if (target.value.length > 0) {
+                            handleButtonClick(e)
+                        } else {
+                        }
+                    }}
+                    ref={browseInputRef}
+                />
+                <label htmlFor="raised-button-file" className={classes.fileDropContents}>
+                    {!success &&
+                        <div className={classes.missingHeaderMsg}>
+                            {missingHeaders ? "File is missing required headers: " + missingHeaders.map((h: any) => {
+                                return " " + h;
+                            }) + " Please make sure you are uploading the correct roster for: " + props.uploadType : errors}
+                        </div>
+                    }
+                    {(loading || success) &&
+                    <div className={classes.wrapper}>
+                        <Fab
+                            aria-label="save"
+                            color="primary"
+                            className={buttonClassname}
+                        >
+                            {success ? <CheckIcon/> : errors ? <ErrorOutlineOutlinedIcon/> : <SaveIcon/>}
+                        </Fab>
+                        {(loading && !errors) && <CircularProgress size={68} className={classes.fabProgress}/>}
+                    </div>
+                    }
 
-
-                            {(!loading && !success) && <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
-                                                                                className={classes.uploadIcon}/>}
-                            {(!loading && !success) &&
-                            <span id="simple-modal-dialog"
-                                  className={classes.fileDropDialog}>Drag and drop or</span>
-                            }
-                            {(!loading && !success) &&
-                            < Button variant={"outlined"} component={"span"} className={classes.button}>
-                                Browse
-                            </Button>
-                            }
-                        </label>
-                    </Container>
+                    {(!loading && !success) && <div className={classes.uploadButtonGrp}>
+                     <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>
+                    <span id="simple-modal-dialog"
+                          className={classes.fileDropDialog}>Drag and drop</span>
+                    < Button variant={"outlined"} component={"span"} className={classes.button}>
+                        Browse
+                    </Button>
+                    </div>}
+                </label>
+            </Container>
         </div>
     );
 };
