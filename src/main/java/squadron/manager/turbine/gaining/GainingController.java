@@ -1,7 +1,10 @@
 package squadron.manager.turbine.gaining;
 
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import squadron.manager.turbine.feedback.Feedback;
+import squadron.manager.turbine.feedback.FeedbackJSON;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
@@ -14,6 +17,7 @@ import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -31,16 +35,60 @@ public class GainingController {
     @Autowired
     private MetricService metricService;
 
-
     @Autowired
     private ImportGainingChangeLogRepository importGainingChangeLogRepository;
-
 
     @CrossOrigin
     @GetMapping
     public @ResponseBody
     Iterable<Gaining> getGaining() {
         return this.gainingRepository.findAll();
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/delete")
+    public List<Gaining> create(@Valid @RequestBody Long id) {
+        System.out.println("Deleting: " + id);
+        gainingRepository.deleteById(id);
+        return gainingRepository.findAll();
+    }
+
+    @CrossOrigin
+    @PostMapping(path = "/update")
+    public List<Gaining> create(@Valid @RequestBody GainingJSON gaining) {
+        Gaining oldData = gainingRepository.findBySqid(gaining.getSqid());
+        System.out.println("Updating: " + gaining);
+        Date date = new Date();
+        Gaining updatedGaining = new Gaining(
+                gaining.getSqid(),
+                gaining.getFullName(),
+                gaining.getFirstName(),
+                gaining.getLastName(),
+                gaining.getRnltd(),
+                gaining.getGrade(),
+                gaining.getGainingPas(),
+                gaining.getDafsc(),
+                gaining.getDor(),
+                gaining.getDateDepLastDutyStn(),
+                gaining.getSponsorId(),
+                gaining.getLosingPas(),
+                date
+        );
+
+        oldData.setFullName(updatedGaining.getFullName());
+        oldData.setFirstName(updatedGaining.getFirstName());
+        oldData.setLastName(updatedGaining.getLastName());
+        oldData.setRnltd(updatedGaining.getRnltd());
+        oldData.setGrade(updatedGaining.getGrade());
+        oldData.setGainingPas(updatedGaining.getGainingPas());
+        oldData.setDafsc(updatedGaining.getDafsc());
+        oldData.setDor(updatedGaining.getDor());
+        oldData.setDateDepLastDutyStn(updatedGaining.getDateDepLastDutyStn());
+        oldData.setSponsorId(updatedGaining.getSponsorId());
+        oldData.setLosingPas(updatedGaining.getLosingPas());
+        oldData.setLastUpdated(new Date());
+        gainingRepository.save(oldData);
+        return gainingRepository.findAll();
     }
 
     @CrossOrigin

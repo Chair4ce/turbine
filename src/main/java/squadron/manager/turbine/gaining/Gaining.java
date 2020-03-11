@@ -15,7 +15,6 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "gaining")
-@DynamicUpdate
 public class Gaining {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

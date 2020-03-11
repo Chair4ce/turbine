@@ -2,6 +2,8 @@ import React from 'react';
 import MaterialTable, {Column} from 'material-table';
 import GainingModel from "../../store/gaining/GainingModel";
 import moment from "moment";
+import {useDispatch} from "react-redux";
+import {deleteGaining} from "../../store/gaining/thunks";
 
 interface Row {
     id: number;
@@ -56,6 +58,8 @@ const GainingTable: React.FC<Props> = props => {
         ],
         data: props.gaining,
     });
+
+    const dispatch = useDispatch();
 
     // const timer = React.useRef<number>();
 
@@ -158,6 +162,7 @@ const GainingTable: React.FC<Props> = props => {
                                 data.splice(data.indexOf(oldData), 1);
                                 return {...prevState, data};
                             });
+                            dispatch(deleteGaining(oldData.id));
                         }, 300);
                     }),
             } : {}}
