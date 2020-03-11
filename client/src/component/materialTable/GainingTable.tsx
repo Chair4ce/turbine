@@ -3,19 +3,29 @@ import MaterialTable, {Column} from 'material-table';
 import GainingModel from "../../store/gaining/GainingModel";
 import moment from "moment";
 import {useDispatch} from "react-redux";
-import {deleteGaining} from "../../store/gaining/thunks";
+import {deleteGaining, updateGaining} from "../../store/gaining/thunks";
 
 interface Row {
-    id: number;
-    fullName: string;
-    grade: string;
-    dafsc: string;
-    rnltd: Date | null;
-    sponsorId: string | null;
-    projectedArrivalDate: Date | null;
-    projectedBilletId: string | null;
-    dateDepLastDutyStn: Date | null;
-    losingPas: string | null
+     id: number;
+     sqid: string;
+     fullName: string;
+     firstName: string;
+     lastName: string;
+     rnltd: Date | null;
+     grade: string;
+     gainingPas: string;
+     projectedArrivalDate: Date | null;
+     dafsc: string;
+     cellPhone: string | null;
+     email: string | null;
+     dor: Date | null;
+     dateArrivedStation: Date | null;
+     projectedBilletId: string | null;
+     dateDepLastDutyStn: Date | null;
+     sponsorId: string | null;
+     losingPas: string | null;
+     projectedOfficeSymbol: string | null;
+     lastUpdated: Date | null;
 }
 
 interface TableState {
@@ -150,6 +160,28 @@ const GainingTable: React.FC<Props> = props => {
                                     data[data.indexOf(oldData)] = newData;
                                     return {...prevState, data};
                                 });
+                                const newGainingData = new GainingModel(newData.id,
+                                    newData.sqid,
+                                    newData.fullName,
+                                    newData.firstName,
+                                    newData.lastName,
+                                    newData.rnltd,
+                                    newData.grade,
+                                    newData.gainingPas,
+                                    newData.projectedArrivalDate,
+                                    newData.dafsc,
+                                    newData.cellPhone,
+                                    newData.email,
+                                    newData.dor,
+                                    newData.dateArrivedStation,
+                                    newData.projectedBilletId,
+                                    newData.dateDepLastDutyStn,
+                                    newData.sponsorId,
+                                    newData.losingPas,
+                                    newData.projectedOfficeSymbol,
+                                    newData.lastUpdated);
+                                console.log(newGainingData);
+                                dispatch(updateGaining(newGainingData));
                             }
                         }, 300);
                     }),

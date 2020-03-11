@@ -155,10 +155,19 @@ public class Gaining {
         }
 
         try {
-            if (!convertDate(this.rnltd).equals(convertDate(importingMember.rnltd)))
+            if (!convertDate(this.rnltd).equals(convertDate(importingMember.rnltd))) {
+                if (convertDate(this.rnltd) == null && convertDate(importingMember.rnltd) == null) {
+
+                } else {
                 diff.add("rnltd");
+                }
+            }
         } catch (NullPointerException e) {
-            diff.add("rnltd");
+            if (convertDate(this.rnltd) == null && convertDate(importingMember.rnltd) == null) {
+
+            } else {
+                diff.add("rnltd");
+            }
         }
 
         try {
@@ -183,17 +192,36 @@ public class Gaining {
         }
 
         try {
-            if (!convertDate(this.dor).equals(convertDate(importingMember.dor)))
-                diff.add("dor");
+            if (!convertDate(this.dor).equals(convertDate(importingMember.dor))) {
+                if (convertDate(this.dor) == null && convertDate(importingMember.dor) == null) {
+
+                } else {
+                    diff.add("dor");
+                }
+            }
         } catch (NullPointerException e) {
-            diff.add("dor");
+            if (convertDate(this.dor) == null && convertDate(importingMember.dor) == null) {
+
+            } else {
+                diff.add("dor");
+            }
         }
 
         try {
-            if (!convertDate(this.dateDepLastDutyStn).equals(convertDate(importingMember.dateDepLastDutyStn)))
-                diff.add("dateDepLastDutyStn");
+            if (!convertDate(this.dateDepLastDutyStn).equals(convertDate(importingMember.dateDepLastDutyStn))) {
+                if (convertDate(this.dateDepLastDutyStn) == null && convertDate(importingMember.dateDepLastDutyStn) == null) {
+
+                } else {
+                    diff.add("dateDepLastDutyStn");
+                }
+            }
+
         } catch (NullPointerException e) {
-            diff.add("dateDepLastDutyStn");
+            if (convertDate(this.dateDepLastDutyStn) == null && convertDate(importingMember.dateDepLastDutyStn) == null) {
+
+            } else {
+                diff.add("dateDepLastDutyStn");
+            }
         }
 
         try {

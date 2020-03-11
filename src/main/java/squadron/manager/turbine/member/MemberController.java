@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import squadron.manager.turbine.metric.ImportMembersChangeLog;
-import squadron.manager.turbine.metric.ImportMembersChangeLogRepository;
-import squadron.manager.turbine.metric.MetricService;
+import squadron.manager.turbine.metric.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -75,6 +73,7 @@ public class MemberController {
         if (notNull(existingMember)) {
             logAndSaveChanges(date, importingMember, existingMember);
         } else {
+            this.metricService.logNewImportedMembers(new NewMemberLogModel(importingMember.getSqid(), importingMember.getFullName(), date));
             this.memberRepository.save(importingMember);
         }
     }

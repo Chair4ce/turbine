@@ -3,7 +3,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import SpeedDial from '@material-ui/lab/SpeedDial';
 import SpeedDialAction from '@material-ui/lab/SpeedDialAction';
 import FileCopyIcon from '@material-ui/icons/FileCopyOutlined';
-import TurbineIcon from "../icon/TurbineLogo";
+import MenuRoundedIcon from '@material-ui/icons/MenuRounded';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
@@ -81,7 +81,7 @@ const SpeedDialBtn: React.FC<Props> = props => {
                 ariaLabel="SpeedDial example"
                 className={classNames(classes.speedDial, 'DialIcon')}
                 hidden={hidden}
-                icon={<TurbineIcon/>}
+                icon={<MenuRoundedIcon/>}
                 direction={"right"}
                 onClose={handleClose}
                 onOpen={handleOpen}

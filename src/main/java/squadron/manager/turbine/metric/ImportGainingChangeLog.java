@@ -67,8 +67,19 @@ public class ImportGainingChangeLog {
                     break;
 
                 case "rnltd":
-                    this.oldData = verifyDate(oldGaining.getRnltd()).toString();
-                    this.newData = newGaining.getRnltd().toString();
+
+                    if (oldGaining.getRnltd() == null && newGaining.getRnltd() == null) break;
+                    if (oldGaining.getRnltd() == null) {
+                        this.oldData = "not set";
+                    } else {
+                        this.oldData = verifyDate(oldGaining.getRnltd()).toString();
+                    }
+
+                    if (newGaining.getRnltd() == null) {
+                        this.newData = "not set";
+                    } else {
+                        this.newData = newGaining.getRnltd().toString();
+                    }
                     break;
 
                 case "grade":
@@ -81,8 +92,17 @@ public class ImportGainingChangeLog {
                     this.newData = newGaining.getDafsc();
                     break;
                 case "dor":
-                    this.oldData = verifyDate(oldGaining.getDor()).toString();
-                    this.newData = newGaining.getDor().toString();
+                    if (oldGaining.getDor() == null) {
+                        this.oldData = "not set";
+                    } else {
+                        this.oldData = verifyDate(oldGaining.getDor()).toString();
+                    }
+
+                    if (newGaining.getDor() == null) {
+                        this.newData = null;
+                    } else {
+                        this.newData = newGaining.getDor().toString();
+                    }
                     break;
                 case "dateDepLastDutyStn":
                     if (oldGaining.getDateDepLastDutyStn() == null) {

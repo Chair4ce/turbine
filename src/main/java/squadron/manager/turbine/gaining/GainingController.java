@@ -1,23 +1,20 @@
 package squadron.manager.turbine.gaining;
 
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import squadron.manager.turbine.feedback.Feedback;
-import squadron.manager.turbine.feedback.FeedbackJSON;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
 import squadron.manager.turbine.metric.ImportGainingChangeLog;
 import squadron.manager.turbine.metric.ImportGainingChangeLogRepository;
 import squadron.manager.turbine.metric.MetricService;
+import squadron.manager.turbine.metric.NewGainingLogModel;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -55,38 +52,39 @@ public class GainingController {
 
     @CrossOrigin
     @PostMapping(path = "/update")
-    public List<Gaining> create(@Valid @RequestBody GainingJSON gaining) {
-        Gaining oldData = gainingRepository.findBySqid(gaining.getSqid());
-        System.out.println("Updating: " + gaining);
+    public List<Gaining> create(@Valid @RequestBody GainingJSON newGaining) {
+        Gaining oldData = gainingRepository.findBySqid(newGaining.getSqid());
         Date date = new Date();
-        Gaining updatedGaining = new Gaining(
-                gaining.getSqid(),
-                gaining.getFullName(),
-                gaining.getFirstName(),
-                gaining.getLastName(),
-                gaining.getRnltd(),
-                gaining.getGrade(),
-                gaining.getGainingPas(),
-                gaining.getDafsc(),
-                gaining.getDor(),
-                gaining.getDateDepLastDutyStn(),
-                gaining.getSponsorId(),
-                gaining.getLosingPas(),
+        Gaining newData = new Gaining(
+                newGaining.getSqid(),
+                newGaining.getFullName(),
+                newGaining.getFirstName(),
+                newGaining.getLastName(),
+                newGaining.getRnltd(),
+                newGaining.getGrade(),
+                newGaining.getGainingPas(),
+                newGaining.getDafsc(),
+                newGaining.getDor(),
+                newGaining.getDateDepLastDutyStn(),
+                newGaining.getSponsorId(),
+                newGaining.getLosingPas(),
                 date
         );
 
-        oldData.setFullName(updatedGaining.getFullName());
-        oldData.setFirstName(updatedGaining.getFirstName());
-        oldData.setLastName(updatedGaining.getLastName());
-        oldData.setRnltd(updatedGaining.getRnltd());
-        oldData.setGrade(updatedGaining.getGrade());
-        oldData.setGainingPas(updatedGaining.getGainingPas());
-        oldData.setDafsc(updatedGaining.getDafsc());
-        oldData.setDor(updatedGaining.getDor());
-        oldData.setDateDepLastDutyStn(updatedGaining.getDateDepLastDutyStn());
-        oldData.setSponsorId(updatedGaining.getSponsorId());
-        oldData.setLosingPas(updatedGaining.getLosingPas());
-        oldData.setLastUpdated(new Date());
+        logAndSaveChanges(date, newData, oldData);
+
+        oldData.setFullName(newData.getFullName());
+        oldData.setFirstName(newData.getFirstName());
+        oldData.setLastName(newData.getLastName());
+        oldData.setRnltd(newData.getRnltd());
+        oldData.setGrade(newData.getGrade());
+        oldData.setGainingPas(newData.getGainingPas());
+        oldData.setDafsc(newData.getDafsc());
+        oldData.setDor(newData.getDor());
+        oldData.setDateDepLastDutyStn(newData.getDateDepLastDutyStn());
+        oldData.setSponsorId(newData.getSponsorId());
+        oldData.setLosingPas(newData.getLosingPas());
+        oldData.setLastUpdated(date);
         gainingRepository.save(oldData);
         return gainingRepository.findAll();
     }
@@ -133,6 +131,7 @@ public class GainingController {
         if (notNull(existingGaining)) {
              logAndSaveChanges(date, importedGaining, existingGaining);
         } else {
+            this.metricService.logNewImportedGaining(new NewGainingLogModel(importedGaining.getSqid(), importedGaining.getFullName(), date));
             this.gainingRepository.save(importedGaining);
         }
     }
