@@ -139,17 +139,17 @@ const GainingTable: React.FC<Props> = props => {
                 // })
             }}
             editable={props.edit ? {
-                onRowAdd: newData =>
-                    new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return {...prevState, data};
-                            });
-                        }, 300);
-                    }),
+                // onRowAdd: newData =>
+                //     new Promise(resolve => {
+                //         setTimeout(() => {
+                //             resolve();
+                //             setState(prevState => {
+                //                 const data = [...prevState.data];
+                //                 data.push(newData);
+                //                 return {...prevState, data};
+                //             });
+                //         }, 300);
+                //     }),
                     onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
                         setTimeout(() => {

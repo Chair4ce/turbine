@@ -30,13 +30,13 @@ public class FeedbackController {
 
     @CrossOrigin
     @PostMapping(path = "/submit")
-    public Feedback create(@Valid @RequestBody FeedbackJSON feedbackJSON) {
+    public Feedback create(@Valid @RequestBody String feedback) {
 
-            Feedback feedback = new Feedback(
+            Feedback newfeedback = new Feedback(
                     new LocalDateTime().toDate(),
-                    feedbackJSON.getFeedback_entry()
+                    feedback
             );
 
-            return this.feedbackRepository.save(feedback);
+            return this.feedbackRepository.save(newfeedback);
     }
 }

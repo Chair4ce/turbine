@@ -45,16 +45,19 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    postFeedback: (feedBackMsg: string) => void;
+    postFeedback: (type: string, data: string | null) => void;
 }
 
+const VIEW_CALLBACK_ENUMS = {
+    CHILD_FEEDBACK_TASK: 'FEEDBACK/POST_FEEDBACK',
+};
 
 
 const FeedbackInput: React.FC<Props> = props => {
     const classes = useStyles();
     const [success, setSuccess] = React.useState(false);
     const [btnText, setbtnText] = React.useState("SUBMIT");
-    const [feedBackMsg, setfeedBackMsg] = React.useState("");
+    const [feedBackMsg, setfeedBackMsg] = React.useState(null);
 
     const [loading, setLoading] = React.useState(false);
     const timer = React.useRef<number>();
@@ -65,7 +68,7 @@ const FeedbackInput: React.FC<Props> = props => {
     });
 
     const handleButtonClick = async() => {
-        if (!loading && feedBackMsg.length > 0) {
+        if (!loading && feedBackMsg !== null) {
             setSuccess(false);
             setLoading(true);
            await submitFeedback();
@@ -75,10 +78,10 @@ const FeedbackInput: React.FC<Props> = props => {
     const submitFeedback = () => {
         timer.current = setTimeout(() => {
             setLoading(false);
-            props.postFeedback(feedBackMsg);
+            if (feedBackMsg) props.postFeedback(VIEW_CALLBACK_ENUMS.CHILD_FEEDBACK_TASK, feedBackMsg);
             setSuccess(true);
             setbtnText("THANK YOU!");
-            setfeedBackMsg("");
+            setfeedBackMsg(null);
         }, 500);
     };
 
@@ -103,7 +106,7 @@ const FeedbackInput: React.FC<Props> = props => {
                     multiline
                     variant="filled"
                     onChange={handleChange}
-                    value={feedBackMsg.length === 0 ? "" : feedBackMsg}
+                    value={!feedBackMsg ? "" : feedBackMsg}
                 />
                 <Button
                     variant="contained"
@@ -121,3 +124,7 @@ const FeedbackInput: React.FC<Props> = props => {
 
 
 export default FeedbackInput;
+
+export {
+    VIEW_CALLBACK_ENUMS as FEEDBACK_CALLBACK_ENUMS,
+};

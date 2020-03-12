@@ -27,9 +27,9 @@ import {ApplicationState} from "../../store";
 import SpeedDialBtn, {CALLBACK_ENUMS} from "../../component/speedDialMenu/SpeedDialBtn";
 import VerticalLinearStepper from "../../component/speedDialMenu/actions/VerticalLinearStepper";
 import {toggleUploadModal} from "../../store/modals";
-import FeedbackInput from "../../component/feedBack/Feedback";
+import FeedbackInput, {FEEDBACK_CALLBACK_ENUMS} from "../../component/feedBack/Feedback";
 import GainingTable from "../../component/materialTable/GainingTable";
-import {getMembers} from "../../store/members/thunks";
+import {getMembers, postFeedback} from "../../store/members/thunks";
 import {getGainingMembers} from "../../store/gaining/thunks";
 import {getSquadrons} from "../../store/squadrons/thunks";
 
@@ -130,6 +130,10 @@ const MemberDashboard: React.FC<Props> = props => {
                 dispatch(toggleUploadModal(data));
                 break;
             case CALLBACK_ENUMS.CHILD_TOGGLE_TASK:
+                break;
+            case FEEDBACK_CALLBACK_ENUMS.CHILD_FEEDBACK_TASK:
+                console.log("fired");
+                dispatch(postFeedback(data));
                 break;
         }
     };
