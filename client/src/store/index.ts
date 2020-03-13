@@ -11,6 +11,7 @@ import {ShowModalState} from "./modals/types";
 import {showModalReducer} from "./modals/reducer";
 import {gainingReducer, GainingState} from "./gaining";
 import {importChangesReducer, ImportChangesState} from "./importChanges";
+import {SquadronTaskState} from "./squadronTasks";
 
 // The top-level state object
 export interface ApplicationState {
@@ -18,6 +19,7 @@ export interface ApplicationState {
     members: MembersState;
     gaining: GainingState;
     squadrons: SquadronsState;
+    squadronTasks: SquadronTaskState;
     showModal: ShowModalState;
     importChanges: ImportChangesState;
     router: RouterState;
@@ -30,6 +32,7 @@ export const createRootReducer = (history: History) =>
     combineReducers({
         layout: layoutReducer,
         squadrons: squadronsReducer,
+        squadronTask: squadronsReducer,
         showModal: showModalReducer,
         members: membersReducer,
         gaining: gainingReducer,

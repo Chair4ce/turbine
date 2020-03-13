@@ -22,18 +22,31 @@ import java.util.List;
 public class GainingController {
 
     public static final String URI = "api/gaining";
-
-    @Autowired
     private GainingRepository gainingRepository;
-
-    @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
     private MetricService metricService;
+    private ImportGainingChangeLogRepository importGainingChangeLogRepository;
+
+
 
     @Autowired
-    private ImportGainingChangeLogRepository importGainingChangeLogRepository;
+    public void ConstructorBasedInjection(GainingRepository gainingRepository) {
+        this.gainingRepository = gainingRepository;
+    }
+    @Autowired
+    public void ConstructorBasedInjection(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+    @Autowired
+    public void ConstructorBasedInjection(MetricService metricService) {
+        this.metricService = metricService;
+    }
+    @Autowired
+    public void ConstructorBasedInjection(ImportGainingChangeLogRepository importGainingChangeLogRepository) {
+        this.importGainingChangeLogRepository = importGainingChangeLogRepository;
+    }
+
+
 
     @CrossOrigin
     @GetMapping
