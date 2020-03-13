@@ -10,6 +10,7 @@ interface Row {
     officeSymbol: string | null;
     dutyTitle: string | null;
     dutyPhone: string | null;
+    rnltd: Date | null;
     supvName: string | null;
 }
 
@@ -40,7 +41,8 @@ const AlphaRosterTable: React.FC<Props> = props => {
             {title: 'Office', field: 'officeSymbol'},
             {title: 'Duty Title', field: 'dutyTitle'},
             {title: 'Phone', field: 'dutyPhone'},
-            {title: 'Supervisor', field: 'supvName'}
+            {title: 'Supervisor', field: 'supvName'},
+            {title: 'RNLTD', field: 'rnltd', type: "date"}
 
             //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
             // {

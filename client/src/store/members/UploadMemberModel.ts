@@ -14,10 +14,11 @@ export default class UploadMemberModel {
     public supvName: string | null;
     public supvBeginDate: string | null;
     public dateArrivedStation: string | null;
+    public rnltd: string | null;
     public dor: string | null;
 
 
-    constructor(sqid: string, fullName: string, tafmsd: string | null, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: string | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: string | null, dateArrivedStation: string | null, dor: string | null) {
+    constructor(sqid: string, fullName: string, tafmsd: string | null, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: string | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: string | null, dateArrivedStation: string | null, rnltd: string | null, dor: string | null) {
         this.sqid = sqid;
         this.fullName = fullName;
         this.tafmsd = tafmsd;
@@ -31,6 +32,7 @@ export default class UploadMemberModel {
         this.supvName = supvName;
         this.supvBeginDate = supvBeginDate;
         this.dateArrivedStation = dateArrivedStation;
+        this.rnltd = rnltd;
         this.dor = dor;
     }
 }

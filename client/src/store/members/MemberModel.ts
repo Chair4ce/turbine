@@ -16,10 +16,11 @@ export default class MemberModel {
     public supvName: string | null;
     public supvBeginDate: Date | null;
     public dateArrivedStation: Date | null;
+    public rnltd: Date | null;
     public dor: Date | null;
 
 
-    constructor(id: number, sqid: string, fullName: string, tafmsd: Date | null, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: Date | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: Date | null, dateArrivedStation: Date | null, dor: Date | null) {
+    constructor(id: number, sqid: string, fullName: string, tafmsd: Date | null, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: Date | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: Date | null, dateArrivedStation: Date | null, rnltd: Date | null, dor: Date | null) {
         this.id = id;
         this.sqid = sqid;
         this.fullName = fullName;
@@ -34,6 +35,7 @@ export default class MemberModel {
         this.supvName = supvName;
         this.supvBeginDate = supvBeginDate;
         this.dateArrivedStation = dateArrivedStation;
+        this.rnltd = rnltd;
         this.dor = dor;
     }
 }

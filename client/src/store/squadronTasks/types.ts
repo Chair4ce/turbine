@@ -9,9 +9,11 @@
 // of Redux's `@@INIT` action.
 import ImportChangeModel from "./SquadronTaskModel";
 import SquadronTask from "./SquadronTaskModel";
+import SquadronTaskDetail from "./squadronTaskDetailModel";
 
 export enum SquadronTaskActionTypes {
     POST_SQUADRON_TASK_SUCCESS = '@@squadronTask/POST_SQUADRON_TASK_SUCCESS',
+    POST_SQUADRON_TASK_DETAILS_SUCCESS = '@@squadronTask/POST_SQUADRON_TASK_DETAILS_SUCCESS',
     POST_SQUADRON_TASK_ERROR = '@@squadronTask/POST_SQUADRON_TASK_ERROR',
     POST_SQUADRON_TASK_UPDATE = '@@squadronTask/POST_SQUADRON_TASK_UPDATE',
     POST_SQUADRON_TASK_DELETE = '@@squadronTask/POST_SQUADRON_TASK_DELETE',
@@ -22,7 +24,8 @@ export enum SquadronTaskActionTypes {
 // Declare state types with `readonly` modifier to get compile time immutability.
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface SquadronTaskState {
-    readonly squadronTasks: SquadronTask[];
+    readonly squadronTask: SquadronTask[];
+    readonly squadronTaskDetails: SquadronTaskDetail[];
     readonly loading: boolean;
     readonly errors?: string;
 }

@@ -66,6 +66,7 @@ public class MemberController {
                 newImport.getSupvName(),
                 newImport.getSupvBeginDate(),
                 newImport.getDateArrivedStation(),
+                newImport.getRnltd(),
                 newImport.getDor(),
                 date
         );

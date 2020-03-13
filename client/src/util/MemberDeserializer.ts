@@ -21,6 +21,7 @@ export class MemberDeserializer {
                     item.supvName,
                     moment(item.supvBeginDate).utc(true).toDate(),
                     moment(item.dateArrivedStation).utc(true).toDate(),
+                    moment(item.rnltd).utc(true).toDate(),
                     moment(item.dor).utc(true).toDate(),
             )
                 ;

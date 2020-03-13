@@ -23,6 +23,7 @@ describe('reducer', () => {
                     '',
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate()),
                 new MemberModel(
                     2,
@@ -39,6 +40,7 @@ describe('reducer', () => {
                     '',
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate()),
                 new MemberModel(
                     3,
@@ -53,6 +55,7 @@ describe('reducer', () => {
                     moment(date).utc(false).toDate(),
                     '',
                     '',
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate()),
@@ -81,6 +84,7 @@ describe('reducer', () => {
                 '',
                 moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate(),
+                moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate()),
             new MemberModel(
                 2,"987698752",
@@ -96,6 +100,7 @@ describe('reducer', () => {
                 '',
                 moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate(),
+                moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate()),
             new MemberModel(
                 3,"987698753",
@@ -109,6 +114,7 @@ describe('reducer', () => {
                 moment(date).utc(true).toDate(),
                 '',
                 '',
+                moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate(),
                 moment(date).utc(true).toDate()),

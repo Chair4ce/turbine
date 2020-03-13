@@ -14,7 +14,15 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useDispatch, useSelector} from "react-redux";
-import {Box, Container, Grow, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
+import {
+    Box,
+    Container,
+    Fade,
+    ListItem,
+    ListItemIcon,
+    ListItemSecondaryAction,
+    ListItemText,
+} from "@material-ui/core";
 import AlphaRosterTable from "../../component/materialTable/AlphaRosterTable";
 import GroupIcon from '@material-ui/icons/Group';
 import PowerIcon from '@material-ui/icons/Power';
@@ -32,6 +40,8 @@ import GainingTable from "../../component/materialTable/GainingTable";
 import {getMembers, postFeedback} from "../../store/members/thunks";
 import {getGainingMembers} from "../../store/gaining/thunks";
 import {getSquadrons} from "../../store/squadrons/thunks";
+import SquadronTaskTable from "../../component/materialTable/SquadronTaskTable";
+import {getSquadronTasks} from "../../store/squadronTasks/thunks";
 
 interface Props{
     className?: string;
@@ -43,6 +53,8 @@ const MemberDashboard: React.FC<Props> = props => {
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
     const gaining = useSelector(({gaining}: ApplicationState) => gaining.data);
+    const squadronTasks = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTask);
+    const squadronTasksLoading = useSelector(({squadronTask}: ApplicationState) => squadronTask.loading);
     const memberLoading = useSelector(({members}: ApplicationState) => members.loading);
     const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
     const dispatch = useDispatch();
@@ -51,13 +63,16 @@ const MemberDashboard: React.FC<Props> = props => {
     const [open, setOpen] = React.useState(true);
     const [gainTable, showGainTable] = React.useState(false);
     const [alphaTable, showAlphaTable] = React.useState(false);
+    const [taskTable, showTaskTable] = React.useState(false);
     // const [lossTable, showLossTable] = React.useState(false);
-    const [alphaTableOrder, setAlphaTableOrder] = React.useState(2);
-    const [gainTableOrder, setGainTableOrder] = React.useState(1);
-    const [lossTableOrder, setLossTableOrder] = React.useState(3);
+    const [alphaTableOrder, setAlphaTableOrder] = React.useState(3);
+    const [gainTableOrder, setGainTableOrder] = React.useState(2);
+    const [lossTableOrder, setLossTableOrder] = React.useState(4);
+    const [taskTableOrder, setTaskTableOrder] = React.useState(1);
     // const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
 
     useEffect(() => {
+        dispatch(getSquadronTasks());
         dispatch(getMembers());
         dispatch(getSquadrons());
         dispatch(getGainingMembers());
@@ -70,6 +85,11 @@ const MemberDashboard: React.FC<Props> = props => {
     const handleGainBtnClick = () => {
         handleTableOrder("gain");
         showGainTable(prev => !prev)
+    };
+    const handleTaskBtnClick = () => {
+        console.log(squadronTasks);
+        handleTableOrder("task");
+        showTaskTable(prev => !prev)
     };
 
     // const handleLossBtnClick = () => {
@@ -104,6 +124,13 @@ const MemberDashboard: React.FC<Props> = props => {
                 setLossTableOrder(1);
                 setAlphaTableOrder(alphaTableOrder + 1);
                 setGainTableOrder(gainTableOrder + 1);
+                break;
+            }
+            case "task": {
+                setTaskTableOrder(1);
+                setAlphaTableOrder(alphaTableOrder + 1);
+                setGainTableOrder(gainTableOrder + 1);
+                setLossTableOrder(lossTableOrder + 1);
                 break;
             }
             default: {
@@ -230,7 +257,9 @@ const MemberDashboard: React.FC<Props> = props => {
                     <ListItemIcon>{<DescriptionOutlinedIcon/>}</ListItemIcon>
                     <ListItemText primary="Evaluations"/>
                 </ListItem>
-                <ListItem button>
+                <ListItem button onClick={handleTaskBtnClick} className={clsx( {
+                        [classes.selected]: taskTable,
+                        [classes.unselected]: !taskTable,})}>
                     <ListItemIcon>{<EmojiEventsOutlinedIcon/>}</ListItemIcon>
                     <ListItemText primary="Awards & Decs"/>
                 </ListItem>
@@ -251,7 +280,7 @@ const MemberDashboard: React.FC<Props> = props => {
                 <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
                     {gainTable &&
-                    <Grow in={gainTable}>
+                    <Fade in={gainTable} >
                         <Box order={gainTableOrder} className={classes.table}>
                             <GainingTable
                                 gaining={gaining}
@@ -265,10 +294,10 @@ const MemberDashboard: React.FC<Props> = props => {
                                 exportButton={true}
                             />
                         </Box>
-                    </Grow>
+                    </Fade>
                     }
                     {alphaTable &&
-                    <Grow in={alphaTable}>
+                    <Fade in={alphaTable}>
                         <Box order={alphaTableOrder} className={classes.table}>
                     <AlphaRosterTable
                         members={members}
@@ -283,7 +312,25 @@ const MemberDashboard: React.FC<Props> = props => {
                         // className={alphaTableClassname}
                     />
                         </Box>
-                    </Grow>
+                    </Fade>
+                    }
+                    {taskTable &&
+                    <Fade in={taskTable}>
+                        <Box order={taskTableOrder} className={classes.table}>
+                            <SquadronTaskTable
+                                items={squadronTasks}
+                                loading={squadronTasksLoading}
+                                title={"Awards And Decorations"}
+                                edit={true}
+                                filtering={true}
+                                grouping={true}
+                                search={true}
+                                selection={false}
+                                exportButton={true}
+                                // className={alphaTableClassname}
+                            />
+                        </Box>
+                    </Fade>
                     }
                     {/*{lossTable &&*/}
                     {/*<Grow in={lossTable}>*/}

@@ -3,6 +3,8 @@ package squadron.manager.turbine.tasks;
 
 import lombok.*;
 
+import java.util.Date;
+
 @NoArgsConstructor
 @Data
 public class SquadronTaskJSON {
@@ -10,6 +12,6 @@ public class SquadronTaskJSON {
     private String mbrId;
     private String taskType;
     private String status;
-    private String dueDate;
+    private Date dueDate;
 
 }

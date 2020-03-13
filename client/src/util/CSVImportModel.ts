@@ -55,6 +55,7 @@ export class CSVImportModel {
         'SUPV_NAME',
         'SUPV_BEGIN_DATE',
         'DATE_ARRIVED_STATION',
+        'RNLTD',
         'DOR',
     ];
 

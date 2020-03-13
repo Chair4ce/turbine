@@ -60,12 +60,14 @@ public class Member {
     //    @Column(name = "date_arrived_station")
     private Date dateArrivedStation;
 
+    private Date rnltd;
+
     private Date dor;
 
     //    @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date dor, Date lastUpdated) {
+    public Member(String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
         this.sqid = sqid;
         this.fullName = fullName;
         this.firstName = firstName;
@@ -81,11 +83,12 @@ public class Member {
         this.supvName = supvName;
         this.supvBeginDate = verifyDate(supvBeginDate);
         this.dateArrivedStation = verifyDate(dateArrivedStation);
+        this.rnltd = verifyDate(rnltd);
         this.dor = verifyDate(dor);
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(Long id, String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date dor, Date lastUpdated) {
+    public Member(Long id, String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
         this.id = id;
         this.sqid = sqid;
         this.fullName = fullName;
@@ -102,6 +105,7 @@ public class Member {
         this.supvName = supvName;
         this.supvBeginDate = supvBeginDate;
         this.dateArrivedStation = dateArrivedStation;
+        this.rnltd = rnltd;
         this.dor = dor;
         this.lastUpdated = lastUpdated;
     }
@@ -122,6 +126,7 @@ public class Member {
         this.setSupvName(json.getSupvName());
         this.setSupvBeginDate(json.getSupvBeginDate());
         this.setDateArrivedStation(json.getDateArrivedStation());
+        this.setRnltd(json.getRnltd());
         this.setDor(json.getDor());
         this.setLastUpdated(json.getLastUpdated());
         return this;
@@ -233,6 +238,13 @@ public class Member {
                 diff.add("dateArrivedStation");
         } catch (NullPointerException e) {
             diff.add("dateArrivedStation");
+        }
+
+        try {
+            if (!verifyDate(this.rnltd).equals(verifyDate(importingMember.rnltd)))
+                diff.add("rnltd");
+        } catch (NullPointerException e) {
+            diff.add("rnltd");
         }
 
         try {

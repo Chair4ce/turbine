@@ -46,6 +46,8 @@ public class MemberJSON {
 
     private Date dateArrivedStation;
 
+    private Date rnltd;
+
     private Date dor;
 
     private Date lastUpdated;

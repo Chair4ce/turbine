@@ -1,19 +1,25 @@
 
 import {callApi} from "../../util/api";
-import {squadronTaskPostError, squadronTaskPostSuccess} from "./actions";
+import {
+    squadronTaskDetailError,
+    squadronTaskDetailSuccess,
+    squadronTaskPostError,
+    squadronTaskPostSuccess
+} from "./actions";
 import SquadronTask from "./SquadronTaskModel";
 import {squadronPostRequest} from "../squadrons";
+import NewSquadronTask from "./NewSquadronTask";
 
-export const createNewSquadronTask = (squadronTask: SquadronTask) => {
+export const createNewSquadronTask = (newSquadronTask: NewSquadronTask) => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('POST', 'api/sqTask/save', squadronTask)
+        callApi('POST', 'api/sqTask/save', newSquadronTask)
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch(err => dispatch(squadronTaskPostError(err.toString())))
     }
 };
 
-export const deleteNewSquadronTask = (squadronTaskId: number) => {
+export const deleteSquadronTask = (squadronTaskId: number) => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
         callApi('POST', 'api/sqTask/delete', squadronTaskId)
@@ -22,19 +28,28 @@ export const deleteNewSquadronTask = (squadronTaskId: number) => {
     }
 };
 
-export const getSquadronTask = () => {
+export const getSquadronTasks = () => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('GET', 'api/sqTask/get')
+        callApi('GET', 'api/sqTask')
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch(err => dispatch(squadronTaskPostError(err.toString())))
     }
 };
 
-export const updateNewSquadronTask = (gaining: SquadronTask) => {
+export const getSquadronTaskDetails = () => {
+    return (dispatch: any) => {
+        dispatch(squadronPostRequest);
+        callApi('GET', 'api/sqTask/details')
+            .then(res => dispatch(squadronTaskDetailSuccess(res)))
+            .catch(err => dispatch(squadronTaskDetailError(err.toString())))
+    }
+};
+
+export const updateNewSquadronTask = (newTask: SquadronTask) => {
     return(dispatch: any) => {
         dispatch(squadronPostRequest);
-        return  callApi('POST', 'api/gaining/update', gaining)
+        return  callApi('POST', 'api/sqTask/update', newTask)
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch((err => dispatch(squadronTaskPostError(err.toString()))));
     }

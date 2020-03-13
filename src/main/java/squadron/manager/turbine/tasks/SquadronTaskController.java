@@ -2,16 +2,14 @@ package squadron.manager.turbine.tasks;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-import squadron.manager.turbine.gaining.GainingRepository;
 import squadron.manager.turbine.member.Member;
-import squadron.manager.turbine.squadron.Squadron;
+import squadron.manager.turbine.member.MemberRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
@@ -20,23 +18,54 @@ public class SquadronTaskController {
 
     public static final String URI = "api/sqTask";
     private SquadronTaskRepository squadronTaskRepository;
+    private MemberRepository memberRepository;
 
     @Autowired
     public void ConstructorBasedInjection(SquadronTaskRepository squadronTaskRepository) {
         this.squadronTaskRepository = squadronTaskRepository;
     }
 
+    @Autowired
+    public void ConstructorBasedInjection(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    Iterable<SquadronTask> getTasks() {
-        return squadronTaskRepository.findAll();
+    List<SquadronTask> getTasks() { return squadronTaskRepository.findAll(); }
+
+    @CrossOrigin
+    @GetMapping(path = "/details")
+    public @ResponseBody
+    List<TaskDetailModel> getDetails() {
+        List<SquadronTask> squadronTaskList = squadronTaskRepository.findAll();
+        List<TaskDetailModel> DetailTaskList = new ArrayList();
+        squadronTaskList.forEach((sqTask -> {
+            Member member = memberRepository.findBySqid(sqTask.getMbrId());
+
+            Member supervisor = memberRepository.findBySqid(member.getSupvName());
+
+            DetailTaskList.add(new TaskDetailModel(
+                    sqTask.getMbrId(),
+                    member.getFullName(),
+                    sqTask.getTaskType(),
+                    sqTask.getStatus(),
+                    sqTask.getDueDate(),
+                    member.getRnltd(),
+                    supervisor.getFullName() != null ? supervisor.getFullName() : "Not Assigned",
+                    supervisor.getSqid() != null ? supervisor.getSqid() : "Not Assigned"
+                    ));
+        }));
+
+        return DetailTaskList;
     }
 
 
     @CrossOrigin
     @PostMapping(path = "/save")
     public Iterable<SquadronTask> saveMbrTask(@Valid @RequestBody SquadronTaskJSON json) {
+        System.out.println(json.getMbrId());
         SquadronTask squadronTask = new SquadronTask(json.getMbrId(), json.getTaskType(),json.getStatus(), json.getDueDate());
         squadronTaskRepository.save(squadronTask);
         return squadronTaskRepository.findAll();

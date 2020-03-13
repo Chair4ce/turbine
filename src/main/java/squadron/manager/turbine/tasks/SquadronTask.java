@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @NoArgsConstructor
 @Entity
 @Data
-@Table(name = "gaining")
+@Table(name = "squadron_member_task")
 public class SquadronTask {
 
     @Id
@@ -17,16 +18,16 @@ public class SquadronTask {
     private String mbrId;
     private String taskType;
     private String status;
-    private String dueDate;
+    private Date dueDate;
 
-    public SquadronTask(String mbrId, String taskType, String status, String dueDate) {
+    public SquadronTask(String mbrId, String taskType, String status, Date dueDate) {
         this.mbrId = mbrId;
         this.taskType = taskType;
         this.status = status;
         this.dueDate = dueDate;
     }
 
-    public SquadronTask(long id,String mbrId, String taskType, String status, String dueDate) {
+    public SquadronTask(long id,String mbrId, String taskType, String status, Date dueDate) {
         this.id = id;
         this.mbrId = mbrId;
         this.taskType = taskType;
