@@ -16,23 +16,20 @@ public class SquadronTask {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String mbrId;
-    private String mbrName;
     private String taskType;
     private String status;
     private Date dueDate;
 
-    public SquadronTask(String mbrId, String mbrName, String taskType, String status, Date dueDate) {
+    public SquadronTask(String mbrId, String taskType, String status, Date dueDate) {
         this.mbrId = mbrId;
-        this.mbrName = mbrName;
         this.taskType = taskType;
         this.status = status;
         this.dueDate = dueDate;
     }
 
-    public SquadronTask(Long id, String mbrId, String mbrName, String taskType, String status, Date dueDate) {
+    public SquadronTask(Long id, String mbrId, String taskType, String status, Date dueDate) {
         this.id = id;
         this.mbrId = mbrId;
-        this.mbrName = mbrName;
         this.taskType = taskType;
         this.status = status;
         this.dueDate = dueDate;
@@ -40,7 +37,6 @@ public class SquadronTask {
 
     public SquadronTask update(SquadronTaskJSON json) {
         this.setMbrId(json.getMbrId());
-        this.setMbrName(json.getMbrName());
         this.setTaskType(json.getTaskType());
         this.setStatus(json.getStatus());
         this.setDueDate(json.getDueDate());

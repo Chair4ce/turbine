@@ -1,6 +1,7 @@
 import {action} from 'typesafe-actions';
 import SquadronTask from "./SquadronTaskModel";
 import {SquadronTaskActionTypes} from "./types";
+import SquadronTaskDetail from "./squadronTaskDetailModel";
 
 // Here we use the `action` helper function provided by `typesafe-actions`.
 // This library provides really useful helpers for writing Redux actions in a type-safe manner.
@@ -13,6 +14,6 @@ import {SquadronTaskActionTypes} from "./types";
 export const squadronTaskPostSuccess = (payload: SquadronTask[]) => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_SUCCESS, payload);
 export const squadronTaskPostRequest = () => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_SUCCESS);
 export const squadronTaskPostError = (payload: String) => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_SUCCESS, payload);
-export const squadronTaskDetailSuccess = (payload: String) => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_DETAILS_SUCCESS, payload);
+export const squadronTaskDetailSuccess = (payload: SquadronTaskDetail[]) => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_DETAILS_SUCCESS, payload);
 export const squadronTaskDetailError = (payload: String) => action(SquadronTaskActionTypes.POST_SQUADRON_TASK_DETAILS_SUCCESS, payload);
 

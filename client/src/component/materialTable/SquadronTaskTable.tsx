@@ -4,7 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {
     createNewSquadronTask,
     deleteSquadronTask,
-    getSquadronTasks,
+    getSquadronTaskDetails,
     updateNewSquadronTask
 } from "../../store/squadronTasks/thunks";
 import SquadronTask from "../../store/squadronTasks/SquadronTaskModel";
@@ -13,10 +13,6 @@ import MemberOptionModel from "./MemberOptionModel";
 import {TextField} from "@material-ui/core";
 import {ApplicationState} from "../../store";
 import NewSquadronTask from "../../store/squadronTasks/NewSquadronTask";
-import {getMembers} from "../../store/members/thunks";
-import {getSquadrons} from "../../store/squadrons/thunks";
-import {getGainingMembers} from "../../store/gaining/thunks";
-import SquadronTaskDisplay from "../../store/squadronTasks/SquadronTaskDisplay";
 
 
 interface Row {
@@ -26,6 +22,9 @@ interface Row {
     taskType: string;
     status: string;
     dueDate: Date;
+    rnltd: Date;
+    Supervisor: string;
+    SupId: string;
 }
 
 interface TableState {
@@ -34,45 +33,45 @@ interface TableState {
 }
 
 interface Props {
-    items: SquadronTaskDisplay[];
-    loading: boolean;
     title: string;
-    filtering: boolean,
-    edit: boolean,
-    grouping: boolean,
-    search: boolean,
-    selection: boolean,
-    exportButton: boolean,
+    filtering: boolean;
+    edit: boolean;
+    grouping: boolean;
+    search: boolean;
+    selection: boolean;
+    exportButton: boolean;
     className?: string;
 }
 
+
 const SquadronTaskTable: React.FC<Props> = props => {
     const dispatch = useDispatch();
+
     const memberOptions: MemberOptionModel[] = useSelector(({members}: ApplicationState) => members.data.map((function(member) {
         return new MemberOptionModel(member.sqid,member.fullName)
     })));
+
+    const squadronTaskDetails = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTaskDetails);
+    const squadronTasksLoading = useSelector(({squadronTask}: ApplicationState) => squadronTask.loading);
+
     const [assignedMemberSqid, updateAssignedMemberSqid] = React.useState("");
     const [assignedMemberName, updateAssignedMemberName] = React.useState("");
 
-    function handleChange(event: any, values: any) {
-console.log(values);
+    useEffect(() => {
+        dispatch(getSquadronTaskDetails());
+    }, [dispatch]);
 
-        if(values.Name !== null) {
-        updateAssignedMemberSqid(values.sqid);
-        updateAssignedMemberName(values.Name);
+    function handleChange(event: any, values: any) {
+        console.log(values);
+        if (event) {
+        if(values.sqid === "" || values.sqid !== null || !values) updateAssignedMemberSqid(values.sqid);
+
         }
-        // this.setState({
-        //     tags: values
-        // }, () => {
-        //     // This will output an array of objects
-        //     // given by Autocompelte options property.
-        //     console.log(state.tags);
-        // });
     }
 
     const [state, setState] = React.useState<TableState>({
         columns: [
-            {title: 'Assigned', field: 'mbrId',
+            {title: 'Assigned', field: 'mbrName',
                 editComponent: props => (
                     <Autocomplete
                         id="combo-box"
@@ -80,18 +79,19 @@ console.log(values);
                         getOptionLabel={(option: MemberOptionModel) => option.Name}
                         style={{ width: 400 }}
                         onChange={handleChange}
+                        disableClearable
                         renderInput={params => <TextField
                             {...params}
                             label="Select Member"
                             variant="outlined"
                             style={{ width: 400 }}
-                            value={props.value}
+                            placeholder={props.rowData.mbrName}
                         />}
                     />
                 )
             },
-            {title: 'type', field: 'taskType'},
-            {title: 'status', field: 'status', lookup: { 34: 'pending', 63: 'complete', 72: 'returned' },},
+            {title: 'type', field: 'taskType', lookup: { 'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
+            {title: 'status', field: 'status', lookup: { 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
             {title: 'dueDate', field: 'dueDate', type: "date"},
         ],
         //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
@@ -100,11 +100,8 @@ console.log(values);
         //     field: 'birthCity',
         //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
         // },
-        data: props.items,
+        data: [],
     });
-    useEffect(() => {
-        dispatch(getSquadronTasks());
-    }, [state]);
 
 
     // const timer = React.useRef<number>();
@@ -113,8 +110,8 @@ console.log(values);
         <MaterialTable
             title={props.title}
             columns={state.columns}
-            data={state.data}
-            isLoading={props.loading}
+            data={squadronTaskDetails}
+            isLoading={squadronTasksLoading}
 
             actions={[
                 // {
@@ -177,46 +174,44 @@ console.log(values);
             editable={props.edit ? {
                 onRowAdd: newData =>
                     new Promise(resolve => {
-                        newData.mbrId = assignedMemberSqid;
+                      if (assignedMemberSqid !== null) {
+                          newData.mbrId = assignedMemberSqid;
+                      }
+                        const newSquadronTask = new NewSquadronTask(
+                            newData.mbrId,
+                            newData.taskType,
+                            newData.status,
+                            newData.dueDate
+                        );
+                        dispatch(createNewSquadronTask(newSquadronTask));
                         setTimeout(() => {
                             resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return {...prevState, data};
-                            });
-                            console.log(newData);
-                            const newSquadronTask = new NewSquadronTask(
+                            dispatch(getSquadronTaskDetails());
+                        }, 1200);
+
+                    }),
+                onRowUpdate: (newData, oldData) =>
+                    new Promise(resolve => {
+                        if (oldData) {
+                            if (assignedMemberSqid !== "") newData.mbrId = assignedMemberSqid;
+                            // setState(prevState => {
+                            //     const data = [...prevState.data];
+                            //     data[data.indexOf(oldData)] = newData;
+                            //     return {...prevState, data};
+                            // });
+                            const newSquadronTaskData = new SquadronTask(
+                                newData.id,
                                 newData.mbrId,
                                 newData.taskType,
                                 newData.status,
                                 newData.dueDate
                             );
-                            dispatch(createNewSquadronTask(newSquadronTask));
-                        }, 300);
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise(resolve => {
-                        newData.mbrId = assignedMemberSqid;
+                            dispatch(updateNewSquadronTask(newSquadronTaskData));
+                        }
                         setTimeout(() => {
                             resolve();
-                            if (oldData) {
-                                setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    return {...prevState, data};
-                                });
-                                const newSquadronTaskData = new SquadronTask(
-                                    newData.id,
-                                    newData.mbrId,
-                                    newData.taskType,
-                                    newData.status,
-                                    newData.dueDate
-                                );
-                                console.log(newSquadronTaskData);
-                                dispatch(updateNewSquadronTask(newSquadronTaskData));
-                            }
-                        }, 300);
+                                dispatch(getSquadronTaskDetails());
+                        }, 1200);
                     }),
 
                 onRowDelete: oldData =>
@@ -229,7 +224,6 @@ console.log(values);
                                 data.splice(data.indexOf(oldData), 1);
                                 return {...prevState, data};
                             });
-                            console.log("Deleting: " + oldData.id + ", with id: " + oldData.mbrId);
                             dispatch(deleteSquadronTask(oldData.id));
                         }, 300);
                     }),

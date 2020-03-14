@@ -7,7 +7,7 @@ export class SquadronTaskDetailDeserializer {
             return items.map((item: any) => {
                 return new SquadronTaskDetail(
                     item.id,
-                    item.mbrSqId,
+                    item.mbrId,
                     item.mbrName,
                     item.taskType,
                     item.status,
@@ -16,7 +16,6 @@ export class SquadronTaskDetailDeserializer {
                     item.supervisor,
                     item.supId
                 )
-                    ;
             });
         }
         return [];

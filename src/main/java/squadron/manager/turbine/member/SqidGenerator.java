@@ -41,7 +41,7 @@ public class SqidGenerator {
 //        this.middleInitial = matcher.group(3);
         this.lastName = matcher.group(1);
 
-        this.sqid = rawSqid + "." + this.firstName.toUpperCase() + "." + this.lastName.toUpperCase();
+        this.sqid = rawSqid + "." + this.lastName.toUpperCase() + "." + this.firstName.toUpperCase();
 
     }
 }

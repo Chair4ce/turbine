@@ -1,6 +1,6 @@
 export default class SquadronTaskDetail {
     public id: number;
-    public mbrSqId: string;
+    public mbrId: string;
     public mbrName: string;
     public taskType: string;
     public status: string;
@@ -10,9 +10,9 @@ export default class SquadronTaskDetail {
     public SupId: string;
 
 
-    constructor(id: number, mbrSqId: string, mbrName: string, taskType: string, status: string, dueDate: Date, rnltd: Date, Supervisor: string, SupId: string) {
+    constructor(id: number, mbrId: string, mbrName: string, taskType: string, status: string, dueDate: Date, rnltd: Date, Supervisor: string, SupId: string) {
         this.id = id;
-        this.mbrSqId = mbrSqId;
+        this.mbrId = mbrId;
         this.mbrName = mbrName;
         this.taskType = taskType;
         this.status = status;

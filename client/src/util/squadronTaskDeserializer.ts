@@ -8,7 +8,6 @@ export class SquadronTaskDeserializer {
                 return new SquadronTask(
                     item.id,
                     item.mbrId,
-                    item.mbrName,
                     item.taskType,
                     item.status,
                     moment(item.dueDate).utc(true).toDate()

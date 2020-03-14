@@ -1,7 +1,5 @@
 import {gainingFetchError, gainingFetchRequest, gainingFetchSuccess} from './actions';
 import {callApi} from '../../util/api';
-import FeedbackModel from "../members/FeedbackModel";
-import {membersFetchError} from "../members";
 import GainingModel from "./GainingModel";
 
 

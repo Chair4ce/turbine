@@ -7,7 +7,6 @@
 // Define however naming conventions you'd like for your action types, but
 // personally, I use the `@@context/ACTION_TYPE` convention, to follow the convention
 // of Redux's `@@INIT` action.
-import ImportChangeModel from "./SquadronTaskModel";
 import SquadronTask from "./SquadronTaskModel";
 import SquadronTaskDetail from "./squadronTaskDetailModel";
 

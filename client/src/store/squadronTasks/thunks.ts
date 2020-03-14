@@ -1,4 +1,3 @@
-
 import {callApi} from "../../util/api";
 import {
     squadronTaskDetailError,
@@ -40,6 +39,7 @@ export const getSquadronTasks = () => {
 export const getSquadronTaskDetails = () => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
+        console.log("calling task details");
         callApi('GET', 'api/sqTask/details')
             .then(res => dispatch(squadronTaskDetailSuccess(res)))
             .catch(err => dispatch(squadronTaskDetailError(err.toString())))

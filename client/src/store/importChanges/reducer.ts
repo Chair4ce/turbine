@@ -2,7 +2,6 @@ import {Reducer} from 'redux';
 import ImportChangeModel from "./ImportChangeModel";
 import {ImportChangesActionTypes, ImportChangesState} from "./types";
 import {ImportChangesDeserializer} from "../../util/ImportChangesDeserializer";
-import {MemberActionTypes} from "../members";
 
 
 // Type-safe initialState!

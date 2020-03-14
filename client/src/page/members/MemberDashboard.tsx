@@ -17,11 +17,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {Box, Container, Fade, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
 import AlphaRosterTable from "../../component/materialTable/AlphaRosterTable";
 import GroupIcon from '@material-ui/icons/Group';
-import PowerIcon from '@material-ui/icons/Power';
-import DirectionsRunIcon from '@material-ui/icons/DirectionsRun';
-import DescriptionOutlinedIcon from '@material-ui/icons/DescriptionOutlined';
 import EmojiEventsOutlinedIcon from '@material-ui/icons/EmojiEventsOutlined';
-import SupervisorAccountOutlinedIcon from '@material-ui/icons/SupervisorAccountOutlined';
 import AccountCircleOutlinedIcon from '@material-ui/icons/AccountCircleOutlined';
 import {ApplicationState} from "../../store";
 import SpeedDialBtn, {CALLBACK_ENUMS} from "../../component/speedDialMenu/SpeedDialBtn";
@@ -33,7 +29,7 @@ import {getMembers, postFeedback} from "../../store/members/thunks";
 import {getGainingMembers} from "../../store/gaining/thunks";
 import {getSquadrons} from "../../store/squadrons/thunks";
 import SquadronTaskTable from "../../component/materialTable/SquadronTaskTable";
-import {getSquadronTasks} from "../../store/squadronTasks/thunks";
+import {getSquadronTaskDetails, getSquadronTasks} from "../../store/squadronTasks/thunks";
 
 interface Props{
     className?: string;
@@ -45,7 +41,7 @@ const MemberDashboard: React.FC<Props> = props => {
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
     const gaining = useSelector(({gaining}: ApplicationState) => gaining.data);
-    const squadronTasks = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTask);
+    const squadronTaskDetails = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTaskDetails);
     const squadronTasksLoading = useSelector(({squadronTask}: ApplicationState) => squadronTask.loading);
     const memberLoading = useSelector(({members}: ApplicationState) => members.loading);
     const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
@@ -65,12 +61,15 @@ const MemberDashboard: React.FC<Props> = props => {
 
     useEffect(() => {
         dispatch(getSquadronTasks());
+        dispatch(getSquadronTaskDetails());
         dispatch(getMembers());
         dispatch(getSquadrons());
         dispatch(getGainingMembers());
     }, [dispatch]);
 
-
+    useEffect(() => {
+console.log("noticed change")
+    }, [squadronTaskDetails]);
 
     const handleAlphaBtnClick = () => {
         handleTableOrder("alpha");
@@ -152,7 +151,7 @@ const MemberDashboard: React.FC<Props> = props => {
             case CALLBACK_ENUMS.CHILD_TOGGLE_TASK:
                 break;
             case FEEDBACK_CALLBACK_ENUMS.CHILD_FEEDBACK_TASK:
-                console.log("fired");
+
                 dispatch(postFeedback(data));
                 break;
         }
@@ -311,8 +310,6 @@ const MemberDashboard: React.FC<Props> = props => {
                     <Fade in={taskTable}>
                         <Box order={taskTableOrder} className={classes.table}>
                             <SquadronTaskTable
-                                items={squadronTasks}
-                                loading={squadronTasksLoading}
                                 title={"Awards And Decorations"}
                                 edit={true}
                                 filtering={true}

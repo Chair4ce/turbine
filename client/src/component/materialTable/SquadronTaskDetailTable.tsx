@@ -8,7 +8,7 @@ import {deleteSquadronTask} from "../../store/squadronTasks/thunks";
 
 interface Row {
     id: number;
-    mbrSqId: string;
+    mbrId: string;
     mbrName: string;
     taskType: string;
     status: string;
