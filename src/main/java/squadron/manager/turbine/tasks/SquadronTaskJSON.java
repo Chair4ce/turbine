@@ -10,6 +10,7 @@ import java.util.Date;
 public class SquadronTaskJSON {
     private Long id;
     private String mbrId;
+    private String mbrName;
     private String taskType;
     private String status;
     private Date dueDate;

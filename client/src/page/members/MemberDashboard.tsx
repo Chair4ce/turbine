@@ -14,15 +14,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import GroupAddIcon from '@material-ui/icons/GroupAdd';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import {useDispatch, useSelector} from "react-redux";
-import {
-    Box,
-    Container,
-    Fade,
-    ListItem,
-    ListItemIcon,
-    ListItemSecondaryAction,
-    ListItemText,
-} from "@material-ui/core";
+import {Box, Container, Fade, ListItem, ListItemIcon, ListItemSecondaryAction, ListItemText,} from "@material-ui/core";
 import AlphaRosterTable from "../../component/materialTable/AlphaRosterTable";
 import GroupIcon from '@material-ui/icons/Group';
 import PowerIcon from '@material-ui/icons/Power';
@@ -78,6 +70,8 @@ const MemberDashboard: React.FC<Props> = props => {
         dispatch(getGainingMembers());
     }, [dispatch]);
 
+
+
     const handleAlphaBtnClick = () => {
         handleTableOrder("alpha");
         showAlphaTable(prev => !prev)
@@ -87,7 +81,6 @@ const MemberDashboard: React.FC<Props> = props => {
         showGainTable(prev => !prev)
     };
     const handleTaskBtnClick = () => {
-        console.log(squadronTasks);
         handleTableOrder("task");
         showTaskTable(prev => !prev)
     };
@@ -244,29 +237,29 @@ const MemberDashboard: React.FC<Props> = props => {
                     {/*</ListItem>*/}
                 </List>
                 <Divider/>
-                <ListItem button>
-                    <ListItemIcon>{<PowerIcon/>}</ListItemIcon>
-                    <ListItemText primary="Positions"/>
-                </ListItem>
+                {/*<ListItem button>*/}
+                {/*    <ListItemIcon>{<PowerIcon/>}</ListItemIcon>*/}
+                {/*    <ListItemText primary="Positions"/>*/}
+                {/*</ListItem>*/}
 
-                <ListItem button>
-                    <ListItemIcon>{<DirectionsRunIcon/>}</ListItemIcon>
-                    <ListItemText primary="Fitness"/>
-                </ListItem>
-                <ListItem button>
-                    <ListItemIcon>{<DescriptionOutlinedIcon/>}</ListItemIcon>
-                    <ListItemText primary="Evaluations"/>
-                </ListItem>
+                {/*<ListItem button>*/}
+                {/*    <ListItemIcon>{<DirectionsRunIcon/>}</ListItemIcon>*/}
+                {/*    <ListItemText primary="Fitness"/>*/}
+                {/*</ListItem>*/}
+                {/*<ListItem button>*/}
+                {/*    <ListItemIcon>{<DescriptionOutlinedIcon/>}</ListItemIcon>*/}
+                {/*    <ListItemText primary="Evaluations"/>*/}
+                {/*</ListItem>*/}
                 <ListItem button onClick={handleTaskBtnClick} className={clsx( {
                         [classes.selected]: taskTable,
                         [classes.unselected]: !taskTable,})}>
                     <ListItemIcon>{<EmojiEventsOutlinedIcon/>}</ListItemIcon>
                     <ListItemText primary="Awards & Decs"/>
                 </ListItem>
-                <ListItem button>
-                    <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>
-                    <ListItemText primary="Supervisors"/>
-                </ListItem>
+                {/*<ListItem button>*/}
+                {/*    <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>*/}
+                {/*    <ListItemText primary="Supervisors"/>*/}
+                {/*</ListItem>*/}
                 <SpeedDialBtn
                     callbackHandler={callbackHandler}
                 />

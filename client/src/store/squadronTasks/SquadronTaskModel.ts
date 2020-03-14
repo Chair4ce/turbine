@@ -6,9 +6,9 @@ export default class SquadronTask {
     public dueDate: Date;
 
 
-    constructor(id: number, mbrSqId: string, taskType: string, status: string, dueDate: Date) {
+    constructor(id: number, mbrId: string, taskType: string, status: string, dueDate: Date) {
         this.id = id;
-        this.mbrId = mbrSqId;
+        this.mbrId = mbrId;
         this.taskType = taskType;
         this.status = status;
         this.dueDate = dueDate;

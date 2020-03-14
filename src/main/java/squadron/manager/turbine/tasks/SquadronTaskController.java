@@ -33,7 +33,9 @@ public class SquadronTaskController {
     @CrossOrigin
     @GetMapping
     public @ResponseBody
-    List<SquadronTask> getTasks() { return squadronTaskRepository.findAll(); }
+    List<SquadronTask> getTasks() {
+        return squadronTaskRepository.findAll();
+    }
 
     @CrossOrigin
     @GetMapping(path = "/details")
@@ -55,7 +57,7 @@ public class SquadronTaskController {
                     member.getRnltd(),
                     supervisor.getFullName() != null ? supervisor.getFullName() : "Not Assigned",
                     supervisor.getSqid() != null ? supervisor.getSqid() : "Not Assigned"
-                    ));
+            ));
         }));
 
         return DetailTaskList;
@@ -65,8 +67,13 @@ public class SquadronTaskController {
     @CrossOrigin
     @PostMapping(path = "/save")
     public Iterable<SquadronTask> saveMbrTask(@Valid @RequestBody SquadronTaskJSON json) {
-        System.out.println(json.getMbrId());
-        SquadronTask squadronTask = new SquadronTask(json.getMbrId(), json.getTaskType(),json.getStatus(), json.getDueDate());
+        System.out.println(json.getMbrName());
+        SquadronTask squadronTask = new SquadronTask(
+                json.getMbrId(),
+                json.getMbrName(),
+                json.getTaskType(),
+                json.getStatus(),
+                json.getDueDate());
         squadronTaskRepository.save(squadronTask);
         return squadronTaskRepository.findAll();
     }
@@ -81,15 +88,17 @@ public class SquadronTaskController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/update")
-    public List<SquadronTask> updateMbrTask(@Valid @RequestBody SquadronTaskJSON task) {
-        SquadronTask squadronTask = squadronTaskRepository.getOne(task.getId());
+    public List<SquadronTask> updateMbrTask(@Valid @RequestBody SquadronTask task) {
+        SquadronTask squadronTask = squadronTaskRepository.findSquadronTaskById(task.getId());
         SquadronTask newSquadronTask = new SquadronTask(
                 task.getMbrId(),
+                task.getMbrName(),
                 task.getTaskType(),
                 task.getStatus(),
                 task.getDueDate()
         );
         squadronTask.setMbrId(newSquadronTask.getMbrId());
+        squadronTask.setMbrName(newSquadronTask.getMbrId());
         squadronTask.setTaskType(newSquadronTask.getTaskType());
         squadronTask.setStatus(newSquadronTask.getStatus());
         squadronTask.setDueDate(newSquadronTask.getDueDate());

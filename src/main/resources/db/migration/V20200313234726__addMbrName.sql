@@ -1,0 +1,1 @@
+ALTER TABLE squadron_member_task ADD COLUMN mbr_name TEXT AFTER mbr_id;
