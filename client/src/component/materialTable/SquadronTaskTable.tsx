@@ -89,9 +89,9 @@ const SquadronTaskTable: React.FC<Props> = props => {
                     />
                 )
             },
-            {title: 'type', field: 'taskType', lookup: {  'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
-            {title: 'status', field: 'status', lookup: {'not started': 'not started', 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
-            {title: 'dueDate', field: 'dueDate', type: "date"},
+            {title: 'Type', field: 'taskType', lookup: {  'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
+            {title: 'Status', field: 'status', lookup: { 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
+            {title: 'Due Date', field: 'dueDate', type: "date"},
         ],
         //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
         // {
@@ -186,7 +186,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
                         setTimeout(() => {
                             resolve();
                             dispatch(getSquadronTaskDetails());
-                        }, 1200);
+                        }, 600);
 
                     }),
                 onRowUpdate: (newData, oldData) =>
@@ -210,7 +210,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
                         setTimeout(() => {
                             resolve();
                             dispatch(getSquadronTaskDetails());
-                        }, 1200);
+                        }, 600);
                     }),
 
                 onRowDelete: oldData =>
@@ -219,7 +219,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
                         setTimeout(() => {
                             resolve();
                             dispatch(getSquadronTaskDetails());
-                        }, 1200);
+                        }, 600);
                     }),
 
             } : {}}

@@ -415,6 +415,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         selected: {
             backgroundColor: '#DD7373',
+            '&:hover': {
+                background: "#ff8585",
+            },
             // opacity: '.8',
         },
         unselected: {

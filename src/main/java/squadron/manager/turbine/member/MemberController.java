@@ -55,65 +55,10 @@ public class MemberController {
         }));
 
         findSupervisor();
-        createDecorationTasks();
         return importMembersChangeLogRepository.findAll();
     }
 
-    public static Date addDays(Date date, int days)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, days); //minus number would decrement the days
-        return cal.getTime();
-    }
 
-    private void createDecorationTasks() {
-        Iterable<Member> members = memberRepository.findAll();
-        Iterable<SquadronTask> tasks = squadronTaskRepository.findAll();
-
-        members.forEach(member -> {
-            if (!doesContain(tasks, member)) {
-                if (member.getRnltd() != null) {
-                    SquadronTask squadronTask = new SquadronTask(
-                            member.getSqid(),
-                            determineAppropriateDecoration(member.getGrade()),
-                            "not started",
-                            addDays(member.getRnltd(), -60)
-                    );
-                    System.out.println("creating task: " + squadronTask);
-                    squadronTaskRepository.save(squadronTask);
-                }
-            }
-        });
-    }
-
-    static boolean doesContain(Iterable<SquadronTask> tasks, Member member) {
-        AtomicBoolean found = new AtomicBoolean(false);
-        tasks.forEach(task -> {
-            if (member.getSqid().equals(task.getMbrId()) && task.getDueDate().equals(addDays(member.getRnltd(), -60))){
-                found.set(true);
-            }
-        });
-        return found.get();
-    }
-
-    private String determineAppropriateDecoration(String grade) {
-        switch (grade) {
-            case "SSG":
-            case "TSG":
-                return "Commendation";
-            case "SRA":
-            case "A1C":
-            case "AMN":
-                return "Achievement";
-            case "MSG":
-            case "SMS":
-            case "CMS":
-                return "MSM";
-            default:
-                return "unknown";
-        }
-    }
 
     private void findExistingOrSaveNew(Date date, MemberJSON newImport) {
         SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
