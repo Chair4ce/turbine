@@ -210,22 +210,17 @@ const SquadronTaskTable: React.FC<Props> = props => {
                         }
                         setTimeout(() => {
                             resolve();
-                                dispatch(getSquadronTaskDetails());
+                            dispatch(getSquadronTaskDetails());
                         }, 1200);
                     }),
 
                 onRowDelete: oldData =>
                     new Promise(resolve => {
-                        console.log(oldData);
+                        dispatch(deleteSquadronTask(oldData.id));
                         setTimeout(() => {
                             resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return {...prevState, data};
-                            });
-                            dispatch(deleteSquadronTask(oldData.id));
-                        }, 300);
+                            dispatch(getSquadronTaskDetails());
+                        }, 1200);
                     }),
 
             } : {}}
