@@ -62,7 +62,6 @@ const SquadronTaskTable: React.FC<Props> = props => {
     }, [dispatch]);
 
     function handleChange(event: any, values: any) {
-        console.log(values);
         if (event) {
         if(values.sqid === "" || values.sqid !== null || !values) updateAssignedMemberSqid(values.sqid);
 
@@ -90,8 +89,8 @@ const SquadronTaskTable: React.FC<Props> = props => {
                     />
                 )
             },
-            {title: 'type', field: 'taskType', lookup: { 'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
-            {title: 'status', field: 'status', lookup: { 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
+            {title: 'type', field: 'taskType', lookup: {  'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
+            {title: 'status', field: 'status', lookup: {'not started': 'not started', 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
             {title: 'dueDate', field: 'dueDate', type: "date"},
         ],
         //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>

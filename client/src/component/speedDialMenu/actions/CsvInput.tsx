@@ -118,7 +118,7 @@ function csvJSON(csv: any, type: string) {
     let headers = lines[0].split(commaRegex).map((h: any) => h.replace(quotesRegex, "$1"));
 
     const csvImportModel: CSVImportModel = new CSVImportModel(type, headers);
-    console.log(csvImportModel.missingHeaders);
+
     let CamelHeaders = convertHeader(headers);
 
     for (let i = 1; i < lines.length; i++) {
@@ -271,7 +271,6 @@ const CsvInput: React.FC<Props> = props => {
                 };
 
             } else {
-                console.log("not a csv")
             }
 
         }

@@ -20,7 +20,6 @@ export const initialState: SquadronTaskState = {
 const reducer: Reducer<SquadronTaskState> = (state = initialState, action) => {
     switch (action.type) {
         case SquadronTaskActionTypes.POST_SQUADRON_TASK_DETAILS_SUCCESS: {
-            console.log("Assigning task details to state: " +action.payload);
             return { ...state, loading: false, squadronTaskDetails: SquadronTaskDetailDeserializer.deserialize(action.payload) };
         }
         case SquadronTaskActionTypes.POST_SQUADRON_TASK_SUCCESS: {

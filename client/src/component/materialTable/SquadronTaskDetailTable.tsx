@@ -155,7 +155,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
                 //                     newData.status,
                 //                     newData.dueDate
                 //                 );
-                //                 console.log(newSquadronTaskData);
+                //
                 //                 dispatch(updateNewSquadronTask(newSquadronTaskData));
                 //             }
                 //         }, 300);

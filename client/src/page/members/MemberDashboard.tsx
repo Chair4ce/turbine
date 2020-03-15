@@ -68,7 +68,7 @@ const MemberDashboard: React.FC<Props> = props => {
     }, [dispatch]);
 
     useEffect(() => {
-console.log("noticed change")
+
     }, [squadronTaskDetails]);
 
     const handleAlphaBtnClick = () => {

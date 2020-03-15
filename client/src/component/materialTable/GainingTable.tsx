@@ -180,7 +180,6 @@ const GainingTable: React.FC<Props> = props => {
                                     newData.losingPas,
                                     newData.projectedOfficeSymbol,
                                     newData.lastUpdated);
-                                console.log(newGainingData);
                                 dispatch(updateGaining(newGainingData));
                             }
                         }, 300);

@@ -5,17 +5,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import squadron.manager.turbine.metric.*;
+import squadron.manager.turbine.tasks.SquadronTask;
+import squadron.manager.turbine.tasks.SquadronTaskRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping(MemberController.URI)
 public class MemberController {
     public static final String URI = "api/members";
+
+    private SquadronTaskRepository squadronTaskRepository;
 
     @Autowired
     private MemberRepository memberRepository;
@@ -26,6 +33,10 @@ public class MemberController {
     @Autowired
     private ImportMembersChangeLogRepository importMembersChangeLogRepository;
 
+    @Autowired
+    public void ConstructorBasedInjection(SquadronTaskRepository squadronTaskRepository) {
+        this.squadronTaskRepository = squadronTaskRepository;
+    }
 
     @CrossOrigin
     @GetMapping
@@ -42,13 +53,74 @@ public class MemberController {
         json.forEach((newImport -> {
             findExistingOrSaveNew(date, newImport);
         }));
-        System.out.println(importMembersChangeLogRepository.findAll());
+
+        findSupervisor();
+        createDecorationTasks();
         return importMembersChangeLogRepository.findAll();
+    }
+
+    public static Date addDays(Date date, int days)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, days); //minus number would decrement the days
+        return cal.getTime();
+    }
+
+    private void createDecorationTasks() {
+        Iterable<Member> members = memberRepository.findAll();
+        Iterable<SquadronTask> tasks = squadronTaskRepository.findAll();
+
+        members.forEach(member -> {
+            if (!doesContain(tasks, member)) {
+                if (member.getRnltd() != null) {
+                    SquadronTask squadronTask = new SquadronTask(
+                            member.getSqid(),
+                            determineAppropriateDecoration(member.getGrade()),
+                            "not started",
+                            addDays(member.getRnltd(), -60)
+                    );
+                    System.out.println("creating task: " + squadronTask);
+                    squadronTaskRepository.save(squadronTask);
+                }
+            }
+        });
+    }
+
+    static boolean doesContain(Iterable<SquadronTask> tasks, Member member) {
+        AtomicBoolean found = new AtomicBoolean(false);
+        tasks.forEach(task -> {
+            if (member.getSqid().equals(task.getMbrId()) && task.getDueDate().equals(addDays(member.getRnltd(), -60))){
+                found.set(true);
+            }
+        });
+        return found.get();
+    }
+
+    private String determineAppropriateDecoration(String grade) {
+        switch (grade) {
+            case "SSG":
+            case "TSG":
+                return "Commendation";
+            case "SRA":
+            case "A1C":
+            case "AMN":
+                return "Achievement";
+            case "MSG":
+            case "SMS":
+            case "CMS":
+                return "MSM";
+            default:
+                return "unknown";
+        }
     }
 
     private void findExistingOrSaveNew(Date date, MemberJSON newImport) {
         SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
         Member existingMember = returnMemberIfExists(sqidModel.getSqid());
+        if (newImport.getSupvName() != null) {
+            newImport.setSupvName(newImport.getSupvName().replaceAll("\\s", "."));
+        }
 
         Member importingMember = new Member(
                 sqidModel.getSqid(),
@@ -77,6 +149,33 @@ public class MemberController {
             this.metricService.logNewImportedMembers(new NewMemberLogModel(importingMember.getSqid(), importingMember.getFullName(), date));
             this.memberRepository.save(importingMember);
         }
+
+    }
+
+    private void findSupervisor() {
+        System.out.println("setting up");
+        Iterable<Member> members = memberRepository.findAll();
+        members.forEach(member -> {
+            if (member.getSupvName() != null) {
+                compareSupName(member, members);
+            }
+        });
+    }
+
+    private void compareSupName(Member member, Iterable<Member> potentialSupervisors) {
+        AtomicReference<Integer> foundMatch = new AtomicReference<>(0);
+        System.out.println("looking for supervisors");
+        potentialSupervisors.forEach(potentialSupervisor -> {
+            if (member.getSupvName().equals(potentialSupervisor.getSqid().substring(potentialSupervisor.getSqid().indexOf(".") + 1))) {
+                if (foundMatch.get() == 0) {
+                    System.out.println("found one");
+                    member.setSupvName(potentialSupervisor.getSqid());
+                    memberRepository.save(member);
+                }
+                foundMatch.set(foundMatch.get() + 1);
+            }
+        });
+
     }
 
 
@@ -88,9 +187,9 @@ public class MemberController {
             importMemberChanges.add(new ImportMembersChangeLog(date, importingMember, existingMember, field));
         }
 
-        if(changed) {
-        this.metricService.logMembersFieldChange(importMemberChanges);
-        this.memberRepository.save(updateExistingMemberData(importingMember, existingMember));
+        if (changed) {
+            this.metricService.logMembersFieldChange(importMemberChanges);
+            this.memberRepository.save(updateExistingMemberData(importingMember, existingMember));
         }
     }
 
