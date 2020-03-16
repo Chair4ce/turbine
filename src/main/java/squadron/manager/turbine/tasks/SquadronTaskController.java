@@ -43,24 +43,33 @@ public class SquadronTaskController {
     List<TaskDetailModel> getDetails() {
         List<SquadronTask> squadronTaskList = squadronTaskRepository.findAll();
         List<TaskDetailModel> DetailTaskList = new ArrayList();
-        squadronTaskList.forEach((sqTask -> {
+        Iterable<Member> members = memberRepository.findAll();
+
+        squadronTaskList.forEach(sqTask -> {
             if (sqTask != null) {
-                Member member = memberRepository.findBySqid(sqTask.getMbrId());
-                Member supervisor = memberRepository.findBySqid(member.getSupvName());
+                String supervisor = "";
+                String mbrName = "";
+                Date rnltd = null;
+                for (Member member : members) {
+                    if (sqTask.getMbrId().equals(member.getSqid())) {
+                        supervisor = member.getSupvName();
+                        mbrName = member.getFullName();
+                        rnltd = member.getRnltd();
+                        break;
+                    }
+                }
                 DetailTaskList.add(new TaskDetailModel(
                         sqTask.getId(),
                         sqTask.getMbrId(),
-                        member.getFullName(),
+                        mbrName,
                         sqTask.getTaskType(),
                         sqTask.getStatus(),
                         sqTask.getDueDate(),
-                        member.getRnltd(),
-                        supervisor != null ? supervisor.getFullName() : "Not Assigned",
-                        supervisor != null ? supervisor.getSqid() : "Not Assigned"
+                        rnltd,
+                        supervisor
                 ));
             }
-        }));
-        System.out.println(DetailTaskList);
+        });
         return DetailTaskList;
     }
 

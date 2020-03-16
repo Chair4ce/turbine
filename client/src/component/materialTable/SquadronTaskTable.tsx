@@ -23,8 +23,7 @@ interface Row {
     status: string;
     dueDate: Date;
     rnltd: Date;
-    Supervisor: string;
-    SupId: string;
+    supervisor: string;
 }
 
 interface TableState {
@@ -47,15 +46,14 @@ interface Props {
 const SquadronTaskTable: React.FC<Props> = props => {
     const dispatch = useDispatch();
 
-    const memberOptions: MemberOptionModel[] = useSelector(({members}: ApplicationState) => members.data.map((function(member) {
-        return new MemberOptionModel(member.sqid,member.fullName)
+    const memberOptions: MemberOptionModel[] = useSelector(({members}: ApplicationState) => members.data.map((function (member) {
+        return new MemberOptionModel(member.sqid, member.fullName)
     })));
 
     const squadronTaskDetails = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTaskDetails);
     const squadronTasksLoading = useSelector(({squadronTask}: ApplicationState) => squadronTask.loading);
 
     const [assignedMemberSqid, updateAssignedMemberSqid] = React.useState("");
-    const [assignedMemberName, updateAssignedMemberName] = React.useState("");
 
     useEffect(() => {
         dispatch(getSquadronTaskDetails());
@@ -63,35 +61,45 @@ const SquadronTaskTable: React.FC<Props> = props => {
 
     function handleChange(event: any, values: any) {
         if (event) {
-        if(values.sqid === "" || values.sqid !== null || !values) updateAssignedMemberSqid(values.sqid);
-
+            if (values.sqid === "" || values.sqid !== null || !values) updateAssignedMemberSqid(values.sqid);
         }
     }
 
     const [state, setState] = React.useState<TableState>({
         columns: [
-            {title: 'Assigned', field: 'mbrName',
+            {
+                title: 'Assigned', field: 'mbrName',
                 editComponent: props => (
                     <Autocomplete
                         id="combo-box"
                         options={memberOptions}
                         getOptionLabel={(option: MemberOptionModel) => option.Name}
-                        style={{ width: 400 }}
+                        style={{width: 400}}
                         onChange={handleChange}
                         disableClearable
                         renderInput={params => <TextField
                             {...params}
                             label="Select Member"
                             variant="outlined"
-                            style={{ width: 400 }}
+                            style={{width: 400}}
                             placeholder={props.rowData.mbrName}
                         />}
                     />
                 )
             },
-            {title: 'Type', field: 'taskType', lookup: {  'Achievement': 'Achievement',  'Commendation': 'Commendation', 'MSM': 'MSM' }},
-            {title: 'Status', field: 'status', lookup: { 'pending': 'pending',  'returned': 'returned', 'complete': 'complete' }},
-            {title: 'Due Date', field: 'dueDate', type: "date"},
+            {
+                title: 'Type',
+                field: 'taskType',
+                lookup: {'Achievement': 'Achievement', 'Commendation': 'Commendation', 'MSM': 'MSM'}
+            },
+            {
+                title: 'Status',
+                field: 'status',
+                lookup: {'pending': 'pending', 'returned': 'returned', 'complete': 'complete'}
+            },
+            {title: 'Due Date', field: 'dueDate', type: 'date'},
+            {title: 'RNLTD', field: 'rnltd', type: 'date', editable: 'never', emptyValue: '-'},
+            {title: 'Supervisor', field: 'supervisor', editable: 'never'},
         ],
         //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
         // {
@@ -161,7 +169,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
                 search: props.search,
                 selection: props.selection,
                 exportButton: props.exportButton,
-                pageSizeOptions: [5,10,50,100],
+                pageSizeOptions: [5, 10, 50, 100],
                 columnsButton: true,
                 emptyRowsWhenPaging: false,
 
@@ -173,9 +181,9 @@ const SquadronTaskTable: React.FC<Props> = props => {
             editable={props.edit ? {
                 onRowAdd: newData =>
                     new Promise(resolve => {
-                      if (assignedMemberSqid !== null) {
-                          newData.mbrId = assignedMemberSqid;
-                      }
+                        if (assignedMemberSqid !== null) {
+                            newData.mbrId = assignedMemberSqid;
+                        }
                         const newSquadronTask = new NewSquadronTask(
                             newData.mbrId,
                             newData.taskType,

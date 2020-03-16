@@ -18,9 +18,8 @@ public class TaskDetailModel {
     private Date dueDate;
     private Date rnltd;
     private String supervisor;
-    private String supId;
 
-    public TaskDetailModel( String mbrId, String mbrName, String taskType, String status, Date dueDate, Date rnltd, String supervisor, String supId) {
+    public TaskDetailModel( String mbrId, String mbrName, String taskType, String status, Date dueDate, Date rnltd, String supervisor) {
         this.mbrId = mbrId;
         this.mbrName = mbrName;
         this.taskType = taskType;
@@ -28,10 +27,9 @@ public class TaskDetailModel {
         this.dueDate = dueDate;
         this.rnltd = rnltd;
         this.supervisor = supervisor;
-        this.supId = supId;
     }
 
-    public TaskDetailModel(long id, String mbrId, String mbrName, String taskType, String status, Date dueDate, Date rnltd, String supervisor, String supId) {
+    public TaskDetailModel(long id, String mbrId, String mbrName, String taskType, String status, Date dueDate, Date rnltd, String supervisor) {
         this.id = id;
         this.mbrId = mbrId;
         this.mbrName = mbrName;
@@ -40,7 +38,6 @@ public class TaskDetailModel {
         this.dueDate = dueDate;
         this.rnltd = rnltd;
         this.supervisor = supervisor;
-        this.supId = supId;
     }
 
     public TaskDetailModel update(TaskDetailJSON json) {
@@ -51,7 +48,6 @@ public class TaskDetailModel {
         this.setDueDate(json.getDueDate());
         this.setRnltd(json.getRnltd());
         this.setSupervisor(json.getSupervisor());
-        this.setSupId(json.getSupId());
         return this;
     }
 }

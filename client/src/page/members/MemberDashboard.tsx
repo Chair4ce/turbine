@@ -26,23 +26,19 @@ import {toggleUploadModal} from "../../store/modals";
 import FeedbackInput, {FEEDBACK_CALLBACK_ENUMS} from "../../component/feedBack/Feedback";
 import GainingTable from "../../component/materialTable/GainingTable";
 import {getMembers, postFeedback} from "../../store/members/thunks";
-import {getGainingMembers} from "../../store/gaining/thunks";
-import {getSquadrons} from "../../store/squadrons/thunks";
 import SquadronTaskTable from "../../component/materialTable/SquadronTaskTable";
-import {getSquadronTaskDetails, getSquadronTasks} from "../../store/squadronTasks/thunks";
-
-interface Props{
-    className?: string;
-}
+import {getSquadronTaskDetails} from "../../store/squadronTasks/thunks";
+import {getSquadrons} from "../../store/squadrons/thunks";
+import {getGainingMembers} from "../../store/gaining/thunks";
 
 
-const MemberDashboard: React.FC<Props> = props => {
+
+
+const MemberDashboard: React.FC = () => {
 
     const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
     const members = useSelector(({members}: ApplicationState) => members.data);
     const gaining = useSelector(({gaining}: ApplicationState) => gaining.data);
-    const squadronTaskDetails = useSelector(({squadronTask}: ApplicationState) => squadronTask.squadronTaskDetails);
-    const squadronTasksLoading = useSelector(({squadronTask}: ApplicationState) => squadronTask.loading);
     const memberLoading = useSelector(({members}: ApplicationState) => members.loading);
     const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
     const dispatch = useDispatch();
@@ -52,96 +48,38 @@ const MemberDashboard: React.FC<Props> = props => {
     const [gainTable, showGainTable] = React.useState(false);
     const [alphaTable, showAlphaTable] = React.useState(false);
     const [taskTable, showTaskTable] = React.useState(false);
-    // const [lossTable, showLossTable] = React.useState(false);
-    const [alphaTableOrder, setAlphaTableOrder] = React.useState(3);
-    const [gainTableOrder, setGainTableOrder] = React.useState(2);
-    const [lossTableOrder, setLossTableOrder] = React.useState(4);
-    const [taskTableOrder, setTaskTableOrder] = React.useState(1);
-    // const [showCSVInputModal, setShowCSVInputModal] = React.useState(false);
 
     useEffect(() => {
-        dispatch(getSquadronTasks());
         dispatch(getSquadronTaskDetails());
         dispatch(getMembers());
         dispatch(getSquadrons());
         dispatch(getGainingMembers());
     }, [dispatch]);
 
-    useEffect(() => {
-
-    }, [squadronTaskDetails]);
 
     const handleAlphaBtnClick = () => {
-        handleTableOrder("alpha");
-        showAlphaTable(prev => !prev)
+        showAlphaTable(prev => !prev);
+        showGainTable(false);
+        showTaskTable(false);
     };
     const handleGainBtnClick = () => {
-        handleTableOrder("gain");
-        showGainTable(prev => !prev)
+        showGainTable(prev => !prev);
+        showAlphaTable(false);
+        showTaskTable(false);
     };
     const handleTaskBtnClick = () => {
-        handleTableOrder("task");
-        showTaskTable(prev => !prev)
+        showTaskTable(prev => !prev);
+        showGainTable(false);
+        showAlphaTable(false);
     };
 
-    // const handleLossBtnClick = () => {
-    //     handleTableOrder("loss");
-    //     showLossTable(prev => !prev)
-    // };
-
     const handleDrawerOpen = () => {
-        setOpen(true);
+        setOpen(prev => !prev);
     };
 
     const handleDrawerClose = () => {
-        setOpen(false);
+        setOpen(prev => !prev);
     };
-
-
-    const handleTableOrder = (table: string) => {
-        switch (table) {
-            case "alpha": {
-                setAlphaTableOrder(1);
-                setGainTableOrder(gainTableOrder + 1);
-                setLossTableOrder(lossTableOrder + 1);
-                break;
-            }
-            case "gain": {
-                setGainTableOrder(1);
-                setAlphaTableOrder(alphaTableOrder + 1);
-                setLossTableOrder(lossTableOrder + 1);
-                break;
-            }
-            case "loss": {
-                setLossTableOrder(1);
-                setAlphaTableOrder(alphaTableOrder + 1);
-                setGainTableOrder(gainTableOrder + 1);
-                break;
-            }
-            case "task": {
-                setTaskTableOrder(1);
-                setAlphaTableOrder(alphaTableOrder + 1);
-                setGainTableOrder(gainTableOrder + 1);
-                setLossTableOrder(lossTableOrder + 1);
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    };
-
-    // onRowAdd: newData =>
-    //     new Promise(resolve => {
-    //         setTimeout(() => {
-    //             resolve();
-    //             setState(prevState => {
-    //                 const data = [...prevState.data];
-    //                 data.push(newData);
-    //                 return { ...prevState, data };
-    //             });
-    //         }, 300);
-    //     })
 
    const callbackHandler = (type: string, data?: any) => {
         switch(type) {
@@ -151,12 +89,10 @@ const MemberDashboard: React.FC<Props> = props => {
             case CALLBACK_ENUMS.CHILD_TOGGLE_TASK:
                 break;
             case FEEDBACK_CALLBACK_ENUMS.CHILD_FEEDBACK_TASK:
-
                 dispatch(postFeedback(data));
                 break;
         }
     };
-
 
     return (
         <div className={classes.root}>
@@ -259,21 +195,19 @@ const MemberDashboard: React.FC<Props> = props => {
                 {/*    <ListItemIcon>{<SupervisorAccountOutlinedIcon/>}</ListItemIcon>*/}
                 {/*    <ListItemText primary="Supervisors"/>*/}
                 {/*</ListItem>*/}
+            </Drawer>
                 <SpeedDialBtn
                     callbackHandler={callbackHandler}
                 />
-            </Drawer>
             <Container className={classes.content}>
                 {showUploadModal &&
                 <VerticalLinearStepper/>
-                // <ConnectedCsvInput
-                //     toggleCSVInputModal={toggleCSVInputModal}/>
                 }
                 <Box display={'flex'} flexDirection={'column'} height={'100%'}
                      position={'relative'}>
                     {gainTable &&
                     <Fade in={gainTable} >
-                        <Box order={gainTableOrder} className={classes.table}>
+                        <Box className={classes.table}>
                             <GainingTable
                                 gaining={gaining}
                                 loading={gainingLoading}
@@ -290,7 +224,7 @@ const MemberDashboard: React.FC<Props> = props => {
                     }
                     {alphaTable &&
                     <Fade in={alphaTable}>
-                        <Box order={alphaTableOrder} className={classes.table}>
+                        <Box className={classes.table}>
                     <AlphaRosterTable
                         members={members}
                         loading={memberLoading}
@@ -308,7 +242,7 @@ const MemberDashboard: React.FC<Props> = props => {
                     }
                     {taskTable &&
                     <Fade in={taskTable}>
-                        <Box order={taskTableOrder} className={classes.table}>
+                        <Box className={classes.table}>
                             <SquadronTaskTable
                                 title={"Awards And Decorations"}
                                 edit={true}
@@ -425,7 +359,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         table: {
             width: '100%',
-            minWidth: 200,
+            minWidth: 300,
             marginBottom: 20,
         },
         gainTableDisplay: {
@@ -435,6 +369,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'none'
         },
         alphaTableDisplay: {
+            display: 'none'
+        },
+        taskTableDisplay: {
             display: 'none'
         },
         csvInput: {

@@ -13,8 +13,7 @@ export class SquadronTaskDetailDeserializer {
                     item.status,
                     moment(item.dueDate).utc(true).toDate(),
                     moment(item.rnltd).utc(true).toDate(),
-                    item.supervisor,
-                    item.supId
+                    item.supervisor
                 )
             });
         }

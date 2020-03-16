@@ -6,11 +6,10 @@ export default class SquadronTaskDetail {
     public status: string;
     public dueDate: Date;
     public rnltd: Date;
-    public Supervisor: string;
-    public SupId: string;
+    public supervisor: string;
 
 
-    constructor(id: number, mbrId: string, mbrName: string, taskType: string, status: string, dueDate: Date, rnltd: Date, Supervisor: string, SupId: string) {
+    constructor(id: number, mbrId: string, mbrName: string, taskType: string, status: string, dueDate: Date, rnltd: Date, supervisor: string) {
         this.id = id;
         this.mbrId = mbrId;
         this.mbrName = mbrName;
@@ -18,7 +17,6 @@ export default class SquadronTaskDetail {
         this.status = status;
         this.dueDate = dueDate;
         this.rnltd = rnltd;
-        this.Supervisor = Supervisor;
-        this.SupId = SupId;
+        this.supervisor = supervisor;
     }
 }

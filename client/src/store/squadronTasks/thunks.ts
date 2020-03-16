@@ -1,7 +1,6 @@
 import {callApi} from "../../util/api";
 import {
-    squadronTaskDetailError,
-    squadronTaskDetailSuccess,
+    squadronTaskDetailError, squadronTaskDetailSuccess,
     squadronTaskPostError,
     squadronTaskPostSuccess
 } from "./actions";
@@ -12,7 +11,7 @@ import NewSquadronTask from "./NewSquadronTask";
 export const createNewSquadronTask = (newSquadronTask: NewSquadronTask) => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('POST', 'api/sqTask/save', newSquadronTask)
+       return callApi('POST', 'api/sqTask/save', newSquadronTask)
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch(err => dispatch(squadronTaskPostError(err.toString())))
     }
@@ -21,7 +20,7 @@ export const createNewSquadronTask = (newSquadronTask: NewSquadronTask) => {
 export const deleteSquadronTask = (squadronTaskId: number) => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('POST', 'api/sqTask/delete', squadronTaskId)
+       return callApi('POST', 'api/sqTask/delete', squadronTaskId)
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch(err => dispatch(squadronTaskPostError(err.toString())))
     }
@@ -30,7 +29,7 @@ export const deleteSquadronTask = (squadronTaskId: number) => {
 export const getSquadronTasks = () => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('GET', 'api/sqTask')
+       return callApi('GET', 'api/sqTask')
             .then(res => dispatch(squadronTaskPostSuccess(res)))
             .catch(err => dispatch(squadronTaskPostError(err.toString())))
     }
@@ -39,7 +38,7 @@ export const getSquadronTasks = () => {
 export const getSquadronTaskDetails = () => {
     return (dispatch: any) => {
         dispatch(squadronPostRequest);
-        callApi('GET', 'api/sqTask/details')
+       return callApi('GET', 'api/sqTask/details')
             .then(res => dispatch(squadronTaskDetailSuccess(res)))
             .catch(err => dispatch(squadronTaskDetailError(err.toString())))
     }

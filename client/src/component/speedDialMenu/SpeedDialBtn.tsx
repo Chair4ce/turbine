@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100vh',
             transform: 'translateZ(0px)',
             flexGrow: 1,
-            zIndex: 1000,
+            zIndex: 5000,
             pointerEvents: 'none',
         },
         speedDial: {
