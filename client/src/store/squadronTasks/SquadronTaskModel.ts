@@ -3,10 +3,10 @@ export default class SquadronTask {
     public mbrId: string;
     public taskType: string;
     public status: string;
-    public dueDate: Date;
+    public dueDate: Date | undefined;
 
 
-    constructor(id: number, mbrId: string, taskType: string, status: string, dueDate: Date) {
+    constructor(id: number, mbrId: string, taskType: string, status: string, dueDate: Date | undefined) {
         this.id = id;
         this.mbrId = mbrId;
         this.taskType = taskType;

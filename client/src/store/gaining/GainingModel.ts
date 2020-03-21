@@ -7,24 +7,24 @@ export default class GainingModel {
     public fullName: string;
     public firstName: string;
     public lastName: string;
-    public rnltd: Date | null;
+    public rnltd: Date | undefined;
     public grade: string;
     public gainingPas: string;
-    public projectedArrivalDate: Date | null;
+    public projectedArrivalDate: Date | undefined;
     public dafsc: string;
     public cellPhone: string | null;
     public email: string | null;
-    public dor: Date | null;
-    public dateArrivedStation: Date | null;
+    public dor: Date | undefined;
+    public dateArrivedStation: Date | undefined;
     public projectedBilletId: string | null;
-    public dateDepLastDutyStn: Date | null;
+    public dateDepLastDutyStn: Date | undefined;
     public sponsorId: string | null;
     public losingPas: string | null;
     public projectedOfficeSymbol: string | null;
-    public lastUpdated: Date | null;
+    public lastUpdated: Date | undefined;
 
 
-    constructor(id: number, sqid: string, fullName: string, firstName: string, lastName: string, rnltd: Date | null, grade: string, gainingPas: string, projectedArrivalDate: Date | null, dafsc: string, cellPhone: string | null, email: string | null, dor: Date | null, dateArrivedStation: Date | null, projectedBilletId: string | null, dateDepLastDutyStn: Date | null, sponsorId: string | null, losingPas: string | null, projectedOfficeSymbol: string | null, lastUpdated: Date | null) {
+    constructor(id: number, sqid: string, fullName: string, firstName: string, lastName: string, rnltd: Date | undefined, grade: string, gainingPas: string, projectedArrivalDate: Date | undefined, dafsc: string, cellPhone: string | null, email: string | null, dor: Date | undefined, dateArrivedStation: Date | undefined, projectedBilletId: string | null, dateDepLastDutyStn: Date | undefined, sponsorId: string | null, losingPas: string | null, projectedOfficeSymbol: string | null, lastUpdated: Date | undefined) {
         this.id = id;
         this.sqid = sqid;
         this.fullName = fullName;

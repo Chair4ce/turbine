@@ -6,12 +6,12 @@ interface Row {
     id: number;
     fullName: string;
     grade: string;
+    dor: Date | undefined;
     dafsc: string;
-    officeSymbol: string | null;
-    dutyTitle: string | null;
-    dutyPhone: string | null;
-    rnltd: Date | null;
-    supvName: string | null;
+    officeSymbol: string | undefined;
+    dutyTitle: string | undefined;
+    rnltd: Date | undefined;
+    supvName: string | undefined;
 }
 
 interface TableState {

@@ -21,8 +21,8 @@ interface Row {
     mbrName: string;
     taskType: string;
     status: string;
-    dueDate: Date;
-    rnltd: Date;
+    dueDate: Date | undefined;
+    rnltd: Date | undefined;
     supervisor: string;
 }
 
@@ -61,7 +61,7 @@ const SquadronTaskTable: React.FC<Props> = props => {
 
     function handleChange(event: any, values: any) {
         if (event) {
-            if (values.sqid === "" || values.sqid !== null || !values) updateAssignedMemberSqid(values.sqid);
+            if (values.sqid === "" || values.sqid !== undefined || !values) updateAssignedMemberSqid(values.sqid);
         }
     }
 
@@ -192,10 +192,9 @@ const SquadronTaskTable: React.FC<Props> = props => {
                         );
                         dispatch(createNewSquadronTask(newSquadronTask));
                         setTimeout(() => {
-                            resolve();
                             dispatch(getSquadronTaskDetails());
-                        }, 600);
-
+                            resolve();
+                        }, 300);
                     }),
                 onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
@@ -214,20 +213,21 @@ const SquadronTaskTable: React.FC<Props> = props => {
                                 newData.dueDate
                             );
                             dispatch(updateNewSquadronTask(newSquadronTaskData));
+                            setTimeout(() => {
+                                dispatch(getSquadronTaskDetails());
+                                resolve();
+                            }, 300);
                         }
-                        setTimeout(() => {
-                            resolve();
-                            dispatch(getSquadronTaskDetails());
-                        }, 600);
+                        resolve();
                     }),
 
                 onRowDelete: oldData =>
                     new Promise(resolve => {
                         dispatch(deleteSquadronTask(oldData.id));
                         setTimeout(() => {
-                            resolve();
                             dispatch(getSquadronTaskDetails());
-                        }, 600);
+                            resolve();
+                        }, 300);
                     }),
 
             } : {}}

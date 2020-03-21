@@ -11,8 +11,8 @@ export class SquadronTaskDetailDeserializer {
                     item.mbrName,
                     item.taskType,
                     item.status,
-                    moment(item.dueDate).utc(true).toDate(),
-                    moment(item.rnltd).utc(true).toDate(),
+                    item.dueDate == null ? undefined : moment(item.dueDate).utc(true).toDate(),
+                    item.rnltd == null ? undefined : moment(item.rnltd).utc(true).toDate(),
                     item.supervisor
                 )
             });

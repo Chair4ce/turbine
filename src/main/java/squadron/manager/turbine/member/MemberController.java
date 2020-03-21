@@ -98,7 +98,6 @@ public class MemberController {
     }
 
     private void findSupervisor() {
-        System.out.println("setting up");
         Iterable<Member> members = memberRepository.findAll();
         members.forEach(member -> {
             if (member.getSupvName() != null) {
@@ -109,11 +108,9 @@ public class MemberController {
 
     private void compareSupName(Member member, Iterable<Member> potentialSupervisors) {
         AtomicReference<Integer> foundMatch = new AtomicReference<>(0);
-        System.out.println("looking for supervisors");
         potentialSupervisors.forEach(potentialSupervisor -> {
             if (member.getSupvName().equals(potentialSupervisor.getSqid().substring(potentialSupervisor.getSqid().indexOf(".") + 1))) {
                 if (foundMatch.get() == 0) {
-                    System.out.println("found one");
                     member.setSupvName(potentialSupervisor.getSqid());
                     memberRepository.save(member);
                 }

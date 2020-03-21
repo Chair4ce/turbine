@@ -76,21 +76,18 @@ public class Gaining {
         this.fullName = fullName;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.rnltd = convertDate(rnltd);
+        this.rnltd = rnltd;
         this.grade = grade;
         this.gainingPas = gainingPas;
-        this.projectedArrivalDate = convertDate(projectedArrivalDate);
         this.dafsc = dafsc.replaceAll("-", "");
-        this.dor = convertDate(dor);
-        this.dateArrivedStation = convertDate(dateArrivedStation);
-        this.dateDepLastDutyStn = convertDate(dateDepLastDutyStn);
+        this.dor = dor;
+        this.dateDepLastDutyStn = dateDepLastDutyStn;
         this.sponsorId = sponsorId;
         this.losingPas = losingPas;
         this.lastUpdated = lastUpdated;
     }
 
-    public Gaining(Long id, String sqid, String fullName, String firstName, String lastName, Date rnltd, String grade, String gainingPas, Date projectedArrivalDate, String dafsc, String cellPhone, String email, Date dor, Date dateArrivedStation, String projectedBilletId, Date dateDepLastDutyStn,String sponsorId, String losingPas, String projectedOfficeSymbol, Date lastUpdated) {
-        this.id = id;
+    public Gaining(String sqid, String fullName, String firstName, String lastName, Date rnltd, String grade, String gainingPas, Date projectedArrivalDate, String dafsc, String cellPhone, String email, Date dor, Date dateArrivedStation, String projectedBilletId, Date dateDepLastDutyStn,String sponsorId, String losingPas, String projectedOfficeSymbol, Date lastUpdated) {
         this.sqid = sqid;
         this.fullName = fullName;
         this.firstName = firstName;
@@ -155,15 +152,15 @@ public class Gaining {
         }
 
         try {
-            if (!convertDate(this.rnltd).equals(convertDate(importingMember.rnltd))) {
-                if (convertDate(this.rnltd) == null && convertDate(importingMember.rnltd) == null) {
+            if (!this.rnltd.equals(importingMember.rnltd)) {
+                if (this.rnltd == null && importingMember.rnltd == null) {
 
                 } else {
                 diff.add("rnltd");
                 }
             }
         } catch (NullPointerException e) {
-            if (convertDate(this.rnltd) == null && convertDate(importingMember.rnltd) == null) {
+            if (this.rnltd == null && importingMember.rnltd == null) {
 
             } else {
                 diff.add("rnltd");
@@ -192,15 +189,15 @@ public class Gaining {
         }
 
         try {
-            if (!convertDate(this.dor).equals(convertDate(importingMember.dor))) {
-                if (convertDate(this.dor) == null && convertDate(importingMember.dor) == null) {
+            if (!this.dor.equals(importingMember.dor)) {
+                if (this.dor == null && importingMember.dor == null) {
 
                 } else {
                     diff.add("dor");
                 }
             }
         } catch (NullPointerException e) {
-            if (convertDate(this.dor) == null && convertDate(importingMember.dor) == null) {
+            if (this.dor == null && importingMember.dor == null) {
 
             } else {
                 diff.add("dor");
@@ -208,8 +205,8 @@ public class Gaining {
         }
 
         try {
-            if (!convertDate(this.dateDepLastDutyStn).equals(convertDate(importingMember.dateDepLastDutyStn))) {
-                if (convertDate(this.dateDepLastDutyStn) == null && convertDate(importingMember.dateDepLastDutyStn) == null) {
+            if (!this.dateDepLastDutyStn.equals(importingMember.dateDepLastDutyStn)) {
+                if (this.dateDepLastDutyStn == null && importingMember.dateDepLastDutyStn == null) {
 
                 } else {
                     diff.add("dateDepLastDutyStn");
@@ -217,7 +214,7 @@ public class Gaining {
             }
 
         } catch (NullPointerException e) {
-            if (convertDate(this.dateDepLastDutyStn) == null && convertDate(importingMember.dateDepLastDutyStn) == null) {
+            if (this.dateDepLastDutyStn == null && importingMember.dateDepLastDutyStn == null) {
 
             } else {
                 diff.add("dateDepLastDutyStn");
@@ -238,6 +235,7 @@ System.out.println(diff);
 
     private Date convertDate(Date item) {
         if (item != null) {
+            System.out.println(item + " -> " + new LocalDate(item).toDate());
             return new LocalDate(item).toDate();
         } else {
             return null;

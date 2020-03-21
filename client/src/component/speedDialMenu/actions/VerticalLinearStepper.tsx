@@ -141,7 +141,9 @@ const VerticalLinearStepper: React.FC<Props> = props => {
 
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
-
+const [completedStep1, setCompletedStep1] = React.useState(false);
+const [completedStep2, setCompletedStep2] = React.useState(false);
+const [completedStep3, setCompletedStep3] = React.useState(false);
     const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
 
     // const [squadron, setSquadron] = React.useState('');
@@ -232,13 +234,39 @@ const VerticalLinearStepper: React.FC<Props> = props => {
     };
 
     const handleBack = () => {
-
         setActiveStep(prevActiveStep => prevActiveStep - 1);
     };
 
     const handleReset = () => {
         setActiveStep(0);
+        setCompletedStep1(false);
+        setCompletedStep2(false);
+        setCompletedStep3(false);
     };
+
+    function currentStepComplete(activeStep: number) {
+        switch (activeStep) {
+            case 0:
+                return completedStep1;
+            case 1:
+                return completedStep2;
+            case 2:
+                return completedStep3;
+            default:
+                return false;
+        }
+    }
+
+    function completeStep(stepCompleted: string) {
+        switch (stepCompleted) {
+            case 'Alpha':
+                return setCompletedStep1(true);
+            case 'Gaining':
+                return setCompletedStep2(true);
+            default:
+                return false;
+        }
+    }
 
     return (
         <div className={classes.root}>
@@ -316,7 +344,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                                                 Back
                                             </Button>
                                             <Button
-                                                disabled={loading}
+                                                disabled={!currentStepComplete(activeStep) || loading}
                                                 variant="contained"
                                                 color="primary"
                                                 onClick={handleNext}
@@ -325,7 +353,7 @@ const VerticalLinearStepper: React.FC<Props> = props => {
                                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                             </Button>
                                         </div>
-                                        <CsvInput uploadType={label}/>
+                                        <CsvInput uploadType={label} callBack={completeStep}/>
                                     </div>
                                 </StepContent>
                             </Step>

@@ -18,6 +18,8 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import {ApplicationState} from "../../../store";
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
+import {membersFetchError} from "../../../store/members";
+import {useState} from "react";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -158,8 +160,9 @@ function convertHeader(obj: any) {
 
 
 interface Props {
-    squadron?: string;
+    callBack: (step: string) => void;
     uploadType: string;
+    squadron?: string;
 }
 
 
@@ -174,7 +177,8 @@ const CsvInput: React.FC<Props> = props => {
     const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
     const errors = useSelector(({importChanges}: ApplicationState) => importChanges.errors);
 
-
+    const [fileErrorMsg, setFileErrorMsg] = React.useState("");
+    const [fileError, setFileError] = React.useState(false);
     const [missingHeaders, setMissingHeaders] = React.useState();
 
     const buttonClassname = clsx({
@@ -196,6 +200,12 @@ const CsvInput: React.FC<Props> = props => {
         };
     }, []);
 
+    React.useEffect(() => {
+        if (success) {
+            props.callBack(props.uploadType);
+        }
+    }, [success]);
+
     // useEffect(() => {
     //             setSuccess(false);
     // }, [missingGainingHeaders, missingAlphaHeaders]);
@@ -203,6 +213,8 @@ const CsvInput: React.FC<Props> = props => {
 
     const handleButtonClick = (e: any) => {
         if (!loading && !success) {
+            setFileError(false);
+            setFileErrorMsg("");
             setMissingHeaders(null);
             doUpload(e);
             // timer.current = setTimeout(() => {
@@ -229,6 +241,7 @@ const CsvInput: React.FC<Props> = props => {
         let file: File = formData.get('file') as File;
         if (file) {
             let fileName = file.name;
+
             if (fileName.toLowerCase().endsWith('csv')) {
 
                 const reader = new FileReader();
@@ -245,6 +258,7 @@ const CsvInput: React.FC<Props> = props => {
                                     if (gainingData.missingHeaders.length === 0) {
                                         let gaining: UploadGainingModel[] = UploadGainingDeserializer.deserialize(gainingData.json);
                                         await Dispatch(saveGainingsFromCsv(gaining));
+                                        // props.callBack(props.uploadType);
                                     } else {
                                         setMissingHeaders(gainingData.missingHeaders);
                                     }
@@ -254,6 +268,7 @@ const CsvInput: React.FC<Props> = props => {
                                     if (alphaData.missingHeaders.length === 0) {
                                         let members: UploadMemberModel[] = UploadMemberDeserializer.deserialize(alphaData.json);
                                         await Dispatch(saveMembersFromCsv(members));
+                                        // props.callBack(props.uploadType);
                                     } else {
                                         setMissingHeaders(alphaData.missingHeaders);
                                     }
@@ -271,6 +286,8 @@ const CsvInput: React.FC<Props> = props => {
                 };
 
             } else {
+                setFileError(true);
+                setFileErrorMsg("Please upload a .CSV file. If you uploaded an excel file please convert it to .CSV by using the 'save As' feature and try again.");
             }
 
         }
@@ -308,9 +325,11 @@ const CsvInput: React.FC<Props> = props => {
                     ref={browseInputRef}
                 />
                 <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                    {!success &&
+                    {(!success || !fileError) &&
                     <div className={classes.missingHeaderMsg}>
-                        {missingHeaders ? <WarningRoundedIcon fontSize={"large"} color={"primary"} className={classes.alertIcon}/> : ""}
+                        {fileErrorMsg ? "File type Error: please upload a .CSV file for the " + props.uploadType + " roster. If you uploaded an excel file please convert it to .CSV by using the 'save As' feature and try again." : ""}
+                        {missingHeaders ? <WarningRoundedIcon fontSize={"large"} color={"primary"}
+                                                              className={classes.alertIcon}/> : ""}
                         {missingHeaders ? "File is missing required headers: " + missingHeaders.map((h: any) => {
                             return " " + h;
                         }) + ". Please make sure you are uploading the correct roster for: " + props.uploadType : errors}

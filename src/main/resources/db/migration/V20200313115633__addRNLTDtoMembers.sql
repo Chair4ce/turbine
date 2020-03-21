@@ -1,1 +1,1 @@
-ALTER TABLE members ADD COLUMN rnltd DATE AFTER date_arrived_station;
+ALTER TABLE members ADD COLUMN rnltd DATETIME AFTER date_arrived_station;

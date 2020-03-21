@@ -58,7 +58,6 @@ public class GainingController {
     @CrossOrigin
     @PostMapping(path = "/delete")
     public List<Gaining> create(@Valid @RequestBody Long id) {
-        System.out.println("Deleting: " + id);
         gainingRepository.deleteById(id);
         return gainingRepository.findAll();
     }
@@ -76,11 +75,17 @@ public class GainingController {
                 newGaining.getRnltd(),
                 newGaining.getGrade(),
                 newGaining.getGainingPas(),
+                newGaining.getProjectedArrivalDate(),
                 newGaining.getDafsc(),
+                newGaining.getCellPhone(),
+                newGaining.getEmail(),
                 newGaining.getDor(),
+                newGaining.getDateArrivedStation(),
+                newGaining.getProjectedBilletId(),
                 newGaining.getDateDepLastDutyStn(),
                 newGaining.getSponsorId(),
                 newGaining.getLosingPas(),
+                newGaining.getProjectedOfficeSymbol(),
                 date
         );
 
@@ -92,11 +97,16 @@ public class GainingController {
         oldData.setRnltd(newData.getRnltd());
         oldData.setGrade(newData.getGrade());
         oldData.setGainingPas(newData.getGainingPas());
+        oldData.setProjectedArrivalDate(newData.getProjectedArrivalDate());
         oldData.setDafsc(newData.getDafsc());
+        oldData.setCellPhone(newData.getCellPhone());
+        oldData.setEmail(newData.getEmail());
         oldData.setDor(newData.getDor());
+        oldData.setProjectedBilletId(newData.getProjectedBilletId());
         oldData.setDateDepLastDutyStn(newData.getDateDepLastDutyStn());
         oldData.setSponsorId(newData.getSponsorId());
         oldData.setLosingPas(newData.getLosingPas());
+        oldData.setProjectedOfficeSymbol(newData.getProjectedOfficeSymbol());
         oldData.setLastUpdated(date);
         gainingRepository.save(oldData);
         return gainingRepository.findAll();
@@ -152,7 +162,6 @@ public class GainingController {
 
     private Gaining updateExistingGainingData(Gaining existingGaining, Gaining importingGaining) {
 
-            System.out.println("Found Changes for: " + existingGaining.getFullName());
             existingGaining.setFullName(importingGaining.getFullName());
             existingGaining.setFirstName(importingGaining.getFirstName());
             existingGaining.setLastName(importingGaining.getLastName());
@@ -173,7 +182,6 @@ return existingGaining;
         if (sponsorId != null) {
             for (Member member : members) {
                 if (member.getSqid().substring(0, 9).equals(sponsorId)) {
-                    System.out.println("Found Sponsor: " + member.getFullName());
                     return member.getFullName();
                 }
             }

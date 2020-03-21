@@ -1,6 +1,6 @@
 import GainingModel from "../store/gaining/GainingModel";
-import moment from "moment";
 
+const moment = require('moment');
 
 export class GainingDeserializer {
     static deserialize(items: any): GainingModel[] {
@@ -12,21 +12,21 @@ export class GainingDeserializer {
                     item.fullName,
                     item.firstName,
                     item.lastName,
-                    moment(item.rnltd).utc(true).toDate(),
+                    item.rnltd == null ? undefined : moment(item.rnltd).utc(true).toDate(),
                     item.grade,
                     item.gainingPas,
-                    moment(item.projectedArrivalDate).utc(true).toDate(),
+                    item.projectedArrivalDate == null ? undefined : moment(item.projectedArrivalDate).utc(true).toDate(),
                     item.dafsc,
                     item.cellPhone,
                     item.email,
-                    moment(item.dor).utc(true).toDate(),
-                    moment(item.dateArrivedStation).utc(true).toDate(),
+                    item.dor == null ? undefined : moment(item.dor).utc(true).toDate(),
+                    item.dateArrivedStation == null ? undefined : moment(item.dateArrivedStation).utc(true).toDate(),
                     item.projectedBilletId,
-                    moment(item.dateDepLastDutyStn).utc(true).toDate(),
+                    item.dateDepLastDutyStn == null ? undefined : moment(item.dateDepLastDutyStn).utc(true).toDate(),
                     item.sponsorId,
                     item.losingPas,
                     item.projectedOfficeSymbol,
-                    moment(item.lastUpdated).utc(true).toDate(),
+                    item.lastUpdated == null ? undefined : moment(item.lastUpdated).utc(true).toDate(),
                 )
                     ;
             });

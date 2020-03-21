@@ -209,8 +209,6 @@ const MemberDashboard: React.FC = () => {
                     <Fade in={gainTable} >
                         <Box className={classes.table}>
                             <GainingTable
-                                gaining={gaining}
-                                loading={gainingLoading}
                                 title={"Gaining"}
                                 filtering={true}
                                 edit={true}

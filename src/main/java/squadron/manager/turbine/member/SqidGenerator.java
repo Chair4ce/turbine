@@ -22,11 +22,9 @@ public class SqidGenerator {
 
     public SqidGenerator(String fullName, String rawSqid) {
         String regexp = "([A-Za-z]+),\\s+([A-Za-z]+)";
-
         fullName = fullName.replaceAll("\'","").replaceAll("-","");
-
         fullName = fullName.substring( 0, fullName.indexOf(",")).replaceAll("\\s", "") + fullName.substring(fullName.indexOf(",")) ;
-        System.out.println(fullName);
+
         Pattern pattern = Pattern.compile(regexp);
         Matcher matcher = pattern.matcher(fullName);
         matcher.find();

@@ -10,7 +10,7 @@ export class SquadronTaskDeserializer {
                     item.mbrId,
                     item.taskType,
                     item.status,
-                    moment(item.dueDate).utc(true).toDate()
+                    item.dueDate == null ? undefined : moment(item.dueDate).utc(true).toDate()
                 )
                     ;
             });

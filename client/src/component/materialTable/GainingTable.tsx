@@ -1,9 +1,10 @@
 import React from 'react';
 import MaterialTable, {Column} from 'material-table';
 import GainingModel from "../../store/gaining/GainingModel";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteGaining, getGainingMembers, updateGaining} from "../../store/gaining/thunks";
+import {ApplicationState} from "../../store";
 import moment from "moment";
-import {useDispatch} from "react-redux";
-import {deleteGaining, updateGaining} from "../../store/gaining/thunks";
 
 interface Row {
      id: number;
@@ -11,21 +12,21 @@ interface Row {
      fullName: string;
      firstName: string;
      lastName: string;
-     rnltd: Date | null;
+     rnltd: Date | undefined;
      grade: string;
      gainingPas: string;
-     projectedArrivalDate: Date | null;
+     projectedArrivalDate: Date | undefined;
      dafsc: string;
      cellPhone: string | null;
      email: string | null;
-     dor: Date | null;
-     dateArrivedStation: Date | null;
+     dor: Date | undefined;
+     dateArrivedStation: Date | undefined;
      projectedBilletId: string | null;
-     dateDepLastDutyStn: Date | null;
+     dateDepLastDutyStn: Date | undefined;
      sponsorId: string | null;
      losingPas: string | null;
      projectedOfficeSymbol: string | null;
-     lastUpdated: Date | null;
+     lastUpdated: Date | undefined;
 }
 
 interface TableState {
@@ -34,8 +35,6 @@ interface TableState {
 }
 
 interface Props {
-    gaining: GainingModel[];
-    loading: boolean;
     title: string;
     filtering: boolean,
     edit: boolean,
@@ -47,17 +46,22 @@ interface Props {
 }
 
 const GainingTable: React.FC<Props> = props => {
+    const dispatch = useDispatch();
+    const gainingMembers = useSelector(({gaining}: ApplicationState) => gaining.data);
+    const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
+
+
     const [state, setState] = React.useState<TableState>({
         columns: [
-            {title: 'Name', field: 'fullName'},
-            {title: 'Rank', field: 'grade'},
-            {title: 'DAFSC', field: 'dafsc'},
-            {title: 'RNLTD', field: 'rnltd', type: 'date'},
+            {title: 'Name', field: 'fullName', editable: 'never'},
+            {title: 'Rank', field: 'grade', editable: 'never'},
+            {title: 'DAFSC', field: 'dafsc', editable: 'never'},
+            {title: 'RNLTD', field: 'rnltd', type: 'date', editable: 'never'},
             {title: 'Projected_Arrival', field: 'projectedArrivalDate', type: 'date'},
             {title: 'Projected_Billet', field: 'projectedBilletId'},
             {title: 'Sponsor', field: 'sponsorId'},
             {title: 'Departed_Stn', field: 'dateDepLastDutyStn', type: 'date'},
-            {title: 'losing PAS', field: 'losingPas'},
+            {title: 'losing PAS', field: 'losingPas', editable: 'never'},
 
             //rowData => <img src={rowData.id} style={{width: 50, borderRadius: '50%'}}/>
             // {
@@ -66,10 +70,8 @@ const GainingTable: React.FC<Props> = props => {
             //     lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
             // },
         ],
-        data: props.gaining,
+        data: [],
     });
-
-    const dispatch = useDispatch();
 
     // const timer = React.useRef<number>();
 
@@ -77,8 +79,8 @@ const GainingTable: React.FC<Props> = props => {
         <MaterialTable
             title={props.title}
             columns={state.columns}
-            data={state.data}
-            isLoading={props.loading}
+            data={gainingMembers}
+            isLoading={gainingLoading}
             actions={[
                 // {
                 //     tooltip: 'Remove All Selected Users',
@@ -99,7 +101,7 @@ const GainingTable: React.FC<Props> = props => {
                                     backgroundColor: '#8d8891',
                                 }}
                             >
-                               {rowData.rnltd ? "Arriving in: "+moment(rowData.rnltd).format("MMM YY") : null}
+                                {rowData.rnltd ? "Arriving in: " + moment(rowData.rnltd).format("MMM YY") : null}
                             </div>
                         )
                     },
@@ -129,7 +131,7 @@ const GainingTable: React.FC<Props> = props => {
                 search: props.search,
                 selection: props.selection,
                 exportButton: props.exportButton,
-                pageSizeOptions: [5,10,50,100],
+                pageSizeOptions: [5, 10, 50, 100],
                 columnsButton: true,
                 emptyRowsWhenPaging: false,
 
@@ -150,51 +152,44 @@ const GainingTable: React.FC<Props> = props => {
                 //             });
                 //         }, 300);
                 //     }),
-                    onRowUpdate: (newData, oldData) =>
+                onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
-                        setTimeout(() => {
-                            resolve();
-                            if (oldData) {
-                                setState(prevState => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    return {...prevState, data};
-                                });
-                                const newGainingData = new GainingModel(newData.id,
-                                    newData.sqid,
-                                    newData.fullName,
-                                    newData.firstName,
-                                    newData.lastName,
-                                    newData.rnltd,
-                                    newData.grade,
-                                    newData.gainingPas,
-                                    newData.projectedArrivalDate,
-                                    newData.dafsc,
-                                    newData.cellPhone,
-                                    newData.email,
-                                    newData.dor,
-                                    newData.dateArrivedStation,
-                                    newData.projectedBilletId,
-                                    newData.dateDepLastDutyStn,
-                                    newData.sponsorId,
-                                    newData.losingPas,
-                                    newData.projectedOfficeSymbol,
-                                    newData.lastUpdated);
-                                dispatch(updateGaining(newGainingData));
-                            }
-                        }, 300);
+                        if (oldData){
+                        const newGainingData = new GainingModel(newData.id,
+                            newData.sqid,
+                            newData.fullName,
+                            newData.firstName,
+                            newData.lastName,
+                            newData.rnltd,
+                            newData.grade,
+                            newData.gainingPas,
+                            newData.projectedArrivalDate,
+                            newData.dafsc,
+                            newData.cellPhone,
+                            newData.email,
+                            newData.dor,
+                            newData.dateArrivedStation,
+                            newData.projectedBilletId,
+                            newData.dateDepLastDutyStn,
+                            newData.sponsorId,
+                            newData.losingPas,
+                            newData.projectedOfficeSymbol,
+                            newData.lastUpdated);
+                        dispatch(updateGaining(newGainingData));
+                            setTimeout(() => {
+                                resolve();
+                                dispatch(getGainingMembers());
+                            }, 600);
+                        }
+                        resolve();
                     }),
-                    onRowDelete: oldData =>
+                onRowDelete: oldData =>
                     new Promise(resolve => {
+                        dispatch(deleteGaining(oldData.id));
                         setTimeout(() => {
+                            dispatch(getGainingMembers());
                             resolve();
-                            setState(prevState => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return {...prevState, data};
-                            });
-                            dispatch(deleteGaining(oldData.id));
-                        }, 300);
+                        }, 600);
                     }),
             } : {}}
 
