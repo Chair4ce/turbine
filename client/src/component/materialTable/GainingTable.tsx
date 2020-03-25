@@ -5,6 +5,9 @@ import {useDispatch, useSelector} from "react-redux";
 import {deleteGaining, getGainingMembers, updateGaining} from "../../store/gaining/thunks";
 import {ApplicationState} from "../../store";
 import moment from "moment";
+import MemberOptionModel from "./MemberOptionModel";
+import {Autocomplete} from "@material-ui/lab";
+import {TextField} from "@material-ui/core";
 
 interface Row {
      id: number;
@@ -17,15 +20,15 @@ interface Row {
      gainingPas: string;
      projectedArrivalDate: Date | undefined;
      dafsc: string;
-     cellPhone: string | null;
-     email: string | null;
+     cellPhone: string | undefined;
+     email: string | undefined;
      dor: Date | undefined;
      dateArrivedStation: Date | undefined;
-     projectedBilletId: string | null;
+     projectedBilletId: string | undefined;
      dateDepLastDutyStn: Date | undefined;
-     sponsorId: string | null;
-     losingPas: string | null;
-     projectedOfficeSymbol: string | null;
+     sponsorId: string | undefined;
+     losingPas: string | undefined;
+     projectedOfficeSymbol: string | undefined;
      lastUpdated: Date | undefined;
 }
 
@@ -49,7 +52,17 @@ const GainingTable: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const gainingMembers = useSelector(({gaining}: ApplicationState) => gaining.data);
     const gainingLoading = useSelector(({gaining}: ApplicationState) => gaining.loading);
+    const memberOptions: MemberOptionModel[] = useSelector(({members}: ApplicationState) => members.data.map((function (member) {
+        return new MemberOptionModel(member.sqid, member.fullName)
+    })));
 
+    const [assignedSponsorSqid, updateAssignedSponsorSqid] = React.useState("");
+
+    function handleChange(event: any, values: any) {
+        if (event) {
+            if (values.Name === "" || values.Name !== undefined || !values) updateAssignedSponsorSqid(values.Name);
+        }
+    }
 
     const [state, setState] = React.useState<TableState>({
         columns: [
@@ -59,7 +72,25 @@ const GainingTable: React.FC<Props> = props => {
             {title: 'RNLTD', field: 'rnltd', type: 'date', editable: 'never'},
             {title: 'Projected_Arrival', field: 'projectedArrivalDate', type: 'date'},
             {title: 'Projected_Billet', field: 'projectedBilletId'},
-            {title: 'Sponsor', field: 'sponsorId'},
+            {title: 'Sponsor', field: 'sponsorId',
+                editComponent: props => (
+                    <Autocomplete
+                        id="combo-box"
+                        options={memberOptions}
+                        getOptionLabel={(option: MemberOptionModel) => option.Name}
+                        style={{width: 400}}
+                        onChange={handleChange}
+                        disableClearable
+                        renderInput={params => <TextField
+                            {...params}
+                            label="Select Member"
+                            variant="outlined"
+                            style={{width: 400}}
+                            value={props.rowData.sponsorId ? props.rowData.sponsorId : '' }
+                            placeholder={props.rowData.sponsorId}
+                        />}
+                    />
+                )},
             {title: 'Departed_Stn', field: 'dateDepLastDutyStn', type: 'date'},
             {title: 'losing PAS', field: 'losingPas', editable: 'never'},
 
@@ -155,7 +186,9 @@ const GainingTable: React.FC<Props> = props => {
                 onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
                         if (oldData){
-                        const newGainingData = new GainingModel(newData.id,
+                            if (assignedSponsorSqid !== "") newData.sponsorId = assignedSponsorSqid;
+                        const newGainingData = new GainingModel(
+                            newData.id,
                             newData.sqid,
                             newData.fullName,
                             newData.firstName,
@@ -177,9 +210,9 @@ const GainingTable: React.FC<Props> = props => {
                             newData.lastUpdated);
                         dispatch(updateGaining(newGainingData));
                             setTimeout(() => {
-                                resolve();
                                 dispatch(getGainingMembers());
-                            }, 600);
+                                resolve();
+                            }, 300);
                         }
                         resolve();
                     }),
@@ -189,7 +222,7 @@ const GainingTable: React.FC<Props> = props => {
                         setTimeout(() => {
                             dispatch(getGainingMembers());
                             resolve();
-                        }, 600);
+                        }, 300);
                     }),
             } : {}}
 

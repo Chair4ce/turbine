@@ -5,24 +5,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import squadron.manager.turbine.metric.*;
-import squadron.manager.turbine.tasks.SquadronTask;
 import squadron.manager.turbine.tasks.SquadronTaskRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 @RestController
 @RequestMapping(MemberController.URI)
 public class MemberController {
-    public static final String URI = "api/members";
 
-    private SquadronTaskRepository squadronTaskRepository;
+    public static final String URI = "api/members";
 
     @Autowired
     private MemberRepository memberRepository;
@@ -34,8 +31,18 @@ public class MemberController {
     private ImportMembersChangeLogRepository importMembersChangeLogRepository;
 
     @Autowired
-    public void ConstructorBasedInjection(SquadronTaskRepository squadronTaskRepository) {
-        this.squadronTaskRepository = squadronTaskRepository;
+    public void ConstructorBasedInjection(MetricService metricService) {
+        this.metricService = metricService;
+    }
+
+    @Autowired
+    public void ConstructorBasedInjection(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
+    @Autowired
+    public void ConstructorBasedInjection(ImportMembersChangeLogRepository importMembersChangeLogRepository) {
+        this.importMembersChangeLogRepository = importMembersChangeLogRepository;
     }
 
     @CrossOrigin
@@ -53,19 +60,13 @@ public class MemberController {
         json.forEach((newImport -> {
             findExistingOrSaveNew(date, newImport);
         }));
-
-        findSupervisor();
         return importMembersChangeLogRepository.findAll();
     }
 
-
-
     private void findExistingOrSaveNew(Date date, MemberJSON newImport) {
+        Iterable<Member> members = memberRepository.findAll();
         SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
         Member existingMember = returnMemberIfExists(sqidModel.getSqid());
-        if (newImport.getSupvName() != null) {
-            newImport.setSupvName(newImport.getSupvName().replaceAll("\\s", "."));
-        }
 
         Member importingMember = new Member(
                 sqidModel.getSqid(),
@@ -80,7 +81,7 @@ public class MemberController {
                 newImport.getDutyTitle(),
                 newImport.getDutyStartDate(),
                 newImport.getDutyPhone(),
-                newImport.getSupvName(),
+                returnSupervisorSqid(newImport.getSupvName(), members),
                 newImport.getSupvBeginDate(),
                 newImport.getDateArrivedStation(),
                 newImport.getRnltd(),
@@ -94,32 +95,23 @@ public class MemberController {
             this.metricService.logNewImportedMembers(new NewMemberLogModel(importingMember.getSqid(), importingMember.getFullName(), date));
             this.memberRepository.save(importingMember);
         }
-
     }
 
-    private void findSupervisor() {
-        Iterable<Member> members = memberRepository.findAll();
-        members.forEach(member -> {
-            if (member.getSupvName() != null) {
-                compareSupName(member, members);
-            }
-        });
-    }
-
-    private void compareSupName(Member member, Iterable<Member> potentialSupervisors) {
+    private String returnSupervisorSqid(String strSearch, Iterable<Member> members) {
+        AtomicReference<String> strFound = new AtomicReference<>("");
         AtomicReference<Integer> foundMatch = new AtomicReference<>(0);
-        potentialSupervisors.forEach(potentialSupervisor -> {
-            if (member.getSupvName().equals(potentialSupervisor.getSqid().substring(potentialSupervisor.getSqid().indexOf(".") + 1))) {
-                if (foundMatch.get() == 0) {
-                    member.setSupvName(potentialSupervisor.getSqid());
-                    memberRepository.save(member);
+        if (strSearch != null) {
+            members.forEach(potentialSupervisor -> {
+                if (strSearch.replaceAll("\\s", ".").equals(potentialSupervisor.getSqid().substring(potentialSupervisor.getSqid().indexOf(".") + 1))) {
+                    if (foundMatch.get() == 0) {
+                        strFound.set(potentialSupervisor.getSqid());
+                    }
+                    foundMatch.set(foundMatch.get() + 1);
                 }
-                foundMatch.set(foundMatch.get() + 1);
-            }
-        });
-
+            });
+        }
+        return strFound.get().length() > 0 ? strFound.get() : strSearch;
     }
-
 
     private void logAndSaveChanges(Date date, Member importingMember, Member existingMember) {
         List<ImportMembersChangeLog> importMemberChanges = new ArrayList();
@@ -156,7 +148,6 @@ public class MemberController {
         return existingMember;
     }
 
-
     private Member returnMemberIfExists(String importingSqid) {
         return memberRepository.findBySqid(importingSqid);
     }
@@ -171,7 +162,6 @@ public class MemberController {
         List<Member> members = this.memberRepository.findAllByAssignedPas(PAS);
         return ResponseEntity.ok().body(members);
     }
-
 
     @CrossOrigin
     @GetMapping("/{sqid}")

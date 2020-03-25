@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.LocalDate;
 
 import javax.persistence.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -132,8 +134,12 @@ public class Gaining {
         return this;
     }
 
+
     public List<String> compare(Gaining importingMember) throws NullPointerException {
         List<String> diff = new ArrayList<>();
+        SimpleDateFormat oldformat = new SimpleDateFormat("MMM dd HH:mm:ss z yyyy");
+        SimpleDateFormat newformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
+System.out.println("COmparing");
         if (!this.fullName.equals(importingMember.fullName))
             diff.add("fullName");
 
@@ -152,17 +158,14 @@ public class Gaining {
         }
 
         try {
-            if (!this.rnltd.equals(importingMember.rnltd)) {
+            if (this.rnltd.getTime() != importingMember.rnltd.getTime()) {
                 if (this.rnltd == null && importingMember.rnltd == null) {
-
                 } else {
                 diff.add("rnltd");
                 }
             }
         } catch (NullPointerException e) {
-            if (this.rnltd == null && importingMember.rnltd == null) {
-
-            } else {
+            if (this.rnltd != null && importingMember.rnltd != null) {
                 diff.add("rnltd");
             }
         }
@@ -182,6 +185,21 @@ public class Gaining {
         }
 
         try {
+            if (this.projectedArrivalDate.getTime() != importingMember.projectedArrivalDate.getTime()) {
+                if (this.projectedArrivalDate == null && importingMember.projectedArrivalDate == null) {
+                } else {
+                    diff.add("projectedArrivalDate");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.projectedArrivalDate == null && importingMember.projectedArrivalDate == null) {
+
+            } else {
+                diff.add("projectedArrivalDate");
+            }
+        }
+
+        try {
             if (!this.dafsc.equals(importingMember.dafsc))
                 diff.add("dafsc");
         } catch (NullPointerException e) {
@@ -189,9 +207,38 @@ public class Gaining {
         }
 
         try {
-            if (!this.dor.equals(importingMember.dor)) {
-                if (this.dor == null && importingMember.dor == null) {
+            if (this.cellPhone != importingMember.cellPhone) {
+                if (this.cellPhone == null && importingMember.cellPhone == null) {
+                } else {
+                    diff.add("cellPhone");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.cellPhone == null && importingMember.cellPhone == null) {
 
+            } else {
+                diff.add("cellPhone");
+            }
+        }
+
+        try {
+            if (this.email != importingMember.email) {
+                if (this.email == null && importingMember.email == null) {
+                } else {
+                    diff.add("email");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.email == null && importingMember.email == null) {
+
+            } else {
+                diff.add("email");
+            }
+        }
+
+        try {
+            if (this.dor.getTime() != importingMember.dor.getTime()) {
+                if (this.dor == null && importingMember.dor == null) {
                 } else {
                     diff.add("dor");
                 }
@@ -205,7 +252,37 @@ public class Gaining {
         }
 
         try {
-            if (!this.dateDepLastDutyStn.equals(importingMember.dateDepLastDutyStn)) {
+            if (this.dateArrivedStation.getTime() != importingMember.dateArrivedStation.getTime()) {
+                if (this.dateArrivedStation == null && importingMember.dateArrivedStation == null) {
+                } else {
+                    diff.add("dateArrivedStation");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.dateArrivedStation == null && importingMember.dateArrivedStation == null) {
+
+            } else {
+                diff.add("dateArrivedStation");
+            }
+        }
+
+        try {
+            if (this.projectedBilletId != importingMember.projectedBilletId) {
+                if (this.projectedBilletId == null && importingMember.projectedBilletId == null) {
+                } else {
+                    diff.add("projectedBilletId");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.projectedBilletId == null && importingMember.projectedBilletId == null) {
+
+            } else {
+                diff.add("projectedBilletId");
+            }
+        }
+
+        try {
+            if (this.dateDepLastDutyStn.getTime() != importingMember.dateDepLastDutyStn.getTime()) {
                 if (this.dateDepLastDutyStn == null && importingMember.dateDepLastDutyStn == null) {
 
                 } else {
@@ -215,27 +292,45 @@ public class Gaining {
 
         } catch (NullPointerException e) {
             if (this.dateDepLastDutyStn == null && importingMember.dateDepLastDutyStn == null) {
-
             } else {
                 diff.add("dateDepLastDutyStn");
             }
         }
 
         try {
-            if (!this.sponsorId.equals(importingMember.sponsorId))
-                diff.add("sponsorId");
+            if (!this.sponsorId.equals(importingMember.sponsorId)) {
+                if (this.sponsorId == null && importingMember.sponsorId == null) {
+                } else {
+                    diff.add("sponsorId");
+                }
+            }
         } catch (NullPointerException e) {
-            if (!(this.sponsorId == null && importingMember.sponsorId == null)) {
+            if (this.sponsorId == null && importingMember.sponsorId == null) {
+
+            } else {
                 diff.add("sponsorId");
             }
         }
-System.out.println(diff);
+
+        try {
+            if (this.projectedOfficeSymbol != importingMember.projectedOfficeSymbol) {
+                if (this.projectedOfficeSymbol == null && importingMember.projectedOfficeSymbol == null) {
+                } else {
+                    diff.add("projectedOfficeSymbol");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.projectedOfficeSymbol == null && importingMember.projectedOfficeSymbol == null) {
+
+            } else {
+                diff.add("projectedOfficeSymbol");
+            }
+        }
         return diff;
     }
 
     private Date convertDate(Date item) {
         if (item != null) {
-            System.out.println(item + " -> " + new LocalDate(item).toDate());
             return new LocalDate(item).toDate();
         } else {
             return null;

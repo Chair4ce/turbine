@@ -12,19 +12,19 @@ export default class GainingModel {
     public gainingPas: string;
     public projectedArrivalDate: Date | undefined;
     public dafsc: string;
-    public cellPhone: string | null;
-    public email: string | null;
+    public cellPhone: string | undefined;
+    public email: string | undefined;
     public dor: Date | undefined;
     public dateArrivedStation: Date | undefined;
-    public projectedBilletId: string | null;
+    public projectedBilletId: string | undefined;
     public dateDepLastDutyStn: Date | undefined;
-    public sponsorId: string | null;
-    public losingPas: string | null;
-    public projectedOfficeSymbol: string | null;
+    public sponsorId: string | undefined;
+    public losingPas: string | undefined;
+    public projectedOfficeSymbol: string | undefined;
     public lastUpdated: Date | undefined;
 
 
-    constructor(id: number, sqid: string, fullName: string, firstName: string, lastName: string, rnltd: Date | undefined, grade: string, gainingPas: string, projectedArrivalDate: Date | undefined, dafsc: string, cellPhone: string | null, email: string | null, dor: Date | undefined, dateArrivedStation: Date | undefined, projectedBilletId: string | null, dateDepLastDutyStn: Date | undefined, sponsorId: string | null, losingPas: string | null, projectedOfficeSymbol: string | null, lastUpdated: Date | undefined) {
+    constructor(id: number, sqid: string, fullName: string, firstName: string, lastName: string, rnltd: Date | undefined, grade: string, gainingPas: string, projectedArrivalDate: Date | undefined, dafsc: string, cellPhone: string | undefined, email: string | undefined, dor: Date | undefined, dateArrivedStation: Date | undefined, projectedBilletId: string | undefined, dateDepLastDutyStn: Date | undefined, sponsorId: string | undefined, losingPas: string | undefined, projectedOfficeSymbol: string | undefined, lastUpdated: Date | undefined) {
         this.id = id;
         this.sqid = sqid;
         this.fullName = fullName;

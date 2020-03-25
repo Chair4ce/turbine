@@ -100,6 +100,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         alertIcon: {
             margin: theme.spacing(1),
+        },
+        buttonLoading: {
+            pointerEvents: 'none',
         }
     }),
 );
@@ -183,10 +186,12 @@ const CsvInput: React.FC<Props> = props => {
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
+        [classes.buttonLoading]: loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
+        [classes.buttonLoading]: loading,
     });
 
     // const missingHeaderMsg = clsx({

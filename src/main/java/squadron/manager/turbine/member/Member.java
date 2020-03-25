@@ -72,19 +72,19 @@ public class Member {
         this.fullName = fullName;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.tafmsd = verifyDate(tafmsd);
+        this.tafmsd = tafmsd;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc.replaceAll("-", "");
         this.officeSymbol = officeSymbol;
         this.dutyTitle = dutyTitle;
-        this.dutyStartDate = verifyDate(dutyStartDate);
+        this.dutyStartDate = dutyStartDate;
         this.dutyPhone = dutyPhone;
         this.supvName = supvName;
-        this.supvBeginDate = verifyDate(supvBeginDate);
-        this.dateArrivedStation = verifyDate(dateArrivedStation);
-        this.rnltd = verifyDate(rnltd);
-        this.dor = verifyDate(dor);
+        this.supvBeginDate = supvBeginDate;
+        this.dateArrivedStation = dateArrivedStation;
+        this.rnltd = rnltd;
+        this.dor = dor;
         this.lastUpdated = lastUpdated;
     }
 
@@ -154,10 +154,16 @@ public class Member {
         }
 
         try {
-            if (!verifyDate(this.tafmsd).equals(verifyDate(importingMember.tafmsd)))
-                diff.add("tafmsd");
+            if (this.tafmsd.getTime() != importingMember.tafmsd.getTime()){
+                if (this.tafmsd == null && importingMember.tafmsd == null) {
+                } else {
+                    diff.add("tafmsd");
+                }
+            }
         } catch (NullPointerException e) {
-            diff.add("tafmsd");
+            if (this.tafmsd != null && importingMember.tafmsd != null) {
+                diff.add("tafmsd");
+            }
         }
 
         try {
@@ -200,10 +206,16 @@ public class Member {
         }
 
         try {
-            if (!verifyDate(this.dutyStartDate).equals(verifyDate(importingMember.dutyStartDate)))
-                diff.add("dutyStartDate");
+            if (this.dutyStartDate.getTime() != importingMember.dutyStartDate.getTime()){
+                if (this.dutyStartDate == null && importingMember.dutyStartDate == null) {
+                } else {
+                    diff.add("dutyStartDate");
+                }
+            }
         } catch (NullPointerException e) {
-            diff.add("dutyStartDate");
+            if (this.dutyStartDate != null && importingMember.dutyStartDate != null) {
+                diff.add("dutyStartDate");
+            }
         }
 
         try {
@@ -225,43 +237,57 @@ public class Member {
         }
 
         try {
-            if (!verifyDate(this.supvBeginDate).equals(verifyDate(importingMember.supvBeginDate)))
-                diff.add("supvBeginDate");
+            if (this.supvBeginDate.getTime() != importingMember.supvBeginDate.getTime()){
+                if (this.supvBeginDate == null && importingMember.supvBeginDate == null) {
+                } else {
+                    diff.add("supvBeginDate");
+                }
+            }
         } catch (NullPointerException e) {
-            if (!(this.supvBeginDate == null && importingMember.supvBeginDate == null)){
-            diff.add("supvBeginDate");
+            if (this.supvBeginDate != null && importingMember.supvBeginDate != null) {
+                diff.add("supvBeginDate");
             }
         }
 
         try {
-            if (!verifyDate(this.dateArrivedStation).equals(verifyDate(importingMember.dateArrivedStation)))
+            if (this.dateArrivedStation.getTime() != importingMember.dateArrivedStation.getTime()){
+                if (this.dateArrivedStation == null && importingMember.dateArrivedStation == null) {
+                } else {
+                    diff.add("dateArrivedStation");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.dateArrivedStation != null && importingMember.dateArrivedStation != null) {
                 diff.add("dateArrivedStation");
-        } catch (NullPointerException e) {
-            diff.add("dateArrivedStation");
+            }
         }
 
         try {
-            if (!verifyDate(this.rnltd).equals(verifyDate(importingMember.rnltd)))
+            if (this.rnltd.getTime() != importingMember.rnltd.getTime()) {
+                if (this.rnltd == null && importingMember.rnltd == null) {
+                } else {
+                    diff.add("rnltd");
+                }
+            }
+        } catch (NullPointerException e) {
+            if (this.rnltd != null && importingMember.rnltd != null) {
                 diff.add("rnltd");
-        } catch (NullPointerException e) {
-            diff.add("rnltd");
+            }
         }
 
         try {
-            if (!verifyDate(this.dor).equals(verifyDate(importingMember.dor)))
-                diff.add("dor");
+            if (this.dor.getTime() != importingMember.dor.getTime()){
+                if (this.dor == null && importingMember.dor == null) {
+                } else {
+                    diff.add("dor");
+                }
+            }
         } catch (NullPointerException e) {
-            diff.add("dor");
+            if (this.dor != null && importingMember.dor != null) {
+                diff.add("dor");
+            }
         }
         return diff;
     }
 
-
-    private Date verifyDate(Date item) {
-        if (item != null) {
-            return new LocalDate(item).toDate();
-        } else {
-            return null;
-        }
-    }
 }

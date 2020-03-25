@@ -46,6 +46,8 @@ public class GainingJSON {
 
     private String sponsorId;
 
+    private String sponsorName;
+
     private String losingPas;
 
     private String projectedOfficeSymbol;

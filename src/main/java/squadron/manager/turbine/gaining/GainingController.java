@@ -12,6 +12,7 @@ import squadron.manager.turbine.metric.NewGainingLogModel;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,6 @@ public class GainingController {
     private MemberRepository memberRepository;
     private MetricService metricService;
     private ImportGainingChangeLogRepository importGainingChangeLogRepository;
-
 
 
     @Autowired
@@ -64,8 +64,9 @@ public class GainingController {
 
     @CrossOrigin
     @PostMapping(path = "/update")
-    public List<Gaining> create(@Valid @RequestBody GainingJSON newGaining) {
+    public List<Gaining> create(@Valid @RequestBody GainingJSON newGaining) throws ParseException {
         Gaining oldData = gainingRepository.findBySqid(newGaining.getSqid());
+
         Date date = new Date();
         Gaining newData = new Gaining(
                 newGaining.getSqid(),
@@ -107,7 +108,7 @@ public class GainingController {
         oldData.setSponsorId(newData.getSponsorId());
         oldData.setLosingPas(newData.getLosingPas());
         oldData.setProjectedOfficeSymbol(newData.getProjectedOfficeSymbol());
-        oldData.setLastUpdated(date);
+        oldData.setLastUpdated(newData.getLastUpdated());
         gainingRepository.save(oldData);
         return gainingRepository.findAll();
     }
@@ -124,12 +125,13 @@ public class GainingController {
 
             Gaining importedGaining = buildGainingModel(members, date, newImport, sqidModel);
 
+
             findExistingOrSaveNew(date, sqidModel, importedGaining);
         }));
        return importGainingChangeLogRepository.findAllByImportDateTime(date);
     }
 
-    private Gaining buildGainingModel(List<Member> members, Date date, GainingJSON newImport, SqidGenerator sqidModel) {
+    private Gaining buildGainingModel(List<Member> members, Date date, GainingJSON newImport, SqidGenerator sqidModel)  {
         String assignedSponsor = returnSponsorName(newImport.getSponsorId(), members);
         return new Gaining(
                 sqidModel.getSqid(),
@@ -147,6 +149,8 @@ public class GainingController {
                 date
         );
     }
+
+
 
     private void findExistingOrSaveNew(Date date, SqidGenerator sqidModel, Gaining importedGaining) {
         Gaining existingGaining = returnGainingIfExists(sqidModel.getSqid());

@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class SquadronJSON {
 
-    private static  final String emptyFieldMessage = "This is required";
+    private static final String emptyFieldMessage = "This is required";
 
     private long id;
     private String squadron;

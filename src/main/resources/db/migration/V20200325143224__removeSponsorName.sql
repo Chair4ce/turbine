@@ -1,0 +1,1 @@
+ALTER TABLE gaining DROP COLUMN sponsor_Name;

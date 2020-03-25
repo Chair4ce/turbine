@@ -21,6 +21,7 @@ public class MetricService {
     private NewMemberLogRepository newMemberLogRepository;
 
     public void logGainingFieldChanges(Iterable<ImportGainingChangeLog> importGainingChangeLog) {
+        System.out.println("logging change");
         this.importGainingChangeLogRepository.saveAll(importGainingChangeLog);
     }
 

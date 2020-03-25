@@ -235,6 +235,8 @@ const [completedStep3, setCompletedStep3] = React.useState(false);
 
     const handleBack = () => {
         setActiveStep(prevActiveStep => prevActiveStep - 1);
+        dispatch(setImportLoading(false));
+        dispatch(resetImportError);
     };
 
     const handleReset = () => {

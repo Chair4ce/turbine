@@ -16,12 +16,12 @@ export class UploadGainingDeserializer {
                 return new UploadGainingModel(
                     convertToHash(item.sqid),
                     item.fullName,
-                    item.rnltd ? moment(item.rnltd).utc(true).toDate(): null,
+                    item.rnltd ? moment(item.rnltd).toDate(): null,
                     item.grade,
                     item.gainingPas,
                     item.dafsc,
-                    item.dor ? moment(item.dor).utc(true).toDate(): null,
-                    item.dateDepLastDutyStn ? moment(item.dateDepLastDutyStn).utc(true).toDate(): null,
+                    item.dor ? moment(item.dor).toDate(): null,
+                    item.dateDepLastDutyStn ? moment(item.dateDepLastDutyStn).toDate(): null,
                     item.sponsorId ? convertToHash(item.sponsorId): null,
                     item.losingPas,
                 );

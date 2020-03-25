@@ -25,7 +25,6 @@ export const deleteGaining = (id: number) => {
 
 export const updateGaining = (gaining: GainingModel) => {
     return (dispatch: any) => {
-        console.log("Deleting: " + gaining);
         callApi('POST', 'api/gaining/update', gaining)
             .then(res => gainingFetchSuccess(res))
             .catch((err => {

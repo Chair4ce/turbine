@@ -1,0 +1,1 @@
+ALTER TABLE gaining ADD COLUMN sponsor_Name DATETIME AFTER sponsor_id;

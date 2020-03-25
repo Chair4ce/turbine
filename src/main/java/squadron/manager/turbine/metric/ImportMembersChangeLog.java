@@ -6,6 +6,7 @@ import org.joda.time.LocalDate;
 import squadron.manager.turbine.member.Member;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -61,50 +62,43 @@ public class ImportMembersChangeLog {
         this.importDateTime = importDatetime;
         this.fullName = oldMember.getFullName();
         this.field = field;
+        SimpleDateFormat newformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
         switch (field) {
             case "fullName":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getFullName();
                 this.newData = newMember.getFullName();
                 break;
             case "firstName":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getFirstName();
                 this.newData = newMember.getFirstName();
                 break;
 
 
-            case "lastName":
-                System.out.println("Found Change in: " + field);// this is the only field that could be null to string
+            case "lastName":// this is the only field that could be null to string
                 this.oldData = oldMember.getLastName();
                 this.newData = newMember.getLastName();
                 break;
 
             case "tafmsd":
-                System.out.println("Found Change in: " + field);
-                this.oldData = verifyDate(oldMember.getTafmsd()).toString();
-                this.newData = newMember.getTafmsd().toString();
+                this.oldData = oldMember.getTafmsd().toString();
+                this.newData = newformat.format(newMember.getTafmsd());
                 break;
 
             case "grade":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getGrade();
                 this.newData = newMember.getGrade();
                 break;
 
             case "assignedPas":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getAssignedPas();
                 this.newData = newMember.getAssignedPas();
                 break;
 
             case "dafsc":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getDafsc();
                 this.newData = newMember.getDafsc();
                 break;
             case "officeSymbol":
-                System.out.println("Found Change in: " + field);
                 if (oldMember.getOfficeSymbol() == null) {
 
                     this.oldData = "empty";
@@ -120,69 +114,61 @@ public class ImportMembersChangeLog {
 
                 break;
             case "dutyTitle":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getDutyTitle();
                 this.newData = newMember.getDutyTitle();
                 break;
 
             case "dutyStartDate":
-                System.out.println("Found Change in: " + field);
 
                 if (oldMember.getDutyStartDate() == null) {
                     this.oldData = "empty";
                 } else {
-                    this.oldData = verifyDate(oldMember.getDutyStartDate()).toString();
+                    this.oldData = oldMember.getDutyStartDate().toString();
                 }
 
                 if (newMember.getDutyStartDate() == null) {
                     this.newData = "empty";
                 } else {
-                    this.newData = newMember.getDutyStartDate().toString();
+                    this.newData = newformat.format(newMember.getDutyStartDate());
                 }
                 break;
 
             case "dutyPhone":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getDutyPhone();
                 this.newData = newMember.getDutyPhone();
                 break;
 
             case "supvName":
-                System.out.println("Found Change in: " + field);
                 this.oldData = oldMember.getSupvName();
                 this.newData = newMember.getSupvName();
                 break;
 
             case "supvBeginDate":
-                System.out.println("Found Change in: " + field);
 
                 if (oldMember.getSupvBeginDate() == null) {
                     this.oldData = "empty";
                 } else {
-                    this.oldData = verifyDate(oldMember.getSupvBeginDate()).toString();
+                    this.oldData = oldMember.getSupvBeginDate().toString();
                 }
 
                 if (newMember.getSupvBeginDate() == null) {
                     this.newData = "empty";
                 } else {
-                    this.newData = newMember.getSupvBeginDate().toString();
+                    this.newData = newformat.format(newMember.getSupvBeginDate());
                 }
                 break;
 
             case "dateArrivedStation":
-                System.out.println("Found Change in: " + field);
-                this.oldData = verifyDate(oldMember.getDateArrivedStation()).toString();
-                this.newData = newMember.getDateArrivedStation().toString();
+                this.oldData = oldMember.getDateArrivedStation().toString();
+                this.newData = newformat.format(newMember.getDateArrivedStation());
                 break;
 
             case "dor":
-                System.out.println("Found Change in: " + field);
-                this.oldData = verifyDate(oldMember.getDor()).toString();
-                this.newData = newMember.getDor().toString();
+                this.oldData = oldMember.getDor().toString();
+                this.newData = newformat.format(newMember.getDor());
                 break;
 
             default:
-                System.out.println("Found Change in: " + field);
                 break;
         }
 
