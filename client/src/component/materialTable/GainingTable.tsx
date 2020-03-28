@@ -160,7 +160,7 @@ const GainingTable: React.FC<Props> = props => {
                 filtering: props.filtering,
                 grouping: props.grouping,
                 search: props.search,
-                selection: props.selection,
+                // selection: props.selection,
                 exportButton: props.exportButton,
                 pageSizeOptions: [5, 10, 50, 100],
                 columnsButton: true,

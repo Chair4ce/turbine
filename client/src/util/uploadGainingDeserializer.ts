@@ -15,7 +15,7 @@ export class UploadGainingDeserializer {
             return items.map((item: any) => {
                 return new UploadGainingModel(
                     convertToHash(item.sqid),
-                    item.fullName,
+                    item.fullName.toUpperCase(),
                     item.rnltd ? moment(item.rnltd).toDate(): null,
                     item.grade,
                     item.gainingPas,

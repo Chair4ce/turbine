@@ -18,7 +18,7 @@ export class MemberDeserializer {
                     item.dutyTitle,
                     item.dutyStartDate == null ? undefined : moment(item.dutyStartDate).utc(true).toDate(),
                     item.dutyPhone,
-                    item.supvName,
+                    item.supvName.toUpperCase(),
                     item.supvBeginDate == null ? undefined : moment(item.supvBeginDate).utc(true).toDate(),
                     item.dateArrivedStation == null ? undefined : moment(item.dateArrivedStation).utc(true).toDate(),
                     item.rnltd == null ? undefined : moment(item.rnltd).utc(true).toDate(),

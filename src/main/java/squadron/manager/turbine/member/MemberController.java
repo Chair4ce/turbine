@@ -20,24 +20,13 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MemberController {
 
     public static final String URI = "api/members";
-
-    @Autowired
     private MemberRepository memberRepository;
-
-    @Autowired
     private MetricService metricService;
-
-    @Autowired
     private ImportMembersChangeLogRepository importMembersChangeLogRepository;
 
     @Autowired
     public void ConstructorBasedInjection(MetricService metricService) {
         this.metricService = metricService;
-    }
-
-    @Autowired
-    public void ConstructorBasedInjection(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
     }
 
     @Autowired

@@ -35,6 +35,9 @@ this.newGainingLogRepository.save(gaining);
     public void logNewImportedMembers(NewMemberLogModel member){
 this.newMemberLogRepository.save(member);
     }
+    public void logNewImportedBillets(NewMemberLogModel member){
+this.newMemberLogRepository.save(member);
+    }
 
 
 }

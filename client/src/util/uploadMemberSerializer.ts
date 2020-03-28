@@ -15,7 +15,7 @@ export class UploadMemberDeserializer {
             return items.map((item: any) => {
                 return new UploadMemberModel(
                     convertToHash(item.sqid),
-                    item.fullName,
+                    item.fullName.toUpperCase(),
                     item.tafmsd ? moment(new Date(item.tafmsd)).utc().format(): null ,
                     item.grade,
                     item.assignedPas,
@@ -24,7 +24,7 @@ export class UploadMemberDeserializer {
                     item.dutyTitle ? item.dutyTitle : null,
                     item.dutyStartDate ? moment(new Date(item.dutyStartDate)).utc().format() : null,
                     item.dutyPhone ? item.dutyPhone : null,
-                    item.supvName ? item.supvName : null,
+                    item.supvName.toUpperCase() ? item.supvName : null,
                     item.supvBeginDate ? moment(new Date(item.supvBeginDate)).utc().format() : null,
                     item.dateArrivedStation ? moment(new Date(item.dateArrivedStation)).utc().format() : null,
                     item.rnltd ? moment(new Date(item.rnltd)).utc().format() : null,

@@ -18,9 +18,7 @@ import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import {ApplicationState} from "../../../store";
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
 import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
-import {membersFetchError} from "../../../store/members";
-import {useState} from "react";
-
+import {func} from "prop-types";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -115,8 +113,7 @@ function csvJSON(csv: any, type: string) {
         lines.shift();
         lines.shift();
         lines.pop();
-    }
-    ;
+    };
 
     let commaRegex = /,(?=(?:[^"]*"[^"]*")*[^"]*$)/g;
     let quotesRegex = /^"(.*)"$/g;
