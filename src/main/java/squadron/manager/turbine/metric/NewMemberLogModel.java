@@ -17,8 +17,6 @@ public class NewMemberLogModel {
     private String sqid;
     private String fullName;
     private Date importDateTime;
-
-
     public NewMemberLogModel(String sqid, String fullName, Date importDateTime) {
         this.sqid = sqid;
         this.fullName = fullName;

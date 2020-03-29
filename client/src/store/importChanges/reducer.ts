@@ -1,13 +1,17 @@
 import {Reducer} from 'redux';
-import ImportChangeModel from "./ImportChangeModel";
+import ImportChangeModel from "./MemberImportChangeModel";
 import {ImportChangesActionTypes, ImportChangesState} from "./types";
 import {ImportChangesDeserializer} from "../../util/ImportChangesDeserializer";
+import MemberImportChangeModel from "./MemberImportChangeModel";
+import BilletImportChangeModel from "./BilletImportChangeModel";
+import GainingImportChangeModel from "./GainingImportChangeModel";
 
 
 // Type-safe initialState!
 export const initialState: ImportChangesState = {
-    gainingImportChanges: [] as ImportChangeModel[],
-    memberImportChanges: [] as ImportChangeModel[],
+    gainingImportChanges: [] as GainingImportChangeModel[],
+    memberImportChanges: [] as MemberImportChangeModel[],
+    billetImportChanges: [] as BilletImportChangeModel[],
     loading: false,
     success: undefined,
     errors: "",

@@ -21,7 +21,6 @@ public class SquadronController {
         return squadronRepository.findAll();
     }
 
-
     @CrossOrigin
     @PostMapping(path = "/add")
     List<Squadron> save(@Valid @RequestBody SquadronJSON squadronJSON){

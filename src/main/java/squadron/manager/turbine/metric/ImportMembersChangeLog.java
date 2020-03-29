@@ -27,7 +27,7 @@ public class ImportMembersChangeLog {
     @Column(length = 65535, name= "old_data")
     private String oldData;
 
-    @Column(length = 65535)
+    @Column(length = 65535, name = "new_data")
     private String newData;
 
     public ImportMembersChangeLog(

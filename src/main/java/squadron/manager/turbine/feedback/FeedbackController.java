@@ -14,7 +14,6 @@ import java.util.List;
 public class FeedbackController {
 
     public static final String URI = "api/feedback";
-
     private FeedbackRepository feedbackRepository;
 
     @CrossOrigin

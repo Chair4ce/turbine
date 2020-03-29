@@ -20,7 +20,6 @@ public class Feedback {
     private Date date_time;
     private String feedback_entry;
 
-
     public Feedback(Date date_time, String feedback_entry) {
         this.date_time = date_time;
         this.feedback_entry = feedback_entry;

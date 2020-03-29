@@ -29,20 +29,6 @@ public class ImportGainingChangeLog {
     private String newData;
 
     public ImportGainingChangeLog(
-            String sqid,
-            Date importDatetime,
-            String field,
-            String oldData,
-            String newData
-    ) {
-        this.sqid = sqid;
-        this.importDateTime = importDatetime;
-        this.field = field;
-        this.oldData = oldData;
-        this.newData = newData;
-    }
-
-    public ImportGainingChangeLog(
             Date importDatetime,
             Gaining newGaining,
             Gaining oldGaining,
@@ -224,14 +210,6 @@ public class ImportGainingChangeLog {
 
             default:
                 break;
-        }
-    }
-
-    private Date verifyDate(Date item) {
-        if (item != null) {
-            return new LocalDate(item).toDate();
-        } else {
-            return null;
         }
     }
 }

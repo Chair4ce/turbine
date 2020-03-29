@@ -6,17 +6,14 @@ import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
 import squadron.manager.turbine.metric.ImportGainingChangeLog;
-import squadron.manager.turbine.metric.ImportGainingChangeLogRepository;
 import squadron.manager.turbine.metric.MetricService;
 import squadron.manager.turbine.metric.NewGainingLogModel;
-
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 @RestController
 @RequestMapping(GainingController.URI)
@@ -26,8 +23,6 @@ public class GainingController {
     private GainingRepository gainingRepository;
     private MemberRepository memberRepository;
     private MetricService metricService;
-    private ImportGainingChangeLogRepository importGainingChangeLogRepository;
-
 
     @Autowired
     public void ConstructorBasedInjection(GainingRepository gainingRepository) {
@@ -41,12 +36,6 @@ public class GainingController {
     public void ConstructorBasedInjection(MetricService metricService) {
         this.metricService = metricService;
     }
-    @Autowired
-    public void ConstructorBasedInjection(ImportGainingChangeLogRepository importGainingChangeLogRepository) {
-        this.importGainingChangeLogRepository = importGainingChangeLogRepository;
-    }
-
-
 
     @CrossOrigin
     @GetMapping
@@ -122,13 +111,10 @@ public class GainingController {
 
         json.forEach((newImport -> {
             SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSqid());
-
             Gaining importedGaining = buildGainingModel(members, date, newImport, sqidModel);
-
-
             findExistingOrSaveNew(date, sqidModel, importedGaining);
         }));
-       return importGainingChangeLogRepository.findAllByImportDateTime(date);
+       return metricService.getAllGainingByImportDateTime(date);
     }
 
     private Gaining buildGainingModel(List<Member> members, Date date, GainingJSON newImport, SqidGenerator sqidModel)  {
@@ -150,8 +136,6 @@ public class GainingController {
         );
     }
 
-
-
     private void findExistingOrSaveNew(Date date, SqidGenerator sqidModel, Gaining importedGaining) {
         Gaining existingGaining = returnGainingIfExists(sqidModel.getSqid());
 
@@ -162,7 +146,6 @@ public class GainingController {
             this.gainingRepository.save(importedGaining);
         }
     }
-
 
     private Gaining updateExistingGainingData(Gaining existingGaining, Gaining importingGaining) {
 

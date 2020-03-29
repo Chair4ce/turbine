@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 function getSteps() {
-    return ['Alpha', 'Gaining'];
+    return ['Alpha', 'Gaining', 'UPMR'];
 }
 
 // function getStepContent(step: number) {
@@ -141,9 +141,9 @@ const VerticalLinearStepper: React.FC<Props> = props => {
 
     const [modalStyle] = React.useState(getModalStyle);
     const [open, setOpen] = React.useState(true);
-const [completedStep1, setCompletedStep1] = React.useState(false);
-const [completedStep2, setCompletedStep2] = React.useState(false);
-const [completedStep3, setCompletedStep3] = React.useState(false);
+    const [completedStep1, setCompletedStep1] = React.useState(false);
+    const [completedStep2, setCompletedStep2] = React.useState(false);
+    const [completedStep3, setCompletedStep3] = React.useState(false);
     const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
 
     // const [squadron, setSquadron] = React.useState('');
@@ -153,8 +153,6 @@ const [completedStep3, setCompletedStep3] = React.useState(false);
     // const [sqInputError, setSqInputError] = React.useState(false);
     // const [pasCodeInputError, setPasCodeInputError] = React.useState(false);
     // const [errState, setErrState] = React.useState(false);
-
-
 
 
     // React.useEffect(() => {
@@ -265,6 +263,8 @@ const [completedStep3, setCompletedStep3] = React.useState(false);
                 return setCompletedStep1(true);
             case 'Gaining':
                 return setCompletedStep2(true);
+            case 'UPMR':
+                return setCompletedStep3(true);
             default:
                 return false;
         }

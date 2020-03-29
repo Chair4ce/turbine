@@ -17,8 +17,9 @@ import {CSVImportModel} from "../../../util/CSVImportModel";
 import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import {ApplicationState} from "../../../store";
 import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import {saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
-import {func} from "prop-types";
+import {saveBilletsFromCsv, saveGainingsFromCsv, saveMembersFromCsv} from "../../../store/importChanges/thunks";
+import UploadBilletModel from "../../../store/billet/UploadBilletModel";
+import {UploadBilletDeserializer} from "../../../util/uploadBilletDeserializer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -121,7 +122,7 @@ function csvJSON(csv: any, type: string) {
 
     const csvImportModel: CSVImportModel = new CSVImportModel(type, headers);
 
-    let CamelHeaders = convertHeader(headers);
+    let CamelHeaders = convertHeader(type, headers);
 
     for (let i = 1; i < lines.length; i++) {
         let obj: any = {};
@@ -143,11 +144,21 @@ function snakeToCamel(str: string) {
 }
 
 
-function convertHeader(obj: any) {
+function convertHeader(type: string, obj: any) {
     for (let prop in obj) {
         if (typeof obj[prop] === 'string') {
             if (obj[prop] === 'SSAN') {
-                obj[prop] = 'SQID'
+                if (type == 'Gaining' || type == 'Alpha') {
+                    obj[prop] = 'SQID'
+                }
+                if (type == 'UPMR') {
+                    obj[prop] = 'MBR_ASSIGNED'
+                }
+            }
+            if (obj[prop] === 'PASCODE') {
+                if (type == 'UPMR') {
+                    obj[prop] = 'PAS_CODE'
+                }
             }
             if (obj[prop] === 'SPONSOR_SSAN') {
                 obj[prop] = 'SPONSOR_ID'
@@ -276,6 +287,14 @@ const CsvInput: React.FC<Props> = props => {
                                     }
                                     break;
                                 case 'UPMR':
+                                    const upmrData: CSVImportModel = csvJSON(csv, props.uploadType);
+                                    if (upmrData.missingHeaders.length === 0) {
+                                        let members: UploadBilletModel[] = UploadBilletDeserializer.deserialize(upmrData.json);
+                                        await Dispatch(saveBilletsFromCsv(members));
+                                        // props.callBack(props.uploadType);
+                                    } else {
+                                        setMissingHeaders(upmrData.missingHeaders);
+                                    }
                                     break;
                                 case 'Losing':
                                     break;

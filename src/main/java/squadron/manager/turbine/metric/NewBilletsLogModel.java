@@ -6,22 +6,23 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
+
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "new_gaining_log")
-public class NewGainingLogModel {
+@Table(name = "new_billet_log")
+public class NewBilletsLogModel {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String sqid;
-    private String fullName;
+    private String pasCode;
+    private String posNr;
     private Date importDateTime;
 
-    public NewGainingLogModel( String sqid, String fullName, Date importDateTime) {
-        this.sqid = sqid;
-        this.fullName = fullName;
+    public NewBilletsLogModel(String pasCode, String posNr, Date importDateTime) {
+        this.pasCode = pasCode;
+        this.posNr = posNr;
         this.importDateTime = importDateTime;
     }
-
 }

@@ -30,9 +30,10 @@ public class MemberController {
     }
 
     @Autowired
-    public void ConstructorBasedInjection(ImportMembersChangeLogRepository importMembersChangeLogRepository) {
-        this.importMembersChangeLogRepository = importMembersChangeLogRepository;
+    public void ConstructorBasedInjection(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
+
 
     @CrossOrigin
     @GetMapping
@@ -49,7 +50,7 @@ public class MemberController {
         json.forEach((newImport -> {
             findExistingOrSaveNew(date, newImport);
         }));
-        return importMembersChangeLogRepository.findAll();
+        return metricService.getAllMembersByImportDateTime(date);
     }
 
     private void findExistingOrSaveNew(Date date, MemberJSON newImport) {

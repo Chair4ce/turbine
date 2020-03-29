@@ -2,16 +2,11 @@ package squadron.manager.turbine.gaining;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
-import org.joda.time.LocalDate;
-
 import javax.persistence.*;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 
 @NoArgsConstructor
 @Entity
@@ -21,57 +16,25 @@ public class Gaining {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String sqid;
-
-    //    @Column(name = "full_name")
     private String fullName;
-
-    //    @Column(name = "first_name")
     private String firstName;
-
-    //    @Column(name = "last_name")
     private String lastName;
-
     private Date rnltd;
-
     private String grade;
-
-    //    @Column(name = "gaining_pas")
     private String gainingPas;
-
-    //    @Column(name = "projected_arrival_date")
     private Date projectedArrivalDate;
-
     private String dafsc;
-
-    //    @Column(name = "cell_phone")
     private String cellPhone;
-
     private String email;
-
     private Date dor;
-
-    //    @Column(name = "date_arrived_station")
     private Date dateArrivedStation;
-
-    //    @Column(name = "projected_billet_id")
     private String projectedBilletId;
-
-    //    @Column(name = "departed_last_station")
     private Date dateDepLastDutyStn;
-
     private String sponsorId;
-
-    //    @Column(name = "losing_pas")
     private String losingPas;
-
-    //    @Column(name = "projected_Office_Symbol")
     private String projectedOfficeSymbol;
-
-    //    @Column(name = "last_updated")
     private Date lastUpdated;
-
 
     public Gaining(String sqid, String fullName, String firstName, String lastName, Date rnltd, String grade, String gainingPas, String dafsc, Date dor, Date dateDepLastDutyStn, String sponsorId, String losingPas, Date lastUpdated) {
         this.sqid = sqid;
@@ -134,12 +97,11 @@ public class Gaining {
         return this;
     }
 
-
     public List<String> compare(Gaining importingMember) throws NullPointerException {
         List<String> diff = new ArrayList<>();
         SimpleDateFormat oldformat = new SimpleDateFormat("MMM dd HH:mm:ss z yyyy");
         SimpleDateFormat newformat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S");
-System.out.println("COmparing");
+
         if (!this.fullName.equals(importingMember.fullName))
             diff.add("fullName");
 
@@ -328,13 +290,4 @@ System.out.println("COmparing");
         }
         return diff;
     }
-
-    private Date convertDate(Date item) {
-        if (item != null) {
-            return new LocalDate(item).toDate();
-        } else {
-            return null;
-        }
-    }
-
 }

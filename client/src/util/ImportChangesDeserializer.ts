@@ -1,5 +1,5 @@
 import moment from "moment";
-import ImportChangeModel from "../store/importChanges/ImportChangeModel";
+import ImportChangeModel from "../store/importChanges/MemberImportChangeModel";
 
 
 export class ImportChangesDeserializer {

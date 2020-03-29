@@ -1,4 +1,4 @@
-export default class ImportChangeModel {
+export default class GainingImportChangeModel {
     public id: number;
     public sqid: string;
     public fullName: string;

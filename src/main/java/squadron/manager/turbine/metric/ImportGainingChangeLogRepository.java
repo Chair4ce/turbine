@@ -6,6 +6,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface ImportGainingChangeLogRepository extends JpaRepository<ImportGainingChangeLog, Long> {
-
 List<ImportGainingChangeLog> findAllByImportDateTime(Date date);
 }

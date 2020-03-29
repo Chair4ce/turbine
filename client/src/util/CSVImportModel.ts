@@ -36,6 +36,19 @@ export class CSVImportModel {
                     if (!found) this.missingHeaders.push(this.alphaHeaders[header]);
                 }
                 break;
+            case "UPMR":
+                for (let header in this.upmrHeaders) {
+                    let found = false;
+                    for (let prop in verifyHeaders) {
+                        if (typeof verifyHeaders[prop] === 'string') {
+                            if (verifyHeaders[prop] === this.upmrHeaders[header]) {
+                                found = true;
+                            }
+                        }
+                    }
+                    if (!found) this.missingHeaders.push(this.upmrHeaders[header]);
+                }
+                break;
             default:
                 break;
         }
@@ -71,5 +84,18 @@ export class CSVImportModel {
         'DATE_DEP_LAST_DUTY_STN',
         'SPONSOR_SSAN',
         'LOSING_PAS',
+    ];
+
+    private upmrHeaders: string[] = [
+        'PASCODE',
+        'ORGN_STRUCT_ID',
+        'AFSC_AUTH',
+        'GRD_AUTH',
+        'CURR_QTR',
+        'PROJ_QTR1',
+        'PROJ_QTR2',
+        'PROJ_QTR3',
+        'PROJ_QTR4',
+        'SSAN',
     ];
 }

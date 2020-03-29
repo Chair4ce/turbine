@@ -8,5 +8,4 @@ import java.util.Optional;
 public interface GainingRepository extends JpaRepository<Gaining, Long> {
     Gaining findBySqid(String sqid);
     List<Gaining> findAll();
-    void deleteBySqid(String sqid);
 }

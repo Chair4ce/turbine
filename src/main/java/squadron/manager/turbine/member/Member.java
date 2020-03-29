@@ -3,7 +3,6 @@ package squadron.manager.turbine.member;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
-import org.joda.time.LocalDate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -19,52 +18,23 @@ public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private String sqid;
-
     private String fullName;
-
-    //    @Column(name = "first_name")
     private String firstName;
-
-    //    @Column(name = "last_name")
     private String lastName;
-
     private Date tafmsd;
-
     private String grade;
-
-    //    @Column(name = "assigned_pas")
     private String assignedPas;
-
     private String dafsc;
-
-    //    @Column(name = "office_symbol")
     private String officeSymbol;
-
-    //    @Column(name = "duty_title")
     private String dutyTitle;
-
-    //    @Column(name = "duty_start_date")
     private Date dutyStartDate;
-
-    //    @Column(name = "duty_phone")
     private String dutyPhone;
-
-    //    @Column(name = "supv_name")
     private String supvName;
-
-    //    @Column(name = "supv_begin_date")
     private Date supvBeginDate;
-
-    //    @Column(name = "date_arrived_station")
     private Date dateArrivedStation;
-
     private Date rnltd;
-
     private Date dor;
-
-    //    @Column(name = "last_updated")
     private Date lastUpdated;
 
     public Member(String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
@@ -132,7 +102,6 @@ public class Member {
         return this;
     }
 
-
     public List<String> compare(Member importingMember) throws NullPointerException {
         List<String> diff = new ArrayList<>();
 
@@ -155,10 +124,7 @@ public class Member {
 
         try {
             if (this.tafmsd.getTime() != importingMember.tafmsd.getTime()){
-                if (this.tafmsd == null && importingMember.tafmsd == null) {
-                } else {
                     diff.add("tafmsd");
-                }
             }
         } catch (NullPointerException e) {
             if (this.tafmsd != null && importingMember.tafmsd != null) {
@@ -207,10 +173,7 @@ public class Member {
 
         try {
             if (this.dutyStartDate.getTime() != importingMember.dutyStartDate.getTime()){
-                if (this.dutyStartDate == null && importingMember.dutyStartDate == null) {
-                } else {
                     diff.add("dutyStartDate");
-                }
             }
         } catch (NullPointerException e) {
             if (this.dutyStartDate != null && importingMember.dutyStartDate != null) {
@@ -238,10 +201,7 @@ public class Member {
 
         try {
             if (this.supvBeginDate.getTime() != importingMember.supvBeginDate.getTime()){
-                if (this.supvBeginDate == null && importingMember.supvBeginDate == null) {
-                } else {
                     diff.add("supvBeginDate");
-                }
             }
         } catch (NullPointerException e) {
             if (this.supvBeginDate != null && importingMember.supvBeginDate != null) {
@@ -251,10 +211,7 @@ public class Member {
 
         try {
             if (this.dateArrivedStation.getTime() != importingMember.dateArrivedStation.getTime()){
-                if (this.dateArrivedStation == null && importingMember.dateArrivedStation == null) {
-                } else {
                     diff.add("dateArrivedStation");
-                }
             }
         } catch (NullPointerException e) {
             if (this.dateArrivedStation != null && importingMember.dateArrivedStation != null) {
@@ -264,10 +221,7 @@ public class Member {
 
         try {
             if (this.rnltd.getTime() != importingMember.rnltd.getTime()) {
-                if (this.rnltd == null && importingMember.rnltd == null) {
-                } else {
                     diff.add("rnltd");
-                }
             }
         } catch (NullPointerException e) {
             if (this.rnltd != null && importingMember.rnltd != null) {
@@ -277,10 +231,7 @@ public class Member {
 
         try {
             if (this.dor.getTime() != importingMember.dor.getTime()){
-                if (this.dor == null && importingMember.dor == null) {
-                } else {
                     diff.add("dor");
-                }
             }
         } catch (NullPointerException e) {
             if (this.dor != null && importingMember.dor != null) {

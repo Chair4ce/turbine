@@ -13,13 +13,10 @@ import java.util.regex.Pattern;
 @Getter
 @Setter
 public class SqidGenerator {
-
     private String firstName;
     private String middleInitial;
     private String lastName;
     private String sqid;
-
-
     public SqidGenerator(String fullName, String rawSqid) {
         String regexp = "([A-Za-z]+),\\s+([A-Za-z]+)";
         fullName = fullName.replaceAll("\'","").replaceAll("-","");
