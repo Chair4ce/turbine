@@ -1,1 +1,0 @@
-ALTER TABLE gaining ADD COLUMN sponsor_id TEXT AFTER departed_last_station;

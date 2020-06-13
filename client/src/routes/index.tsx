@@ -1,12 +1,9 @@
 import * as React from 'react'
+import {lazy, Suspense} from 'react'
 import {Route, Switch} from 'react-router-dom'
-import {Global} from '@emotion/core'
-import Root from '../style/layout/Root'
-import normalize from '../style/normalize'
-import {lazy, Suspense} from 'react';
 import LoadingSpinner from "../component/displayLoading/LoadingSpinner";
 
-const membersPage = lazy(() => import('../page/members'));
+const mainPage = lazy(() => import('../page/main'));
 
 // If your app is big + you have routes with a lot of components, you should consider
 // code-splitting your routes! If you bundle stuff up with Webpack, I recommend `react-loadable`.
@@ -19,15 +16,13 @@ const membersPage = lazy(() => import('../page/members'));
 
 
 const Routes: React.FC = () => (
-    <Root>
-        <Global styles={normalize} />
+    <div>
         <Suspense fallback={<LoadingSpinner/>}>
-        <Switch>
-            <Route exact path="/" component={membersPage}/>
-            {/*<Route path="/members" component={MembersIndexPage} />*/}
-        </Switch>
+            <Switch>
+                <Route exact path="/" component={mainPage}/>
+            </Switch>
         </Suspense>
-    </Root>
+    </div>
 );
 
 export default Routes

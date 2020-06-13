@@ -1,27 +1,13 @@
 import {combineReducers} from 'redux';
 import {connectRouter, RouterState} from 'connected-react-router';
 import {History} from 'history';
-import {layoutReducer, LayoutState} from './layout';
-import {membersReducer} from './members/reducer';
-import {MembersState} from './members';
-import {SquadronsState} from "./squadrons";
-import {squadronsReducer} from "./squadrons/reducer";
 
 import {ShowModalState} from "./modals/types";
 import {showModalReducer} from "./modals/reducer";
-import {gainingReducer, GainingState} from "./gaining";
-import {importChangesReducer, ImportChangesState} from "./importChanges";
-import {squadronTaskReducer, SquadronTaskState} from "./squadronTasks";
 
 // The top-level state object
 export interface ApplicationState {
-    layout: LayoutState;
-    members: MembersState;
-    gaining: GainingState;
-    squadrons: SquadronsState;
-    squadronTask: SquadronTaskState;
     showModal: ShowModalState;
-    importChanges: ImportChangesState;
     router: RouterState;
 }
 
@@ -30,13 +16,7 @@ export interface ApplicationState {
 // the reducer acts on the corresponding ApplicationState property type.
 export const createRootReducer = (history: History) =>
     combineReducers({
-        layout: layoutReducer,
-        squadrons: squadronsReducer,
-        squadronTask: squadronTaskReducer,
         showModal: showModalReducer,
-        members: membersReducer,
-        gaining: gainingReducer,
-        importChanges: importChangesReducer,
         router: connectRouter(history),
     });
 

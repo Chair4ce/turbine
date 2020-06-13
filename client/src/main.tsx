@@ -1,28 +1,28 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'connected-react-router';
-import { Store } from 'redux';
-import { History } from 'history';
-import { ThemeProvider } from '@material-ui/styles';
+import {Provider} from 'react-redux';
+import {ConnectedRouter} from 'connected-react-router';
+import {Store} from 'redux';
+import {History} from 'history';
 import Routes from './routes';
-import { ApplicationState } from './store';
-import {darktheme} from "./style/theme/dark";
+import {ApplicationState} from './store';
+import normalize from "./style/normalize";
+import {Global} from "@emotion/core";
 
 // Any additional component props go here.
 interface MainProps {
     store: Store<ApplicationState>;
     history: History;
 }
+
 // Create an intersection type of the component props and our Redux props.
-const Main: React.FC<MainProps> = ({ store, history }) => {
+const Main: React.FC<MainProps> = ({store, history}) => {
     return (
-        <ThemeProvider theme={darktheme}>
-        <Provider store={store}>
-            <ConnectedRouter history={history}>
-                            <Routes />
-            </ConnectedRouter>
-        </Provider>
-        </ThemeProvider>
+            <Provider store={store}>
+                <Global styles={normalize}/>
+                <ConnectedRouter history={history}>
+                    <Routes/>
+                </ConnectedRouter>
+            </Provider>
     );
 };
 

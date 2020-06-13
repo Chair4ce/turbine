@@ -1,1 +1,0 @@
-ALTER TABLE gaining CHANGE departed_last_station date_dep_last_duty_stn TEXT;

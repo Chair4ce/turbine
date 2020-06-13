@@ -1,10 +1,6 @@
 import * as React from 'react';
 // import Member from "../../dispatchAndState/members/Member";
-import Page from "../../style/layout/Page";
-import color from "@material-ui/core/colors/blueGrey";
-import styled from "styled-components";
-import {Message} from "@material-ui/icons";
-
+import MainDashboard from "./MainDashboard";
 
 // Separate state props + dispatch props to their own interfaces.
 interface Props{
@@ -13,18 +9,11 @@ interface Props{
 
 // We can use `typeof` here to map our dispatch types to the props, like so
 
-class InProcessingIndexPage extends React.Component<Props> {
+class MainIndexPage extends React.Component<Props> {
 
     public render() {
         return (
-            <Page
-                className="InProcessingPage"
-            >
-                <Message>
-                <a>This will soon be a login page. Please add /members to the url above and press enter to see the main dashboard.</a>
-                </Message>
-                {/*<InProcessingPage />*/}
-            </Page>
+                <MainDashboard />
         );
     }
 }
@@ -37,9 +26,8 @@ class InProcessingIndexPage extends React.Component<Props> {
 // You can access these via `this.props`.
 // Now let's connect our component!
 // With redux v4's improved typings, we can finally omit generics here.
-export default InProcessingIndexPage;
+export default MainIndexPage;
 
 
-// export const Message = styled('div')`
-// color: #aaaaaa;
-// `;
+
+

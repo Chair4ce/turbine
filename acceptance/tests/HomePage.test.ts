@@ -4,5 +4,4 @@ Feature('Home Page');
 
 Scenario ('should see a home page', (I) => {
     I.amOnPage('/');
-    I.see("Turbine");
 });

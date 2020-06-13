@@ -1,1 +1,0 @@
-ALTER TABLE members ADD COLUMN rnltd DATETIME AFTER date_arrived_station;
