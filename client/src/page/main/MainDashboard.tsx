@@ -1,12 +1,6 @@
-import React, {useEffect} from 'react';
-import {createStyles, makeStyles, Theme, useTheme} from '@material-ui/core/styles';
-import {useDispatch} from "react-redux";
+import React from 'react';
 
 const MainDashboard: React.FC = () => {
-
-    // const showUploadModal = useSelector(({showModal}: ApplicationState) => showModal.uploadModal);
-
-
     return (
         <div className={"hello"}>
             Hello World
