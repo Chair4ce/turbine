@@ -1,13 +1,10 @@
 import {combineReducers} from 'redux';
 import {connectRouter, RouterState} from 'connected-react-router';
 import {History} from 'history';
-
-import {ShowModalState} from "./modals/types";
 import {showModalReducer} from "./modals/reducer";
 
 // The top-level state object
 export interface ApplicationState {
-    showModal: ShowModalState;
     router: RouterState;
 }
 

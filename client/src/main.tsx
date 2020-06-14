@@ -7,6 +7,7 @@ import Routes from './routes';
 import {ApplicationState} from './store';
 import normalize from "./style/normalize";
 import {Global} from "@emotion/core";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
 // Any additional component props go here.
 interface MainProps {
@@ -19,6 +20,7 @@ const Main: React.FC<MainProps> = ({store, history}) => {
     return (
             <Provider store={store}>
                 <Global styles={normalize}/>
+                <CssBaseline/>
                 <ConnectedRouter history={history}>
                     <Routes/>
                 </ConnectedRouter>
