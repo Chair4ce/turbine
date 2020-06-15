@@ -2,9 +2,11 @@ import {combineReducers} from 'redux';
 import {connectRouter, RouterState} from 'connected-react-router';
 import {History} from 'history';
 import {showModalReducer} from "./modals/reducer";
+import {membersReducer, MembersState} from "./members";
 
 // The top-level state object
 export interface ApplicationState {
+    members: MembersState
     router: RouterState;
 }
 
@@ -14,6 +16,7 @@ export interface ApplicationState {
 export const createRootReducer = (history: History) =>
     combineReducers({
         showModal: showModalReducer,
+        members: membersReducer,
         router: connectRouter(history),
     });
 

@@ -5,3 +5,6 @@ CREATE TABLE update_metric
     date      DATETIME,
     PRIMARY KEY (id)
 );
+
+
+

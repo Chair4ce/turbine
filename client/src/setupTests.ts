@@ -3,6 +3,7 @@ import Enzyme from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import {RouterState} from "connected-react-router";
 import {ApplicationState} from "./store";
+import {MemberInitState} from "./store/members";
 
 Enzyme.configure({adapter: new Adapter()});
 const initRouter: RouterState = {
@@ -17,5 +18,6 @@ const initRouter: RouterState = {
 ;
 
 export const initStore: ApplicationState = {
+    members: MemberInitState,
     router: initRouter,
 };
