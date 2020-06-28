@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import * as React from "react";
 import styled from "styled-components";
 import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
@@ -35,55 +35,89 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         hide: {
             visibility: 'hidden',
-
         }
     }),
 );
 
 interface Props {
+    showCurrentPanel: boolean;
+    showProjectedPanel: boolean;
+    showGainingPanel: boolean;
+    showLosingPanel: boolean;
+    menuSelectHandler: (type: string) => void;
     expanded: boolean;
     className?: string;
 }
 
+const ROSTER_MENU_SELECT_ITEM = {
+    TOGGLE_CURRENT_ROSTER: 'ROSTER_MENU/TOGGLE_CURRENT',
+    TOGGLE_PROJECTED_ROSTER: 'ROSTER_MENU/TOGGLE_PROJECTED',
+    TOGGLE_GAINING_ROSTER: 'ROSTER_MENU/TOGGLE_GAINING',
+    TOGGLE_LOSING_ROSTER: 'ROSTER_MENU/TOGGLE_LOSING',
+}
+
 const RosterMenu: React.FC<Props> = props => {
     const classes = useStyles();
-    const [currentSelected, setCurrentSelected] = useState(false);
-    const [projectedSelected, setProjectedSelected] = useState(false);
-    const [gainingSelected, setGainingSelected] = useState(false);
-    const [losingSelected, setLosingSelected] = useState(false);
+
+    const toggleCurrentPanel = () => {
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_CURRENT_ROSTER
+        )
+    }
+
+    const toggleProjectedPanel = () => {
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_PROJECTED_ROSTER
+        )
+    }
+
+    const toggleGainingPanel = () => {
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_GAINING_ROSTER
+        )
+    }
+
+    const toggleLosingPanel = () => {
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_LOSING_ROSTER
+        )
+    }
 
     const handleCurrentClick = () => {
-        setCurrentSelected(prev => !prev);
+        toggleCurrentPanel();
     }
+
     const handleProjectedClick = () => {
-        setProjectedSelected(prev => !prev);
+        toggleProjectedPanel();
     }
+
     const handleGainingClick = () => {
-        setGainingSelected(prev => !prev);
+        toggleGainingPanel();
     }
+
     const handleLosingClick = () => {
-        setLosingSelected(prev => !prev);
+        toggleLosingPanel();
     }
+
     const currentSelectorClassName = clsx({
-        [classes.selected]: currentSelected,
-        [classes.unselected]: !currentSelected,
+        [classes.selected]: props.showCurrentPanel,
+        [classes.unselected]: !props.showCurrentPanel,
     });
 
     const projectedSelectorClassName = clsx({
-        [classes.selected]: projectedSelected,
-        [classes.unselected]: !projectedSelected,
+        [classes.selected]: props.showProjectedPanel,
+        [classes.unselected]: !props.showProjectedPanel,
     });
 
     const gainingSelectorClassName = clsx({
-        [classes.selected]: gainingSelected,
-        [classes.unselected]: !gainingSelected,
+        [classes.selected]: props.showGainingPanel,
+        [classes.unselected]: !props.showGainingPanel,
     });
 
     const losingSelectorClassName = clsx({
-        [classes.selected]: losingSelected,
-        [classes.unselected]: !losingSelected,
+        [classes.selected]: props.showLosingPanel,
+        [classes.unselected]: !props.showLosingPanel,
     });
-
 
     return (
         <div className={classNames('roster_menu', props.className)}>
@@ -96,7 +130,7 @@ const RosterMenu: React.FC<Props> = props => {
                         {props.expanded ? <span className={classNames('menu_item_text',currentSelectorClassName)}>
                     Current
                     </span> : ''}
-                        {currentSelected ? <div className={'selected_bar'}/> : ''}
+                        {props.showCurrentPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
                     <MenuItem className={projectedSelectorClassName} onClick={handleProjectedClick}>
                         <div className={classes.iconArea}>
@@ -106,7 +140,7 @@ const RosterMenu: React.FC<Props> = props => {
                         Projected
 
                         </span> : ''}
-                        {projectedSelected ? <div className={'selected_bar'}/> : ''}
+                        {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
                     <MenuItem className={gainingSelectorClassName} onClick={handleGainingClick}>
                         <div className={classes.iconArea}>
@@ -115,7 +149,7 @@ const RosterMenu: React.FC<Props> = props => {
                         {props.expanded ? <span className={gainingSelectorClassName}>
                         Gaining
                         </span> : ''}
-                        {gainingSelected ? <div className={'selected_bar'}/> : ''}
+                        {props.showGainingPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
                     <MenuItem className={losingSelectorClassName} onClick={handleLosingClick}>
                         <div className={classes.iconArea}>
@@ -124,7 +158,7 @@ const RosterMenu: React.FC<Props> = props => {
                         {props.expanded ? <span className={losingSelectorClassName}>
                         Losing
                         </span> : ''}
-                        {losingSelected ? <div className={'selected_bar'}/> : ''}
+                        {props.showLosingPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
                 </MenuList>
 
@@ -134,7 +168,7 @@ const RosterMenu: React.FC<Props> = props => {
 }
 
 export const StyledRosterMenu = styled(RosterMenu)`
-
+height: 100%;
 position: relative;
 display: block;
 li{
@@ -156,3 +190,7 @@ width: 3px;
 background-color: rgb(86, 137, 159);
 }
 `;
+
+export {
+    ROSTER_MENU_SELECT_ITEM as ROSTER_MENU_SELECT_ACTION,
+};

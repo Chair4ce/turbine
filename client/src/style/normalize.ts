@@ -61,6 +61,7 @@ const normalize = css`
         -webkit-font-smoothing: subpixel-antialiased;
                 position: relative;
         height: 100%;
+        overflow: hidden;
     }
 
     /**

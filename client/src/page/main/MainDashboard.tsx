@@ -2,8 +2,7 @@ import React from 'react';
 import {StyledMainHeader} from "../../component/appHeader/AppHeader";
 import classNames from "classnames";
 import styled from "styled-components";
-import {StyledSideBar} from "../../component/sidebar/SideBar";
-import {StyledMainPanels} from "../../component/panels/MainPanels";
+import {StyledMainSection} from "./MainSection";
 
 interface Props {
     className?: string;
@@ -17,15 +16,7 @@ const MainDashboard: React.FC<Props> = props => {
                     <StyledMainHeader/>
                 </div>
             </div>
-            <section className={'main_section'}>
-                <div className={'sidebar_area'}>
-                    <StyledSideBar/>
-                </div>
-                <article className={'main'}>
-                    <StyledMainPanels/>
-                </article>
-
-            </section>
+            <StyledMainSection/>
         </div>
     );
 };
@@ -41,6 +32,7 @@ min-width: 973px;
 
 .main_section {
 position: absolute;
+width: 100%;
 display: flex;
 flex-direction: row;
 top: 61px;
@@ -57,7 +49,7 @@ height: 100%;
 
 .main {
 position: relative;
-
+width: 100%;
 }
 
 

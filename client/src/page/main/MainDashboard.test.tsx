@@ -14,12 +14,12 @@ describe('MainDashboard test', () => {
         expect(subject.exists()).toBe(true);
     });
 
-    it('should render the main section', function () {
-        expect(subject.find('.main_section').exists()).toBeTruthy();
+    it('should render the main dashboard', function () {
+        expect(subject.find('.main_dashboard').exists()).toBeTruthy();
     });
 
-    it('should render the sidebar area', function () {
-        expect(subject.find('.sidebar_area').exists()).toBeTruthy();
+    it('should render the header', function () {
+        expect(subject.find('.main_header').exists()).toBeTruthy();
     });
 
 
