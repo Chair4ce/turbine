@@ -1,12 +1,12 @@
 import React from 'react';
-import {shallow, ShallowWrapper} from "enzyme";
-import MainDashboard from "./MainDashboard";
+import {mount, ReactWrapper, ShallowWrapper} from "enzyme";
+import {StyledMainDashboard} from "./MainDashboard";
 
 describe('MainDashboard test', () => {
-    let subject: ShallowWrapper;
+    let subject: ReactWrapper;
     beforeEach(() => {
-        subject = shallow(
-            <MainDashboard/>
+        subject = mount(
+            <StyledMainDashboard/>
         );
     });
 
@@ -14,10 +14,13 @@ describe('MainDashboard test', () => {
         expect(subject.exists()).toBe(true);
     });
 
-    // Covered in Acceptance test
-    test('displays Hello World', () => {
-        expect(subject.find('.hello').text()).toBe("Hello World");
-    })
+    it('should render the main section', function () {
+        expect(subject.find('.main_section').exists()).toBeTruthy();
+    });
+
+    it('should render the sidebar area', function () {
+        expect(subject.find('.sidebar_area').exists()).toBeTruthy();
+    });
 
 
 })

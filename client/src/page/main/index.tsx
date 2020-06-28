@@ -1,5 +1,5 @@
 import * as React from 'react';
-import MainDashboard from "./MainDashboard";
+import {StyledMainDashboard} from "./MainDashboard";
 
 interface Props{
     classname?: string;
@@ -9,7 +9,7 @@ class MainIndexPage extends React.Component<Props> {
 
     public render() {
         return (
-                <MainDashboard />
+                <StyledMainDashboard />
         );
     }
 }

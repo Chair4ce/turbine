@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import {css} from '@emotion/core';
 
 const normalize = css`
     /*! modern-normalize | MIT License | https://github.com/sindresorhus/modern-normalize */
@@ -27,6 +27,8 @@ const normalize = css`
     :root {
         -moz-tab-size: 4;
         tab-size: 4;
+        position: relative;
+        height: 100%;
     }
 
     /**
@@ -36,7 +38,15 @@ const normalize = css`
     html {
         line-height: 1.15;
     }
-
+    
+    a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    font-size: 100%;
+    vertical-align: baseline;
+    }
     /* Sections
     ========================================================================== */
 
@@ -45,16 +55,31 @@ const normalize = css`
   */
 
     body {
+    display: block;
         margin: 0;
+         background-color: #212121;
+        -webkit-font-smoothing: subpixel-antialiased;
+                position: relative;
+        height: 100%;
     }
 
     /**
   * Improve consistency of default fonts in all browsers. (https://github.com/sindresorhus/modern-normalize/issues/3)
   */
+  
+  ::-webkit-scrollbar {
+    background-color: #fff;
+    width: 10px;
+    height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+    background: #bbb;
+    min-height: 40px;
+    }
 
     body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', Rambla;
     }
 
     /**
@@ -64,7 +89,7 @@ const normalize = css`
 
     h1 {
         font-size: 2em;
-        margin: 0.67em 0;
+        //margin: 0.67em 0;
     }
 
     /* Grouping content

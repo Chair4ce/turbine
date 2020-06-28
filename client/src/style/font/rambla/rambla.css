@@ -1,0 +1,28 @@
+
+@font-face {
+    font-family: 'Rambla';
+    src: url('./Rambla-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Rambla Bold';
+    src: url('./Rambla-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Rambla Bold Italic';
+    src: url('./Rambla-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Rambla Italic';
+    src: url('./Rambla-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
