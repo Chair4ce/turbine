@@ -2,6 +2,7 @@ import * as React from "react";
 import styled from 'styled-components';
 import classNames from "classnames";
 import theme from "../../style/theme";
+import TurbineLogo from "../icon/TurbineLogo";
 
 interface Props {
     className?: string;
@@ -11,6 +12,7 @@ const MainHeader: React.FC<Props> = props => {
     return (
         <header className={classNames('main_header', props.className)}>
             <div className={'logo_area'}>
+                <TurbineLogo/>
             </div>
             <h1 className={'app_title'}>Turbine</h1>
         </header>
@@ -24,7 +26,7 @@ flex-direction: row;
 align-content: center;
 width: 100%;
 height: 60px;
-background-color: rgb(86, 137, 159);
+background-color: #292929;
 border-bottom: 1px solid #212121;
 min-width: 1000px;
 .logo_area {
@@ -33,7 +35,7 @@ margin-left: 3px;
 }
 h1 {
 color: #ffffff;
-padding: 5px;
+padding: 3px;
 width: min-content;
 font-size: 24px;
 font-style: normal;

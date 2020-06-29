@@ -86,6 +86,16 @@ const theme = {
         sizeModalHeader: '30px',
         sizeBigMetric: '40px',
     },
+
+    item_height: {
+        normal: '40px',
+},
+    header_heights: {
+        panel: '38px',
+        content: '22px',
+        main: '30px',
+        app: '60px'
+    }
 };
 
     const muiPalette = createPalette(

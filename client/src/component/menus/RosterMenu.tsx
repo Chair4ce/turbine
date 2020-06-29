@@ -132,16 +132,6 @@ const RosterMenu: React.FC<Props> = props => {
                     </span> : ''}
                         {props.showCurrentPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
-                    <MenuItem className={projectedSelectorClassName} onClick={handleProjectedClick}>
-                        <div className={classes.iconArea}>
-                            <UpdateIcon/>
-                        </div>
-                        {props.expanded ? <span className={projectedSelectorClassName}>
-                        Projected
-
-                        </span> : ''}
-                        {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}
-                    </MenuItem>
                     <MenuItem className={gainingSelectorClassName} onClick={handleGainingClick}>
                         <div className={classes.iconArea}>
                             <AddIcon/>
@@ -159,6 +149,16 @@ const RosterMenu: React.FC<Props> = props => {
                         Losing
                         </span> : ''}
                         {props.showLosingPanel ? <div className={'selected_bar'}/> : ''}
+                    </MenuItem>
+                    <MenuItem className={projectedSelectorClassName} onClick={handleProjectedClick}>
+                        <div className={classes.iconArea}>
+                            <UpdateIcon/>
+                        </div>
+                        {props.expanded ? <span className={projectedSelectorClassName}>
+                        Projected
+
+                        </span> : ''}
+                        {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
                 </MenuList>
 

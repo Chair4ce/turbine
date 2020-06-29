@@ -1,33 +1,33 @@
 {
   "files": {
     "main.css": "/static/css/main.b59c803d.chunk.css",
-    "main.js": "/static/js/main.5b837d82.chunk.js",
-    "main.js.map": "/static/js/main.5b837d82.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.c0fa6c50.js",
-    "runtime-main.js.map": "/static/js/runtime-main.c0fa6c50.js.map",
+    "main.js": "/static/js/main.d9d92e93.chunk.js",
+    "main.js.map": "/static/js/main.d9d92e93.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.a5dbc1b4.js",
+    "runtime-main.js.map": "/static/js/runtime-main.a5dbc1b4.js.map",
     "static/css/2.7215679f.chunk.css": "/static/css/2.7215679f.chunk.css",
     "static/js/2.2a4485fa.chunk.js": "/static/js/2.2a4485fa.chunk.js",
     "static/js/2.2a4485fa.chunk.js.map": "/static/js/2.2a4485fa.chunk.js.map",
-    "static/js/3.1c92a0b0.chunk.js": "/static/js/3.1c92a0b0.chunk.js",
-    "static/js/3.1c92a0b0.chunk.js.map": "/static/js/3.1c92a0b0.chunk.js.map",
-    "static/js/4.86d18781.chunk.js": "/static/js/4.86d18781.chunk.js",
-    "static/js/4.86d18781.chunk.js.map": "/static/js/4.86d18781.chunk.js.map",
+    "static/js/3.95dca303.chunk.js": "/static/js/3.95dca303.chunk.js",
+    "static/js/3.95dca303.chunk.js.map": "/static/js/3.95dca303.chunk.js.map",
+    "static/js/4.fc50acfc.chunk.js": "/static/js/4.fc50acfc.chunk.js",
+    "static/js/4.fc50acfc.chunk.js.map": "/static/js/4.fc50acfc.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.a384c3768e9eb829b2598338fc7a8d67.js": "/precache-manifest.a384c3768e9eb829b2598338fc7a8d67.js",
+    "precache-manifest.94323b90e7cee56d257a63309822f4a7.js": "/precache-manifest.94323b90e7cee56d257a63309822f4a7.js",
     "service-worker.js": "/service-worker.js",
     "static/css/2.7215679f.chunk.css.map": "/static/css/2.7215679f.chunk.css.map",
     "static/css/main.b59c803d.chunk.css.map": "/static/css/main.b59c803d.chunk.css.map",
     "static/js/2.2a4485fa.chunk.js.LICENSE.txt": "/static/js/2.2a4485fa.chunk.js.LICENSE.txt",
-    "static/js/3.1c92a0b0.chunk.js.LICENSE.txt": "/static/js/3.1c92a0b0.chunk.js.LICENSE.txt",
+    "static/js/3.95dca303.chunk.js.LICENSE.txt": "/static/js/3.95dca303.chunk.js.LICENSE.txt",
     "static/media/rambla.css": "/static/media/Rambla-Regular.7f82525c.ttf",
     "static/media/roboto.css": "/static/media/Roboto-ThinItalic.35a9c89a.ttf",
     "static/media/index.css": "/static/media/ibm-plex-sans-latin-700italic.72e9af40.woff"
   },
   "entrypoints": [
-    "static/js/runtime-main.c0fa6c50.js",
+    "static/js/runtime-main.a5dbc1b4.js",
     "static/css/2.7215679f.chunk.css",
     "static/js/2.2a4485fa.chunk.js",
     "static/css/main.b59c803d.chunk.css",
-    "static/js/main.5b837d82.chunk.js"
+    "static/js/main.d9d92e93.chunk.js"
   ]
 }

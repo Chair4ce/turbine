@@ -20,7 +20,7 @@ const LosingRosterPanel: React.FC<Props> = props => {
             <div className={classNames('container')}>
                 <header className={classNames('panel_header')}>
                     <div className={classNames('header-title-area')}>
-                        <h2>Current Losing Roster</h2>
+                        <h2>Losing Roster</h2>
                     </div>
                     <div className={'header_action_area'}>
                         <button className={'close_btn'} onClick={handleClose}>
@@ -96,8 +96,8 @@ const LosingRosterPanel: React.FC<Props> = props => {
                         <div className={'item'}/>
                         <div className={'item'}/>
                     </div>
-                </section>
                 <div className={classNames('end_of_list', 'preview')}/>
+                </section>
             </div>
         </div>
     )
@@ -137,19 +137,16 @@ width: 100%;
 flex-grow: 1;
 overflow-y: auto;
 }
-.items_container {
-display: block;
-height: 100%;
-}
+
 .item {
-height: 40px;
+height: ${theme.item_height.normal};
 width: 100%;
-background-color: #f4f4f4;
+background-color: #ffe3e3;
 border-bottom: 1px solid #ddd;
 }
 
 .end_of_list {
-    height: 76px;
+    min-height: ${theme.header_heights.panel};
     background-color: #484f57;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -172,10 +169,10 @@ border-bottom: 1px solid #ddd;
     align-items: center;
     flex-grow: 0;
     flex-shrink: 1;
-    padding: 0 10px 0 15px;
+    padding: 0 7px 0 10px;
     margin: 0;
     border: 0;
-    height: 76px;
+    min-height: ${theme.header_heights.panel};
     
     background: rgb(44, 45, 47);;
     border-top-left-radius: 4px;
@@ -231,10 +228,9 @@ height: 24px;
   padding: 0;
   display: flex;
   position: relative;
-  flex-direction: row;
   align-content: center;
-  justify-content: space-around;
-  height: 44px;
+  justify-content: space-between;
+  min-height: ${theme.header_heights.content};
   background: #575757;
   
 .column-title {
@@ -247,18 +243,23 @@ height: 24px;
 .column-title-grade {
   margin-left: 10px;
   min-width: 43px;
+  max-width: 60px;
 }
 .column-title-name {
-  width: 230px;
+  min-width: 100px;
+    max-width: 360px;
 }
 .column-title-afsc {
-  width: 80px;
+  min-width: 80px;
+    max-width: 100px;
 }
 .column-title-dor {
-  width: 80px;
+  min-width: 80px;
+    max-width: 100px;
 }
 .column-title-dos {
-  width: 80px;
+  min-width: 80px;
+    max-width: 100px;
 }
 }
 `;
