@@ -26,7 +26,7 @@ flex-direction: row;
 align-content: center;
 width: 100%;
 height: 60px;
-background-color: #292929;
+background-color: #5D8AA8;
 border-bottom: 1px solid #212121;
 min-width: 1000px;
 .logo_area {

@@ -7,6 +7,7 @@ import theme from "../../style/theme";
 
 interface Props {
     callback: (type: string) => void;
+    provided: any;
     className?: string;
 }
 
@@ -16,8 +17,9 @@ const GainingRosterPanel: React.FC<Props> = props => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_GAINING_ROSTER)
     }
     return (
-        <div className={classNames('panel', props.className)}>
-            <div className={classNames('container')}>
+        <div className={classNames('container', props.className)}
+             ref={props.provided.innerRef}
+            >
                 <header className={classNames('panel_header')}>
                     <div className={classNames('header-title-area')}>
                         <h2>Gaining Roster</h2>
@@ -83,28 +85,28 @@ const GainingRosterPanel: React.FC<Props> = props => {
                         <div className={'item'}/>
                         <div className={'item'}/>
                         <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
+                        <div className={'item'}/>
                     </div>
                 <div className={classNames('end_of_list', 'preview')}/>
                 </section>
-            </div>
+            {props.provided.placeholder}
         </div>
     )
 }
 
 export const StyledGainingRosterPanel = styled(GainingRosterPanel)`
 
-
-
-display: block;
-position: relative;
-width: inherit;
-height: calc(100% - 1px);
-min-width: 275px;
-float: left;
-overflow: hidden;
-font: inherit;
-font-size: 100%;
-vertical-align: baseline;
 
 .close_btn {
 display: flex;
@@ -140,6 +142,7 @@ position: relative;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
+
 .container {
     display: flex;
     -ms-flex-direction: column;
@@ -162,7 +165,7 @@ position: relative;
     margin: 0;
     border: 0;
     min-height: ${theme.header_heights.panel};
-    
+    cursor: move;
     background: rgb(44, 45, 47);;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;

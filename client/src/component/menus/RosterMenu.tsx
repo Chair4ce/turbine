@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import UpdateIcon from '@material-ui/icons/Update';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 import clsx from 'clsx';
+import theme from "../../style/theme";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         selected: {
             // transition: 'color 100ms ease-in',
-            color: 'rgb(86, 137, 159)'
+            color: '#5D8AA8'
         },
         unselected: {
             // transition: 'color 100ms ease-in',
@@ -156,7 +157,6 @@ const RosterMenu: React.FC<Props> = props => {
                         </div>
                         {props.expanded ? <span className={projectedSelectorClassName}>
                         Projected
-
                         </span> : ''}
                         {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
@@ -179,6 +179,8 @@ text-rendering: optimizeLegibility;
 width: 100%;
 }
 span {
+text-rendering: optimizeLegibility;
+text-shadow: 0 1px 1px rgba(0,0,0,.5);
 padding-left: 8px;
 }
 .selected_bar {
@@ -187,7 +189,7 @@ height: 100%;
 right: 0;
 flex-shrink: 0;
 width: 3px;
-background-color: rgb(86, 137, 159);
+background-color: ${theme.color.itemSelected};
 }
 `;
 

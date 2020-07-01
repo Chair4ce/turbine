@@ -65,6 +65,14 @@ const brandColors = {
     brightBlue: '#1E98E5',//
     skyBlueGreen: '#6FB6CF',//
     skyBlue: '#82BFF9',
+    ceruleanCrayola: '#00a5d7',
+    airForceBlue: '#5D8AA8',
+    bone: '#D8D0C1',
+    sage: '#B3B492',
+    flame: '#F05D23',
+    raisin: '#1A181B',
+    raisinLight: '#2E2C2F',
+    redPurple: '#DC0073',
     lightBlueGray: '#8199A2',//
 };
 

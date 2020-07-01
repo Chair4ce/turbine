@@ -7,6 +7,7 @@ import theme from "../../style/theme";
 
 interface Props {
     callback: (type: string) => void;
+    provided: any;
     className?: string;
 }
 
@@ -16,8 +17,10 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_PROJECTED_ROSTER)
     }
     return (
-        <div className={classNames('panel', props.className)}>
-            <div className={classNames('container')}>
+        <div className={classNames('container', props.className)}
+             ref={props.provided.innerRef}
+        >
+            {props.provided.placeholder}
                 <header className={classNames('panel_header')}>
                     <div className={classNames('header-title-area')}>
                         <h2>Projected Roster</h2>
@@ -98,7 +101,7 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
                     </div>
                 <div className={classNames('end_of_list', 'preview')}/>
                 </section>
-            </div>
+
         </div>
     )
 }
@@ -106,17 +109,19 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
 export const StyledProjectedRosterPanel = styled(ProjectedRosterPanel)`
 
 
-
-display: block;
-position: relative;
-width: inherit;
-height: calc(100% - 1px);
-min-width: 275px;
-float: left;
-overflow: hidden;
-font: inherit;
-font-size: 100%;
-vertical-align: baseline;
+.container {
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 100%;
+}
 
 .close_btn {
 display: flex;
@@ -156,19 +161,7 @@ border-bottom: 1px solid #ddd;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
 }
-.container {
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    height: 100%;
-}
+
 .panel_header {
     display: flex;
     align-items: center;

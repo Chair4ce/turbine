@@ -61,6 +61,7 @@ const theme = {
         fontSubHeader: brandColors.lightBlueGray,//
         copyTgtBorder: brandColors.lightCoolBlack,//
         dateDividerBox: brandColors.mediumBrightBrightBlue,//
+        itemSelected: brandColors.airForceBlue,//
     },
 
     font: {
@@ -88,7 +89,7 @@ const theme = {
     },
 
     item_height: {
-        normal: '40px',
+        normal: '80px',
 },
     header_heights: {
         panel: '38px',

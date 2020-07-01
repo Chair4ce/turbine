@@ -7,6 +7,7 @@ import theme from "../../style/theme";
 
 interface Props {
     callback: (type: string) => void;
+    provided: any;
     className?: string;
 }
 
@@ -16,8 +17,10 @@ const LosingRosterPanel: React.FC<Props> = props => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_LOSING_ROSTER)
     }
     return (
-        <div className={classNames('panel', props.className)}>
-            <div className={classNames('container')}>
+        <div className={classNames('container', props.className)}
+             ref={props.provided.innerRef}
+        >
+            {props.provided.placeholder}
                 <header className={classNames('panel_header')}>
                     <div className={classNames('header-title-area')}>
                         <h2>Losing Roster</h2>
@@ -38,11 +41,11 @@ const LosingRosterPanel: React.FC<Props> = props => {
                     <div className={classNames('column-title', 'column-title-afsc')}>
                         <h4>AFSC</h4>
                     </div>
-                    <div className={classNames('column-title', 'column-title-dor')}>
-                        <h4>DOR</h4>
-                    </div>
                     <div className={classNames('column-title', 'column-title-dos')}>
                         <h4>DOS</h4>
+                    </div>
+                    <div className={classNames('column-title', 'column-title-rnltd')}>
+                        <h4>RNLTD</h4>
                     </div>
                 </div>
                 <section className={classNames('panel_content')}>
@@ -98,7 +101,6 @@ const LosingRosterPanel: React.FC<Props> = props => {
                     </div>
                 <div className={classNames('end_of_list', 'preview')}/>
                 </section>
-            </div>
         </div>
     )
 }
@@ -107,16 +109,7 @@ export const StyledLosingRosterPanel = styled(LosingRosterPanel)`
 
 
 
-display: block;
-position: relative;
-width: inherit;
-height: calc(100% - 1px);
-min-width: 275px;
-float: left;
-overflow: hidden;
-font: inherit;
-font-size: 100%;
-vertical-align: baseline;
+
 
 .close_btn {
 display: flex;
@@ -253,7 +246,7 @@ height: 24px;
   min-width: 80px;
     max-width: 100px;
 }
-.column-title-dor {
+.column-title-rnltd {
   min-width: 80px;
     max-width: 100px;
 }

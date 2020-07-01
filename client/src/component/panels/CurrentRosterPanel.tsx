@@ -7,6 +7,7 @@ import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
 
 interface Props {
     callback: (type: string) => void;
+    provided: any;
     className?: string;
 }
 
@@ -16,8 +17,8 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_CURRENT_ROSTER)
     }
     return (
-        <div className={classNames('panel', props.className)}>
-            <div className={classNames('container')}>
+        <div className={classNames('container', props.className)}
+        ref={props.provided.innerRef}>
                 <header className={classNames('panel_header')}>
                     <div className={classNames('header-title-area')}>
                         <h2>Alpha Roster</h2>
@@ -98,26 +99,26 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </div>
                 <div className={classNames('end_of_list', 'preview')}/>
                 </section>
-            </div>
+            {props.provided.placeholder}
         </div>
     )
 }
 
 export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
 
-
-
-display: block;
-position: relative;
-width: inherit;
-height: calc(100% - 1px);
-min-width: 275px;
-float: left;
-overflow: hidden;
-font: inherit;
-font-size: 100%;
-vertical-align: baseline;
-
+.container {
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    height: 100%;
+}
 .close_btn {
 display: flex;
 align-items: center;
@@ -141,7 +142,7 @@ overflow-y: auto;
 .item {
 height: ${theme.item_height.normal};
 width: 100%;
-background-color: #f4f4f4;
+background-color: #f4f4f4 ;
 border-bottom: 1px solid #ddd;
 }
 
@@ -150,20 +151,7 @@ border-bottom: 1px solid #ddd;
     background-color: #484f57;
     border-bottom-left-radius: 4px;
     border-bottom-right-radius: 4px;
-}
-.container {
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 100%;
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-    height: 100%;
-}
+} 
 .panel_header {
     display: flex;
     align-items: center;
