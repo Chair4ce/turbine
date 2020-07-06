@@ -98,6 +98,8 @@ height: 100%;
   overflow-y: auto;
   border-top: 1px solid #000000;
   border-bottom: 1px solid #000;
+  outline: none;
+  :focus {outline:0 !important;}
 }
 
 .toggleButtonArea {

@@ -15,9 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             display: 'flex',
+            outline: 'none',
         },
         paper: {
             marginRight: theme.spacing(2),
+            outline: 'none',
         },
         iconArea: {
             display: 'flex',
@@ -171,12 +173,14 @@ export const StyledRosterMenu = styled(RosterMenu)`
 height: 100%;
 position: relative;
 display: block;
+outline: none;
 li{
 padding-left: 12px;
 }
 ul {
 text-rendering: optimizeLegibility;
 width: 100%;
+outline: none;
 }
 span {
 text-rendering: optimizeLegibility;

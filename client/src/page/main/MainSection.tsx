@@ -4,97 +4,10 @@ import {StyledSideBar} from "../../component/sidebar/SideBar";
 import {StyledPanelsContainer} from "../../component/panels/PanelsContainer";
 import styled from "styled-components";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
-// @ts-ignore
-// import readXlsxFile from "read-excel-file";
 
 interface Props {
     className?: string;
 }
-
-// const schema = {
-//     'FULL_NAME': {
-//         prop: 'fullName',
-//         type: String,
-//         required: true
-//         // Excel stores dates as integers.
-//         // E.g. '24/03/2018' === 43183.
-//         // Such dates are parsed to UTC+0 timezone with time 12:00 .
-//     },
-//     'GRADE': {
-//         prop: 'grade',
-//         type: String,
-//         required: false
-//     },
-//     'ASSIGNED_PAS': {
-//         prop: 'assignedPas',
-//         type: String,
-//         required: false
-//     },
-//     'OFFICE_SYMBOL': {
-//         prop: 'officeSymbol',
-//         type: String,
-//         required: false
-//     },
-//     'DUTY_TITLE': {
-//         prop: 'dutyTitle',
-//         type: String,
-//         required: false
-//     },
-//     'DUTY_START_DATE': {
-//         prop: 'dutyStartDate',
-//         type: Date,
-//         required: false
-//     },
-//     'DOR': {
-//         prop: 'dor',
-//         type: Date,
-//         required: false
-//     },
-//     'DAFSC': {
-//         prop: 'dafsc',
-//         type: String,
-//         required: false
-//     },
-//     'PAFSC': {
-//         prop: 'pafsc',
-//         type: String,
-//         required: false
-//     },
-//     'DATE_ARRIVED_STATION': {
-//         prop: 'dateArrivedStation',
-//         type: Date,
-//         required: false
-//     },
-//     'DOS': {
-//         prop: 'dos',
-//         type: Date,
-//         required: false
-//     },
-//     'RNLTD': {
-//         prop: 'rnltd',
-//         type: Date,
-//         required: false
-//     },
-//     'SUPV_NAME': {
-//         prop: 'supvName',
-//         type: String,
-//         required: false
-//     },
-//     'SUPV_BEGIN_DATE': {
-//         prop: 'supvBeginDate',
-//         type: Date,
-//         required: false
-//     },
-//     'DEROS': {
-//         prop: 'deros',
-//         type: Date,
-//         required: false
-//     }
-//
-//     // 'COURSE' is not a real Excel file column name,
-//     // it can be any string — it's just for code readability.
-// }
-
 
 const MainSection: React.FC<Props> = props => {
     const [showCurrentPanel, toggleCurrentPanel] = useState(false);
@@ -119,18 +32,6 @@ const MainSection: React.FC<Props> = props => {
         }
     }
 
-
-    // function handleFile(e: HTMLInputElement) {
-    //     if (e.files) {
-    //         const data = readXlsxFile(e.files[0], {schema, transformData(data: any) {
-    //             return data.splice(2, data.length - 3)}}).then(((rows: any, errors: any) => {
-    //                 updateFileData(rows.rows);
-    //             console.log(rows.rows);
-    //         }));
-    //
-    //     }
-    // }
-
     return (
         <section className={'main_section'}>
             <div className={'sidebar_area'}>
@@ -143,15 +44,6 @@ const MainSection: React.FC<Props> = props => {
                 />
             </div>
             <article className={'main'}>
-                {/*<input type="file" id="input" onChange={(e) => {*/}
-                {/*    const {target} = e;*/}
-                {/*    if (target.value.length > 0) {*/}
-                {/*        handleFile(e.target)*/}
-                {/*    }*/}
-                {/*}}/>*/}
-                {/*{fileData ? fileData.map((row: any) => {*/}
-                {/*return row.fullName}) : ''*/}
-                {/*}*/}
                 <StyledPanelsContainer
                     showCurrentPanel={showCurrentPanel}
                     showProjectedPanel={showProjectedPanel}
