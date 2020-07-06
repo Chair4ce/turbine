@@ -6,8 +6,6 @@ import java.util.List;
 
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Member findBySqid(String sqid);
-    List<Member> findAllByAssignedPas(String pas);
 }
 
 

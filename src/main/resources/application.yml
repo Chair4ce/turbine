@@ -9,7 +9,6 @@ spring:
     baseline-version: 0
   jpa:
      hibernate:
-      dialect: org.hibernate.dialect.MySQL5Dialect
       use-new-id-generator-mappings: false
   servlet:
     multipart:

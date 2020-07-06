@@ -4,6 +4,7 @@ import styled from "styled-components";
 import theme from "../../style/theme";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
+import PublishIcon from '@material-ui/icons/Publish';
 
 interface Props {
     callback: (type: string) => void;
@@ -18,87 +19,93 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     }
     return (
         <div className={classNames('container', props.className)}
-        ref={props.provided.innerRef}>
-                <header className={classNames('panel_header')}>
-                    <div className={classNames('header-title-area')}>
-                        <h2>Alpha Roster</h2>
-                    </div>
-                    <div className={'header_action_area'}>
-                        <button className={'close_btn'} onClick={handleClose}>
-                            <CloseIcon color={"action"}/>
-                        </button>
-                    </div>
-                </header>
-                <div className={classNames('content_header')}>
-                    <div className={classNames('column-title', 'column-title-grade')}>
-                        <h4>Grade</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-name')}>
-                        <h4>Name</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-afsc')}>
-                        <h4>AFSC</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dor')}>
-                        <h4>DOR</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dos')}>
-                        <h4>DOS</h4>
-                    </div>
+             ref={props.provided.innerRef}>
+            <header className={classNames('panel_header')}>
+                <div className={classNames('header-title-area')}>
+                    <h2>Alpha Roster</h2>
                 </div>
-                <section className={classNames('panel_content')}>
-                    <div className={'items_container'}>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                        <div className={'item'}/>
-                    </div>
+                <div className={'action_area'}>
+                    <button className={'upload_btn'} >
+                        <PublishIcon color={"action"}/>
+                        Upload
+                    </button>
+                </div>
+                <div className={'header_action_area'}>
+                    <button className={'close_btn'} onClick={handleClose}>
+                        <CloseIcon color={"action"}/>
+                    </button>
+                </div>
+            </header>
+            <div className={classNames('content_header')}>
+                <div className={classNames('column-title', 'column-title-grade')}>
+                    <h4>Grade</h4>
+                </div>
+                <div className={classNames('column-title', 'column-title-name')}>
+                    <h4>Name</h4>
+                </div>
+                <div className={classNames('column-title', 'column-title-afsc')}>
+                    <h4>AFSC</h4>
+                </div>
+                <div className={classNames('column-title', 'column-title-dor')}>
+                    <h4>DOR</h4>
+                </div>
+                <div className={classNames('column-title', 'column-title-dos')}>
+                    <h4>DOS</h4>
+                </div>
+            </div>
+            <section className={classNames('panel_content')}>
+                <div className={'items_container'}>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                    <div className={'item'}/>
+                </div>
                 <div className={classNames('end_of_list', 'preview')}/>
-                </section>
+            </section>
             {props.provided.placeholder}
         </div>
     )
@@ -118,6 +125,52 @@ export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
     height: 100%;
+}
+
+//.MuiButton-root {
+//    color: #CCCCCC;
+//    padding: 6px 16px;
+//    font-size: 0.875rem;
+//    min-width: 64px;
+//    box-sizing: border-box;
+//    
+//    font-family: open-sans;
+//    font-weight: 500;
+//    line-height: 1.75;
+//    border-radius: 4px;
+//    text-transform: uppercase;
+//}
+//.MuiButton-text {
+//    padding: 6px 8px;
+//}
+
+.action_area {
+display: block;
+margin-left: auto;
+flex-shrink: 0;
+height: 34px;
+}
+
+.upload_btn {
+display: flex;
+align-items: center;
+justify-content: center;
+background-color: transparent;
+color: white;
+border: none;
+outline: none;
+cursor: pointer;
+height: 34px;
+width: 90px;
+padding: 0;
+-webkit-transition: background-color 100ms ease-in;
+-moz-transition: background-color 100ms ease-in;
+-o-transition: background-color 100ms ease-in;
+transition: background-color 100ms ease-in;
+ :hover {
+  border-radius: 4px;
+  background-color: rgb(255,133,36);
+ }
 }
 .close_btn {
 display: flex;
@@ -177,7 +230,7 @@ border-bottom: 1px solid #ddd;
 }
 
 .header_action_area {
-margin-left: auto;
+margin-left: 20px;
 flex-shrink: 0;
 cursor: pointer;
 height: 24px;

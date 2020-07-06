@@ -16,15 +16,7 @@ public class MemberJSON {
 
     private Long id;
 
-    private String sqid;
-
     private String fullName;
-
-    private String firstName;
-
-    private String lastName;
-
-    private Date tafmsd;
 
     private String grade;
 

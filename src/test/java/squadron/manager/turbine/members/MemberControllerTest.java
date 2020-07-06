@@ -22,11 +22,8 @@ public class MemberControllerTest extends BaseIntegrationTest {
 
         Date date = new Date();
        Member newMember = new Member(
-               "92093",
+               (long) 34768,
                "Hoag, Jacy L",
-               "Jacy",
-               "Hoag",
-               date,
                "TSgt",
                "UHBYGVYT",
                "3D1X2",

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.joda.time.LocalDate;
+import org.springframework.context.annotation.ComponentScan;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,61 +19,49 @@ import java.util.List;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     private Long id;
 
-    private String sqid;
-
+    @Column(name = "full_name")
     private String fullName;
-
-    //    @Column(name = "first_name")
-    private String firstName;
-
-    //    @Column(name = "last_name")
-    private String lastName;
-
-    private Date tafmsd;
 
     private String grade;
 
-    //    @Column(name = "assigned_pas")
+    @Column(name = "assigned_pas")
     private String assignedPas;
 
     private String dafsc;
 
-    //    @Column(name = "office_symbol")
+    @Column(name = "office_symbol")
     private String officeSymbol;
 
-    //    @Column(name = "duty_title")
+    @Column(name = "duty_title")
     private String dutyTitle;
 
-    //    @Column(name = "duty_start_date")
+    @Column(name = "duty_start_date")
     private Date dutyStartDate;
 
-    //    @Column(name = "duty_phone")
+    @Column(name = "duty_phone")
     private String dutyPhone;
 
-    //    @Column(name = "supv_name")
+    @Column(name = "supv_name")
     private String supvName;
 
-    //    @Column(name = "supv_begin_date")
+    @Column(name = "supv_begin_date")
     private Date supvBeginDate;
 
-    //    @Column(name = "date_arrived_station")
+    @Column(name = "date_arrived_station")
     private Date dateArrivedStation;
 
     private Date rnltd;
 
     private Date dor;
 
-    //    @Column(name = "last_updated")
+    @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
-        this.sqid = sqid;
+    public Member(String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
         this.fullName = fullName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.tafmsd = tafmsd;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc.replaceAll("-", "");
@@ -88,13 +77,9 @@ public class Member {
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(Long id, String sqid, String fullName, String firstName, String lastName, Date tafmsd, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
+    public Member(Long id, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
         this.id = id;
-        this.sqid = sqid;
         this.fullName = fullName;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.tafmsd = tafmsd;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc;
@@ -111,11 +96,7 @@ public class Member {
     }
 
     public Member update(MemberJSON json) {
-        this.setSqid(json.getSqid());
         this.setFullName(json.getFullName());
-        this.setFirstName(json.getFirstName());
-        this.setLastName(json.getLastName());
-        this.setTafmsd(json.getTafmsd());
         this.setGrade(json.getGrade());
         this.setAssignedPas(json.getAssignedPas());
         this.setDafsc(json.getDafsc());
@@ -138,33 +119,6 @@ public class Member {
 
         if (!this.fullName.equals(importingMember.fullName))
             diff.add("fullName");
-
-        try {
-            if (!this.firstName.equals(importingMember.firstName))
-                diff.add("firstName");
-        } catch (NullPointerException e) {
-            diff.add("firstName");
-        }
-
-        try {
-            if (!this.lastName.equals(importingMember.lastName))
-                diff.add("lastName");
-        } catch (NullPointerException e) {
-            diff.add("lastName");
-        }
-
-        try {
-            if (this.tafmsd.getTime() != importingMember.tafmsd.getTime()){
-                if (this.tafmsd == null && importingMember.tafmsd == null) {
-                } else {
-                    diff.add("tafmsd");
-                }
-            }
-        } catch (NullPointerException e) {
-            if (this.tafmsd != null && importingMember.tafmsd != null) {
-                diff.add("tafmsd");
-            }
-        }
 
         try {
             if (!this.grade.equals(importingMember.grade))
