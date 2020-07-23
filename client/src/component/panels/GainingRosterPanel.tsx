@@ -13,15 +13,20 @@ import clsx from 'clsx';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
-    Button, CircularProgress, Container,
-    Dialog, DialogActions,
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogProps,
-    DialogTitle, Fab,
-    Fade, FormControl, FormControlLabel, InputLabel,
+    DialogTitle,
+    Fab,
+    Fade,
+    FormControl,
     Menu,
-    MenuItem, Select, Switch
+    MenuItem
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
@@ -252,11 +257,15 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
-        handleClickOpen();
     };
 
+    const handleMenuSelect = () => {
+        setAnchorEl(null);
+        handleClickOpen();
+    }
+
     const handlePanelClose = () => {
-        props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_CURRENT_ROSTER)
+        props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_GAINING_ROSTER)
     }
     const handleClickOpen = () => {
         setOpen(true);
@@ -292,9 +301,6 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
         <div className={'panel'}>
             <React.Fragment>
-                <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-                    Open max-width dialog
-                </Button>
                 <Dialog
                     fullWidth={fullWidth}
                     maxWidth={maxWidth}
@@ -385,7 +391,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
-                                <MenuItem onClick={handleMenuClose}>
+                                <MenuItem onClick={handleMenuSelect}>
                                     <PublishIcon color={"action"}/>Upload</MenuItem>
                             </Menu>
                         </div>
@@ -431,7 +437,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
 export const StyledGainingRosterPanel = styled(GainingRosterPanel)`
 
 .item {
-background-color: #f4f4f4 ;
+background-color: #daebcf;
 }
   
 .column-title-grade {

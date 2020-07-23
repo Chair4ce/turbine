@@ -7,34 +7,34 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::        (v2.1.2.RELEASE)
 
-2020-07-06 07:07:23.955  INFO 2590 --- [           main] s.m.turbine.main.TurbineApplication      : Starting TurbineApplication v0.0.1-SNAPSHOT on Ridleys-iMac.local with PID 2590 (/Users/ridley/workspace/turbine/target/turbine-0.0.1-SNAPSHOT.jar started by ridley in /Users/ridley/workspace/turbine)
-2020-07-06 07:07:23.957  INFO 2590 --- [           main] s.m.turbine.main.TurbineApplication      : The following profiles are active: test
-2020-07-06 07:07:24.411  INFO 2590 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
-2020-07-06 07:07:24.427  INFO 2590 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9ms. Found 0 repository interfaces.
-2020-07-06 07:07:24.692  INFO 2590 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$423e5eb5] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
-2020-07-06 07:07:24.975  INFO 2590 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
-2020-07-06 07:07:25.000  INFO 2590 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2020-07-06 07:07:25.000  INFO 2590 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
-2020-07-06 07:07:25.008  INFO 2590 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/ridley/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
-2020-07-06 07:07:25.064  INFO 2590 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2020-07-06 07:07:25.066  INFO 2590 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1074 ms
-2020-07-06 07:07:25.230  INFO 2590 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2020-07-06 07:07:25.347  INFO 2590 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2020-07-06 07:07:25.396  INFO 2590 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
+2020-07-23 01:54:23.545  INFO 21825 --- [           main] s.manager.turbine.TurbineApplication     : Starting TurbineApplication v0.0.1-SNAPSHOT on Ridleys-iMac.local with PID 21825 (/Users/ridley/workspace/turbine/target/turbine-0.0.1-SNAPSHOT.jar started by ridley in /Users/ridley/workspace/turbine/client)
+2020-07-23 01:54:23.547  INFO 21825 --- [           main] s.manager.turbine.TurbineApplication     : The following profiles are active: test
+2020-07-23 01:54:24.075  INFO 21825 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data repositories in DEFAULT mode.
+2020-07-23 01:54:24.125  INFO 21825 --- [           main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 43ms. Found 1 repository interfaces.
+2020-07-23 01:54:24.390  INFO 21825 --- [           main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration' of type [org.springframework.transaction.annotation.ProxyTransactionManagementConfiguration$$EnhancerBySpringCGLIB$$a1a65bcd] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2020-07-23 01:54:24.712  INFO 21825 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 9090 (http)
+2020-07-23 01:54:24.741  INFO 21825 --- [           main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-07-23 01:54:24.742  INFO 21825 --- [           main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.14]
+2020-07-23 01:54:24.752  INFO 21825 --- [           main] o.a.catalina.core.AprLifecycleListener   : The APR based Apache Tomcat Native library which allows optimal performance in production environments was not found on the java.library.path: [/Users/ridley/Library/Java/Extensions:/Library/Java/Extensions:/Network/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java:.]
+2020-07-23 01:54:24.874  INFO 21825 --- [           main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-07-23 01:54:24.874  INFO 21825 --- [           main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 1282 ms
+2020-07-23 01:54:25.002  INFO 21825 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-07-23 01:54:25.127  INFO 21825 --- [           main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-07-23 01:54:25.176  INFO 21825 --- [           main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [
 	name: default
 	...]
-2020-07-06 07:07:25.443  INFO 2590 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
-2020-07-06 07:07:25.444  INFO 2590 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
-2020-07-06 07:07:25.555  INFO 2590 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
-2020-07-06 07:07:25.742  INFO 2590 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
-2020-07-06 07:07:25.890  INFO 2590 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl@4145bad8'
-2020-07-06 07:07:25.892  INFO 2590 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2020-07-06 07:07:26.052  INFO 2590 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
-2020-07-06 07:07:26.089  WARN 2590 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2020-07-06 07:07:26.145  INFO 2590 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
-2020-07-06 07:07:26.212  INFO 2590 --- [           main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
-2020-07-06 07:07:26.274  INFO 2590 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
-2020-07-06 07:07:26.276  INFO 2590 --- [           main] s.m.turbine.main.TurbineApplication      : Started TurbineApplication in 2.68 seconds (JVM running for 2.986)
-2020-07-06 07:07:26.360  INFO 2590 --- [nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
-2020-07-06 07:07:26.360  INFO 2590 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
-2020-07-06 07:07:26.366  INFO 2590 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms
+2020-07-23 01:54:25.225  INFO 21825 --- [           main] org.hibernate.Version                    : HHH000412: Hibernate Core {5.3.7.Final}
+2020-07-23 01:54:25.226  INFO 21825 --- [           main] org.hibernate.cfg.Environment            : HHH000206: hibernate.properties not found
+2020-07-23 01:54:25.355  INFO 21825 --- [           main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.0.4.Final}
+2020-07-23 01:54:25.564  INFO 21825 --- [           main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2020-07-23 01:54:26.009  INFO 21825 --- [           main] o.h.t.schema.internal.SchemaCreatorImpl  : HHH000476: Executing import script 'org.hibernate.tool.schema.internal.exec.ScriptSourceInputNonExistentImpl@75c56eb9'
+2020-07-23 01:54:26.011  INFO 21825 --- [           main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-07-23 01:54:26.424  INFO 21825 --- [           main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-07-23 01:54:26.464  WARN 21825 --- [           main] aWebConfiguration$JpaWebMvcConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-07-23 01:54:26.530  INFO 21825 --- [           main] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2020-07-23 01:54:26.598  INFO 21825 --- [           main] o.s.s.c.ThreadPoolTaskScheduler          : Initializing ExecutorService 'taskScheduler'
+2020-07-23 01:54:26.747  INFO 21825 --- [           main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 9090 (http) with context path ''
+2020-07-23 01:54:26.748  INFO 21825 --- [           main] s.manager.turbine.TurbineApplication     : Started TurbineApplication in 3.58 seconds (JVM running for 3.905)
+2020-07-23 01:54:26.937  INFO 21825 --- [nio-9090-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-07-23 01:54:26.937  INFO 21825 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-07-23 01:54:26.943  INFO 21825 --- [nio-9090-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 6 ms

@@ -8,27 +8,30 @@ import PublishIcon from '@material-ui/icons/Publish';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CheckIcon from '@material-ui/icons/Check';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import SaveIcon from '@material-ui/icons/Save';
 import clsx from 'clsx';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
-    Button, CircularProgress, Container,
-    Dialog, DialogActions,
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogProps,
-    DialogTitle, Fab,
-    Fade, FormControl, FormControlLabel, InputLabel,
+    DialogTitle,
+    Fab,
+    Fade,
+    FormControl,
     Menu,
-    MenuItem, Select, Switch
+    MenuItem
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
 import {green} from "@material-ui/core/colors";
+import CurrentRosterRow from "./PanelRow";
+import {Skeleton} from "@material-ui/lab";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -112,11 +115,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         morDots: {
             width: 5,
-            height: 34,
+            height: 32,
         },
-        inputArea: {
-
-        },
+        inputArea: {},
         form: {
             display: 'flex',
             flexDirection: 'column',
@@ -132,6 +133,53 @@ const useStyles = makeStyles((theme: Theme) =>
         formControlLabel: {
             marginTop: theme.spacing(1),
         },
+        column_title: {
+            width: 65
+        },
+        content_header: {
+            padding: 0,
+            display: 'flex',
+            position: 'absolute',
+            zIndex: 100,
+            width: '100%',
+            alignContent: 'center',
+            minHeight: 22,
+            background: '#575757',
+            overflowX: 'hidden',
+        },
+        column_title_grade: {
+            display: 'flex',
+            marginLeft: 63,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            textOverflow: 'ellipsis'
+        },
+        column_title_name: {
+            paddingLeft: 25,
+            width: 220,
+            display: 'flex',
+            minWidth: 90,
+            alignItems: 'center',
+        },
+        content_title_set: {
+            display: 'flex',
+            minWidth: 200,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        panel_content: {
+            display: 'block',
+            position: 'absolute',
+            width: '100%',
+            height: 'calc(100vh - 145px)',
+        },
+        item_container: {
+            overflowY: 'auto',
+            height: '100%',
+            top: 22,
+            position: 'relative',
+        }
     }),
 );
 
@@ -232,7 +280,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     const opens = Boolean(anchorEl);
     const [open, setOpen] = React.useState(false);
     const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [success, updateSuccess] = useState(false);
     const [loading, updateLoading] = useState(false);
 
@@ -258,26 +306,27 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         setAnchorEl(null);
     };
 
-    const handleSelectUpload = () => {
+    const handleMenuSelect = () => {
         setAnchorEl(null);
-        handleClickUploadModalOpen();
+        handleShowUploadModal();
     };
 
     const handlePanelClose = () => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_CURRENT_ROSTER)
     }
-    const handleClickUploadModalOpen = () => {
+    const handleShowUploadModal = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
-        setOpen(false);
         updateLoading(false);
+        setOpen(false);
     };
 
 
     function handleFile(e: HTMLInputElement) {
         if (e.files) {
+            updateLoading(true);
             const data = readXlsxFile(e.files[0], {
                 schema, transformData(data: any) {
                     return data.splice(2, data.length - 3)
@@ -292,8 +341,8 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
 
     const handleButtonClick = (e: any) => {
-        updateLoading(true);
-            handleFile(e);
+
+        handleFile(e);
     };
 
     return (
@@ -314,13 +363,14 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                         </DialogContentText>
                         <form className={classes.form} noValidate>
                             <FormControl className={classes.formControl}>
-                                <input  className={classes.inputArea} type="file" id="raised-button-file" style={{display: 'none'}} onChange={(e) => {
+                                <input className={classes.inputArea} type="file" id="raised-button-file"
+                                       style={{display: 'none'}} onChange={(e) => {
                                     const {target} = e;
                                     if (target.value.length > 0) {
                                         handleFile(e.target)
                                     }
                                 }}
-                                        ref={browseInputRef}/>
+                                       ref={browseInputRef}/>
 
                                 <div className={classes.root}>
                                     <Container className={classNames(classes.fileDropArea, FileDropClassname)}
@@ -345,15 +395,18 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(loading) && <CircularProgress size={68} className={classes.fabProgress}/>}
+                                                {(loading) &&
+                                                <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
                                             {(!loading && !success) && <div className={classes.uploadButtonGrp}>
-                                                <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>
+                                                <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
+                                                                         className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
                                                       className={classes.fileDropDialog}>Drag and drop or</span>
-                                                < Button variant={"outlined"} component={"span"} className={classes.button}>
+                                                < Button variant={"outlined"} component={"span"}
+                                                         className={classes.button}>
                                                     Browse
                                                 </Button>
                                             </div>}
@@ -379,7 +432,8 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </div>
                     <div className={classNames('action_area')}>
                         <div>
-                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
+                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
+                                    onClick={handleClick}>
                                 <MoreVertIcon/>
                             </Button>
                             <Menu
@@ -390,8 +444,8 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
-                                <MenuItem onClick={handleSelectUpload}>
-                                            <PublishIcon color={"action"}/>Upload</MenuItem>
+                                <MenuItem onClick={handleMenuSelect}>
+                                    <PublishIcon color={"action"}/>Upload</MenuItem>
                             </Menu>
                         </div>
                         <div className={classNames('panel_header_action_area_close')}>
@@ -402,32 +456,43 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </div>
 
                 </header>
+                <div className={'content_container'}>
+                    <section className={classNames('panel_content', classes.panel_content)}>
+                        <header className={classNames('content_header', classes.content_header)}>
+                            <div className={classNames(classes.column_title_grade)}>
+                                <h4>Grade</h4>
+                            </div>
 
-                <header className={classNames('content_header')}>
-                    <div className={classNames('column-title', 'column-title-grade')}>
-                        <h4>Grade</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-name')}>
-                        <h4>Name</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-afsc')}>
-                        <h4>AFSC</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dor')}>
-                        <h4>DOR</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dos')}>
-                        <h4>DOS</h4>
-                    </div>
-                </header>
+                            <div className={classNames(classes.content_title_set)}>
+                                <div className={classNames(classes.column_title_name)}>
+                                    <h4>Name</h4>
+                                </div>
+                                <div className={classNames(classes.column_title)}>
+                                    <h4>AFSC</h4>
+                                </div>
+                                <div className={classNames(classes.column_title)}>
+                                    <h4>DOR</h4>
+                                </div>
+                                <div className={classNames(classes.column_title)}>
+                                    <h4>DOS</h4>
+                                </div>
+                            </div>
+                        </header>
+                        <div className={classNames('items_container', classes.item_container)}>
+                            {loading ? <Skeleton variant="text"/> : ''}
+                            {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
+                                key={index}
+                                className={'item'}
+                                name={row.fullName}
+                                grade={row.grade}
+                                afsc={row.dafsc}
+                            />) : ''}
+                        </div>
 
-                <section className={classNames('panel_content')}>
-                    <div className={'items_container'}>
-                        {fileData ? fileData.map((row: any, index: number) => <div className={'item'}
-                                                                                   key={index}>{row.fullName}</div>) : ''}
-                    </div>
-                    <div className={classNames('end_of_list', 'preview')}/>
-                </section>
+                        {fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}
+
+                    </section>
+                </div>
             </div>
         </div>
     )
@@ -438,27 +503,34 @@ export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
 .item {
 background-color: #f4f4f4 ;
 }
+
+.CMS {
+background: #D9AAAA;!important;
+}
+
+.SMS {
+background: #C4AAD9;!important;
+}
+
+.TSG {
+background: #AAD9D6;!important;
+}
+
+.SSG {
+background: #B0D9AA;!important;
+}
+
+.SRA {
+background: #D8D9AA;!important;
+}
+
+.A1C {
+background: #D9CCAA;!important;
+}
+
+.AMN {
+background: #D9B8AA; !important;
+}
   
-.column-title-grade {
-  margin-left: 10px;
-  min-width: 43px;
-  max-width: 60px;
-}
-.column-title-name {
-  min-width: 100px;
-    max-width: 360px;
-}
-.column-title-afsc {
-  min-width: 80px;
-    max-width: 100px;
-}
-.column-title-dor {
-  min-width: 80px;
-    max-width: 100px;
-}
-.column-title-dos {
-  min-width: 80px;
-    max-width: 100px;
-}
 
 `;

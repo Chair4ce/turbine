@@ -8,26 +8,27 @@ import PublishIcon from '@material-ui/icons/Publish';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CheckIcon from '@material-ui/icons/Check';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import SaveIcon from '@material-ui/icons/Save';
 import clsx from 'clsx';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
-    Button, CircularProgress, Container,
-    Dialog, DialogActions,
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogProps,
-    DialogTitle, Fab,
-    Fade, FormControl, FormControlLabel, InputLabel,
+    DialogTitle,
+    Fab,
+    Fade,
+    FormControl,
     Menu,
-    MenuItem, Select, Switch
+    MenuItem
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
 import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -256,8 +257,12 @@ const LosingRosterPanel: React.FC<Props> = props => {
 
     const handleMenuClose = () => {
         setAnchorEl(null);
-        handleClickOpen();
     };
+
+    const handleMenuSelect = () => {
+        setAnchorEl(null);
+        handleClickOpen();
+    }
 
     const handlePanelClose = () => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_LOSING_ROSTER)
@@ -386,7 +391,7 @@ const LosingRosterPanel: React.FC<Props> = props => {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
-                                <MenuItem onClick={handleMenuClose}>
+                                <MenuItem onClick={handleMenuSelect}>
                                     <PublishIcon color={"action"}/>Upload</MenuItem>
                             </Menu>
                         </div>
@@ -432,7 +437,7 @@ const LosingRosterPanel: React.FC<Props> = props => {
 export const StyledLosingRosterPanel = styled(LosingRosterPanel)`
 
 .item {
-background-color: #f4f4f4 ;
+background-color: #ffe3e3;
 }
   
 .column-title-grade {

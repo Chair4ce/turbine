@@ -23,6 +23,7 @@ interface Props {
     showProjectedPanel: boolean;
     showGainingPanel: boolean;
     showLosingPanel: boolean;
+    showPositionPanel: boolean;
     menu_item_select_callback: (type: string) => void;
     className?: string;
 }
@@ -56,6 +57,7 @@ const SideBar: React.FC<Props> = props => {
                         showProjectedPanel={props.showProjectedPanel}
                         showGainingPanel={props.showGainingPanel}
                         showLosingPanel={props.showLosingPanel}
+                        showPositionPanel={props.showPositionPanel}
                         menuSelectHandler={props.menu_item_select_callback}
                         expanded={expanded}
                     />

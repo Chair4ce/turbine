@@ -14,6 +14,7 @@ const MainSection: React.FC<Props> = props => {
     const [showProjectedPanel, toggleProjectedPanel] = useState(false);
     const [showGainingPanel, toggleGainingPanel] = useState(false);
     const [showLosingPanel, toggleLosingPanel] = useState(false);
+    const [showPositionPanel, togglePositionPanel] = useState(false);
     // const [fileData, updateFileData] = useState();
     const menuSelectHandler = (type: string) => {
         switch (type) {
@@ -29,6 +30,8 @@ const MainSection: React.FC<Props> = props => {
             case ROSTER_MENU_SELECT_ACTION.TOGGLE_LOSING_ROSTER:
                 toggleLosingPanel(prev => !prev)
                 break;
+            case ROSTER_MENU_SELECT_ACTION.TOGGLE_POSITION_PANEL:
+                togglePositionPanel(prev => !prev)
         }
     }
 
@@ -40,6 +43,7 @@ const MainSection: React.FC<Props> = props => {
                     showProjectedPanel={showProjectedPanel}
                     showGainingPanel={showGainingPanel}
                     showLosingPanel={showLosingPanel}
+                    showPositionPanel={showPositionPanel}
                     menu_item_select_callback={menuSelectHandler}
                 />
             </div>
@@ -49,6 +53,7 @@ const MainSection: React.FC<Props> = props => {
                     showProjectedPanel={showProjectedPanel}
                     showGainingPanel={showGainingPanel}
                     showLosingPanel={showLosingPanel}
+                    showPositionPanel={showPositionPanel}
                     callback={menuSelectHandler}
                 />
             </article>

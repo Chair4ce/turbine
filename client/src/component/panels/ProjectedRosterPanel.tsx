@@ -8,26 +8,27 @@ import PublishIcon from '@material-ui/icons/Publish';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CheckIcon from '@material-ui/icons/Check';
-import ErrorOutlineOutlinedIcon from '@material-ui/icons/ErrorOutlineOutlined';
-import WarningRoundedIcon from '@material-ui/icons/WarningRounded';
 import SaveIcon from '@material-ui/icons/Save';
 import clsx from 'clsx';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
-    Button, CircularProgress, Container,
-    Dialog, DialogActions,
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogProps,
-    DialogTitle, Fab,
-    Fade, FormControl, FormControlLabel, InputLabel,
+    DialogTitle,
+    Fab,
+    Fade,
+    FormControl,
     Menu,
-    MenuItem, Select, Switch
+    MenuItem
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {useDispatch, useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
 import {green} from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -111,7 +112,7 @@ const useStyles = makeStyles((theme: Theme) =>
             pointerEvents: 'none',
         },
         morDots: {
-            width: 5,
+            minWidth: 10,
             height: 34,
         },
         inputArea: {
@@ -258,15 +259,15 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
         setAnchorEl(null);
     };
 
-    const handleSelectUpload = () => {
+    const handleMenuSelect = () => {
         setAnchorEl(null);
-        handleClickUploadModalOpen();
-    };
+        handleShowUploadModal();
+    }
 
     const handlePanelClose = () => {
-        props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_CURRENT_ROSTER)
+        props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_PROJECTED_ROSTER)
     }
-    const handleClickUploadModalOpen = () => {
+    const handleShowUploadModal = () => {
         setOpen(true);
     };
 
@@ -390,7 +391,7 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
                                 onClose={handleMenuClose}
                                 TransitionComponent={Fade}
                             >
-                                <MenuItem onClick={handleSelectUpload}>
+                                <MenuItem onClick={handleMenuSelect}>
                                     <PublishIcon color={"action"}/>Upload</MenuItem>
                             </Menu>
                         </div>
@@ -436,7 +437,7 @@ const ProjectedRosterPanel: React.FC<Props> = props => {
 export const StyledProjectedRosterPanel = styled(ProjectedRosterPanel)`
 
 .item {
-background-color: #f4f4f4 ;
+background-color: #e4eff7;
 }
   
 .column-title-grade {

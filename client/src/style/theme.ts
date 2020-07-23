@@ -89,7 +89,7 @@ const theme = {
     },
 
     item_height: {
-        normal: '80px',
+        normal: '60px',
 },
     header_heights: {
         panel: '38px',
@@ -109,6 +109,13 @@ const theme = {
 
     export const muiTheme = createMuiTheme(
         {
+            overrides: {
+                MuiButton: {
+                    root: {
+                        minWidth: 32
+                    }
+                }
+            },
             palette: muiPalette,
         });
 

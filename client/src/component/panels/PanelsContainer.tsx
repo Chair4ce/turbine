@@ -7,12 +7,14 @@ import {StyledGainingRosterPanel} from "./GainingRosterPanel";
 import {StyledLosingRosterPanel} from "./LosingRosterPanel";
 import theme from "../../style/theme";
 import {StyledProjectedRosterPanel} from "./ProjectedRosterPanel";
+import {StyledPositionPanel} from "./PositionPanel";
 
 interface Props {
     showCurrentPanel?: boolean;
     showProjectedPanel?: boolean;
     showGainingPanel?: boolean;
     showLosingPanel?: boolean;
+    showPositionPanel?: boolean;
     callback: (type: string) => void;
     className?: string;
 }
@@ -26,6 +28,7 @@ const PanelsContainer: React.FC<Props> = props => {
                 {props.showGainingPanel && <StyledGainingRosterPanel callback={props.callback}/>}
                 {props.showLosingPanel && <StyledLosingRosterPanel callback={props.callback}/>}
                 {props.showProjectedPanel && <StyledProjectedRosterPanel callback={props.callback}/>}
+                {props.showPositionPanel && <StyledPositionPanel callback={props.callback}/>}
             </div>
         </section>
     )
@@ -87,7 +90,7 @@ vertical-align: baseline;
     margin: 0;
     border: 0;
     min-height: ${theme.header_heights.panel};
-    padding: 0 7px 0 10px;
+    padding: 0 3px 0 10px;
     background: rgb(44, 45, 47);;
     border-top-left-radius: 4px;
     border-top-right-radius: 4px;
@@ -102,8 +105,7 @@ vertical-align: baseline;
     flex-shrink: 1;
 }
 .panel_header_action_area_upload {
-height: 34px;
-
+height: 32px;
     -webkit-transition: background-color 100ms ease-in;
     -moz-transition: background-color 100ms ease-in;
     -o-transition: background-color 100ms ease-in;
@@ -114,8 +116,9 @@ height: 34px;
 }
 
 .panel_header_action_area_close {
-    margin-left: 10px;
-height: 24px;
+    margin-left: 5px;
+height: 32px;
+border-radius: 4px;
     -webkit-transition: background-color 100ms ease-in;
     -moz-transition: background-color 100ms ease-in;
     -o-transition: background-color 100ms ease-in;
@@ -140,8 +143,8 @@ background-color: transparent;
 border: none;
 outline: none;
 cursor: pointer;
-height: 24px;
-width: 24px;
+height: 32px;
+width: 32px;
 }
 
 .moreDots {
@@ -172,34 +175,26 @@ transition: background-color 100ms ease-in;
 
 .panel_content {
 display: block;
+position: absolute;
+width: 100%;
+height: calc(100vh - 145px);
+background-color: #f4f4f4 ;
+}
+
+.content_container {
 position: relative;
 width: 100%;
-flex-grow: 1;
-overflow-y: auto;
+overflow: hidden;
+overflow-x: auto;
+height: 100%;
 }
 
-.content_header {
-  padding: 0;
-  display: flex;
-  position: relative;
-  align-content: center;
-  justify-content: space-between;
-  min-height: ${theme.header_heights.content};
-  background: #575757;
-    overflow-x: hidden;
-}
-
-.column-title {
-  display: flex;
-  align-items: center;
-  flex-grow: 0;
-  flex-shrink: 1;
-}
 
 .item {
 display: flex;
-height: ${theme.item_height.normal};
 width: 100%;
+flex: 1 0 auto;
+height: ${theme.item_height.normal};
 align-items: center;
 border-bottom: 1px solid #ddd;
 color: #333333;
@@ -208,6 +203,8 @@ background-color: rgb(255,255,255);
 }
 }
 .end_of_list {
+    position: relative;
+    width: 100%;
     min-height: ${theme.header_heights.panel};
     background-color: #484f57;
     border-bottom-left-radius: 4px;
@@ -234,8 +231,9 @@ background-color: rgb(255,255,255);
     font-style: normal;
     font-weight: bold;
     font-size: 14px;
+      overflow: hidden;
+  text-overflow: ellipsis;
     line-height: 15px;
-    white-space: nowrap;
     margin-top: 0;
     margin-bottom: 0;
   }

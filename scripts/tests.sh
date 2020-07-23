@@ -7,6 +7,7 @@ function main {
 
     case "${1}" in
         acc|acceptance)
+            yarnBuild
             jarBuild
             acceptanceTests ${@}
         ;;
@@ -16,8 +17,8 @@ function main {
         ;;
         *)
             yarnBuild
-            jarBuild
             unitTests
+            jarBuild
             acceptanceTests
         ;;
     esac
@@ -31,8 +32,10 @@ function acceptanceTests {
 
     SPECIFIC_TESTS=""
 
-    if [[ "${2}" == "./tests/"*".test.ts" ]]; then
-        SPECIFIC_TESTS=${2}
+       if [[ "${2}" != "" ]]; then
+        if [[ $(find ${BASE_DIR}/acceptance/tests/*${2}*) ]]; then
+            SPECIFIC_TESTS=$(find ${BASE_DIR}/acceptance/tests/*${2}*)
+        fi
     fi
 
     pushd ${BASE_DIR}/scripts/seed_db
@@ -46,10 +49,15 @@ function acceptanceTests {
 
     pushd ${BASE_DIR}/acceptance
         yarn install
-        if [[ "${TURBINE_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
-            xvfb-run yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
+#        if [[ "${TURBINE_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
+#            xvfb-run yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
+#        else
+#            yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
+#        fi
+                if [[ "${TURBINE_CI}" && "$(lsb_release -crid | grep -i 'Ubuntu')" ]]; then
+            xvfb-run yarn codeceptjs run -o "{\"helpers\": {\"Puppeteer\": {\"url\": \"${REACT_APP_HOST}\", \"chrome\": {\"args\": [\"--headless\", \"--no-sandbox\"]}}}}" ${SPECIFIC_TESTS}
         else
-            yarn codeceptjs run -o "{ \"helpers\": {\"Nightmare\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
+            yarn codeceptjs run -o "{ \"helpers\": {\"Puppeteer\": {\"url\": \"${REACT_APP_HOST}\"}}}" ${SPECIFIC_TESTS}
         fi
 
         if [[ "${?}" == "1" ]]; then
@@ -61,7 +69,7 @@ function acceptanceTests {
 
 function unitTests {
     showBanner "Unit Tests"
-
+    showBanner "Backend"
     pushd ${BASE_DIR}
         if [[ $(mvn test | grep -E "\[INFO\]|\[ERROR\]|Expected" | grep "\[ERROR\]" | wc -l) -gt 0 ]]; then
             echo "Unit Tests Failed... Exiting"
@@ -69,6 +77,7 @@ function unitTests {
         fi
     popd
 
+     showBanner "Frontend"
     pushd ${BASE_DIR}/client
         CI=true yarn test
     popd
@@ -80,17 +89,13 @@ function cleanup {
         cat ${BASE_DIR}/tmp/turbine.pid | xargs kill -9
         rm ${BASE_DIR}/tmp/turbine.pid
     fi
-
-#    pushd ${BASE_DIR}/scripts/seed_db
-#        ./seed_db.sh
-#    popd
 }
 trap cleanup EXIT
 
 function jarBuild {
     showBanner "Build JAR"
        pushd ${BASE_DIR}
-        mvn -Dflyway.user=${TURBINE_DB_USERNAME} -Dflyway.password= -Dflyway.url=${TURBINE_DB_URL} clean flyway:migrate package
+        mvn -Dmaven.test.skip=true -DskipTests -Dflyway.user=${TURBINE_DB_USERNAME} -Dflyway.password= -Dflyway.url=${TURBINE_DB_URL} clean flyway:migrate package
         rm ${BASE_DIR}/artifacts/turbine.jar || true
         cp ${BASE_DIR}/target/turbine-[0-9\.]*-SNAPSHOT.jar ${BASE_DIR}/artifacts/turbine.jar
     popd
@@ -100,7 +105,7 @@ function setup {
     showBanner "Setup"
 
     BASE_DIR="$(dirname $( cd "$(dirname "$0")" ; pwd -P ))"
-
+    source "${BASE_DIR}/scripts/setup_env.sh"
     REACT_APP_HOST=http://localhost:9090
 
     mkdir -p ${BASE_DIR}/tmp
