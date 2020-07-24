@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import classNames from "classnames";
 import styled from "styled-components";
 import CloseIcon from '@material-ui/icons/Close';
@@ -10,6 +10,7 @@ import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import clsx from 'clsx';
+import {ApplicationState} from "../../store";
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
@@ -31,8 +32,14 @@ import {
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./PanelRow";
-import {Skeleton} from "@material-ui/lab";
+import {Alert, Skeleton} from "@material-ui/lab";
 import PersonIcon from "../icon/PersonIcon";
+import {useDispatch, useSelector} from "react-redux";
+import {CurrentMemberSerializer} from "../../util/MemberSerializer";
+import MemberModel from "../../store/members/MemberModel";
+import UploadMemberModel from "../../store/members/UploadMemberModel";
+import {getMembers, saveCurrentRoster} from "../../store/members/thunks";
+import {membersFetchRequest} from "../../store/members";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -196,6 +203,11 @@ interface Props {
 }
 
 const schema = {
+    'SSAN': {
+        prop: 'ssan',
+        type: String,
+        required: false
+    },
     'FULL_NAME': {
         prop: 'fullName',
         type: String,
@@ -280,6 +292,8 @@ const schema = {
 }
 
 const CurrentRosterPanel: React.FC<Props> = props => {
+    const members = useSelector(({members}: ApplicationState) => members.data);
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
     const [fileData, updateFileData] = useState();
     const classes = useStyles();
     const browseInputRef: any = React.createRef();
@@ -289,8 +303,13 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [success, updateSuccess] = useState(false);
-    const [loading, updateLoading] = useState(false);
+    const [errors, updateErrors] = useState("");
 
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getMembers());
+    }, [dispatch]);
     // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
     // const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
 
@@ -326,21 +345,24 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     };
 
     const handleClose = () => {
-        updateLoading(false);
         setOpen(false);
     };
 
 
     function handleFile(e: HTMLInputElement) {
         if (e.files) {
-            updateLoading(true);
             const data = readXlsxFile(e.files[0], {
                 schema, transformData(data: any) {
                     return data.splice(2, data.length - 3)
                 }
             }).then(((rows: any, errors: any) => {
-                updateFileData(rows.rows);
+                if(errors) {
+                    updateErrors(errors)
+                    updateSuccess(false);
+                } else {
+                dispatch(saveCurrentRoster(rows.rows));
                 updateSuccess(true);
+                };
             }));
         }
         handleClose();
@@ -466,8 +488,21 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                 <div className={'content_container'}>
                     <section className={classNames('panel_content', classes.panel_content)}>
                         <div className={classNames('items_container', classes.item_container)}>
-                            {loading ? <Skeleton variant="text"/> : ''}
-                            {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
+                            {errors && <Alert severity="error">{errors}</Alert>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px', margin: '0'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {members && !loading ? members.map((row: any, index: number) => <CurrentRosterRow
                                 key={index}
                                 className={'item'}
                                 name={row.fullName}

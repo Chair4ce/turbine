@@ -3,32 +3,31 @@ import moment from "moment";
 
 
 export class MemberDeserializer {
-    static deserialize(items: any): MemberModel[] {
-        if (items.map) {
-            return items.map((item: any) => {
-                return new MemberModel(
-                    item.id,
-                    item.sqid,
-                    item.fullName,
-                    item.tafmsd == null ? undefined : moment(item.tafmsd).utc(true).toDate(),
-                    item.grade,
-                    item.assignedPas,
-                    item.dafsc,
-                    item.officeSymbol,
-                    item.dutyTitle,
-                    item.dutyStartDate == null ? undefined : moment(item.dutyStartDate).utc(true).toDate(),
-                    item.dutyPhone,
-                    item.supvName.toUpperCase(),
-                    item.supvBeginDate == null ? undefined : moment(item.supvBeginDate).utc(true).toDate(),
-                    item.dateArrivedStation == null ? undefined : moment(item.dateArrivedStation).utc(true).toDate(),
-                    item.rnltd == null ? undefined : moment(item.rnltd).utc(true).toDate(),
-                    item.dor == null ? undefined : moment(item.dor).utc(true).toDate(),
-            )
-                ;
-            });
-        }
-        return [];
-    }
+    // static deserialize(items: any): MemberModel[] {
+    //     if (items.map) {
+    //         return items.map((item: any) => {
+    //             return new MemberModel(
+    //                 item.id,
+    //                 item.sqid,
+    //                 item.fullName, ,
+    //                 item.grade,
+    //                 item.assignedPas,
+    //                 item.dafsc,
+    //                 item.officeSymbol,
+    //                 item.dutyTitle,
+    //                 item.dutyStartDate == null ? undefined : moment(item.dutyStartDate).utc(true).toDate(),
+    //                 item.dutyPhone,
+    //                 item.supvName.toUpperCase(),
+    //                 item.supvBeginDate == null ? undefined : moment(item.supvBeginDate).utc(true).toDate(),
+    //                 item.dateArrivedStation == null ? undefined : moment(item.dateArrivedStation).utc(true).toDate(),
+    //                 item.rnltd == null ? undefined : moment(item.rnltd).utc(true).toDate(),
+    //                 item.dor == null ? undefined : moment(item.dor).utc(true).toDate(),
+    //         )
+    //             ;
+    //         });
+    //     }
+    //     return [];
+    // }
 
     static serialize(item: any): {} {
             return {

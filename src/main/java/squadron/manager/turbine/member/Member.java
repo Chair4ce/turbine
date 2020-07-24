@@ -22,6 +22,9 @@ public class Member {
 
     private Long id;
 
+    @Column(name= "mbr_id")
+    private String mbrId;
+
     @Column(name = "full_name")
     private String fullName;
 
@@ -60,7 +63,8 @@ public class Member {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
+    public Member(String mbrId, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
+        this.mbrId = mbrId;
         this.fullName = fullName;
         this.grade = grade;
         this.assignedPas = assignedPas;
@@ -77,8 +81,9 @@ public class Member {
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(Long id, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
+    public Member(Long id, String mbrId, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
         this.id = id;
+        this.mbrId = mbrId;
         this.fullName = fullName;
         this.grade = grade;
         this.assignedPas = assignedPas;
@@ -96,6 +101,7 @@ public class Member {
     }
 
     public Member update(MemberJSON json) {
+        this.setMbrId(json.getSsan());
         this.setFullName(json.getFullName());
         this.setGrade(json.getGrade());
         this.setAssignedPas(json.getAssignedPas());

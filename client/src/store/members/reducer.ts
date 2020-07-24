@@ -21,7 +21,7 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             };
         }
         case MemberActionTypes.FETCH_SUCCESS: {
-            return { ...state, loading: false, data: MemberDeserializer.deserialize(action.payload)};
+            return { ...state, loading: false, data: action.payload};
         }
         case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };

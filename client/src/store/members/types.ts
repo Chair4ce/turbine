@@ -20,6 +20,7 @@ export enum MemberActionTypes {
     FETCH_ERROR = '@@members/FETCH_ERROR',
     POST_ERROR = '@@members/POST_ERROR',
     POST_REQUEST = '@@members/POST_REQUEST',
+    POST_SUCCESS = '@@members/POST_SUCCESS',
 
 }
 

@@ -6,7 +6,7 @@ export async function callApi(method: string, path: string, data?: any) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(data),
-    });
+    })
     if (res.ok) {
         return await res.json();
     }

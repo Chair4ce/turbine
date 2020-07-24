@@ -1,0 +1,1 @@
+ALTER TABLE members ADD COLUMN mbr_id TEXT AFTER id;

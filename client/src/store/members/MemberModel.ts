@@ -3,9 +3,8 @@
 
 export default class MemberModel {
     public id: number;
-    public sqid: string;
+    public mbrId: string;
     public fullName: string;
-    public tafmsd: Date | undefined;
     public grade: string;
     public assignedPas: string;
     public dafsc: string;
@@ -18,13 +17,13 @@ export default class MemberModel {
     public dateArrivedStation: Date | undefined;
     public rnltd: Date | undefined;
     public dor: Date | undefined;
+    public lastUpdated: Date | undefined;
 
 
-    constructor(id: number, sqid: string, fullName: string, tafmsd: Date | undefined, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | undefined, dutyTitle: string | undefined, dutyStartDate: Date | undefined, dutyPhone: string | undefined, supvName: string | undefined, supvBeginDate: Date | undefined, dateArrivedStation: Date | undefined, rnltd: Date | undefined, dor: Date | undefined) {
+    constructor(id: number, mbrId: string, fullName: string, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | undefined, dutyTitle: string | undefined, dutyStartDate: Date | undefined, dutyPhone: string | undefined, supvName: string | undefined, supvBeginDate: Date | undefined, dateArrivedStation: Date | undefined, rnltd: Date | undefined, dor: Date | undefined, lastUpdated: Date | undefined) {
         this.id = id;
-        this.sqid = sqid;
+        this.mbrId = mbrId;
         this.fullName = fullName;
-        this.tafmsd = tafmsd;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc;
@@ -37,6 +36,7 @@ export default class MemberModel {
         this.dateArrivedStation = dateArrivedStation;
         this.rnltd = rnltd;
         this.dor = dor;
+        this.lastUpdated = lastUpdated;
     }
 }
 

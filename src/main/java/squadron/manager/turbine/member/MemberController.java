@@ -22,7 +22,6 @@ public class MemberController {
         this.memberRepository = memberRepository;
     }
 
-
     @CrossOrigin
     @GetMapping
     public @ResponseBody
@@ -33,22 +32,22 @@ public class MemberController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public String addMembers(@Valid @RequestBody Iterable<MemberJSON> json) {
+    public Iterable<Member> addMembers(@Valid @RequestBody Iterable<MemberJSON> json) {
+        System.out.println(json);
         Date date = new Date();
-        memberRepository.deleteAll();
         json.forEach((newImport -> {
             saveNewMember(date, newImport);
         }));
-        return "Saved";
+        return memberRepository.findAll();
     }
 
     private void saveNewMember(Date date, MemberJSON newImport) {
-
         Member importingMember = new Member(
+                newImport.getSsan(),
                 newImport.getFullName(),
                 newImport.getGrade(),
                 newImport.getAssignedPas(),
-                newImport.getDafsc(),
+                newImport.getDafsc() != null ? newImport.getDafsc() : "",
                 newImport.getOfficeSymbol(),
                 newImport.getDutyTitle(),
                 newImport.getDutyStartDate(),

@@ -1,11 +1,6 @@
 package squadron.manager.turbine.member;
-
-
 import lombok.*;
-
-import javax.persistence.Column;
 import java.util.Date;
-
 
 @Data
 @NoArgsConstructor
@@ -15,6 +10,8 @@ import java.util.Date;
 public class MemberJSON {
 
     private Long id;
+
+    private String ssan;
 
     private String fullName;
 

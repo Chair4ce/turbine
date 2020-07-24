@@ -1,12 +1,11 @@
 
 
 export default class UploadMemberModel {
-    public sqid: string;
+    public ssan: string;
     public fullName: string;
-    public tafmsd: string | null;
-    public grade: string;
-    public assignedPas: string;
-    public dafsc: string;
+    public grade: string | null;
+    public assignedPas: string| null;
+    public dafsc: string | null;
     public officeSymbol: string | null;
     public dutyTitle: string | null;
     public dutyStartDate: string | null;
@@ -17,11 +16,9 @@ export default class UploadMemberModel {
     public rnltd: string | null;
     public dor: string | null;
 
-
-    constructor(sqid: string, fullName: string, tafmsd: string | null, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: string | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: string | null, dateArrivedStation: string | null, rnltd: string | null, dor: string | null) {
-        this.sqid = sqid;
+    constructor( ssan: string, fullName: string, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | null, dutyTitle: string | null, dutyStartDate: string | null, dutyPhone: string | null, supvName: string | null, supvBeginDate: string | null, dateArrivedStation: string | null, rnltd: string | null, dor: string | null) {
+        this.ssan = ssan;
         this.fullName = fullName;
-        this.tafmsd = tafmsd;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc;
