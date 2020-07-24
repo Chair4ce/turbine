@@ -32,6 +32,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./PanelRow";
 import {Skeleton} from "@material-ui/lab";
+import PersonIcon from "../icon/PersonIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -142,6 +143,7 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'absolute',
             zIndex: 100,
             width: '100%',
+            minWidth: 200,
             alignContent: 'center',
             minHeight: 22,
             background: '#575757',
@@ -157,8 +159,8 @@ const useStyles = makeStyles((theme: Theme) =>
         column_title_name: {
             paddingLeft: 25,
             width: 220,
+            minWidth: 150,
             display: 'flex',
-            minWidth: 90,
             alignItems: 'center',
         },
         content_title_set: {
@@ -172,13 +174,18 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block',
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh - 145px)',
+            height: 'calc(100vh - 125px)',
         },
         item_container: {
+            display: 'flex',
+            flexDirection: 'column',
             overflowY: 'auto',
             height: '100%',
-            top: 22,
-            position: 'relative',
+            width: '100%',
+            position: 'absolute',
+        },
+        rowTitles: {
+            width: 65
         }
     }),
 );
@@ -458,26 +465,6 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                 </header>
                 <div className={'content_container'}>
                     <section className={classNames('panel_content', classes.panel_content)}>
-                        <header className={classNames('content_header', classes.content_header)}>
-                            <div className={classNames(classes.column_title_grade)}>
-                                <h4>Grade</h4>
-                            </div>
-
-                            <div className={classNames(classes.content_title_set)}>
-                                <div className={classNames(classes.column_title_name)}>
-                                    <h4>Name</h4>
-                                </div>
-                                <div className={classNames(classes.column_title)}>
-                                    <h4>AFSC</h4>
-                                </div>
-                                <div className={classNames(classes.column_title)}>
-                                    <h4>DOR</h4>
-                                </div>
-                                <div className={classNames(classes.column_title)}>
-                                    <h4>DOS</h4>
-                                </div>
-                            </div>
-                        </header>
                         <div className={classNames('items_container', classes.item_container)}>
                             {loading ? <Skeleton variant="text"/> : ''}
                             {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
@@ -487,9 +474,9 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                 grade={row.grade}
                                 afsc={row.dafsc}
                             />) : ''}
+                            <div className={classNames('end_of_list', 'preview')}/>
                         </div>
-
-                        {fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}
+                        {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
 
                     </section>
                 </div>
@@ -504,33 +491,6 @@ export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
 background-color: #f4f4f4 ;
 }
 
-.CMS {
-background: #D9AAAA;!important;
-}
-
-.SMS {
-background: #C4AAD9;!important;
-}
-
-.TSG {
-background: #AAD9D6;!important;
-}
-
-.SSG {
-background: #B0D9AA;!important;
-}
-
-.SRA {
-background: #D8D9AA;!important;
-}
-
-.A1C {
-background: #D9CCAA;!important;
-}
-
-.AMN {
-background: #D9B8AA; !important;
-}
   
 
 `;

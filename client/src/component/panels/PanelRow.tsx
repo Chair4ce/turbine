@@ -58,7 +58,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
         column_data_name: {
             paddingLeft: 20,
-            width: 220,
             minWidth: 90,
             display: 'flex',
             alignItems: 'center',
@@ -70,6 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'space-between',
             textOverflow: 'ellipsis'
         },
+        rowText: {
+            width: 65
+        }
     }),
 );
 
@@ -91,20 +93,12 @@ const CurrentRosterRow: React.FC<Props> = props => {
                 </div>
             </div>
 
-
-
             <div className={classNames(classes.column_data_set)}>
                 <div className={classNames(classes.column_data_name)}>
                     <h4>{props.name}</h4>
                 </div>
                 <div className={classNames(classes.column_data)}>
-                    <h4>{AFSCregex.exec(props.afsc as string)}</h4>
-                </div>
-                <div className={classNames(classes.column_data)}>
-                    <h4>10/12/19</h4>
-                </div>
-                <div className={classNames(classes.column_data)}>
-                    <h4>10/12/19</h4>
+                    <h4 className={classes.rowText}>{AFSCregex.exec(props.afsc as string)}</h4>
                 </div>
             </div>
         </div>

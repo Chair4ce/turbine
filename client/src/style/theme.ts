@@ -89,7 +89,7 @@ const theme = {
     },
 
     item_height: {
-        normal: '60px',
+        normal: '65px',
 },
     header_heights: {
         panel: '38px',

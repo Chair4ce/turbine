@@ -30,6 +30,8 @@ import {
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
+import {Skeleton} from "@material-ui/lab";
+import CurrentRosterRow from "./PanelRow";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -133,6 +135,59 @@ const useStyles = makeStyles((theme: Theme) =>
         formControlLabel: {
             marginTop: theme.spacing(1),
         },
+        column_title: {
+            width: 65
+        },
+        content_header: {
+            padding: 0,
+            display: 'flex',
+            position: 'absolute',
+            zIndex: 100,
+            width: '100%',
+            minWidth: 200,
+            alignContent: 'center',
+            minHeight: 22,
+            background: '#575757',
+            overflowX: 'hidden',
+        },
+        column_title_grade: {
+            display: 'flex',
+            marginLeft: 63,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            textOverflow: 'ellipsis'
+        },
+        column_title_name: {
+            paddingLeft: 25,
+            width: 220,
+            minWidth: 150,
+            display: 'flex',
+            alignItems: 'center',
+        },
+        content_title_set: {
+            display: 'flex',
+            minWidth: 200,
+            width: '100%',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        panel_content: {
+            display: 'block',
+            position: 'absolute',
+            width: '100%',
+            height: 'calc(100vh - 125px)',
+        },
+        item_container: {
+            display: 'flex',
+            flexDirection: 'column',
+            overflowY: 'auto',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+        },
+        rowTitles: {
+            width: 65
+        }
     }),
 );
 
@@ -404,31 +459,23 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
                 </header>
 
-                <header className={classNames('content_header')}>
-                    <div className={classNames('column-title', 'column-title-grade')}>
-                        <h4>Grade</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-name')}>
-                        <h4>Name</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-afsc')}>
-                        <h4>AFSC</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dor')}>
-                        <h4>DOR</h4>
-                    </div>
-                    <div className={classNames('column-title', 'column-title-dos')}>
-                        <h4>DOS</h4>
-                    </div>
-                </header>
+                <div className={'content_container'}>
+                    <section className={classNames('panel_content', classes.panel_content)}>
+                        <div className={classNames('items_container', classes.item_container)}>
+                            {loading ? <Skeleton variant="text"/> : ''}
+                            {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
+                                key={index}
+                                className={'item'}
+                                name={row.fullName}
+                                grade={row.grade}
+                                afsc={row.dafsc}
+                            />) : ''}
+                            <div className={classNames('end_of_list', 'preview')}/>
+                        </div>
+                        {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
 
-                <section className={classNames('panel_content')}>
-                    <div className={'items_container'}>
-                        {fileData ? fileData.map((row: any, index: number) => <div className={'item'}
-                                                                                   key={index}>{row.fullName}</div>) : ''}
-                    </div>
-                    <div className={classNames('end_of_list', 'preview')}/>
-                </section>
+                    </section>
+                </div>
             </div>
         </div>
     )
@@ -440,26 +487,5 @@ export const StyledGainingRosterPanel = styled(GainingRosterPanel)`
 background-color: #daebcf;
 }
   
-.column-title-grade {
-  margin-left: 10px;
-  min-width: 43px;
-  max-width: 60px;
-}
-.column-title-name {
-  min-width: 100px;
-    max-width: 360px;
-}
-.column-title-afsc {
-  min-width: 80px;
-    max-width: 100px;
-}
-.column-title-dor {
-  min-width: 80px;
-    max-width: 100px;
-}
-.column-title-dos {
-  min-width: 80px;
-    max-width: 100px;
-}
 
 `;
