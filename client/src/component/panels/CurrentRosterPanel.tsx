@@ -25,9 +25,9 @@ import {
     DialogTitle,
     Fab,
     Fade,
-    FormControl,
+    FormControl, InputLabel,
     Menu,
-    MenuItem
+    MenuItem, Select
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
@@ -40,6 +40,7 @@ import MemberModel from "../../store/members/MemberModel";
 import UploadMemberModel from "../../store/members/UploadMemberModel";
 import {getMembers, saveCurrentRoster} from "../../store/members/thunks";
 import {membersFetchRequest} from "../../store/members";
+import RowsByGrade from "./RowsByGrade";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -181,7 +182,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block',
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh - 125px)',
+            height: 'calc(100vh - 99px)',
         },
         item_container: {
             display: 'flex',
@@ -189,18 +190,18 @@ const useStyles = makeStyles((theme: Theme) =>
             overflowY: 'auto',
             height: '100%',
             width: '100%',
-            position: 'absolute',
         },
         rowTitles: {
             width: 65
-        }
+        },
+        sortFormControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
     }),
 );
 
-interface Props {
-    callback: (type: string) => void;
-    className?: string;
-}
+
 
 const schema = {
     'SSAN': {
@@ -291,10 +292,15 @@ const schema = {
     // it can be any string — it's just for code readability.
 }
 
+interface Props {
+    callback: (type: string) => void;
+    data: MemberModel[];
+    loading: boolean;
+    className?: string;
+}
+
 const CurrentRosterPanel: React.FC<Props> = props => {
-    const members = useSelector(({members}: ApplicationState) => members.data);
-    const loading = useSelector(({members}: ApplicationState) => members.loading);
-    const [fileData, updateFileData] = useState();
+    const dispatch = useDispatch();
     const classes = useStyles();
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -304,24 +310,27 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [success, updateSuccess] = useState(false);
     const [errors, updateErrors] = useState("");
+    const [sortByGrade, toggleSortByGrade] = useState(false);
+    const [sortBySkill, toggleSortBySkill] = useState(false);
+    const [state, setState] = React.useState<{ age: string | number; name: string }>({
+        age: '',
+        name: 'hai',
+    });
 
 
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(getMembers());
-    }, [dispatch]);
+
     // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
     // const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
 
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -367,6 +376,33 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         }
         handleClose();
     }
+
+    const handleChange = (event: React.ChangeEvent<{name?: string, value: unknown }>) => {
+        console.log(event.target.value);
+        const name = event.target.name as keyof typeof state;
+        setState({
+            ...state,
+            [name]: event.target.value,
+        });
+
+        switch (event.target.value) {
+            case '1':
+                console.log('fired Grade')
+                toggleSortBySkill(false)
+                toggleSortByGrade(true)
+                break;
+            case '2':
+                console.log('fired Skill')
+                toggleSortByGrade(false)
+                toggleSortBySkill(true)
+                break;
+            case 'None':
+                toggleSortByGrade(false)
+                toggleSortBySkill(false)
+                break;
+        }
+    };
+
 
 
     const handleButtonClick = (e: any) => {
@@ -415,7 +451,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(loading || success) &&
+                                            {(props.loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -424,12 +460,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(loading) &&
+                                                {(props.loading) &&
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
+                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
@@ -460,6 +496,23 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                         <h2>Alpha Roster</h2>
                     </div>
                     <div className={classNames('action_area')}>
+                        <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Group By</InputLabel>
+                            <Select
+                                native
+                                value={state.age}
+                                onChange={handleChange}
+                                label="Group By"
+                                inputProps={{
+                                    name: 'age',
+                                    id: 'outlined-age-native-simple',
+                                }}
+                            >
+                                <option aria-label="None" value="None" />
+                                <option value={1}>Grade</option>
+                                <option value={2}>Skill Level</option>
+                            </Select>
+                        </FormControl>
                         <div>
                             <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
                                     onClick={handleClick}>
@@ -489,26 +542,29 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     <section className={classNames('panel_content', classes.panel_content)}>
                         <div className={classNames('items_container', classes.item_container)}>
                             {errors && <Alert severity="error">{errors}</Alert>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px', margin: '0'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {members && !loading ? members.map((row: any, index: number) => <CurrentRosterRow
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px', margin: '0'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.data && !sortByGrade && !sortBySkill && props.data.map((row: any, index: number) => <CurrentRosterRow
                                 key={index}
                                 className={'item'}
                                 name={row.fullName}
                                 grade={row.grade}
                                 afsc={row.dafsc}
-                            />) : ''}
+                            />)}
+                            { !props.loading && sortByGrade && <RowsByGrade data={props.data}/>}
+
+
                             <div className={classNames('end_of_list', 'preview')}/>
                         </div>
                         {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
@@ -522,9 +578,6 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
 export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
 
-.item {
-background-color: #f4f4f4 ;
-}
 
   
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
@@ -6,8 +6,11 @@ import {StyledCurrentRosterPanel} from "./CurrentRosterPanel";
 import {StyledGainingRosterPanel} from "./GainingRosterPanel";
 import {StyledLosingRosterPanel} from "./LosingRosterPanel";
 import theme from "../../style/theme";
-import {StyledProjectedRosterPanel} from "./ProjectedRosterPanel";
-import {StyledPositionPanel} from "./PositionPanel";
+// import {StyledProjectedRosterPanel} from "./ProjectedRosterPanel";
+// import {StyledPositionPanel} from "./PositionPanel";
+import {useDispatch, useSelector} from "react-redux";
+import {ApplicationState} from "../../store";
+import {getMembers} from "../../store/members/thunks";
 
 interface Props {
     showCurrentPanel?: boolean;
@@ -20,15 +23,21 @@ interface Props {
 }
 
 const PanelsContainer: React.FC<Props> = props => {
+    const members = useSelector(({members}: ApplicationState) => members.data);
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(getMembers());
+    }, [dispatch]);
     return (
         <section className={classNames('panels', props.className)}>
             <div className={'table'}>
-                {props.showCurrentPanel && <StyledCurrentRosterPanel callback={props.callback}/>}
+                {props.showCurrentPanel && <StyledCurrentRosterPanel data={members} loading={loading} callback={props.callback}/>}
                 {props.showGainingPanel && <StyledGainingRosterPanel callback={props.callback}/>}
                 {props.showLosingPanel && <StyledLosingRosterPanel callback={props.callback}/>}
-                {props.showProjectedPanel && <StyledProjectedRosterPanel callback={props.callback}/>}
-                {props.showPositionPanel && <StyledPositionPanel callback={props.callback}/>}
+                {/*{props.showProjectedPanel && <StyledProjectedRosterPanel callback={props.callback}/>}*/}
+                {/*{props.showPositionPanel && <StyledPositionPanel callback={props.callback}/>}*/}
             </div>
         </section>
     )
@@ -69,7 +78,7 @@ margin-right: 10px;
 display: block;
 position: relative;
 width: 100%;
-height: calc(100% - 1px);
+height: 100%;
 min-width: 240px;
 float: left;
 font: inherit;
@@ -233,31 +242,31 @@ background-color: rgb(255,255,255);
   }
   
   .CMS {
-background: #D9AAAA;!important;
+background: #d06868;!important;
 }
 
 .SMS {
-background: #C4AAD9;!important;
+background: #a16ace;!important;
 }
 
 .TSG {
-background: #AAD9D6;!important;
+background: #69d0ca;!important; 
 }
 
 .SSG {
-background: #B0D9AA;!important;
+background: #75d569;!important;
 }
 
 .SRA {
-background: #D8D9AA;!important;
+background: #dbde6e;!important;
 }
 
 .A1C {
-background: #D9CCAA;!important;
+background: #d7b36c;!important;
 }
 
 .AMN {
-background: #D9B8AA; !important;
+background: #db845f; !important;
 }
 
 `;

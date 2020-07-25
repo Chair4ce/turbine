@@ -5,9 +5,17 @@ import {StyledRosterMenu} from "./RosterMenu";
 
 describe('RosterMenu test', () => {
     let subject: ReactWrapper;
+    let Mockfn: jest.Mock;
     beforeEach(() => {
+        let  Mockfn = jest.fn();
         subject = mount(
             <StyledRosterMenu
+                showCurrentPanel={false}
+    showProjectedPanel={false}
+    showGainingPanel={false}
+    showLosingPanel={false}
+    showPositionPanel={false}
+    menuSelectHandler={Mockfn}
             expanded={true}
             />
         );
@@ -22,8 +30,15 @@ describe('RosterMenu test', () => {
         expect(subject.find('.menu_item_text').text()).toBe('Current');
     });
     test('displays no item text while collapsed', () => {
+        let  Mockfn = jest.fn();
         subject = mount(
             <StyledRosterMenu
+                showCurrentPanel={false}
+                showProjectedPanel={false}
+                showGainingPanel={false}
+                showLosingPanel={false}
+                showPositionPanel={false}
+                menuSelectHandler={Mockfn}
                 expanded={false}
             />
         );

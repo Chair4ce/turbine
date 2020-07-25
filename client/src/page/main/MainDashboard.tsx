@@ -23,7 +23,7 @@ const MainDashboard: React.FC<Props> = props => {
 
 export const StyledMainDashboard = styled(MainDashboard)`
 .main_header {
-height: 60px;
+height: 35px;
 }
 
 .main_header_container {
@@ -35,7 +35,7 @@ position: absolute;
 width: 100%;
 display: flex;
 flex-direction: row;
-top: 61px;
+top: 36px;
 overflow: hidden;
     left: 0;
     right: 0;

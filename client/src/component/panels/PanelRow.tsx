@@ -4,6 +4,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import PersonIcon from "../icon/PersonIcon";
 import clsx from "clsx";
 import {useState} from "react";
+import {Avatar} from "@material-ui/core";
 
 interface Props {
     key: number;
@@ -17,16 +18,13 @@ const useStyles = makeStyles((theme: Theme) =>
 
     createStyles({
         root: {
-            cursor: 'pointer'
+            backgroundColor: '#f4f4f4',
+            cursor: 'pointer',
+            minWidth: 301
         },
         column_data: {
+            paddingLeft: 20,
             width: 65
-        },
-        avatar_area: {
-            height: 48,
-            minWidth: 60,
-            display: 'flex',
-            justifyContent: 'center'
         },
         info_area: {
             display: 'flex',
@@ -35,14 +33,6 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'row',
             alignItems: 'center',
             position: 'relative',
-        },
-
-        column_data_set: {
-            width: '100%',
-            minWidth: 200,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
         },
         grade_background: {
             width: 34,
@@ -57,8 +47,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
 
         column_data_name: {
-            paddingLeft: 20,
             minWidth: 90,
+            paddingLeft: 20,
             display: 'flex',
             alignItems: 'center',
             textOverflow: 'ellipsis'
@@ -71,7 +61,21 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         rowText: {
             width: 65
-        }
+        },
+        AvataRoot: {
+            display: 'flex',
+            '& > *': {
+                margin: theme.spacing(1),
+            },
+        },
+        small: {
+            width: theme.spacing(3),
+            height: theme.spacing(3),
+        },
+        large: {
+            width: theme.spacing(7),
+            height: theme.spacing(7),
+        },
     }),
 );
 
@@ -82,8 +86,9 @@ const CurrentRosterRow: React.FC<Props> = props => {
     const AFSCregex = new RegExp(/[^-]+/);
     return (
     <div className={classNames(classes.root, 'item')}>
-        <div className={classes.avatar_area}>
+        <div className={classNames(classes.AvataRoot)}>
             <PersonIcon/>
+            {/*<Avatar variant="square" alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.large} />*/}
         </div>
         <div className={classNames(classes.info_area)}>
 
@@ -92,15 +97,12 @@ const CurrentRosterRow: React.FC<Props> = props => {
                 <h4>{props.grade}</h4>
                 </div>
             </div>
-
-            <div className={classNames(classes.column_data_set)}>
-                <div className={classNames(classes.column_data_name)}>
-                    <h4>{props.name}</h4>
-                </div>
                 <div className={classNames(classes.column_data)}>
                     <h4 className={classes.rowText}>{AFSCregex.exec(props.afsc as string)}</h4>
                 </div>
-            </div>
+                <div className={classNames(classes.column_data_name)}>
+                    <h4>{props.name}</h4>
+                </div>
         </div>
     </div>
     );
