@@ -17,7 +17,6 @@ function convertToHash(mbrId: string, name: string) {
 
 export class CurrentMemberSerializer {
     static serializeToBackend(items: any): UploadMemberModel[] {
-console.log(items);
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(

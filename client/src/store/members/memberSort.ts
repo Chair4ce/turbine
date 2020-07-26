@@ -1,10 +1,25 @@
 import MemberModel from "./MemberModel";
 
-export const sortAscendingGrade = (members: MemberModel[]) => {
+export class EnlistedGradeOnlySorter {
+static sortEnlistedGradeOnlyAscending = (members: MemberModel[]) => {
     return members.sort(function (a, b) {
         return convertGradeValue(a.grade) > convertGradeValue(b.grade) ? -1 : 1;
     });
 }
+    static sortEnlistedGradeOnlyDescending = (members: MemberModel[]) => {
+        function filterEnlisted(members: MemberModel[]) {
+            return members.filter((mbr: MemberModel) => checkForEnlistedGrade(mbr.grade))
+        }
+
+        return filterEnlisted(members).sort(function (a, b) {
+            return convertGradeValue(a.grade) < convertGradeValue(b.grade) ? -1 : 1;
+        });
+    }
+static filterEnlisted = (members: MemberModel[]) => {
+    return members.filter((mbr: MemberModel) => checkForEnlistedGrade(mbr.grade))
+}
+}
+
 
 function convertGradeValue(grade: string) {
     switch (grade) {
@@ -25,6 +40,30 @@ function convertGradeValue(grade: string) {
         case 'CMS':
             return 8;
         default :
-                return 9;
+            return 9;
     }
 }
+
+function checkForEnlistedGrade(grade: string) {
+    switch (grade) {
+        case 'AMN':
+            return true;
+        case 'A1C':
+            return true;
+        case 'SRA':
+            return true;
+        case 'SSG':
+            return true;
+        case 'TSG':
+            return true;
+        case 'MSG':
+            return true;
+        case 'SMS':
+            return true;
+        case 'CMS':
+            return true;
+        default :
+            return false;
+    }
+}
+

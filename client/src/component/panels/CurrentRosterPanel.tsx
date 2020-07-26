@@ -42,6 +42,7 @@ import {getMembers, saveCurrentRoster} from "../../store/members/thunks";
 import {membersFetchRequest} from "../../store/members";
 import RowsByGrade from "./RowsByGrade";
 import RowsBySkill from "./RowsBySkill";
+import {EnlistedGradeOnlySorter} from "../../store/members/memberSort";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -563,8 +564,8 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                 grade={row.grade}
                                 afsc={row.dafsc}
                             />)}
-                            { !props.loading && sortByGrade && <RowsByGrade data={props.data}/>}
-                            { !props.loading && sortBySkill && <RowsBySkill data={props.data}/>}
+                            { !props.loading && sortByGrade && <RowsByGrade data={EnlistedGradeOnlySorter.filterEnlisted(props.data)}/>}
+                            { !props.loading && sortBySkill && <RowsBySkill data={EnlistedGradeOnlySorter.filterEnlisted(props.data)}/>}
 
 
                             <div className={classNames('end_of_list', 'preview')}/>
