@@ -1,18 +1,14 @@
 import * as React from 'react';
+import {useState} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import MemberModel from "../../store/members/MemberModel";
+import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PersonIcon from "../icon/PersonIcon";
-import clsx from "clsx";
-import {useState} from "react";
-import {Avatar} from "@material-ui/core";
-
-interface Props {
-    key: number;
-    name?: string;
-    grade?: string;
-    afsc?: string;
-    className?: string;
-}
+import moment from 'moment';
+import {Button} from "@material-ui/core";
+import DynamicInfoBoxModel from "./DynamicInfoBoxModel";
+import DynamicInfoBox from "./DynamicInfoBox";
 
 const useStyles = makeStyles((theme: Theme) =>
 
@@ -76,35 +72,120 @@ const useStyles = makeStyles((theme: Theme) =>
             width: theme.spacing(7),
             height: theme.spacing(7),
         },
+        awardIcon: {
+            width: 60,
+            height: 40,
+            margin: theme.spacing(1)
+        },
+        expandedView: {
+            cursor: 'default',
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+        },
+        collapsedView: {
+            display: 'flex',
+            flexDirection: 'row',
+            width: '100%',
+        },
+        detailArea: {
+            width: '100%',
+            display: 'flex',
+            padding: theme.spacing(1)
+        },
+        expandedViewTopBar: {
+            display: 'flex',
+            width: '100%',
+            flexDirection: 'row',
+            alignItems: 'center'
+        },
+        collapseBtnArea: {
+            zIndex: 1200,
+            borderRadius: 4,
+            cursor: 'pointer',
+            margin: 5,
+            height: 20,
+            width: 20,
+            '&:hover': {
+                backgroundColor: 'rgb(194,194,194)',
+            },
+        },
+        closeBtn: {
+            fontSize: 9,
+            width: 100,
+            height: 22,
+            marginLeft: 200
+        }
     }),
 );
 
+interface Props {
+    key: number;
+    data: MemberModel;
+    className?: string;
+}
 
 
 const CurrentRosterRow: React.FC<Props> = props => {
     const classes = useStyles();
-    const AFSCregex = new RegExp(/[^-]+/);
-    return (
-    <div className={classNames(classes.root, 'item')}>
-        <div className={classNames(classes.AvataRoot)}>
-            <PersonIcon/>
-            {/*<Avatar variant="square" alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.large} />*/}
-        </div>
-        <div className={classNames(classes.info_area)}>
+    // const AFSCregex = new RegExp(/[^-]+/);
+    const [selected, toggleSelected] = useState(false);
+    const entries = Object.entries(props.data);
+    const DynamicInfoBoxData: DynamicInfoBoxModel[] = [...new Set(entries.map(entry => {
+        return new DynamicInfoBoxModel(entry[0], entry[1])
+    }))]
 
-            <div className={classNames(classes.column_data_grade)}>
-                <div className={classNames(classes.grade_background, props.grade)}>
-                <h4>{props.grade}</h4>
+    function handleExpand() {
+        toggleSelected(true);
+    }
+
+    function handleCollapse() {
+        toggleSelected(false);
+    }
+
+    return (
+        <div className={classNames(classes.root, 'item')}>
+            {selected && <div className={classes.expandedView}>
+                <div className={classes.expandedViewTopBar}>
+                    <div className={classNames(classes.collapseBtnArea, 'collapseBtnArea')} onClick={handleCollapse}>
+                        <ExpandLessIcon fontSize={'small'}/>
+                    </div>
+                    <div className={classNames(classes.column_data_name)}>
+                        <h3>{props.data.fullName}</h3>
+                    </div>
                 </div>
-            </div>
-                <div className={classNames(classes.column_data)}>
-                    <h4 className={classes.rowText}>{AFSCregex.exec(props.afsc as string)}</h4>
+                <Button className={classes.closeBtn} color="primary" variant="contained" onClick={handleCollapse}>
+                    Close
+                </Button>
+                <div className={classes.detailArea}>
+                    <DynamicInfoBox rows={DynamicInfoBoxData}/>
                 </div>
-                <div className={classNames(classes.column_data_name)}>
-                    <h4>{props.name}</h4>
+            </div>}
+
+            {!selected && <div className={classes.collapsedView} onClick={handleExpand}>
+                <div className={classNames(classes.AvataRoot)}>
+                    <PersonIcon/>
+                    {/*<Avatar variant="square" alt="Remy Sharp" src="/static/images/avatar/1.jpg" className={classes.large} />*/}
                 </div>
+                <div className={classNames(classes.info_area)}>
+
+                    <div className={classNames(classes.column_data_grade)}>
+                        <div className={classNames(classes.grade_background, props.data.grade)}>
+                            <h4>{props.data.grade}</h4>
+                        </div>
+                    </div>
+                    <div className={classNames(classes.column_data)}>
+                        <h4 className={classes.rowText}>{props.data.dafsc}</h4>
+                    </div>
+                    <div className={classNames(classes.column_data_name)}>
+                        <h4>{props.data.fullName}</h4>
+                    </div>
+                </div>
+            </div>}
+            {/*{ selected && <img src={AFAM} alt={""} className={classes.awardIcon}/>}*/}
+            {/*<img src={AFCM} alt={""} className={classes.awardIcon}/>*/}
+            {/*<img src={MSM} alt={""} className={classes.awardIcon}/>*/}
         </div>
-    </div>
     );
 };
 

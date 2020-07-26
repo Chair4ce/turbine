@@ -1,15 +1,8 @@
-import {
-    membersFetchError,
-    membersFetchRequest,
-    membersFetchSuccess,
-    membersPostError,
-    membersPostSuccess
-} from './actions';
+import {membersFetchError, membersFetchRequest, membersFetchSuccess, membersPostError} from './actions';
 import {callApi} from '../../util/api';
-import FeedbackModel from "./FeedbackModel";
 import UploadMemberModel from "./UploadMemberModel";
-import {MemberDeserializer} from "../../util/MemberDeserializer";
 import {CurrentMemberSerializer} from "../../util/MemberSerializer";
+import MemberModel from "./MemberModel";
 
 
 export const getMembers = () => {
@@ -20,14 +13,6 @@ export const getMembers = () => {
             .catch((err => dispatch(membersFetchError(err))
             ));
     }
-};
-
-export const postFeedback = (feedback: FeedbackModel) => {
-    return (dispatch: any) => {
-        callApi('POST', 'api/feedback/submit', feedback).catch((err => {
-            dispatch(membersFetchError(err));
-        }));
-    };
 };
 
 export const saveCurrentRoster = (members: UploadMemberModel[]) => {

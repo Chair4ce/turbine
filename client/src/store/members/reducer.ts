@@ -6,8 +6,8 @@ import {MemberDeserializer} from "../../util/MemberDeserializer";
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
-    errors: undefined,
     loading: false,
+    errors: undefined,
 };
 
 // Thanks to Redux 4's much simpler typings, we can take away a lot of typings on the reducer side,
