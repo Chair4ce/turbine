@@ -5,7 +5,7 @@ import CurrentRosterRow from "./PanelRow";
 import MemberModel from "../../store/members/MemberModel";
 import {useState} from "react";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 
 interface Props {
     data: MemberModel[];
@@ -28,8 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
             top: 0,
             zIndex: 120,
             position: 'sticky',
-            cursor: 'pointer',
-            borderBottom: '1px solid #ddd'
+            borderBottom: '1px solid #ddd',
+            '&:hover': {
+                cursor: 'pointer',
+                backgroundColor: '#5D8AA8',
+                // color: '#333333',
+            }
         },
         dividerText: {
             width: 20,
@@ -41,14 +45,14 @@ const useStyles = makeStyles((theme: Theme) =>
 const RowsByGrade: React.FC<Props> = props => {
     const classes = useStyles();
 
-    const [showAmn, toggleAmn] = useState(true);
-    const [showA1C, toggleA1C] = useState(true);
-    const [showSRA, toggleSRA] = useState(true);
-    const [showSSG, toggleSSG] = useState(true);
-    const [showTSG, toggleTSG] = useState(true);
-    const [showMSG, toggleMSG] = useState(true);
-    const [showSMS, toggleSMS] = useState(true);
-    const [showCMS, toggleCMS] = useState(true);
+    const [showAmn, toggleAmn] = useState(false);
+    const [showA1C, toggleA1C] = useState(false);
+    const [showSRA, toggleSRA] = useState(false);
+    const [showSSG, toggleSSG] = useState(false);
+    const [showTSG, toggleTSG] = useState(false);
+    const [showMSG, toggleMSG] = useState(false);
+    const [showSMS, toggleSMS] = useState(false);
+    const [showCMS, toggleCMS] = useState(false);
 
     const handleClick = (group: string) => {
         switch (group) {
@@ -83,7 +87,7 @@ const RowsByGrade: React.FC<Props> = props => {
         <div className={classNames(props.className, classes.root)}>
             <div className={classes.divider} onClick={() => handleClick('AMN')}>
                 {showAmn && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showAmn && <ExpandLessIcon fontSize={"small"}/>}
+                {!showAmn && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     AMN
                                </span>
@@ -99,7 +103,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('A1C')}>
                 {showA1C && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showA1C && <ExpandLessIcon fontSize={"small"}/>}
+                {!showA1C && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     A1C
                                </span>
@@ -114,7 +118,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('SRA')}>
                 {showSRA && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showSRA && <ExpandLessIcon fontSize={"small"}/>}
+                {!showSRA && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     SRA
                                </span>
@@ -129,7 +133,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('SSG')}>
                 {showSSG && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showSSG && <ExpandLessIcon fontSize={"small"}/>}
+                {!showSSG && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     SSG
                                </span>
@@ -144,7 +148,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('TSG')}>
                 {showTSG && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showTSG && <ExpandLessIcon fontSize={"small"}/>}
+                {!showTSG && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     TSG
                                </span>
@@ -159,7 +163,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('MSG')}>
                 {showMSG && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showMSG && <ExpandLessIcon fontSize={"small"}/>}
+                {!showMSG && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     MSG
                                </span>
@@ -174,7 +178,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('SMS')}>
                 {showSMS && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showSMS && <ExpandLessIcon fontSize={"small"}/>}
+                {!showSMS && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     SMS
                                </span>
@@ -189,7 +193,7 @@ const RowsByGrade: React.FC<Props> = props => {
                 />)}
             <div className={classes.divider} onClick={() => handleClick('CMS')}>
                 {showCMS && <ExpandMoreIcon fontSize={"small"}/>}
-                {!showCMS && <ExpandLessIcon fontSize={"small"}/>}
+                {!showCMS && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.dividerText}>
                     CMS
                                </span>

@@ -4,10 +4,15 @@ import MemberModel from "../store/members/MemberModel";
 const crypto = require('crypto');
 
 
-function convertToHash(ssan: string) {
-    let newHash = crypto.createHash('sha1').update(ssan).digest('hex').toString()
+function convertToHash(mbrId: string, name: string) {
+    //This throws out everything except integers of the hash
+    let newSsanHash = crypto.createHash('sha1').update(mbrId).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1,10);
-    return newHash;
+
+    let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
+        .match(/\d+/g).map(Number).join("").substring(1,10);
+    console.log(newSsanHash + newNameHash)
+    return newSsanHash + newNameHash;
 }
 
 export class CurrentMemberSerializer {
@@ -16,7 +21,7 @@ console.log(items);
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(
-                    convertToHash(item.ssan ? item.ssan : 0),
+                    convertToHash(item.ssan ? item.ssan : 0, item.fullName ? item.fullName : 0),
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.assignedPas ? item.assignedPas : null ,

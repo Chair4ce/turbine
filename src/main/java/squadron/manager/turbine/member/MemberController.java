@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.Date;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(MemberController.URI)
@@ -33,16 +34,20 @@ public class MemberController {
     @Transactional
     @PostMapping(path = "/save")
     public Iterable<Member> addMembers(@Valid @RequestBody Iterable<MemberJSON> json) {
-        System.out.println(json);
         Date date = new Date();
         json.forEach((newImport -> {
-            saveNewMember(date, newImport);
+            Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
+            if (existingMember == null) {
+                this.memberRepository.save(NewMemberModel(date, newImport));
+            } else {
+                updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
+            }
         }));
         return memberRepository.findAll();
     }
 
-    private void saveNewMember(Date date, MemberJSON newImport) {
-        Member importingMember = new Member(
+    private Member NewMemberModel(Date date, MemberJSON newImport) {
+        return new Member(
                 newImport.getSsan(),
                 newImport.getFullName(),
                 newImport.getGrade(),
@@ -59,8 +64,24 @@ public class MemberController {
                 newImport.getDor(),
                 date
         );
-            this.memberRepository.save(importingMember);
-        };
+    }
+
+    private void updateExistingMemberData(Member importingMember, Member existingMember) {
+        existingMember.setFullName(importingMember.getFullName());
+        existingMember.setGrade(importingMember.getGrade());
+        existingMember.setAssignedPas(importingMember.getAssignedPas());
+        existingMember.setDafsc(importingMember.getDafsc() != null ? importingMember.getDafsc() : "");
+        existingMember.setOfficeSymbol(importingMember.getOfficeSymbol());
+        existingMember.setDutyTitle(importingMember.getDutyTitle());
+        existingMember.setDutyStartDate(importingMember.getDutyStartDate());
+        existingMember.setDutyPhone(importingMember.getDutyPhone());
+        existingMember.setSupvName(importingMember.getSupvName());
+        existingMember.setSupvBeginDate(importingMember.getSupvBeginDate());
+        existingMember.setDateArrivedStation(importingMember.getDateArrivedStation());
+        existingMember.setDor(importingMember.getDor());
+
+        memberRepository.save(existingMember);
+    }
 
 }
 

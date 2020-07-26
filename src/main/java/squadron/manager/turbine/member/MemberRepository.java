@@ -6,6 +6,8 @@ import java.util.List;
 
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
+
+    Member findByMbrId(String mbrId);
 }
 
 

@@ -41,6 +41,7 @@ import UploadMemberModel from "../../store/members/UploadMemberModel";
 import {getMembers, saveCurrentRoster} from "../../store/members/thunks";
 import {membersFetchRequest} from "../../store/members";
 import RowsByGrade from "./RowsByGrade";
+import RowsBySkill from "./RowsBySkill";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -563,6 +564,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                 afsc={row.dafsc}
                             />)}
                             { !props.loading && sortByGrade && <RowsByGrade data={props.data}/>}
+                            { !props.loading && sortBySkill && <RowsBySkill data={props.data}/>}
 
 
                             <div className={classNames('end_of_list', 'preview')}/>
