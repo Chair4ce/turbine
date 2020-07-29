@@ -21,7 +21,6 @@ export enum MemberActionTypes {
     POST_ERROR = '@@members/POST_ERROR',
     POST_REQUEST = '@@members/POST_REQUEST',
     POST_SUCCESS = '@@members/POST_SUCCESS',
-
 }
 
 // Declare state types with `readonly` modifier to get compile time immutability.

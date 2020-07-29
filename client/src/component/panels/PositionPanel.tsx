@@ -467,9 +467,7 @@ const PositionPanel: React.FC<Props> = props => {
                             {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
                                 key={index}
                                 className={'item'}
-                                name={row.fullName}
-                                grade={row.grade}
-                                afsc={row.dafsc}
+                            data={row}
                             />) : ''}
                             <div className={classNames('end_of_list', 'preview')}/>
                         </div>

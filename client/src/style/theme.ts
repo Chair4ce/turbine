@@ -39,7 +39,7 @@ const theme = {
         backgroundToolTip: brandColors.mediumBlue,
         inProgress: brandColors.stoplightYellow,
         complete: brandColors.stoplightGreen,
-        primaryButton: brandColors.brightBlue,//
+        primaryButton: brandColors.airForceBlue,//
         buttonRowDisabled: brandColors.subtleGray,
         buttonDoesNotMeetEei: brandColors.tomatoRed,
         fontActive: brandColors.notEggWhite,

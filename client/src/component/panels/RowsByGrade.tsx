@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: '100%',
         },
-        divider: {
+        gradedivider: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'flex-start',
@@ -35,9 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
                 // color: '#333333',
             }
         },
-        dividerText: {
-            width: 20,
+        gradeDividerText: {
+            width: '100%',
             padding: theme.spacing(1)
+        },
+        memberCountText: {
+            paddingRight: 20
         }
     }),
 );
@@ -53,6 +56,18 @@ const RowsByGrade: React.FC<Props> = props => {
     const [showMSG, toggleMSG] = useState(false);
     const [showSMS, toggleSMS] = useState(false);
     const [showCMS, toggleCMS] = useState(false);
+    const [showNoGrade, toggleNoGrade] = useState(false);
+
+    const Amn: MemberModel[] = props.data.filter(rowData => rowData.grade === 'AMN');
+    const A1c: MemberModel[] = props.data.filter(rowData => rowData.grade === 'A1C');
+    const Sra: MemberModel[] = props.data.filter(rowData => rowData.grade === 'SRA');
+    const Ssg: MemberModel[] = props.data.filter(rowData => rowData.grade === 'SSG');
+    const Tsg: MemberModel[] = props.data.filter(rowData => rowData.grade === 'TSG');
+    const Msg: MemberModel[] = props.data.filter(rowData => rowData.grade === 'MSG');
+    const Sms: MemberModel[] = props.data.filter(rowData => rowData.grade === 'SMS');
+    const Cms: MemberModel[] = props.data.filter(rowData => rowData.grade === 'CMS');
+    const NoGrd: MemberModel[] = props.data.filter(rowData => rowData.grade === '');
+
 
     const handleClick = (group: string) => {
         switch (group) {
@@ -80,132 +95,173 @@ const RowsByGrade: React.FC<Props> = props => {
             case 'CMS':
                 toggleCMS(prev => !prev)
                 break;
+            case 'NoGrd':
+                toggleNoGrade(prev => !prev)
+                break;
         }
     }
 
     return (
         <div className={classNames(props.className, classes.root)}>
-            <div className={classes.divider} onClick={() => handleClick('AMN')}>
+            <div className={classes.gradedivider} onClick={() => handleClick('AMN')}>
                 {showAmn && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showAmn && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     AMN
                                </span>
+                <span className={classes.memberCountText}>
+                {Amn.length}
+                </span>
             </div>
-
-            {props.data && showAmn && props.data.filter((member) => member.grade === 'AMN').map((row: any, index: number) =>
+            {showAmn && Amn.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('A1C')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('A1C')}>
                 {showA1C && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showA1C && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     A1C
                                </span>
+                <span className={classes.memberCountText}>
+                {A1c.length}
+                </span>
             </div>
-            {props.data && showA1C && props.data.filter((member) => member.grade === 'A1C').map((row: any, index: number) =>
+            {showA1C && A1c.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('SRA')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('SRA')}>
                 {showSRA && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showSRA && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     SRA
                                </span>
+                <span className={classes.memberCountText}>
+                {Sra.length}
+                </span>
             </div>
-            {props.data && showSRA && props.data.filter((member) => member.grade === 'SRA').map((row: any, index: number) =>
+            {showSRA && Sra.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('SSG')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('SSG')}>
                 {showSSG && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showSSG && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     SSG
                                </span>
+                <span className={classes.memberCountText}>
+                {Ssg.length}
+                </span>
             </div>
-            {props.data && showSSG && props.data.filter((member) => member.grade === 'SSG').map((row: any, index: number) =>
+            {showSSG && Ssg.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('TSG')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('TSG')}>
                 {showTSG && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showTSG && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     TSG
                                </span>
+                <span className={classes.memberCountText}>
+                {Tsg.length}
+                </span>
             </div>
-            {props.data && showTSG && props.data.filter((member) => member.grade === 'TSG').map((row: any, index: number) =>
+            {showTSG && Tsg.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('MSG')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('MSG')}>
                 {showMSG && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showMSG && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     MSG
                                </span>
+                <span className={classes.memberCountText}>
+                {Msg.length}
+                </span>
             </div>
-            {props.data && showMSG && props.data.filter((member) => member.grade === 'MSG').map((row: any, index: number) =>
+            {showMSG && Msg.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('SMS')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('SMS')}>
                 {showSMS && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showSMS && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     SMS
                                </span>
+                <span className={classes.memberCountText}>
+                {Sms.length}
+                </span>
             </div>
-            {props.data && showSMS && props.data.filter((member) => member.grade === 'SMS').map((row: any, index: number) =>
+            {showSMS && Sms.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
-            <div className={classes.divider} onClick={() => handleClick('CMS')}>
+
+            <div className={classes.gradedivider} onClick={() => handleClick('CMS')}>
                 {showCMS && <ExpandMoreIcon fontSize={"small"}/>}
                 {!showCMS && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.dividerText}>
+                <span className={classes.gradeDividerText}>
                     CMS
                                </span>
+                <span className={classes.memberCountText}>
+                {Cms.length}
+                </span>
             </div>
-            {props.data && showCMS && props.data.filter((member) => member.grade === 'CMS').map((row: any, index: number) =>
+            {showCMS && Cms.map((rowData: any, index: number) =>
                 <CurrentRosterRow
                     key={index}
                     className={'item'}
-                    name={row.fullName}
-                    grade={row.grade}
-                    afsc={row.dafsc}
+                    data={rowData}
                 />)}
+
+            {NoGrd.length > 0 &&
+            <div>
+                <div className={classes.gradedivider} onClick={() => handleClick('NoGrd')}>
+                    {showNoGrade && <ExpandMoreIcon fontSize={"small"}/>}
+                    {!showNoGrade && <NavigateNextIcon fontSize={"small"}/>}
+                    <span className={classes.gradeDividerText}>
+                    No Grade listed
+                               </span>
+                    <span className={classes.memberCountText}>
+                {NoGrd.length}
+                </span>
+                </div>
+
+                {NoGrd.map((rowData: any, index: number) =>
+                    <CurrentRosterRow
+                        key={index}
+                        className={'item'}
+                        data={rowData}
+                    />
+                )}
+            </div>
+            }
+
         </div>
     );
 };
