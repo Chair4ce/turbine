@@ -11,7 +11,6 @@ function convertToHash(mbrId: string, name: string) {
 
     let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1,10);
-    console.log(newSsanHash + newNameHash)
     return newSsanHash + newNameHash;
 }
 

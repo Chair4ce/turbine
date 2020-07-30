@@ -6,11 +6,12 @@ import {StyledCurrentRosterPanel} from "./CurrentRosterPanel";
 import {StyledGainingRosterPanel} from "./GainingRosterPanel";
 import {StyledLosingRosterPanel} from "./LosingRosterPanel";
 import theme from "../../style/theme";
-// import {StyledProjectedRosterPanel} from "./ProjectedRosterPanel";
-// import {StyledPositionPanel} from "./PositionPanel";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../store";
 import {getMembers} from "../../store/members/thunks";
+import GenericAFSCCollection from "../../store/members/GenericGroupCollectionModel";
+import MemberModel from "../../store/members/MemberModel";
+import GenericGroupCollection from "../../store/members/GenericGroupCollectionModel";
 
 interface Props {
     showCurrentPanel?: boolean;
@@ -23,9 +24,16 @@ interface Props {
 }
 
 const PanelsContainer: React.FC<Props> = props => {
-    const members = useSelector(({members}: ApplicationState) => members.data);
+    const members = useSelector(({members}: ApplicationState) => MemberModel.filterEnlistedOnly(members.data));
     const loading = useSelector(({members}: ApplicationState) => members.loading);
-
+    const genericAFSCs = [...new Set(members.map(item => item.dafsc ? item.dafsc.substring(0, 3) + "X" + item.dafsc.substring(4) : ""))]
+    const workcenters = [...new Set(members.map(item => item.officeSymbol ? item.officeSymbol : ""))]
+    const membersOfGAfscs: GenericGroupCollection[] = genericAFSCs.filter((m) => m.length > 0).map((afsc) => {
+            return new GenericGroupCollection(afsc, MemberModel.membersMatchingGafsc(afsc, members))
+    })
+    const membersOfOffices: GenericGroupCollection[] = workcenters.map((office) => {
+        return new GenericGroupCollection(office, MemberModel.membersMatchingOffice(office, members))
+    })
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getMembers());
@@ -33,11 +41,10 @@ const PanelsContainer: React.FC<Props> = props => {
     return (
         <section className={classNames('panels', props.className)}>
             <div className={'table'}>
-                {props.showCurrentPanel && <StyledCurrentRosterPanel data={members} loading={loading} callback={props.callback}/>}
+                {props.showCurrentPanel &&
+                <StyledCurrentRosterPanel data={members} uniqueAFSCList={membersOfGAfscs} membersOfOffices={membersOfOffices} loading={loading} callback={props.callback}/>}
                 {props.showGainingPanel && <StyledGainingRosterPanel callback={props.callback}/>}
                 {props.showLosingPanel && <StyledLosingRosterPanel callback={props.callback}/>}
-                {/*{props.showProjectedPanel && <StyledProjectedRosterPanel callback={props.callback}/>}*/}
-                {/*{props.showPositionPanel && <StyledPositionPanel callback={props.callback}/>}*/}
             </div>
         </section>
     )
@@ -79,7 +86,7 @@ display: block;
 position: relative;
 width: 100%;
 height: 100%;
-min-width: 240px;
+min-width: 500px;
 float: left;
 font: inherit;
 font-size: 100%;
@@ -189,7 +196,6 @@ width: 100%;
 //overflow: hidden;
 //overflow-x: auto;
 height: calc(100vh - 122px);
-height: 100%;
 }
 
 
@@ -197,7 +203,7 @@ height: 100%;
 display: flex;
 width: 100%;
 flex: 1 0 auto;
-height: ${theme.item_height.normal};
+min-height: 65px;
 align-items: center;
 border-bottom: 1px solid #ddd;
 color: #333333;
