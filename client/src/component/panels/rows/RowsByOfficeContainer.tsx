@@ -1,8 +1,9 @@
 import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import UniqueAFSCRows from "./UniqueAFSCRows";
-import GenericGroupCollectionModel from "../../store/members/GenericGroupCollectionModel";
+import GenericGroupCollectionModel from "../../../store/members/GenericGroupCollectionModel";
+import OfficeGroups from "../containers/OfficeGroups";
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -38,22 +39,22 @@ const useStyles = makeStyles((theme: Theme) =>
         }
     }),
 );
+
 interface Props {
     data: GenericGroupCollectionModel[];
     className?: string;
 }
 
-const RowsByAFSCContainer: React.FC<Props> = props => {
+const RowsByOfficeContainer: React.FC<Props> = props => {
     const classes = useStyles();
-
 
     return (
         <div className={classNames(props.className, classes.root)}>
             {props.data.map((m: GenericGroupCollectionModel, index) =>
-             <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}/>
+                <OfficeGroups key={index} office={m.genericGroup} members={m.members}/>
             )}
         </div>
     );
 };
 
-export default RowsByAFSCContainer;
+export default RowsByOfficeContainer;

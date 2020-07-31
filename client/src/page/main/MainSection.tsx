@@ -1,7 +1,7 @@
 import * as React from "react";
 import {useState} from "react";
 import {StyledSideBar} from "../../component/sidebar/SideBar";
-import {StyledPanelsContainer} from "../../component/panels/PanelsContainer";
+import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
 import styled from "styled-components";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 

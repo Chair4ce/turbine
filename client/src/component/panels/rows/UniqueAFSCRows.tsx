@@ -1,10 +1,13 @@
 import * as React from 'react';
-import {useState} from 'react';
+import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import MemberModel from "../../store/members/MemberModel";
+import {useState} from "react";
+import MemberModel from "../../../store/members/MemberModel";
+import CurrentRosterRow from "./PanelRow";
 import RowsBySkill from "./RowsBySkill";
+
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -12,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: '100%',
         },
-        officeDivider: {
+        AFSCdivider: {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'flex-start',
@@ -30,15 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
                 // color: '#333333',
             }
         },
-        officeDividerText: {
+        AFSCdividerText: {
             width: '100%',
             padding: theme.spacing(1)
         },
-        officeGroup: {
+        afscGroup: {
             display: 'block',
             width: '100%'
         },
-        officeCount: {
+        afscCount: {
             paddingRight: 20
         }
     }),
@@ -46,34 +49,34 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     key: number;
-    office: string;
+    uAFSC: string;
     members?: MemberModel[];
     className?: string;
 }
 
-const OfficeGroups: React.FC<Props> = props => {
+const UniqueAFSCRows: React.FC<Props> = props => {
     const classes = useStyles();
     const [expanded, toggleExpanded] = useState(false);
     const handleClick = () => {
-        toggleExpanded(prev => !prev)
+                toggleExpanded(prev => !prev)
     }
 
 
     return (
-        <div className={classes.officeGroup} key={props.key}>
-            <div className={classes.officeDivider} onClick={handleClick}>
+        <div className={classes.afscGroup} key={props.key}>
+            <div className={classes.AFSCdivider} onClick={handleClick}>
                 {expanded && <ExpandMoreIcon fontSize={"small"}/>}
                 {!expanded && <NavigateNextIcon fontSize={"small"}/>}
-                <span className={classes.officeDividerText}>
-                    {props.office}
+                <span className={classes.AFSCdividerText}>
+                    {props.uAFSC}
                                </span>
-                <span className={classes.officeCount}>
+                <span className={classes.afscCount}>
                     {props.members!.length}
                 </span>
             </div>
-            {props.members && expanded ? <RowsBySkill data={props.members} className={'office'}/> : null}
+            {props.members && expanded ? <RowsBySkill data={props.members}/> : null}
         </div>
     );
 };
 
-export default OfficeGroups;
+export default UniqueAFSCRows;

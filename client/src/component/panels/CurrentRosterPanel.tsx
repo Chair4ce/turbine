@@ -33,7 +33,7 @@ import {
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
-import CurrentRosterRow from "./PanelRow";
+import CurrentRosterRow from "./rows/PanelRow";
 import {Skeleton} from "@material-ui/lab";
 import {useDispatch} from "react-redux";
 import MemberModel from "../../store/members/MemberModel";
@@ -41,11 +41,11 @@ import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
 import UniqueAFSCCollection from "../../store/members/GenericGroupCollectionModel";
 import GenericGroupCollection from "../../store/members/GenericGroupCollectionModel";
-import UniqueAFSCRows from "./UniqueAFSCRows";
-import RowsByGrade from "./RowsByGrade";
-import RowsBySkill from "./RowsBySkill";
+import UniqueAFSCRows from "./rows/UniqueAFSCRows";
+import RowsByGrade from "./rows/RowsByGrade";
+import RowsBySkill from "./rows/RowsBySkill";
 import theme from "../../style/theme";
-import RowsByOfficeContainer from "./RowsByOfficeContainer";
+import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

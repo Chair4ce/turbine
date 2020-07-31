@@ -1,4 +1,4 @@
-import MemberModel from "../../store/members/MemberModel";
+import MemberModel from "../../../store/members/MemberModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
 import {useState} from "react";

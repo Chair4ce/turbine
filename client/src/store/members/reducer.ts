@@ -2,11 +2,14 @@ import { Reducer } from 'redux';
 import { MembersState, MemberActionTypes } from './types';
 import MemberModel from "./MemberModel";
 import {MemberDeserializer} from "../../util/MemberDeserializer";
+import GenericGroupCollectionModel from "./GenericGroupCollectionModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
     loading: false,
+    genericAFSCList: [] as GenericGroupCollectionModel[],
+    workcenterList: [] as GenericGroupCollectionModel[],
     errors: undefined,
 };
 
@@ -21,6 +24,12 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             };
         }
         case MemberActionTypes.FETCH_SUCCESS: {
+            return { ...state, loading: false, data: action.payload};
+        }
+        case MemberActionTypes.GENERATE_AFSCLIST: {
+            return { ...state, loading: false, data: action.payload};
+        }
+        case MemberActionTypes.GENERATE_WORKCENTERLIST: {
             return { ...state, loading: false, data: action.payload};
         }
         case MemberActionTypes.FETCH_ERROR: {

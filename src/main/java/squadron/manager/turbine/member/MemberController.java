@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
 
 @RestController
 @RequestMapping(MemberController.URI)
@@ -29,6 +30,44 @@ public class MemberController {
     Iterable<Member> getMembers() {
         return memberRepository.findAll();
     }
+
+    @CrossOrigin
+    @GetMapping(path = "/DAFSCCollection")
+    public @ResponseBody
+    List<DAFSCCollection> getDAFSCCollection() {
+        List<Member> members = memberRepository.findAll();
+        System.out.println(members);
+        List<DAFSCCollection> dafscCollection = new ArrayList<>();
+            List<String> dafscList = memberRepository.findDistinctDAFSC();
+        System.out.println(dafscList);
+            for (String afsc : dafscList) {
+                  List<Member> memberCollection = new ArrayList<>();
+                   StringBuilder newAFSC = new StringBuilder(afsc);
+               if(afsc.length() >= 4) {
+                   newAFSC.setCharAt(3,'X');
+                   System.out.println("changing afsc to: " + newAFSC);
+                   for (Member member : members) {
+                       StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                        if(compareAFSC.length() >= 4) {
+                            compareAFSC.setCharAt(3,'X');
+
+                            System.out.println("comparing afscs: " + newAFSC + " & " + compareAFSC);
+                            if(newAFSC.toString().equals(compareAFSC.toString())) {
+                                System.out.println("FOUND MATCH: " + newAFSC + " & " + compareAFSC);
+                                memberCollection.add(member);
+                            }
+                        }
+
+                   }
+               }
+                System.out.println(memberCollection);
+
+                if(memberCollection != null)
+                dafscCollection.add(new DAFSCCollection(newAFSC.toString(), memberCollection));
+            }
+        return dafscCollection;
+    }
+
 
     @CrossOrigin
     @Transactional

@@ -3,6 +3,7 @@
 // Response object for GET /members
 
 import MemberModel from "./MemberModel";
+import GenericGroupCollectionModel from "./GenericGroupCollectionModel";
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
 // the expected return type of your API response.
@@ -17,6 +18,8 @@ export type ApiResponse = Record<string, any>;
 export enum MemberActionTypes {
     FETCH_REQUEST = '@@members/FETCH_REQUEST',
     FETCH_SUCCESS = '@@members/FETCH_SUCCESS',
+    GENERATE_AFSCLIST = '@@members/GENERATE_AFSCLIST',
+    GENERATE_WORKCENTERLIST = '@@members/GENERATE_WORKCENTERLIST',
     FETCH_ERROR = '@@members/FETCH_ERROR',
     POST_ERROR = '@@members/POST_ERROR',
     POST_REQUEST = '@@members/POST_REQUEST',
@@ -28,5 +31,7 @@ export enum MemberActionTypes {
 export interface MembersState {
     readonly loading: boolean;
     readonly data: MemberModel[];
+    readonly genericAFSCList: GenericGroupCollectionModel[];
+    readonly workcenterList: GenericGroupCollectionModel[];
     readonly errors?: string;
 }

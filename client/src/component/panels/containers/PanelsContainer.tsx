@@ -2,16 +2,15 @@ import React, {useEffect} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
-import {StyledCurrentRosterPanel} from "./CurrentRosterPanel";
-import {StyledGainingRosterPanel} from "./GainingRosterPanel";
-import {StyledLosingRosterPanel} from "./LosingRosterPanel";
-import theme from "../../style/theme";
+import {StyledCurrentRosterPanel} from "../CurrentRosterPanel";
+import {StyledGainingRosterPanel} from "../GainingRosterPanel";
+import {StyledLosingRosterPanel} from "../LosingRosterPanel";
+import theme from "../../../style/theme";
 import {useDispatch, useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
-import {getMembers} from "../../store/members/thunks";
-import GenericAFSCCollection from "../../store/members/GenericGroupCollectionModel";
-import MemberModel from "../../store/members/MemberModel";
-import GenericGroupCollection from "../../store/members/GenericGroupCollectionModel";
+import {ApplicationState} from "../../../store";
+import {getMembers} from "../../../store/members/thunks";
+import GenericGroupCollection from "../../../store/members/GenericGroupCollectionModel";
+import MemberModel from "../../../store/members/MemberModel";
 
 interface Props {
     showCurrentPanel?: boolean;
@@ -26,14 +25,8 @@ interface Props {
 const PanelsContainer: React.FC<Props> = props => {
     const members = useSelector(({members}: ApplicationState) => MemberModel.filterEnlistedOnly(members.data));
     const loading = useSelector(({members}: ApplicationState) => members.loading);
-    const genericAFSCs = [...new Set(members.map(item => item.dafsc ? item.dafsc.substring(0, 3) + "X" + item.dafsc.substring(4) : ""))]
-    const workcenters = [...new Set(members.map(item => item.officeSymbol ? item.officeSymbol : ""))]
-    const membersOfGAfscs: GenericGroupCollection[] = genericAFSCs.filter((m) => m.length > 0).map((afsc) => {
-            return new GenericGroupCollection(afsc, MemberModel.membersMatchingGafsc(afsc, members))
-    })
-    const membersOfOffices: GenericGroupCollection[] = workcenters.map((office) => {
-        return new GenericGroupCollection(office, MemberModel.membersMatchingOffice(office, members))
-    })
+    const membersOfGAfscs: GenericGroupCollection[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
+    const membersOfOffices: GenericGroupCollection[] = useSelector(({members}: ApplicationState) => members.workcenterList);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getMembers());

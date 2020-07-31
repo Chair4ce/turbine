@@ -32,7 +32,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import PersonIcon from "../icon/PersonIcon";
 import {Skeleton} from "@material-ui/lab";
-import CurrentRosterRow from "./PanelRow";
+import CurrentRosterRow from "./rows/PanelRow";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
