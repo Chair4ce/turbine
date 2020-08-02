@@ -1,15 +1,18 @@
-import { Reducer } from 'redux';
-import { MembersState, MemberActionTypes } from './types';
-import MemberModel from "./MemberModel";
-import {MemberDeserializer} from "../../util/MemberDeserializer";
-import GenericGroupCollectionModel from "./GenericGroupCollectionModel";
+import {Reducer} from 'redux';
+import {MemberActionTypes, MembersState} from './types';
+import MemberModel from "./models/MemberModel";
+import GainingMemberModel from "./models/GainingMemberModel";
+import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
+import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
+    gainingData: [] as GainingMemberModel[],
     loading: false,
     genericAFSCList: [] as GenericGroupCollectionModel[],
-    workcenterList: [] as GenericGroupCollectionModel[],
+    genericGainingAFSCList: [] as GenericGainingGroupCollectionModel[],
+    officeCollection: [] as GenericGroupCollectionModel[],
     errors: undefined,
 };
 
@@ -26,11 +29,26 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
         case MemberActionTypes.FETCH_SUCCESS: {
             return { ...state, loading: false, data: action.payload};
         }
-        case MemberActionTypes.GENERATE_AFSCLIST: {
-            return { ...state, loading: false, data: action.payload};
+        case MemberActionTypes.GAINING_FETCH_SUCCESS: {
+            return { ...state, loading: false, gainingData: action.payload};
         }
-        case MemberActionTypes.GENERATE_WORKCENTERLIST: {
-            return { ...state, loading: false, data: action.payload};
+        case MemberActionTypes.UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS: {
+            return { ...state, loading: false, genericAFSCList: action.payload};
+        }
+        case MemberActionTypes.UNIQUE_AFSC_GAINING_COLLECTION_FETCH_SUCCESS: {
+            return { ...state, loading: false, genericGainingAFSCList: action.payload};
+        }
+        case MemberActionTypes.UNIQUE_AFSC_GAINING_COLLECTION_FETCH_ERROR: {
+            return { ...state, loading: false, errors: action.payload};
+        }
+        case MemberActionTypes.UNIQUE_AFSC_COLLECTION_FETCH_ERROR: {
+            return { ...state, loading: false, errors: action.payload};
+        }
+        case MemberActionTypes.OFFICE_COLLECTION_FETCH_SUCCESS: {
+            return { ...state, loading: false, officeCollection: action.payload};
+        }
+        case MemberActionTypes.OFFICE_COLLECTION_FETCH_ERROR: {
+            return { ...state, loading: false, errors: action.payload};
         }
         case MemberActionTypes.FETCH_ERROR: {
             return { ...state, loading: false, errors: action.payload };

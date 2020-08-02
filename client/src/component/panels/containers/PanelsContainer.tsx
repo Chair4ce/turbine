@@ -3,14 +3,20 @@ import React, {useEffect} from "react";
 import styled from "styled-components";
 import classNames from "classnames";
 import {StyledCurrentRosterPanel} from "../CurrentRosterPanel";
-import {StyledGainingRosterPanel} from "../GainingRosterPanel";
-import {StyledLosingRosterPanel} from "../LosingRosterPanel";
 import theme from "../../../style/theme";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../../store";
-import {getMembers} from "../../../store/members/thunks";
-import GenericGroupCollection from "../../../store/members/GenericGroupCollectionModel";
-import MemberModel from "../../../store/members/MemberModel";
+import {
+    getDistinctGainingAFSCCollection,
+    getGainingMembers,
+    getMembers,
+    getOfficeCollection,
+    getUniqueAFSCCollection
+} from "../../../store/members/thunks";
+import MemberModel from "../../../store/members/models/MemberModel";
+import {StyledGainingRosterPanel} from "../GainingRosterPanel";
+import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
+import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 
 interface Props {
     showCurrentPanel?: boolean;
@@ -24,20 +30,35 @@ interface Props {
 
 const PanelsContainer: React.FC<Props> = props => {
     const members = useSelector(({members}: ApplicationState) => MemberModel.filterEnlistedOnly(members.data));
+    const gainingMembers = useSelector(({members}: ApplicationState) => members.gainingData);
     const loading = useSelector(({members}: ApplicationState) => members.loading);
-    const membersOfGAfscs: GenericGroupCollection[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
-    const membersOfOffices: GenericGroupCollection[] = useSelector(({members}: ApplicationState) => members.workcenterList);
+    const membersOfGAfscs: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
+    const gainingMembersOfGAfscs: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
+    const officeCollection: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(getMembers());
+        dispatch(getGainingMembers());
+        dispatch(getUniqueAFSCCollection());
+        dispatch(getDistinctGainingAFSCCollection());
+        dispatch(getOfficeCollection());
     }, [dispatch]);
     return (
         <section className={classNames('panels', props.className)}>
             <div className={'table'}>
                 {props.showCurrentPanel &&
-                <StyledCurrentRosterPanel data={members} uniqueAFSCList={membersOfGAfscs} membersOfOffices={membersOfOffices} loading={loading} callback={props.callback}/>}
-                {props.showGainingPanel && <StyledGainingRosterPanel callback={props.callback}/>}
-                {props.showLosingPanel && <StyledLosingRosterPanel callback={props.callback}/>}
+                <StyledCurrentRosterPanel
+                    data={members}
+                    uniqueAFSCList={membersOfGAfscs}
+                    officeCollection={officeCollection}
+                    loading={loading}
+                    callback={props.callback}/>}
+                {props.showGainingPanel &&
+                <StyledGainingRosterPanel
+                    data={gainingMembers}
+                    uniqueAFSCList={gainingMembersOfGAfscs}
+                    loading={loading}
+                    callback={props.callback}/>}
             </div>
         </section>
     )

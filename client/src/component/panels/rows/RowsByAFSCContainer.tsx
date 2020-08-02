@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import UniqueAFSCRows from "./UniqueAFSCRows";
-import GenericGroupCollectionModel from "../../../store/members/GenericGroupCollectionModel";
+import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 
 
 const useStyles = makeStyles((theme: Theme) =>

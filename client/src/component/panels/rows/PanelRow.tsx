@@ -2,13 +2,13 @@ import * as React from 'react';
 import {useState} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import MemberModel from "../../../store/members/MemberModel";
+import MemberModel from "../../../store/members/models/MemberModel";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PersonIcon from "../../icon/PersonIcon";
-import moment from 'moment';
 import {Button} from "@material-ui/core";
 import DynamicInfoBoxModel from "../forms/DynamicInfoBoxModel";
 import DynamicInfoBox from "../forms/DynamicInfoBox";
+import GainingMemberModel from "../../../store/members/models/GainingMemberModel";
 
 const useStyles = makeStyles((theme: Theme) =>
 
@@ -120,8 +120,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    key: number;
-    data: MemberModel;
+    data: MemberModel | GainingMemberModel;
     className?: string;
 }
 

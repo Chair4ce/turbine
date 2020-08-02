@@ -1,4 +1,4 @@
-import MemberModel from "../store/members/MemberModel";
+import MemberModel from "../store/members/models/MemberModel";
 import moment from "moment";
 
 

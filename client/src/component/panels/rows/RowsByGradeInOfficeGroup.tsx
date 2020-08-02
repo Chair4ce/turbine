@@ -1,4 +1,4 @@
-import MemberModel from "../../../store/members/MemberModel";
+import MemberModel from "../../../store/members/models/MemberModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
 import {useState} from "react";
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             background: '#a0a0a0',
             width: '100%',
             height: 20,
-            top: 15,
+            top: 55,
             zIndex: 120,
             position: 'sticky',
             borderBottom: '1px solid #ddd',

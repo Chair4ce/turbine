@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import CurrentRosterRow from "./PanelRow";
-import MemberModel from "../../../store/members/MemberModel";
+import MemberModel from "../../../store/members/models/MemberModel";
 import {useState} from "react";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
             background: '#393c3d',
             width: '100%',
             height: 20,
-            top: 19,
-            zIndex: 120,
+            top: 35,
+            zIndex: 121,
             position: 'sticky',
             borderBottom: '1px solid #ddd',
             '&:hover': {
@@ -39,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         skilldividerText: {
             width: '100%',
-            padding: theme.spacing(1),
             paddingLeft: 80
         },
         memberCountText: {

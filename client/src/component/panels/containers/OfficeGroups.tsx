@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import MemberModel from "../../../store/members/MemberModel";
+import MemberModel from "../../../store/members/models/MemberModel";
 import RowsBySkill from "../rows/RowsBySkill";
 
 
@@ -20,8 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
             background: '#424651',
             width: '100%',
             height: 20,
-            top: 0,
-            zIndex: 120,
+            top: 15,
+            zIndex: 122,
             position: 'sticky',
             borderBottom: '1px solid #ddd',
             '&:hover': {
@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         officeDividerText: {
             width: '100%',
-            padding: theme.spacing(1)
         },
         officeGroup: {
             display: 'block',
@@ -45,7 +44,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    key: number;
     office: string;
     members?: MemberModel[];
     className?: string;
@@ -60,7 +58,7 @@ const OfficeGroups: React.FC<Props> = props => {
 
 
     return (
-        <div className={classes.officeGroup} key={props.key}>
+        <div className={classes.officeGroup}>
             <div className={classes.officeDivider} onClick={handleClick}>
                 {expanded && <ExpandMoreIcon fontSize={"small"}/>}
                 {!expanded && <NavigateNextIcon fontSize={"small"}/>}

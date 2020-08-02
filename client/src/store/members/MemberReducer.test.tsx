@@ -1,6 +1,6 @@
 import {MemberActionTypes} from "./types";
 import {membersReducer} from "./reducer";
-import MemberModel from "./MemberModel";
+import MemberModel from "./models/MemberModel";
 import moment from "moment";
 
 describe('reducer', () => {
@@ -124,7 +124,11 @@ describe('reducer', () => {
             membersReducer(undefined, mockAction)
         ).toEqual({
             data: members,
+            gainingData: [],
             errors: undefined,
+            genericAFSCList: [],
+            genericGainingAFSCList: [],
+            officeCollection: [],
             loading: false
         });
     });

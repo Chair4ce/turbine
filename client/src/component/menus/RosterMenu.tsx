@@ -103,9 +103,9 @@ const RosterMenu: React.FC<Props> = props => {
     //     toggleProjectedPanel();
     // }
     //
-    // const handleGainingClick = () => {
-    //     toggleGainingPanel();
-    // }
+    const handleGainingClick = () => {
+        toggleGainingPanel();
+    }
     //
     // const handleLosingClick = () => {
     //     toggleLosingPanel();
@@ -153,15 +153,15 @@ const RosterMenu: React.FC<Props> = props => {
                     </span> : ''}
                         {props.showCurrentPanel ? <div className={'selected_bar'}/> : ''}
                     </MenuItem>
-                    {/*<MenuItem className={classNames("gaining_roster_toggle_btn",gainingSelectorClassName)} onClick={handleGainingClick}>*/}
-                    {/*    <div className={classes.iconArea}>*/}
-                    {/*        <AddIcon/>*/}
-                    {/*    </div>*/}
-                    {/*    {props.expanded ? <span className={gainingSelectorClassName}>*/}
-                    {/*    Gaining*/}
-                    {/*    </span> : ''}*/}
-                    {/*    {props.showGainingPanel ? <div className={'selected_bar'}/> : ''}*/}
-                    {/*</MenuItem>*/}
+                    <MenuItem className={classNames("gaining_roster_toggle_btn",gainingSelectorClassName)} onClick={handleGainingClick}>
+                        <div className={classes.iconArea}>
+                            <AddIcon/>
+                        </div>
+                        {props.expanded ? <span className={gainingSelectorClassName}>
+                        Gaining
+                        </span> : ''}
+                        {props.showGainingPanel ? <div className={'selected_bar'}/> : ''}
+                    </MenuItem>
                     {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleLosingClick}>*/}
                     {/*    <div className={classes.iconArea}>*/}
                     {/*        <RemoveIcon/>*/}

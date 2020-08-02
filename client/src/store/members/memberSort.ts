@@ -1,4 +1,4 @@
-import MemberModel from "./MemberModel";
+import MemberModel from "./models/MemberModel";
 
 export class EnlistedGradeOnlySorter {
 static sortEnlistedGradeOnlyAscending = (members: MemberModel[]) => {

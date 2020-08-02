@@ -2,8 +2,11 @@
 
 // Response object for GET /members
 
-import MemberModel from "./MemberModel";
-import GenericGroupCollectionModel from "./GenericGroupCollectionModel";
+import MemberModel from "./models/MemberModel";
+import GainingMemberModel from "./models/GainingMemberModel";
+import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
+import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
+
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
 // the expected return type of your API response.
@@ -18,8 +21,14 @@ export type ApiResponse = Record<string, any>;
 export enum MemberActionTypes {
     FETCH_REQUEST = '@@members/FETCH_REQUEST',
     FETCH_SUCCESS = '@@members/FETCH_SUCCESS',
-    GENERATE_AFSCLIST = '@@members/GENERATE_AFSCLIST',
-    GENERATE_WORKCENTERLIST = '@@members/GENERATE_WORKCENTERLIST',
+    GAINING_FETCH_SUCCESS = '@@members/GAINING_FETCH_SUCCESS',
+    GAINING_FETCH_ERROR = '@@members/GAINING_FETCH_ERROR',
+    UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS = '@@members/UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS',
+    UNIQUE_AFSC_GAINING_COLLECTION_FETCH_SUCCESS = '@@members/UNIQUE_AFSC_GAINING_COLLECTION_FETCH_SUCCESS',
+    UNIQUE_AFSC_COLLECTION_FETCH_ERROR = '@@members/UNIQUE_AFSC_COLLECTION_FETCH_ERROR',
+    UNIQUE_AFSC_GAINING_COLLECTION_FETCH_ERROR = '@@members/UNIQUE_AFSC_GAINING_COLLECTION_FETCH_ERROR',
+    OFFICE_COLLECTION_FETCH_SUCCESS = '@@members/OFFICE_COLLECTION_FETCH_SUCCESS',
+    OFFICE_COLLECTION_FETCH_ERROR = '@@members/OFFICE_COLLECTION_FETCH_ERROR',
     FETCH_ERROR = '@@members/FETCH_ERROR',
     POST_ERROR = '@@members/POST_ERROR',
     POST_REQUEST = '@@members/POST_REQUEST',
@@ -31,7 +40,9 @@ export enum MemberActionTypes {
 export interface MembersState {
     readonly loading: boolean;
     readonly data: MemberModel[];
+    readonly gainingData: GainingMemberModel[];
     readonly genericAFSCList: GenericGroupCollectionModel[];
-    readonly workcenterList: GenericGroupCollectionModel[];
+    readonly genericGainingAFSCList: GenericGainingGroupCollectionModel[];
+    readonly officeCollection: GenericGroupCollectionModel[];
     readonly errors?: string;
 }

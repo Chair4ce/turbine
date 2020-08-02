@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import GenericGroupCollectionModel from "../../../store/members/GenericGroupCollectionModel";
+import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import OfficeGroups from "../containers/OfficeGroups";
 
 
@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         dividerText: {
             width: '100%',
-            padding: theme.spacing(1)
         },
         afscGroup: {
             display: 'block',

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import classNames from "classnames";
 import styled from "styled-components";
 import CloseIcon from '@material-ui/icons/Close';
@@ -36,16 +36,15 @@ import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
 import {Skeleton} from "@material-ui/lab";
 import {useDispatch} from "react-redux";
-import MemberModel from "../../store/members/MemberModel";
+import MemberModel from "../../store/members/models/MemberModel";
 import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
-import UniqueAFSCCollection from "../../store/members/GenericGroupCollectionModel";
-import GenericGroupCollection from "../../store/members/GenericGroupCollectionModel";
 import UniqueAFSCRows from "./rows/UniqueAFSCRows";
 import RowsByGrade from "./rows/RowsByGrade";
-import RowsBySkill from "./rows/RowsBySkill";
 import theme from "../../style/theme";
 import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
+import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -315,8 +314,8 @@ const schema = {
 interface Props {
     callback: (type: string) => void;
     data: MemberModel[];
-    uniqueAFSCList: GenericGroupCollection[];
-    membersOfOffices: GenericGroupCollection[];
+    uniqueAFSCList: GenericGroupCollectionModel[];
+    officeCollection: GenericGroupCollectionModel[];
     loading: boolean;
     className?: string;
 }
@@ -346,7 +345,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
     const Allsearcher = new FuzzySearch(props.data, ['fullName', 'dafsc'], {sort: true})
     const AFSCsearcher = new FuzzySearch(props.uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
-    const Officesearcher = new FuzzySearch(props.membersOfOffices, ['genericGroup'], {sort: true})
+    const Officesearcher = new FuzzySearch(props.officeCollection, ['genericGroup'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
     const searchResultAFSC = AFSCsearcher.search(searchAFSC);
@@ -457,7 +456,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                 toggleSortBySkill(false)
                 toggleSortByAFSC(false)
                 break;
-            case 'None':
+            case 'A-Z':
                 toggleSortByOffice(false)
                 toggleSortByGrade(false)
                 toggleSortBySkill(false)
@@ -486,7 +485,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     <DialogTitle id="max-width-dialog-title">Upload Alpha Roster</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Compatable file type: '.xlxs'
+                            Compatable file type: '.xlsx'
                         </DialogContentText>
                         <form className={classes.form} noValidate>
                             <FormControl className={classes.formControl}>
@@ -563,9 +562,9 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                             {props.data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
                                 <TextField label="Search" id="standard-size-small" value={searchAll} size="small"
                                            onChange={handleFuzzy}/> : null}
-                            {props.data && sortByAFSC ? <TextField label="Search" id="standard-size-small" value={searchAFSC} size="small"
+                            {props.data && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"
                                            onChange={handleFuzzy}/> : null}
-                            {props.data && sortByOffice ? <TextField label="Search" id="standard-size-small" value={searchOffice} size="small"
+                            {props.data && sortByOffice ? <TextField label="Search" id="standard-size-small" size="small"
                                                      onChange={handleFuzzy}/> : null}
                         </div>
                         <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
@@ -580,9 +579,9 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     id: 'outlined-age-native-simple',
                                 }}
                             >
-                                <option aria-label="None" value="None"/>
+                                <option aria-label="A-Z" value="A-Z"/>
                                 <option value={1}>Grade</option>
-                                <option value={2}>Skill Level</option>
+                                {/*<option value={2}>Skill Level</option>*/}
                                 <option value={3}>AFSC</option>
                                 <option value={4}>Office</option>
                             </Select>
@@ -637,16 +636,16 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                             {/*// List Alphabetical order*/}
                             {props.data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice && searchResultAll.map((row: any, index: number) =>
                                 <CurrentRosterRow
-                                    key={index}
+                                key={row.id}
                                     className={'item'}
                                     data={row}
                                 />)}
 
                             {props.data && sortByGrade && <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)}/>}
-                            {props.data && sortBySkill && <RowsBySkill data={searchResultAll}/>}
+                            {/*{props.data && sortBySkill && <RowsBySkill data={searchResultAll}/>}*/}
                             {props.data && sortByOffice && <RowsByOfficeContainer data={searchResultOffice} />}
-                            {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollection, index) =>
-                                <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}/>)}
+                            {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollectionModel, index) =>
+                                <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
 
 
                             <div className={classNames('end_of_list', 'preview')}>
@@ -672,6 +671,11 @@ font-family: ${theme.font.tableHeader};
 font-size: 11px;
 font-weight: normal;
 line-height: 15px;
+}
+
+.dafsc {
+top: 15px;
+z-index: 123;
 }
 
   

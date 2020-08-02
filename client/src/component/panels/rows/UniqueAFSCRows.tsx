@@ -4,7 +4,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import {useState} from "react";
-import MemberModel from "../../../store/members/MemberModel";
+import MemberModel from "../../../store/members/models/MemberModel";
 import CurrentRosterRow from "./PanelRow";
 import RowsBySkill from "./RowsBySkill";
 
@@ -35,7 +35,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         AFSCdividerText: {
             width: '100%',
-            padding: theme.spacing(1)
         },
         afscGroup: {
             display: 'block',
@@ -48,7 +47,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    key: number;
     uAFSC: string;
     members?: MemberModel[];
     className?: string;
@@ -63,8 +61,8 @@ const UniqueAFSCRows: React.FC<Props> = props => {
 
 
     return (
-        <div className={classes.afscGroup} key={props.key}>
-            <div className={classes.AFSCdivider} onClick={handleClick}>
+        <div className={classes.afscGroup}>
+            <div className={classNames(classes.AFSCdivider, props.className)} onClick={handleClick}>
                 {expanded && <ExpandMoreIcon fontSize={"small"}/>}
                 {!expanded && <NavigateNextIcon fontSize={"small"}/>}
                 <span className={classes.AFSCdividerText}>

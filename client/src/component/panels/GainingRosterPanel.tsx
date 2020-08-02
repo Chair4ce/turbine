@@ -25,13 +25,28 @@ import {
     Fab,
     Fade,
     FormControl,
+    InputLabel,
     Menu,
-    MenuItem
+    MenuItem,
+    Select,
+    TextField
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
-import {Skeleton} from "@material-ui/lab";
 import CurrentRosterRow from "./rows/PanelRow";
+import {Skeleton} from "@material-ui/lab";
+import {useDispatch} from "react-redux";
+import MemberModel from "../../store/members/models/MemberModel";
+import FuzzySearch from 'fuzzy-search';
+import GenericGroupCollection from "../../store/members/models/GenericGroupCollectionModel";
+import UniqueAFSCRows from "./rows/UniqueAFSCRows";
+import RowsByGrade from "./rows/RowsByGrade";
+import theme from "../../style/theme";
+import {saveCurrentRoster, saveGainingMembers} from "../../store/members/thunks";
+import GainingMemberModel from "../../store/members/models/GainingMemberModel";
+import RowsByGainingGrade from "./rows/RowsByGainingGrade";
+import GenericGainingGroupCollectionModel from "../../store/members/models/GenericGainingGroupCollectionModel";
+import UniqueGainingAFSCRows from "./rows/UniqueGainingAFSCRows";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -56,7 +71,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
         uploadIcon: {},
         fileDropDialog: {
-            padding: 10,
+            padding: 10
         },
         uploadButtonGrp: {
             display: 'flex',
@@ -115,11 +130,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         morDots: {
             width: 5,
-            height: 34,
+            height: 32,
         },
-        inputArea: {
-
-        },
+        inputArea: {},
         form: {
             display: 'flex',
             flexDirection: 'column',
@@ -175,64 +188,68 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block',
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh - 125px)',
+            height: 'calc(100vh - 99px)',
         },
         item_container: {
-            display: 'flex',
-            flexDirection: 'column',
+            display: 'block',
             overflowY: 'auto',
             height: '100%',
             width: '100%',
-            position: 'absolute',
         },
         rowTitles: {
             width: 65
+        },
+        sortFormControl: {
+            margin: theme.spacing(1),
+            minWidth: 120,
+        },
+        searchInput: {
+            marginRight: 8,
+            marginBottom: 4,
+            paddingLeft: 20,
+        },
+        totalMembersCount: {
+            color: 'black'
+        },
+        searchResultStatBar: {
+            width: '100%',
+            position: 'sticky',
+            top: 0,
+            background: '#b4b4b4',
+            zIndex: 1000,
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'start',
+            paddingLeft: 4
         }
     }),
 );
 
-interface Props {
-    callback: (type: string) => void;
-    className?: string;
-}
-
 const schema = {
+    'SSAN': {
+        prop: 'mbrId',
+        type: String,
+        required: true
+    },
     'FULL_NAME': {
         prop: 'fullName',
         type: String,
         required: true
-        // Excel stores dates as integers.
-        // E.g. '24/03/2018' === 43183.
-        // Such dates are parsed to UTC+0 timezone with time 12:00 .
     },
     'GRADE': {
         prop: 'grade',
         type: String,
         required: false
     },
-    'ASSIGNED_PAS': {
-        prop: 'assignedPas',
+    'LOSING_PAS': {
+        prop: 'losingPas',
         type: String,
         required: false
     },
-    'OFFICE_SYMBOL': {
-        prop: 'officeSymbol',
+    'LOSING_PAS_CLEARTEXT': {
+        prop: 'losingPasCleartext',
         type: String,
-        required: false
-    },
-    'DUTY_TITLE': {
-        prop: 'dutyTitle',
-        type: String,
-        required: false
-    },
-    'DUTY_START_DATE': {
-        prop: 'dutyStartDate',
-        type: Date,
-        required: false
-    },
-    'DOR': {
-        prop: 'dor',
-        type: Date,
         required: false
     },
     'DAFSC': {
@@ -240,13 +257,13 @@ const schema = {
         type: String,
         required: false
     },
-    'PAFSC': {
-        prop: 'pafsc',
+    'SPONSOR_SSAN': {
+        prop: 'sponsorId',
         type: String,
         required: false
     },
-    'DATE_ARRIVED_STATION': {
-        prop: 'dateArrivedStation',
+    'DOR': {
+        prop: 'dor',
         type: Date,
         required: false
     },
@@ -260,50 +277,56 @@ const schema = {
         type: Date,
         required: false
     },
-    'SUPV_NAME': {
-        prop: 'supvName',
-        type: String,
-        required: false
-    },
-    'SUPV_BEGIN_DATE': {
-        prop: 'supvBeginDate',
-        type: Date,
-        required: false
-    },
-    'DEROS': {
-        prop: 'deros',
-        type: Date,
-        required: false
-    }
 
-    // 'COURSE' is not a real Excel file column name,
-    // it can be any string — it's just for code readability.
+}
+
+interface Props {
+    callback: (type: string) => void;
+    data: GainingMemberModel[];
+    uniqueAFSCList: GenericGainingGroupCollectionModel[];
+    loading: boolean;
+    className?: string;
 }
 
 const GainingRosterPanel: React.FC<Props> = props => {
-    const [fileData, updateFileData] = useState();
+    const dispatch = useDispatch();
     const classes = useStyles();
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
     const [open, setOpen] = React.useState(false);
     const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('sm');
+    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [success, updateSuccess] = useState(false);
-    const [loading, updateLoading] = useState(false);
+    const [errors, updateErrors] = useState("");
+    const [sortByGrade, toggleSortByGrade] = useState(false);
+    const [sortBySkill, toggleSortBySkill] = useState(false);
+    const [sortByAFSC, toggleSortByAFSC] = useState(false);
+    const [searchAll, updateFuzzyAll] = useState("");
+    const [searchAFSC, updateFuzzyAFSC] = useState("");
+    const [state, setState] = React.useState<{ group: string | number; name: string }>({
+        group: '',
+        name: '',
+    });
+
+    const Allsearcher = new FuzzySearch(props.data, ['fullName', 'dafsc'], {sort: true})
+    const AFSCsearcher = new FuzzySearch(props.uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
+
+    const searchResultAll = Allsearcher.search(searchAll);
+    const searchResultAFSC = AFSCsearcher.search(searchAFSC);
+
 
     // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
     // const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
 
-
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -316,19 +339,18 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
     const handleMenuSelect = () => {
         setAnchorEl(null);
-        handleClickOpen();
-    }
+        handleShowUploadModal();
+    };
 
     const handlePanelClose = () => {
         props.callback(ROSTER_MENU_SELECT_ACTION.TOGGLE_GAINING_ROSTER)
     }
-    const handleClickOpen = () => {
+    const handleShowUploadModal = () => {
         setOpen(true);
     };
 
     const handleClose = () => {
         setOpen(false);
-        updateLoading(false);
     };
 
 
@@ -339,16 +361,60 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     return data.splice(2, data.length - 3)
                 }
             }).then(((rows: any, errors: any) => {
-                updateFileData(rows.rows);
-                updateSuccess(true);
+                if (errors) {
+                    updateErrors(errors)
+                    updateSuccess(false);
+                } else {
+                    dispatch(saveGainingMembers(rows.rows));
+                    updateSuccess(true);
+                };
             }));
         }
         handleClose();
     }
 
+    function handleFuzzy(event: any) {
+        if (!sortByAFSC && !sortByGrade && event.target.value.length !== "") {
+            updateFuzzyAll(event.target.value);
+            console.log("AllSearch: " + event.target.value);
+        }
+        if (sortByAFSC) {
+            console.log("AFSCSearch: " + event.target.value);
+            updateFuzzyAFSC(event.target.value)
+
+        }
+
+    }
+
+    const handleChange = (event: React.ChangeEvent<{ name?: string, value: unknown }>) => {
+        updateFuzzyAll("");
+        updateFuzzyAFSC("");
+        const name = event.target.name as keyof typeof state;
+        setState({
+            ...state,
+            [name]: event.target.value,
+        });
+
+        switch (event.target.value) {
+            case '1':
+                toggleSortByGrade(true)
+                toggleSortByAFSC(false)
+                break;
+            case '2':
+                console.log(props.uniqueAFSCList)
+                toggleSortByAFSC(true)
+                toggleSortByGrade(false)
+                break;
+            case 'A-Z':
+                toggleSortByGrade(false)
+                toggleSortByAFSC(false)
+                break;
+        }
+    };
+
 
     const handleButtonClick = (e: any) => {
-        updateLoading(true);
+
         handleFile(e);
     };
 
@@ -366,17 +432,18 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     <DialogTitle id="max-width-dialog-title">Upload Gaining Roster</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
-                            Compatable file type: '.xlxs'
+                            Compatable file type: '.xlsx'
                         </DialogContentText>
                         <form className={classes.form} noValidate>
                             <FormControl className={classes.formControl}>
-                                <input  className={classes.inputArea} type="file" id="raised-button-file" style={{display: 'none'}} onChange={(e) => {
+                                <input className={classes.inputArea} type="file" id="raised-button-file"
+                                       style={{display: 'none'}} onChange={(e) => {
                                     const {target} = e;
                                     if (target.value.length > 0) {
                                         handleFile(e.target)
                                     }
                                 }}
-                                        ref={browseInputRef}/>
+                                       ref={browseInputRef}/>
 
                                 <div className={classes.root}>
                                     <Container className={classNames(classes.fileDropArea, FileDropClassname)}
@@ -392,7 +459,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(loading || success) &&
+                                            {(props.loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -401,16 +468,19 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(loading) && <CircularProgress size={68} className={classes.fabProgress}/>}
+                                                {(props.loading) &&
+                                                <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
-                                                <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"} className={classes.uploadIcon}/>
+                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
+                                                <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
+                                                                         className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
-                                                      className={classes.fileDropDialog}>Drag and drop or</span>
-                                                < Button variant={"outlined"} component={"span"} className={classes.button}>
-                                                    Browse
+                                                      className={classes.fileDropDialog}>Do not Drag and Drop</span>
+                                                < Button variant={"outlined"} component={"span"}
+                                                         className={classes.button}>
+                                                    Please Browse
                                                 </Button>
                                             </div>}
                                         </label>
@@ -433,9 +503,34 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     <div className={classNames('panel_header_title_area')}>
                         <h2>Gaining Roster</h2>
                     </div>
+
                     <div className={classNames('action_area')}>
+                        <div className={classes.searchInput}>
+                            {props.data && !sortByGrade && !sortByAFSC ?
+                                <TextField label="Search All" id="standard-size-small"  size="small"
+                                           onChange={handleFuzzy}/> : <TextField label="Search AFSC" id="standard-size-small"  size="small"
+                                                                                 onChange={handleFuzzy}/>}
+                        </div>
+                        <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Group By</InputLabel>
+                            <Select
+                                native
+                                value={state.group}
+                                onChange={handleChange}
+                                label="Group By"
+                                inputProps={{
+                                    name: 'group',
+                                    id: 'outlined-age-native-simple',
+                                }}
+                            >
+                                <option aria-label="A-Z" value={"A-Z"}/>
+                                <option value={1}>Grade</option>
+                                <option value={2}>AFSC</option>
+                            </Select>
+                        </FormControl>
                         <div>
-                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true" onClick={handleClick}>
+                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
+                                    onClick={handleClick}>
                                 <MoreVertIcon/>
                             </Button>
                             <Menu
@@ -462,13 +557,43 @@ const GainingRosterPanel: React.FC<Props> = props => {
                 <div className={'content_container'}>
                     <section className={classNames('panel_content', classes.panel_content)}>
                         <div className={classNames('items_container', classes.item_container)}>
-                            {loading ? <Skeleton variant="text"/> : ''}
-                            {fileData && !loading ? fileData.map((row: any, index: number) => <CurrentRosterRow
-                                key={index}
-                                className={'item'}
-                                data={row}
-                            />) : ''}
-                            <div className={classNames('end_of_list', 'preview')}/>
+                            <div className={classes.searchResultStatBar}>
+                                {searchResultAll.length > 0 && <em className={classes.totalMembersCount}>
+                                    {'Total: ' + searchResultAll.length}
+                                </em>}
+                            </div>
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
+                            {/*// List Alphabetical order*/}
+                            {props.data && !sortByGrade && !sortByAFSC && searchResultAll.map((row: any, index: number) =>
+                                <CurrentRosterRow
+                                    key={row.id}
+                                    className={'item'}
+                                    data={row}
+                                />)}
+
+                            {props.data && sortByGrade && <RowsByGainingGrade data={MemberModel.sortGainingDorAscending(searchResultAll)}/>}
+                            {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
+                                <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
+
+
+                            <div className={classNames('end_of_list', 'preview')}>
+
+                                {/*{props.data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
+                                {/*    {'Total: ' + searchResultAFSC.length}*/}
+                                {/*</span> }*/}
+                            </div>
                         </div>
                         {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
 
@@ -481,9 +606,18 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
 export const StyledGainingRosterPanel = styled(GainingRosterPanel)`
 
-.item {
-background-color: #daebcf;
+em {
+font-family: ${theme.font.tableHeader};
+font-size: 11px;
+font-weight: normal;
+line-height: 15px;
 }
+
+.dafsc {
+top: 15px;
+z-index: 123;
+}
+
   
 
 `;
