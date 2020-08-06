@@ -6,7 +6,7 @@ import {membersReducer, MembersState} from "./members";
 
 // The top-level state object
 export interface ApplicationState {
-    members: MembersState
+    members: MembersState;
     router: RouterState;
 }
 

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
             cursor: 'text',
             alignItems: 'center',
             background: '#F9F9F9',
-            width: 162,
+            width: 280,
             borderRadius: 1,
             paddingLeft: 4,
 

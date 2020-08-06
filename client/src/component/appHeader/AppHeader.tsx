@@ -26,11 +26,12 @@ flex-direction: row;
 align-content: center;
 width: 100%;
 height: 60px;
-background-color: #5D8AA8;
+background-color: #46565c;
 border-bottom: 1px solid #212121;
 min-width: 1000px;
 .logo_area {
-padding: 7px;
+display: flex;
+align-content: center;
 margin-left: 3px;
 }
 h1 {

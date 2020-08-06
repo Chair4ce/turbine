@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
 import classNames from "classnames";
-import styled from "styled-components";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
 import PublishIcon from '@material-ui/icons/Publish';
@@ -38,15 +37,11 @@ import {Skeleton} from "@material-ui/lab";
 import {useDispatch} from "react-redux";
 import MemberModel from "../../store/members/models/MemberModel";
 import FuzzySearch from 'fuzzy-search';
-import GenericGroupCollection from "../../store/members/models/GenericGroupCollectionModel";
-import UniqueAFSCRows from "./rows/UniqueAFSCRows";
-import RowsByGrade from "./rows/RowsByGrade";
-import theme from "../../style/theme";
-import {saveCurrentRoster, saveGainingMembers} from "../../store/members/thunks";
+import {saveGainingMembers} from "../../store/members/thunks";
 import GainingMemberModel from "../../store/members/models/GainingMemberModel";
-import RowsByGainingGrade from "./rows/RowsByGainingGrade";
 import GenericGainingGroupCollectionModel from "../../store/members/models/GenericGainingGroupCollectionModel";
 import UniqueGainingAFSCRows from "./rows/UniqueGainingAFSCRows";
+import RowsByGainingRankContainer from "./rows/RowsByGainingRankContainer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -583,7 +578,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     data={row}
                                 />)}
 
-                            {props.data && sortByGrade && <RowsByGainingGrade data={MemberModel.sortGainingDorAscending(searchResultAll)}/>}
+                            {props.data && sortByGrade && <RowsByGainingRankContainer data={MemberModel.sortGainingDorAscending(searchResultAll)} bigSticky={false}/>}
                             {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
                                 <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
 
@@ -604,20 +599,4 @@ const GainingRosterPanel: React.FC<Props> = props => {
     )
 }
 
-export const StyledGainingRosterPanel = styled(GainingRosterPanel)`
-
-em {
-font-family: ${theme.font.tableHeader};
-font-size: 11px;
-font-weight: normal;
-line-height: 15px;
-}
-
-.dafsc {
-top: 15px;
-z-index: 123;
-}
-
-  
-
-`;
+export default GainingRosterPanel;

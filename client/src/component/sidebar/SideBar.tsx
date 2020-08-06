@@ -6,6 +6,7 @@ import CollapseIcon from "../icon/CollapseIcon";
 import {StyledRosterMenu} from "../menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import clsx from "clsx";
+import {Button} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -14,6 +15,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         collapsed: {
             width: 50,
+        },
+        toggleWidthBtn: {
+            color: '#C1C1C1',
+            lineHeight: 0,
+            borderRadius: '0px',
         }
     }),
 );
@@ -46,9 +52,9 @@ const SideBar: React.FC<Props> = props => {
             <div className={'sidebar_panels'}>
                 <div className={'sidebar_toggleContainer'}>
                     <div className={'toggleButtonArea'}>
-                        <button className={'toggleButton'} onClick={handleClick}>
-                            {expanded ? <CollapseIcon/> : <ExpandIcon/>}
-                        </button>
+                        <Button className={classNames('toggleButton', classes.toggleWidthBtn)} onClick={handleClick}>
+                            {expanded ? <CollapseIcon /> : <ExpandIcon/>}
+                        </Button>
                     </div>
                 </div>
                 <div className={'menus_container'}>

@@ -11,31 +11,6 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: '100%',
         },
-        divider: {
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'flex-start',
-            alignItems: 'center',
-            background: '#424651',
-            width: '100%',
-            height: 20,
-            top: 0,
-            zIndex: 120,
-            position: 'sticky',
-            borderBottom: '1px solid #ddd',
-            '&:hover': {
-                cursor: 'pointer',
-                backgroundColor: '#5D8AA8',
-                // color: '#333333',
-            }
-        },
-        dividerText: {
-            width: '100%',
-        },
-        afscGroup: {
-            display: 'block',
-            width: '100%'
-        }
     }),
 );
 

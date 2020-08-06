@@ -21,7 +21,7 @@ const MainDashboard: React.FC<Props> = props => {
     );
 };
 
-export const StyledMainDashboard = styled(MainDashboard)`
+export const  StyledMainDashboard = styled(MainDashboard)`
 .main_header {
 height: 35px;
 }

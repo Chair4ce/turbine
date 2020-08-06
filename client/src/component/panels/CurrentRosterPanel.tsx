@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
 import classNames from "classnames";
-import styled from "styled-components";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
 import PublishIcon from '@material-ui/icons/Publish';
@@ -40,8 +39,7 @@ import MemberModel from "../../store/members/models/MemberModel";
 import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
 import UniqueAFSCRows from "./rows/UniqueAFSCRows";
-import RowsByGrade from "./rows/RowsByGrade";
-import theme from "../../style/theme";
+import RowsByGrade from "./rows/RowsByRankContainer";
 import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
 
@@ -581,7 +579,6 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                             >
                                 <option aria-label="A-Z" value="A-Z"/>
                                 <option value={1}>Grade</option>
-                                {/*<option value={2}>Skill Level</option>*/}
                                 <option value={3}>AFSC</option>
                                 <option value={4}>Office</option>
                             </Select>
@@ -641,8 +638,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     data={row}
                                 />)}
 
-                            {props.data && sortByGrade && <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)}/>}
-                            {/*{props.data && sortBySkill && <RowsBySkill data={searchResultAll}/>}*/}
+                            {props.data && sortByGrade && <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)} bigSticky={false}/>}
                             {props.data && sortByOffice && <RowsByOfficeContainer data={searchResultOffice} />}
                             {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollectionModel, index) =>
                                 <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
@@ -664,20 +660,4 @@ const CurrentRosterPanel: React.FC<Props> = props => {
     )
 }
 
-export const StyledCurrentRosterPanel = styled(CurrentRosterPanel)`
-
-em {
-font-family: ${theme.font.tableHeader};
-font-size: 11px;
-font-weight: normal;
-line-height: 15px;
-}
-
-.dafsc {
-top: 15px;
-z-index: 123;
-}
-
-  
-
-`;
+export default CurrentRosterPanel;

@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         unselected: {
             // transition: 'color 100ms ease-in',
-            color: 'white'
+            color: '#C1C1C1'
         },
         hide: {
             visibility: 'hidden',

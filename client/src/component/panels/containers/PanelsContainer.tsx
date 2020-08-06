@@ -2,7 +2,7 @@ import React, {useEffect} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
-import {StyledCurrentRosterPanel} from "../CurrentRosterPanel";
+import CurrentRosterPanel from "../CurrentRosterPanel";
 import theme from "../../../style/theme";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../../store";
@@ -14,7 +14,7 @@ import {
     getUniqueAFSCCollection
 } from "../../../store/members/thunks";
 import MemberModel from "../../../store/members/models/MemberModel";
-import {StyledGainingRosterPanel} from "../GainingRosterPanel";
+import GainingRosterPanel from "../GainingRosterPanel";
 import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 
@@ -47,14 +47,14 @@ const PanelsContainer: React.FC<Props> = props => {
         <section className={classNames('panels', props.className)}>
             <div className={'table'}>
                 {props.showCurrentPanel &&
-                <StyledCurrentRosterPanel
+                <CurrentRosterPanel
                     data={members}
                     uniqueAFSCList={membersOfGAfscs}
                     officeCollection={officeCollection}
                     loading={loading}
                     callback={props.callback}/>}
                 {props.showGainingPanel &&
-                <StyledGainingRosterPanel
+                <GainingRosterPanel
                     data={gainingMembers}
                     uniqueAFSCList={gainingMembersOfGAfscs}
                     loading={loading}

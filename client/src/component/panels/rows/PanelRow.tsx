@@ -100,7 +100,6 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center'
         },
         collapseBtnArea: {
-            zIndex: 1200,
             borderRadius: 4,
             cursor: 'pointer',
             margin: 5,

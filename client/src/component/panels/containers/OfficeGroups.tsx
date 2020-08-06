@@ -4,7 +4,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import MemberModel from "../../../store/members/models/MemberModel";
-import RowsBySkill from "../rows/RowsBySkill";
+import RowsBySkill from "../rows/RowsBySkillContainer";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             background: '#424651',
             width: '100%',
-            height: 20,
+            height: 40,
             top: 15,
             zIndex: 122,
             position: 'sticky',
