@@ -35,6 +35,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         AFSCdividerText: {
             width: '100%',
+            paddingLeft: theme.spacing(1)
         },
         afscGroup: {
             display: 'block',
@@ -54,9 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             width: '100%'
         },
-        paper: {
-            width: '100%'
-        }
     }),
 );
 
@@ -93,9 +91,7 @@ const UniqueAFSCRows: React.FC<Props> = props => {
             {/*{props.members && expanded ?*/}
             <div className={classes.container}>
             <Collapse in={expanded} style={{width: '100%'}}>
-                <Paper className={classes.paper}>
                     {props.members && <RowsBySkillContainer data={props.members} />}
-                </Paper>
             </Collapse>
             </div>
             {/*: null}*/}

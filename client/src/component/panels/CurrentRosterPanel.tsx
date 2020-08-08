@@ -33,8 +33,7 @@ import {
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
-import {Skeleton} from "@material-ui/lab";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import MemberModel from "../../store/members/models/MemberModel";
 import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
@@ -42,7 +41,7 @@ import UniqueAFSCRows from "./rows/UniqueAFSCRows";
 import RowsByGrade from "./rows/RowsByRankContainer";
 import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
-
+import {ApplicationState} from "../../store";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,6 +49,44 @@ const useStyles = makeStyles((theme: Theme) =>
             zIndex: 1500,
             outline: 'none',
             margin: 6,
+        },
+        panel: {
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+            marginRight: 10,
+            display: 'block',
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            minWidth: 500,
+            float: 'left',
+            font: 'inherit',
+            fontSize: '100%',
+            verticalAlign: 'baseline',
+        },
+        panelHeader: {
+            display: 'flex',
+            minWidth: 230,
+            width: '100%',
+            alignItems: 'center',
+            flexGrow: 0,
+            flexShrink: 1,
+            margin: 0,
+            border: 0,
+            height: 54,
+            padding: '0 3px 0 10px',
+            background: 'rgb(44, 45, 47)',
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+            boxSizing: 'border-box',
+            lineHeight: 15,
+        },
+        container: {
+            boxSizing: 'border-box',
+            position: 'absolute',
+            width: '100%',
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+            height: '100%',
         },
         fileDropArea: {
             display: 'flex',
@@ -65,7 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: 'column',
         },
 
-        uploadIcon: {},
+
         fileDropDialog: {
             padding: 10
         },
@@ -125,8 +162,13 @@ const useStyles = makeStyles((theme: Theme) =>
             pointerEvents: 'none',
         },
         morDots: {
-            width: 5,
-            height: 32,
+            marginRight: 4,
+            height: 44,
+            borderRadius: 4,
+            transition: 'background-color 100ms ease-in',
+            '&:hover': {
+                backgroundColor: 'rgba(119,119,119,0.27)',
+            }
         },
         inputArea: {},
         form: {
@@ -186,6 +228,11 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             height: 'calc(100vh - 99px)',
         },
+        contentContainer: {
+            position: 'absolute',
+            width: '100%',
+            height: 'calc(100vh-122px)'
+        },
         item_container: {
             display: 'block',
             overflowY: 'auto',
@@ -200,24 +247,86 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 120,
         },
         searchInput: {
+            height: 45,
             marginRight: 8,
             marginBottom: 4,
             paddingLeft: 20,
         },
         totalMembersCount: {
-            color: 'black'
+            color: '#dcdcdc',
         },
         searchResultStatBar: {
             width: '100%',
             position: 'sticky',
             top: 0,
-            background: '#b4b4b4',
+            background: '#383838',
             zIndex: 1000,
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'start',
-            paddingLeft: 4
+            justifyContent: 'flex-end',
+            paddingRight: 4
+        },
+        endOfList: {
+            position: 'relative',
+            width: '100%',
+            minHeight: 40,
+            backgroundColor: '#484f57',
+            borderBottomLeftRadius: 4,
+            borderBottomRightRadius: 4,
+        },
+        panelTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            flexGrow: 0,
+            flexShrink: 1,
+        },
+        actionArea: {
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: 'auto',
+            flexShrink: 0,
+            cursor: 'pointer',
+        },
+        closeBtn: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            border: 'none',
+            outline: 'none',
+            cursor: 'pointer',
+            height: '100%',
+            width: '100%',
+        },
+        closeBtnArea: {
+            height: 44,
+            marginRight: 2,
+            borderRadius: 4,
+            transition: 'background-color 100ms ease-in',
+            '&:hover': {
+                backgroundColor: 'rgba(119,119,119,0.27)',
+            }
+        },
+        uploadBtnArea: {
+            height: 44,
+            borderRadius: 4,
+            transition: 'background-color 100ms ease-in',
+            '&:hover': {
+                backgroundColor: 'rgba(119,119,119,0.27)',
+            }
+        },
+        uploadIcon: {},
+        item: {
+            display: 'flex',
+            width: '100%',
+            minHeight: 65,
+            alignItems: 'center',
+            borderBottom: '1px solid #ddd',
+            color: '#33333',
+            '&:hover': {
+                backgroundColor: 'rgba(180,180,180,0.27)',
+            }
         }
     }),
 );
@@ -311,16 +420,16 @@ const schema = {
 
 interface Props {
     callback: (type: string) => void;
-    data: MemberModel[];
-    uniqueAFSCList: GenericGroupCollectionModel[];
-    officeCollection: GenericGroupCollectionModel[];
-    loading: boolean;
     className?: string;
 }
 
 const CurrentRosterPanel: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const data = useSelector(({members}: ApplicationState) => members.data);
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
+    const uniqueAFSCList: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
+    const officeCollection: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
@@ -341,14 +450,15 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         name: '',
     });
 
-    const Allsearcher = new FuzzySearch(props.data, ['fullName', 'dafsc'], {sort: true})
-    const AFSCsearcher = new FuzzySearch(props.uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
-    const Officesearcher = new FuzzySearch(props.officeCollection, ['genericGroup'], {sort: true})
+
+    const Allsearcher = new FuzzySearch(data, ['fullName', 'dafsc'], {sort: true})
+    const AFSCsearcher = new FuzzySearch(uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
+    const Officesearcher = new FuzzySearch(officeCollection, ['genericGroup'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
     const searchResultAFSC = AFSCsearcher.search(searchAFSC);
     const searchResultOffice = Officesearcher.search(searchOffice);
-
+    //
 
 
     // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
@@ -357,12 +467,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -471,7 +581,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
     return (
 
-        <div className={'panel'}>
+        <div className={classes.panel}>
             <React.Fragment>
                 <Dialog
                     fullWidth={fullWidth}
@@ -510,7 +620,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(props.loading || success) &&
+                                            {(loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -519,12 +629,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(props.loading) &&
+                                                {(loading) &&
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
+                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
@@ -548,105 +658,95 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
-            <div className={classNames('container', props.className)}>
-                <header className={classNames('panel_header')}>
+            <div className={classNames(classes.container)}>
+                <header className={classNames(classes.panelHeader)}>
 
-                    <div className={classNames('panel_header_title_area')}>
+                    <div className={classNames(classes.panelTitle)}>
                         <h2>Alpha Roster</h2>
                     </div>
 
-                    <div className={classNames('action_area')}>
+                    <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
-                            {props.data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
+                            {data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
                                 <TextField label="Search" id="standard-size-small" value={searchAll} size="small"
                                            onChange={handleFuzzy}/> : null}
-                            {props.data && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"
-                                           onChange={handleFuzzy}/> : null}
-                            {props.data && sortByOffice ? <TextField label="Search" id="standard-size-small" size="small"
-                                                     onChange={handleFuzzy}/> : null}
+                            {data && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"
+                                                             onChange={handleFuzzy}/> : null}
+                            {data && sortByOffice ? <TextField label="Search" id="standard-size-small" size="small"
+                                                               onChange={handleFuzzy}/> : null}
                         </div>
                         <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">Group By</InputLabel>
+                            <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>
                             <Select
                                 native
                                 value={state.group}
                                 onChange={handleChange}
-                                label="Group By"
+                                label="List By"
                                 inputProps={{
                                     name: 'group',
                                     id: 'outlined-age-native-simple',
                                 }}
                             >
-                                <option aria-label="A-Z" value="A-Z"/>
+                                <option aria-label="A-Z" value="A-Z">A-Z</option>
                                 <option value={1}>Grade</option>
                                 <option value={3}>AFSC</option>
                                 <option value={4}>Office</option>
                             </Select>
                         </FormControl>
-                        <div>
-                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
-                                    onClick={handleClick}>
-                                <MoreVertIcon/>
-                            </Button>
-                            <Menu
-                                id="fade-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={opens}
-                                onClose={handleMenuClose}
-                                TransitionComponent={Fade}
-                            >
-                                <MenuItem onClick={handleMenuSelect}>
-                                    <PublishIcon color={"action"}/>Upload</MenuItem>
-                            </Menu>
-                        </div>
-                        <div className={classNames('panel_header_action_area_close')}>
-                            <button className={'close_btn'} onClick={handlePanelClose}>
+
+                        <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
+                                onClick={handleClick}>
+                            <MoreVertIcon/>
+                        </Button>
+
+                        <Menu
+                            id="fade-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={opens}
+                            onClose={handleMenuClose}
+                            TransitionComponent={Fade}
+                        >
+                            <MenuItem onClick={handleMenuSelect}>
+                                <PublishIcon color={"action"}/>Upload</MenuItem>
+                        </Menu>
+
+                        <div className={classNames(classes.closeBtnArea)}>
+                            <Button className={classes.closeBtn} onClick={handlePanelClose}>
                                 <CloseIcon color={"action"}/>
-                            </button>
+                            </Button>
                         </div>
                     </div>
 
                 </header>
 
-                <div className={'content_container'}>
-                    <section className={classNames('panel_content', classes.panel_content)}>
-                        <div className={classNames('items_container', classes.item_container)}>
+                <div className={classes.contentContainer}>
+                    <section className={classNames(classes.panel_content)}>
+                        <div className={classNames(classes.item_container)}>
                             <div className={classes.searchResultStatBar}>
                                 {searchResultAll.length > 0 && <em className={classes.totalMembersCount}>
                                     {'Total: ' + searchResultAll.length}
                                 </em>}
                             </div>
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {/*// List Alphabetical order*/}
-                            {props.data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice && searchResultAll.map((row: any, index: number) =>
+                            {data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice && searchResultAll.map((row: any) =>
                                 <CurrentRosterRow
-                                key={row.id}
-                                    className={'item'}
+                                    key={row.id}
+                                    className={classes.item}
+                                    gradeClassName={row.grade}
                                     data={row}
                                 />)}
 
-                            {props.data && sortByGrade && <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)} bigSticky={false}/>}
-                            {props.data && sortByOffice && <RowsByOfficeContainer data={searchResultOffice} />}
-                            {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollectionModel, index) =>
-                                <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
+                            {data && sortByGrade &&
+                            <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)} bigSticky={false}/>}
+                            {data && sortByOffice && <RowsByOfficeContainer data={searchResultOffice}/>}
+                            {data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollectionModel, index) =>
+                                <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
+                                                className={'dafsc'}/>)}
 
 
-                            <div className={classNames('end_of_list', 'preview')}>
+                            <div className={classNames(classes.endOfList, 'preview')}>
 
-                                {/*{props.data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
+                                {/*{data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
                                 {/*    {'Total: ' + searchResultAFSC.length}*/}
                                 {/*</span> }*/}
                             </div>

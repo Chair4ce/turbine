@@ -1,46 +1,56 @@
 import * as React from "react";
-import styled from 'styled-components';
 import classNames from "classnames";
-import theme from "../../style/theme";
 import TurbineLogo from "../icon/TurbineLogo";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            textRendering: 'optimizeLegibility',
+            display: 'flex',
+            flexDirection: 'row',
+            alignContent: 'center',
+            width: '100%',
+            height: '100%',
+            backgroundColor: '#313131',
+            borderBottom: '1px solid #212121',
+            minWidth: 1000,
+        },
+        logo_area: {
+            display: 'flex',
+            alignContent: 'center',
+            marginLeft: 3,
+        },
+        app_title_text: {
+            color: '#ffffff',
+            padding: 0,
+            margin: 0,
+            alignItems: 'center',
+            height: '100%',
+            display: 'flex',
+            width: 'min-content',
+            fontFamily: 'Rambla',
+            fontSize: 24,
+            fontStyle: 'normal',
+            fontWeight: 'normal',
+        }
+    }),
+);
 
 interface Props {
     className?: string;
 }
 
 const MainHeader: React.FC<Props> = props => {
+    const classes = useStyles();
     return (
-        <header className={classNames('main_header', props.className)}>
-            <div className={'logo_area'}>
+        <header className={classNames(classes.root, props.className)}>
+            <div className={classes.logo_area}>
                 <TurbineLogo/>
             </div>
-            <h1 className={'app_title'}>Turbine</h1>
+            <h1 className={classes.app_title_text}>Turbine</h1>
         </header>
     )
 }
 
-export const StyledMainHeader = styled(MainHeader)`
-text-rendering: optimizeLegibility;
-display: flex;
-flex-direction: row;
-align-content: center;
-width: 100%;
-height: 60px;
-background-color: #46565c;
-border-bottom: 1px solid #212121;
-min-width: 1000px;
-.logo_area {
-display: flex;
-align-content: center;
-margin-left: 3px;
-}
-h1 {
-color: #ffffff;
-padding: 3px;
-width: min-content;
-font-size: 24px;
-font-style: normal;
-font-weight: normal;
-font-family: ${theme.font.title};
-}
-`;
+export default MainHeader;

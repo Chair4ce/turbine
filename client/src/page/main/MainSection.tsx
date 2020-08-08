@@ -1,15 +1,41 @@
 import * as React from "react";
 import {useState} from "react";
-import {StyledSideBar} from "../../component/sidebar/SideBar";
+import SideBar from "../../component/sidebar/SideBar";
 import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
-import styled from "styled-components";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            position: 'absolute',
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'row',
+            top: 36,
+            overflow: 'hidden',
+            left: 0,
+            right: 0,
+            bottom: 0,
+        },
+        sidebar_container: {
+            position: 'relative',
+            height: '100%',
+        },
+        main: {
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+        }
+    }),
+);
 
 interface Props {
     className?: string;
 }
 
 const MainSection: React.FC<Props> = props => {
+    const classes = useStyles();
     const [showCurrentPanel, toggleCurrentPanel] = useState(false);
     const [showProjectedPanel, toggleProjectedPanel] = useState(false);
     const [showGainingPanel, toggleGainingPanel] = useState(false);
@@ -36,9 +62,9 @@ const MainSection: React.FC<Props> = props => {
     }
 
     return (
-        <section className={'main_section'}>
-            <div className={'sidebar_area'}>
-                <StyledSideBar
+        <section className={classes.root}>
+            <div className={classes.sidebar_container}>
+                <SideBar
                     showCurrentPanel={showCurrentPanel}
                     showProjectedPanel={showProjectedPanel}
                     showGainingPanel={showGainingPanel}
@@ -47,7 +73,7 @@ const MainSection: React.FC<Props> = props => {
                     menu_item_select_callback={menuSelectHandler}
                 />
             </div>
-            <article className={'main'}>
+            <article className={classes.main}>
                 <StyledPanelsContainer
                     showCurrentPanel={showCurrentPanel}
                     showProjectedPanel={showProjectedPanel}
@@ -62,18 +88,4 @@ const MainSection: React.FC<Props> = props => {
 };
 
 
-export const StyledMainSection = styled(MainSection)`
-width: 100%;
-.sidebar_area {
-position: relative;
-height: 100%;
-}
-
-.main {
-position: relative;
-width: 100%;
-height: 100%;
-}
-
-
-`;
+export default MainSection;

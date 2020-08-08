@@ -3,23 +3,59 @@ import styled from "styled-components";
 import classNames from "classnames";
 import ExpandIcon from "../icon/ExpandIcon";
 import CollapseIcon from "../icon/CollapseIcon";
-import {StyledRosterMenu} from "../menus/RosterMenu";
+import RosterMenu from "../menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import clsx from "clsx";
 import {Button} from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            display: 'block',
+            position: 'relative',
+            width: 230,
+            height: '100%',
+            boxShadow: '5px 0 10px 0 rgba(0,0,0,.15)',
+            borderRight: '1px solid #000',
+            background: '#2f3337',
+            flexDirection: 'column',
+        },
+        expand_btn_area: {
+            position: 'relative',
+            boxShadow: '5px 0 10px 0 rgba(0,0,0,.15)',
+            borderRight: '1px solid #000',
+            justifyContent: 'start',
+            // backgroundColor: '#2f3337',
+            display: 'flex',
+            alignItems: 'center',
+            borderTop: '1px solid #393a3c',
+            borderBottom: '1px solid #000',
+            backgroundColor: '#2c2d2f',
+            width: '100%',
+            height: 50,
+        },
+        menu_container: {
+            height: '100%',
+            flex: '1 1 auto',
+            overflowY: 'auto',
+            borderTop: '1px solid #000000',
+            borderBottom: '1px solid #000',
+            outline: 'none',
+        },
         expanded: {
+            transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
             width: 230,
         },
         collapsed: {
+            transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
             width: 50,
         },
         toggleWidthBtn: {
             color: '#C1C1C1',
             lineHeight: 0,
             borderRadius: '0px',
+            width: 48,
+            height: '100%',
         }
     }),
 );
@@ -46,90 +82,26 @@ const SideBar: React.FC<Props> = props => {
         toggleDrawer(prev => !prev);
     }
 
-
     return (
-        <aside className={classNames('sidebar', props.className, drawerToggleClassName)}>
-            <div className={'sidebar_panels'}>
-                <div className={'sidebar_toggleContainer'}>
-                    <div className={'toggleButtonArea'}>
-                        <Button className={classNames('toggleButton', classes.toggleWidthBtn)} onClick={handleClick}>
-                            {expanded ? <CollapseIcon /> : <ExpandIcon/>}
-                        </Button>
-                    </div>
-                </div>
-                <div className={'menus_container'}>
-                    <StyledRosterMenu
-                        showCurrentPanel={props.showCurrentPanel}
-                        showProjectedPanel={props.showProjectedPanel}
-                        showGainingPanel={props.showGainingPanel}
-                        showLosingPanel={props.showLosingPanel}
-                        showPositionPanel={props.showPositionPanel}
-                        menuSelectHandler={props.menu_item_select_callback}
-                        expanded={expanded}
-                    />
-                </div>
+        <aside className={classNames(classes.root, drawerToggleClassName)}>
+            <div className={classes.expand_btn_area}>
+                <Button className={classNames(classes.toggleWidthBtn)} onClick={handleClick}>
+                    {expanded ? <CollapseIcon/> : <ExpandIcon/>}
+                </Button>
+            </div>
+            <div className={classes.menu_container}>
+                <RosterMenu
+                    showCurrentPanel={props.showCurrentPanel}
+                    showProjectedPanel={props.showProjectedPanel}
+                    showGainingPanel={props.showGainingPanel}
+                    showLosingPanel={props.showLosingPanel}
+                    showPositionPanel={props.showPositionPanel}
+                    menuSelectHandler={props.menu_item_select_callback}
+                    expanded={expanded}
+                />
             </div>
         </aside>
     )
 }
 
-export const StyledSideBar = styled(SideBar)`
-display: block;
-position: relative;
-width: 230px;
-height: 100%;
-box-shadow: 5px 0 10px 0 rgba(0,0,0,.15);
-border-right: 1px solid #000;
-background-color: #2f3337;
-display: -ms-flexbox;
-display: flex;
--ms-flex-direction: column;
-flex-direction: column;
-
-.sidebar_panels {
-height: 100%;
-}
-
-.sidebar_toggleContainer {
-  display: flex;
-  align-items: center;
-  border-top: 1px solid #393a3c;
-  border-bottom: 1px solid #000;
-  background-color: #2c2d2f;
-  width: 100%;
-  height: 50px
-}
-
-.menus_container {
-  height: 100%;
-  flex: 1 1 auto;
-  overflow-y: auto;
-  border-top: 1px solid #000000;
-  border-bottom: 1px solid #000;
-  outline: none;
-  :focus {outline:0 !important;}
-}
-
-.toggleButtonArea {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  -webkit-transition: background-color 100ms ease-in;
-  -moz-transition: background-color 100ms ease-in;
-  -o-transition: background-color 100ms ease-in;
-  transition: background-color 100ms ease-in;
-    :hover {
-      background-color: rgba(119,119,119,0.27);
-    }
-}
-
-.toggleButton {
-  cursor: pointer;
-  height: 50px;
-  width: 50px;
-  background: transparent;
-  border: none;
-  outline: transparent;
-}
-`;
+export default SideBar;

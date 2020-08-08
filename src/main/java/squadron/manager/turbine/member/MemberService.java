@@ -116,18 +116,27 @@ public class MemberService {
         for (String afsc : distinctAFSCs) {
             List<GainingMember> memberCollection = new ArrayList<>();
             StringBuilder newAFSC = new StringBuilder(afsc);
-            if (afsc.length() >= 4) {
+            if (afsc.length() > 4) {
                 newAFSC.setCharAt(3, 'X');
                 for (GainingMember member : members) {
                    if(member.getDafsc() != null){
                        StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
-                    if (compareAFSC.length() >= 4) {
+                    if (compareAFSC.length() > 4) {
                         compareAFSC.setCharAt(3, 'X');
                         if (newAFSC.toString().equals(compareAFSC.toString())) {
                             memberCollection.add(member);
                         }
                     }
                    }
+                }
+            } else {
+                for (GainingMember member : members) {
+                    if(member.getDafsc() != null){
+                        StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                            if (newAFSC.toString().equals(compareAFSC.toString())) {
+                                memberCollection.add(member);
+                            }
+                    }
                 }
             }
 
@@ -137,29 +146,35 @@ public class MemberService {
     }
 
     public List<String> getArrayOfDistinctDAFSCs(List<Member> members) {
-        return members.stream().filter(member -> isEnlisted(member.getGrade())).filter(Member -> Objects.nonNull(Member.getDafsc())).map(member -> {
+        return members.stream().map(member -> {
+            if (member.getDafsc() != null) {
             StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-            if (newAFSC.length() >= 4) {
+            if (newAFSC.length() > 4) {
                 newAFSC.setCharAt(3, 'X');
             }
             return newAFSC.toString();
+            } else {
+                return "";
+            }
         }).distinct().collect(toList());
     }
 
     public List<String> getArrayOfDistinctGainingDAFSCs(List<GainingMember> members) {
-        return members.stream().filter(member -> isEnlisted(member.getGrade())).filter(Member -> Objects.nonNull(Member.getDafsc())).map(member -> {
+        return members.stream().map(member -> {
+            if (member.getDafsc() != null) {
             StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-            if (newAFSC.length() >= 4) {
+            if (newAFSC.length() > 4) {
                 newAFSC.setCharAt(3, 'X');
             }
             return newAFSC.toString();
+            } else {
+                return "";
+            }
         }).distinct().collect(toList());
     }
 
      public List<String> getArrayOfDistinctOffices(List<Member> members) {
         return members.stream()
-                .filter(member -> isEnlisted(member.getGrade()))
-                .filter(Member -> Objects.nonNull(Member.getOfficeSymbol()))
                 .map(Member::getOfficeSymbol)
                 .distinct()
                 .collect(toList());
@@ -232,29 +247,6 @@ public class MemberService {
         existingMember.setLastUpdated(importingMember.getLastUpdated());
 
         gainingMemberRepository.save(existingMember);
-    }
-
-    private boolean isEnlisted(String grade) {
-        switch (grade) {
-            case "AMN":
-                return true;
-            case "A1C":
-                return true;
-            case "SRA":
-                return true;
-            case "SSG":
-                return true;
-            case "TSG":
-                return true;
-            case "MSG":
-                return true;
-            case "SMS":
-                return true;
-            case "CMS":
-                return true;
-            default:
-                return false;
-        }
     }
 
 

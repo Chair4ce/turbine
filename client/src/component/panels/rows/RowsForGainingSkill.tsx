@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         skilldividerText: {
             width: '100%',
-            paddingLeft: 80
+            paddingLeft: theme.spacing(1)
         },
         memberCountText: {
             paddingRight: 20

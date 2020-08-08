@@ -3,31 +3,38 @@ import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 // import moment from "moment";
 import DynamicInfoBoxModel from "./DynamicInfoBoxModel";
+import {Paper} from "@material-ui/core";
 const S = require('string');
 
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
+        container: {
             width: '100%',
+        },
+        paper: {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             justifyContent: 'center',
             background: 'rgba(217, 217, 217, 0.87)',
             border: '0.5px solid #A3A3A3',
-            borderRadius: 2,
+            borderRadius: 4,
             padding: theme.spacing(1)
         },
         detailRow: {
             width: '100%',
             display: 'flex',
             alignItems: 'center',
+            color: 'black',
             margin: theme.spacing(.5)
         },
         rowTitle: {
             width: 140,
             display: 'flex',
+            fontFamily: 'Rambla',
+            fontSize: '14px',
+            color: 'black',
             alignItems: 'center'
         },
         rowInfo: {
@@ -35,12 +42,11 @@ const useStyles = makeStyles((theme: Theme) =>
             cursor: 'text',
             alignItems: 'center',
             background: '#F9F9F9',
+            fontFamily: 'Rambla',
+            fontSize: '14px',
             width: 280,
             borderRadius: 1,
             paddingLeft: 4,
-
-        },
-        detailForm: {
 
         },
     }),
@@ -68,8 +74,10 @@ const DynamicInfoBox: React.FC<Props> = props => {
     }
 
     return (
-        <div className={classNames(props.className, classes.root)}>
+        <div className={classNames(props.className, classes.container)}>
+            <Paper elevation={1} className={classes.paper} color={'black'}>
                     {detailRow()}
+            </Paper>
         </div>
     );
 };

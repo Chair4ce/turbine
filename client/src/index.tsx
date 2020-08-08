@@ -11,8 +11,6 @@ import 'typeface-ibm-plex-sans';
 import theme, {muiTheme} from "./style/theme";
 import {MuiThemeProvider} from "@material-ui/core";
 import {ThemeProvider} from "styled-components";
-
-
 // We use hash history because this example is going to be hosted statically.
 // Normally you would use browser history.
 const history = createBrowserHistory();

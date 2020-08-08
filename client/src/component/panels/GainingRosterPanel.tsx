@@ -28,20 +28,21 @@ import {
     Menu,
     MenuItem,
     Select,
-    TextField
+    TextField, Typography
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
 import {Skeleton} from "@material-ui/lab";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import MemberModel from "../../store/members/models/MemberModel";
 import FuzzySearch from 'fuzzy-search';
 import {saveGainingMembers} from "../../store/members/thunks";
-import GainingMemberModel from "../../store/members/models/GainingMemberModel";
 import GenericGainingGroupCollectionModel from "../../store/members/models/GenericGainingGroupCollectionModel";
 import UniqueGainingAFSCRows from "./rows/UniqueGainingAFSCRows";
 import RowsByGainingRankContainer from "./rows/RowsByGainingRankContainer";
+import {ApplicationState} from "../../store";
+import SkeletonPanelC from "./SkeletonPanelC";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,6 +50,61 @@ const useStyles = makeStyles((theme: Theme) =>
             zIndex: 1500,
             outline: 'none',
             margin: 6,
+        },
+        panel: {
+            marginRight: 10,
+            display: 'block',
+            position: 'relative',
+            width: '100%',
+            height: '100%',
+            minWidth: 500,
+            float: 'left',
+            font: 'inherit',
+            fontSize: '100%',
+            verticalAlign: 'baseline',
+            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+        },
+        container: {
+            boxSizing: 'border-box',
+            position: 'absolute',
+            width: '100%',
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+            height: '100%',
+        },
+        panel_content: {
+            display: 'block',
+            position: 'absolute',
+            width: '100%',
+            height: 'calc(100vh - 99px)',
+        },
+        item_container: {
+            display: 'block',
+            overflowY: 'auto',
+            height: '100%',
+            width: '100%',
+        },
+        contentContainer: {
+            position: 'absolute',
+            width: '100%',
+            height: 'calc(100vh-122px)'
+        },
+        panelHeader: {
+            display: 'flex',
+            minWidth: 230,
+            width: '100%',
+            alignItems: 'center',
+            flexGrow: 0,
+            flexShrink: 1,
+            margin: 0,
+            border: 0,
+            height: 54,
+            padding: '0 3px 0 10px',
+            background: 'rgb(44, 45, 47)',
+            borderTopLeftRadius: 4,
+            borderTopRightRadius: 4,
+            boxSizing: 'border-box',
+            lineHeight: 15,
         },
         fileDropArea: {
             display: 'flex',
@@ -124,8 +180,8 @@ const useStyles = makeStyles((theme: Theme) =>
             pointerEvents: 'none',
         },
         morDots: {
-            width: 5,
-            height: 32,
+            marginRight: 4,
+            height: 44,
         },
         inputArea: {},
         form: {
@@ -179,18 +235,6 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'space-between',
         },
-        panel_content: {
-            display: 'block',
-            position: 'absolute',
-            width: '100%',
-            height: 'calc(100vh - 99px)',
-        },
-        item_container: {
-            display: 'block',
-            overflowY: 'auto',
-            height: '100%',
-            width: '100%',
-        },
         rowTitles: {
             width: 65
         },
@@ -199,24 +243,77 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 120,
         },
         searchInput: {
+            height: 45,
             marginRight: 8,
             marginBottom: 4,
             paddingLeft: 20,
         },
         totalMembersCount: {
-            color: 'black'
+            color: '#dcdcdc'
         },
         searchResultStatBar: {
             width: '100%',
             position: 'sticky',
             top: 0,
-            background: '#b4b4b4',
+            background: '#383838',
             zIndex: 1000,
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            justifyContent: 'start',
-            paddingLeft: 4
+            justifyContent: 'flex-end',
+            paddingRight: 4
+        },
+        endOfList: {
+            position: 'relative',
+            width: '100%',
+            minHeight: 40,
+            backgroundColor: '#484f57',
+            borderBottomLeftRadius: 4,
+            borderBottomRightRadius: 4,
+        },
+        panelTitle: {
+            display: 'flex',
+            alignItems: 'center',
+            flexGrow: 0,
+            flexShrink: 1,
+        },
+        actionArea: {
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: 'auto',
+            flexShrink: 0,
+            cursor: 'pointer',
+        },
+        closeBtn: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            border: 'none',
+            outline: 'none',
+            cursor: 'pointer',
+            height: '100%',
+            width: '100%',
+        },
+        closeBtnArea: {
+            marginRight: 4,
+            height: 44,
+            borderRadius: 4,
+            transition: 'background-color 100ms ease-in',
+            '&:hover': {
+                backgroundColor: 'rgba(119,119,119,0.27)',
+            }
+        },
+        item: {
+            display: 'flex',
+            width: '100%',
+            minHeight: 65,
+            alignItems: 'center',
+            borderBottom: '1px solid #ddd',
+            color: '#33333',
+            '&:hover': {
+                backgroundColor: 'rgba(180,180,180,0.27)',
+            }
         }
     }),
 );
@@ -277,15 +374,15 @@ const schema = {
 
 interface Props {
     callback: (type: string) => void;
-    data: GainingMemberModel[];
-    uniqueAFSCList: GenericGainingGroupCollectionModel[];
-    loading: boolean;
     className?: string;
 }
 
 const GainingRosterPanel: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const classes = useStyles();
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
+    const data = useSelector(({members}: ApplicationState) => members.gainingData);
+    const uniqueAFSCList: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
@@ -295,7 +392,6 @@ const GainingRosterPanel: React.FC<Props> = props => {
     const [success, updateSuccess] = useState(false);
     const [errors, updateErrors] = useState("");
     const [sortByGrade, toggleSortByGrade] = useState(false);
-    const [sortBySkill, toggleSortBySkill] = useState(false);
     const [sortByAFSC, toggleSortByAFSC] = useState(false);
     const [searchAll, updateFuzzyAll] = useState("");
     const [searchAFSC, updateFuzzyAFSC] = useState("");
@@ -304,8 +400,8 @@ const GainingRosterPanel: React.FC<Props> = props => {
         name: '',
     });
 
-    const Allsearcher = new FuzzySearch(props.data, ['fullName', 'dafsc'], {sort: true})
-    const AFSCsearcher = new FuzzySearch(props.uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
+    const Allsearcher = new FuzzySearch(data, ['fullName', 'dafsc'], {sort: true})
+    const AFSCsearcher = new FuzzySearch(uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
     const searchResultAFSC = AFSCsearcher.search(searchAFSC);
@@ -316,12 +412,12 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -362,7 +458,8 @@ const GainingRosterPanel: React.FC<Props> = props => {
                 } else {
                     dispatch(saveGainingMembers(rows.rows));
                     updateSuccess(true);
-                };
+                }
+                ;
             }));
         }
         handleClose();
@@ -396,7 +493,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                 toggleSortByAFSC(false)
                 break;
             case '2':
-                console.log(props.uniqueAFSCList)
+                console.log(uniqueAFSCList)
                 toggleSortByAFSC(true)
                 toggleSortByGrade(false)
                 break;
@@ -415,7 +512,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
     return (
 
-        <div className={'panel'}>
+        <div className={classes.panel}>
             <React.Fragment>
                 <Dialog
                     fullWidth={fullWidth}
@@ -454,7 +551,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(props.loading || success) &&
+                                            {(loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -463,12 +560,12 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(props.loading) &&
+                                                {(loading) &&
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
+                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
@@ -492,109 +589,95 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
-            <div className={classNames('container', props.className)}>
-                <header className={classNames('panel_header')}>
 
-                    <div className={classNames('panel_header_title_area')}>
-                        <h2>Gaining Roster</h2>
+            {!loading ? ( <div className={classNames(classes.container)}>
+                <header className={classNames(classes.panelHeader)}>
+
+                    <div className={classNames(classes.panelTitle)}>
+                        <Typography>Gaining Roster</Typography>
                     </div>
 
-                    <div className={classNames('action_area')}>
+                    <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
-                            {props.data && !sortByGrade && !sortByAFSC ?
-                                <TextField label="Search All" id="standard-size-small"  size="small"
-                                           onChange={handleFuzzy}/> : <TextField label="Search AFSC" id="standard-size-small"  size="small"
-                                                                                 onChange={handleFuzzy}/>}
+                            {data && !sortByGrade && !sortByAFSC ?
+                                <TextField label="Search All" id="standard-size-small" size="small"
+                                           onChange={handleFuzzy}/> :
+                                <TextField label="Search AFSC" id="standard-size-small" size="small"
+                                           onChange={handleFuzzy}/>}
                         </div>
                         <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">Group By</InputLabel>
+                            <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>
                             <Select
                                 native
                                 value={state.group}
                                 onChange={handleChange}
-                                label="Group By"
+                                label="List By"
                                 inputProps={{
                                     name: 'group',
                                     id: 'outlined-age-native-simple',
                                 }}
                             >
-                                <option aria-label="A-Z" value={"A-Z"}/>
+                                <option aria-label="A-Z" value={"A-Z"}>A-Z</option>
                                 <option value={1}>Grade</option>
                                 <option value={2}>AFSC</option>
                             </Select>
                         </FormControl>
-                        <div>
-                            <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
-                                    onClick={handleClick}>
-                                <MoreVertIcon/>
-                            </Button>
-                            <Menu
-                                id="fade-menu"
-                                anchorEl={anchorEl}
-                                keepMounted
-                                open={opens}
-                                onClose={handleMenuClose}
-                                TransitionComponent={Fade}
-                            >
-                                <MenuItem onClick={handleMenuSelect}>
-                                    <PublishIcon color={"action"}/>Upload</MenuItem>
-                            </Menu>
-                        </div>
-                        <div className={classNames('panel_header_action_area_close')}>
-                            <button className={'close_btn'} onClick={handlePanelClose}>
+                        <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
+                                onClick={handleClick}>
+                            <MoreVertIcon/>
+                        </Button>
+                        <Menu
+                            id="fade-menu"
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={opens}
+                            onClose={handleMenuClose}
+                            TransitionComponent={Fade}
+                        >
+                            <MenuItem onClick={handleMenuSelect}>
+                                <PublishIcon color={"action"}/>Upload</MenuItem>
+                        </Menu>
+                        <div className={classNames(classes.closeBtnArea)}>
+                            <Button className={classes.closeBtn} onClick={handlePanelClose}>
                                 <CloseIcon color={"action"}/>
-                            </button>
+                            </Button>
                         </div>
                     </div>
 
                 </header>
 
-                <div className={'content_container'}>
-                    <section className={classNames('panel_content', classes.panel_content)}>
-                        <div className={classNames('items_container', classes.item_container)}>
+                <div className={classes.contentContainer}>
+                    <section className={classNames(classes.panel_content)}>
+                        <div className={classNames(classes.item_container)}>
                             <div className={classes.searchResultStatBar}>
                                 {searchResultAll.length > 0 && <em className={classes.totalMembersCount}>
                                     {'Total: ' + searchResultAll.length}
                                 </em>}
                             </div>
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {props.loading && <Skeleton variant="text" animation={'wave'} style={{height: '80px'}}/>}
-                            {/*// List Alphabetical order*/}
-                            {props.data && !sortByGrade && !sortByAFSC && searchResultAll.map((row: any, index: number) =>
+                            {data && !sortByGrade && !sortByAFSC && searchResultAll.map((row: any) =>
                                 <CurrentRosterRow
                                     key={row.id}
-                                    className={'item'}
+                                    className={classes.item}
+                                    gradeClassName={row.grade}
                                     data={row}
                                 />)}
 
-                            {props.data && sortByGrade && <RowsByGainingRankContainer data={MemberModel.sortGainingDorAscending(searchResultAll)} bigSticky={false}/>}
-                            {props.data && sortByAFSC && searchResultAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
-                                <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members} className={'dafsc'}/>)}
-
-
-                            <div className={classNames('end_of_list', 'preview')}>
-
-                                {/*{props.data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
+                            {data && sortByGrade &&
+                            <RowsByGainingRankContainer data={MemberModel.sortGainingDorAscending(searchResultAll)}
+                                                        bigSticky={false}/>}
+                            {data && sortByAFSC && searchResultAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
+                                <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
+                                                       className={'dafsc'}/>)}
+                            <div className={classNames(classes.endOfList, 'preview')}>
+                                {/*{data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
                                 {/*    {'Total: ' + searchResultAFSC.length}*/}
                                 {/*</span> }*/}
                             </div>
                         </div>
                         {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
-
                     </section>
                 </div>
-            </div>
+            </div> ) : (<SkeletonPanelC/>)}
         </div>
     )
 }

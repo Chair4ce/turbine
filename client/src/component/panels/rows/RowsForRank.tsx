@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             background: '#cbcbcb',
             width: '100%',
-            height: 20,
+            height: 29,
             top: 85,
             zIndex: 120,
             position: 'sticky',
@@ -59,6 +59,17 @@ const useStyles = makeStyles((theme: Theme) =>
         paper: {
             width: '100%'
         },
+        item: {
+            display: 'flex',
+            width: '100%',
+            minHeight: 65,
+            alignItems: 'center',
+            borderBottom: '1px solid #ddd',
+            color: '#33333',
+            '&:hover': {
+                backgroundColor: 'rgba(180,180,180,0.27)',
+            }
+        }
     }),
 );
 
@@ -93,7 +104,8 @@ const RowsForRank: React.FC<Props> = props => {
                         {props.members ? props.members.map((rowData: any) =>
                             <CurrentRosterRow
                                 key={rowData.id}
-                                className={'item'}
+                                className={classes.item}
+                                gradeClassName={rowData.grade}
                                 data={rowData}
                             />): null}
                     </Paper>

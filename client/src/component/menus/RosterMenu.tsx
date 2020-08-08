@@ -1,5 +1,4 @@
 import * as React from "react";
-import styled from "styled-components";
 import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -15,7 +14,9 @@ import theme from "../../style/theme";
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            display: 'flex',
+            height: '100%',
+            position: 'relative',
+            display: 'block',
             outline: 'none',
         },
         paper: {
@@ -40,6 +41,24 @@ const useStyles = makeStyles((theme: Theme) =>
         hide: {
             visibility: 'hidden',
         },
+        menu_btn: {
+            textRendering: 'optimizeLegibility',
+            width: '100%',
+            outline: 'none',
+        },
+        menu_item_text: {
+            textRendering: 'optimizeLegibility',
+            textShadow: '0 1px 1px rgba(0,0,0,.5)',
+            paddingLeft: 8,
+        },
+        selected_item: {
+            position: 'absolute',
+            height: '100%',
+            right: 0,
+            flexShrink: 0,
+            width: 3,
+            backgroundColor: '#5D8AA8',
+        }
     }),
 );
 
@@ -141,88 +160,61 @@ const RosterMenu: React.FC<Props> = props => {
     });
 
     return (
-        <div className={classNames('roster_menu', props.className)}>
-            <div className={classes.root}>
-                <MenuList>
-                    <MenuItem className={classNames("alpha_roster_toggle_btn", currentSelectorClassName)} onClick={handleCurrentClick}>
-                        <div className={classes.iconArea}>
-                            <AssignmentIcon/>
-                        </div>
-                        {props.expanded ? <span className={classNames('menu_item_text',currentSelectorClassName)}>
+        <div className={classNames(classes.root, props.className)}>
+            <MenuList>
+                <MenuItem className={classNames(classes.menu_btn, currentSelectorClassName)}
+                          onClick={handleCurrentClick}>
+                    <div className={classes.iconArea}>
+                        <AssignmentIcon/>
+                    </div>
+                    {props.expanded ? <span className={classNames(classes.menu_item_text, currentSelectorClassName)}>
                     Current
                     </span> : ''}
-                        {props.showCurrentPanel ? <div className={'selected_bar'}/> : ''}
-                    </MenuItem>
-                    <MenuItem className={classNames("gaining_roster_toggle_btn",gainingSelectorClassName)} onClick={handleGainingClick}>
-                        <div className={classes.iconArea}>
-                            <AddIcon/>
-                        </div>
-                        {props.expanded ? <span className={gainingSelectorClassName}>
+                    {props.showCurrentPanel ? <div className={classes.selected_item}/> : ''}
+                </MenuItem>
+                <MenuItem className={classNames(classes.menu_btn, gainingSelectorClassName)}
+                          onClick={handleGainingClick}>
+                    <div className={classes.iconArea}>
+                        <AddIcon/>
+                    </div>
+                    {props.expanded ? <span className={classNames(classes.menu_item_text, gainingSelectorClassName)}>
                         Gaining
                         </span> : ''}
-                        {props.showGainingPanel ? <div className={'selected_bar'}/> : ''}
-                    </MenuItem>
-                    {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleLosingClick}>*/}
-                    {/*    <div className={classes.iconArea}>*/}
-                    {/*        <RemoveIcon/>*/}
-                    {/*    </div>*/}
-                    {/*    {props.expanded ? <span className={losingSelectorClassName}>*/}
-                    {/*    Losing*/}
-                    {/*    </span> : ''}*/}
-                    {/*    {props.showLosingPanel ? <div className={'selected_bar'}/> : ''}*/}
-                    {/*</MenuItem>*/}
-                    {/*<MenuItem className={classNames("projected_roster_toggle_btn",projectedSelectorClassName)} onClick={handleProjectedClick}>*/}
-                    {/*    <div className={classes.iconArea}>*/}
-                    {/*        <UpdateIcon />*/}
-                    {/*    </div>*/}
-                    {/*    {props.expanded ? <span className={projectedSelectorClassName}>*/}
-                    {/*    Projected*/}
-                    {/*    </span> : ''}*/}
-                    {/*    {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}*/}
-                    {/*</MenuItem>*/}
-                    {/*<MenuItem className={classNames("position_roster_toggle_btn",positionSelectorClassName)} onClick={handlePositionClick}>*/}
-                    {/*    <div className={classes.iconArea}>*/}
-                    {/*        <AssignmentIndIcon/>*/}
-                    {/*    </div>*/}
-                    {/*    {props.expanded ? <span className={positionSelectorClassName}>*/}
-                    {/*    Positions*/}
-                    {/*    </span> : ''}*/}
-                    {/*    {props.showPositionPanel ? <div className={'selected_bar'}/> : ''}*/}
-                    {/*</MenuItem>*/}
-                </MenuList>
-
-            </div>
+                    {props.showGainingPanel ? <div className={classes.selected_item}/> : ''}
+                </MenuItem>
+                {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleLosingClick}>*/}
+                {/*    <div className={classes.iconArea}>*/}
+                {/*        <RemoveIcon/>*/}
+                {/*    </div>*/}
+                {/*    {props.expanded ? <span className={losingSelectorClassName}>*/}
+                {/*    Losing*/}
+                {/*    </span> : ''}*/}
+                {/*    {props.showLosingPanel ? <div className={'selected_bar'}/> : ''}*/}
+                {/*</MenuItem>*/}
+                {/*<MenuItem className={classNames("projected_roster_toggle_btn",projectedSelectorClassName)} onClick={handleProjectedClick}>*/}
+                {/*    <div className={classes.iconArea}>*/}
+                {/*        <UpdateIcon />*/}
+                {/*    </div>*/}
+                {/*    {props.expanded ? <span className={projectedSelectorClassName}>*/}
+                {/*    Projected*/}
+                {/*    </span> : ''}*/}
+                {/*    {props.showProjectedPanel ? <div className={'selected_bar'}/> : ''}*/}
+                {/*</MenuItem>*/}
+                {/*<MenuItem className={classNames("position_roster_toggle_btn",positionSelectorClassName)} onClick={handlePositionClick}>*/}
+                {/*    <div className={classes.iconArea}>*/}
+                {/*        <AssignmentIndIcon/>*/}
+                {/*    </div>*/}
+                {/*    {props.expanded ? <span className={positionSelectorClassName}>*/}
+                {/*    Positions*/}
+                {/*    </span> : ''}*/}
+                {/*    {props.showPositionPanel ? <div className={'selected_bar'}/> : ''}*/}
+                {/*</MenuItem>*/}
+            </MenuList>
         </div>
     )
 }
 
-export const StyledRosterMenu = styled(RosterMenu)`
-height: 100%;
-position: relative;
-display: block;
-outline: none;
-li{
-padding-left: 12px;
-}
-ul {
-text-rendering: optimizeLegibility;
-width: 100%;
-outline: none;
-}
-span {
-text-rendering: optimizeLegibility;
-text-shadow: 0 1px 1px rgba(0,0,0,.5);
-padding-left: 8px;
-}
-.selected_bar {
-position: absolute;
-height: 100%;
-right: 0;
-flex-shrink: 0;
-width: 3px;
-background-color: ${theme.color.itemSelected};
-}
-`;
+export default RosterMenu;
 
 export {
     ROSTER_MENU_SELECT_ITEM as ROSTER_MENU_SELECT_ACTION,
