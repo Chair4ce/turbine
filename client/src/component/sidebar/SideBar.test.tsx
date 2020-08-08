@@ -1,13 +1,21 @@
 import React from "react";
 import {shallow, ShallowWrapper} from "enzyme";
-import {StyledSideBar} from "./SideBar";
+import SideBar from "./SideBar";
 
 
 describe('SideBar Test', () => {
     let subject: ShallowWrapper;
     beforeEach(() => {
+        let  Mockfn = jest.fn();
         subject = shallow(
-            <StyledSideBar/>
+            <SideBar
+                showPositionPanel={false}
+            showLosingPanel={false}
+                showGainingPanel={false}
+                showProjectedPanel={false}
+                showCurrentPanel={false}
+                menu_item_select_callback={Mockfn}
+            />
         )
     });
 

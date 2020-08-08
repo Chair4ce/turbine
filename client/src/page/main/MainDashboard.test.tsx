@@ -1,6 +1,6 @@
 import React from 'react';
 import {mount, ReactWrapper} from "enzyme";
-import {StyledMainDashboard} from "./MainDashboard";
+import MainDashboard from "./MainDashboard";
 import {initStore} from "../../setupTests";
 import configureStore from "../../configureStore";
 import {Provider} from "react-redux";
@@ -16,7 +16,7 @@ describe('MainDashboard test', () => {
     beforeEach(() => {
         subject = mount(
             <Provider store={mockStore}>
-            <StyledMainDashboard/>
+            <MainDashboard/>
             </Provider>
         );
     });
@@ -24,14 +24,4 @@ describe('MainDashboard test', () => {
     test('renders', () => {
         expect(subject.exists()).toBe(true);
     });
-
-    it('should render the main dashboard', function () {
-        expect(subject.find('.main_dashboard').exists()).toBeTruthy();
-    });
-
-    it('should render the header', function () {
-        expect(subject.find('.main_header').exists()).toBeTruthy();
-    });
-
-
 })

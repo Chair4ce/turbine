@@ -42,6 +42,7 @@ import RowsByGrade from "./rows/RowsByRankContainer";
 import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
 import {ApplicationState} from "../../store";
+import SkeletonPanelC from "./SkeletonPanelC";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -658,7 +659,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
-            <div className={classNames(classes.container)}>
+            {!loading ? (  <div className={classNames(classes.container)}>
                 <header className={classNames(classes.panelHeader)}>
 
                     <div className={classNames(classes.panelTitle)}>
@@ -755,7 +756,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
                     </section>
                 </div>
-            </div>
+            </div> ) : (<SkeletonPanelC/>)}
         </div>
     )
 }

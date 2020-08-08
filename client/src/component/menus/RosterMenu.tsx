@@ -162,7 +162,7 @@ const RosterMenu: React.FC<Props> = props => {
     return (
         <div className={classNames(classes.root, props.className)}>
             <MenuList>
-                <MenuItem className={classNames(classes.menu_btn, currentSelectorClassName)}
+                <MenuItem id={'alpha_roster_toggle_btn'} className={classNames(classes.menu_btn, currentSelectorClassName)}
                           onClick={handleCurrentClick}>
                     <div className={classes.iconArea}>
                         <AssignmentIcon/>
@@ -172,7 +172,7 @@ const RosterMenu: React.FC<Props> = props => {
                     </span> : ''}
                     {props.showCurrentPanel ? <div className={classes.selected_item}/> : ''}
                 </MenuItem>
-                <MenuItem className={classNames(classes.menu_btn, gainingSelectorClassName)}
+                <MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, gainingSelectorClassName)}
                           onClick={handleGainingClick}>
                     <div className={classes.iconArea}>
                         <AddIcon/>

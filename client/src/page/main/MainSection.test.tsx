@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {mount, ReactWrapper} from "enzyme";
-import {StyledMainSection} from "./MainSection";
+import MainSection from "./MainSection";
 import {Provider} from "react-redux";
 import {initStore} from "../../setupTests";
 import configureStore from "../../configureStore";
@@ -15,7 +15,7 @@ describe('MainSection test', () => {
     beforeEach(() => {
         subject = mount(
             <Provider store={mockStore}>
-            <StyledMainSection/>
+            <MainSection/>
             </Provider>
         );
     });
@@ -24,13 +24,6 @@ describe('MainSection test', () => {
         expect(subject.exists()).toBe(true);
     });
 
-    it('should render the main section', function () {
-        expect(subject.find('.main_section').exists()).toBeTruthy();
-    });
-
-    it('should render the sidebar area', function () {
-        expect(subject.find('.sidebar_area').exists()).toBeTruthy();
-    });
 
 
 })

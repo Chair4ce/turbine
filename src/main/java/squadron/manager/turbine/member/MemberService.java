@@ -69,15 +69,26 @@ public class MemberService {
         List<Member> members = memberRepository.findAll();
         List<String> distinctOffices = getArrayOfDistinctOffices(members);
         List<GroupCollection> officeCollection = new ArrayList<>();
-
         for (String office : distinctOffices) {
             List<Member> memberCollection = new ArrayList<>();
-            for (Member member : members) {
-                if (office.equals(member.getOfficeSymbol())) {
-                    memberCollection.add(member);
+            if (office == null || office.equals("")) {
+                for (Member member : members) {
+                    if (member.getOfficeSymbol() == null || member.getOfficeSymbol().equals("")) {
+                        memberCollection.add(member);
+                    }
                 }
+                officeCollection.add(new GroupCollection("Empty", memberCollection));
+            } else {
+                for (Member member : members) {
+                    if (member.getOfficeSymbol() != null) {
+                        if (office.equals(member.getOfficeSymbol())) {
+                            memberCollection.add(member);
+                        }
+                    }
+
+                }
+                officeCollection.add(new GroupCollection(office, memberCollection));
             }
-            officeCollection.add(new GroupCollection(office, memberCollection));
         }
         return officeCollection;
     }
@@ -119,23 +130,23 @@ public class MemberService {
             if (afsc.length() > 4) {
                 newAFSC.setCharAt(3, 'X');
                 for (GainingMember member : members) {
-                   if(member.getDafsc() != null){
-                       StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
-                    if (compareAFSC.length() > 4) {
-                        compareAFSC.setCharAt(3, 'X');
-                        if (newAFSC.toString().equals(compareAFSC.toString())) {
-                            memberCollection.add(member);
-                        }
-                    }
-                   }
-                }
-            } else {
-                for (GainingMember member : members) {
-                    if(member.getDafsc() != null){
+                    if (member.getDafsc() != null) {
                         StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                        if (compareAFSC.length() > 4) {
+                            compareAFSC.setCharAt(3, 'X');
                             if (newAFSC.toString().equals(compareAFSC.toString())) {
                                 memberCollection.add(member);
                             }
+                        }
+                    }
+                }
+            } else {
+                for (GainingMember member : members) {
+                    if (member.getDafsc() != null) {
+                        StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                        if (newAFSC.toString().equals(compareAFSC.toString())) {
+                            memberCollection.add(member);
+                        }
                     }
                 }
             }
@@ -148,11 +159,11 @@ public class MemberService {
     public List<String> getArrayOfDistinctDAFSCs(List<Member> members) {
         return members.stream().map(member -> {
             if (member.getDafsc() != null) {
-            StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-            if (newAFSC.length() > 4) {
-                newAFSC.setCharAt(3, 'X');
-            }
-            return newAFSC.toString();
+                StringBuilder newAFSC = new StringBuilder(member.getDafsc());
+                if (newAFSC.length() > 4) {
+                    newAFSC.setCharAt(3, 'X');
+                }
+                return newAFSC.toString();
             } else {
                 return "";
             }
@@ -162,18 +173,18 @@ public class MemberService {
     public List<String> getArrayOfDistinctGainingDAFSCs(List<GainingMember> members) {
         return members.stream().map(member -> {
             if (member.getDafsc() != null) {
-            StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-            if (newAFSC.length() > 4) {
-                newAFSC.setCharAt(3, 'X');
-            }
-            return newAFSC.toString();
+                StringBuilder newAFSC = new StringBuilder(member.getDafsc());
+                if (newAFSC.length() > 4) {
+                    newAFSC.setCharAt(3, 'X');
+                }
+                return newAFSC.toString();
             } else {
                 return "";
             }
         }).distinct().collect(toList());
     }
 
-     public List<String> getArrayOfDistinctOffices(List<Member> members) {
+    public List<String> getArrayOfDistinctOffices(List<Member> members) {
         return members.stream()
                 .map(Member::getOfficeSymbol)
                 .distinct()
