@@ -57,8 +57,6 @@ public class PositionController {
                     updateExistingPositionData(createPositionModel(date, newImport, "unfunded"), existingUnfundedPosition);
                 }
             }
-
-
 //            if(newImport.getAssignedMbrId() != null ) {
 //                if (newImport.getPosNr() != null && newImport.getCurrQtr() == null) {
 //                    if (doubleBilletedRepository.findByMbrId(newImport.getAssignedMbrId()) == null) {
