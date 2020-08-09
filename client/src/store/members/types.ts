@@ -20,6 +20,7 @@ export type ApiResponse = Record<string, any>;
 // of Redux's `@@INIT` action.
 export enum MemberActionTypes {
     FETCH_REQUEST = '@@members/FETCH_REQUEST',
+    FETCH_GAINING_REQUEST = '@@members/FETCH_GAINING_REQUEST',
     FETCH_SUCCESS = '@@members/FETCH_SUCCESS',
     GAINING_FETCH_SUCCESS = '@@members/GAINING_FETCH_SUCCESS',
     GAINING_FETCH_ERROR = '@@members/GAINING_FETCH_ERROR',
@@ -39,6 +40,7 @@ export enum MemberActionTypes {
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface MembersState {
     readonly loading: boolean;
+    readonly gainingLoading: boolean;
     readonly data: MemberModel[];
     readonly gainingData: GainingMemberModel[];
     readonly genericAFSCList: GenericGroupCollectionModel[];

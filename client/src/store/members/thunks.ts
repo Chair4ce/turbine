@@ -1,4 +1,5 @@
 import {
+    gainingFetchRequest,
     gainingMembersFetchError,
     gainingMembersFetchSuccess,
     membersFetchError,
@@ -28,7 +29,7 @@ export const getMembers = () => {
 
 export const getGainingMembers = () => {
     return (dispatch: any) => {
-        dispatch(membersFetchRequest());
+        dispatch(gainingFetchRequest());
         callApi('get', 'api/members/gaining')
             .then(res => dispatch(gainingMembersFetchSuccess(MemberSerializer.serializeGainingMembersFromBackend(res)))
             ).catch(err => dispatch(gainingMembersFetchError(err))
@@ -58,7 +59,7 @@ export const getOfficeCollection = () => {
 
 export const getDistinctGainingAFSCCollection = () => {
     return (dispatch: any) => {
-        dispatch(membersFetchRequest());
+        dispatch(gainingFetchRequest());
         callApi('get', 'api/members/gaining/DAFSCCollection')
             .then(res => dispatch(uniqueGainingAFSCCollectionFetchSuccess(MemberSerializer.serializeGainingCollectionFromBackend(res)))
             ).catch(err => dispatch(uniqueAFSCCollectionFetchError(err))
@@ -77,10 +78,10 @@ export const saveCurrentRoster = (members: UploadMemberModel[]) => {
 
 export const saveGainingMembers = (members: UploadGainingMemberModel[]) => {
     return (dispatch: any) => {
-        dispatch(membersFetchRequest());
+        dispatch(gainingFetchRequest());
         callApi('POST', 'api/members/gaining/save', MemberSerializer.serializeGainingMembersToBackend(members))
             .then(res => dispatch(gainingMembersFetchSuccess(MemberSerializer.serializeGainingMembersFromBackend(res))))
-            .catch(e => dispatch(membersPostError(e)))
+            .catch(err => dispatch(gainingMembersFetchError(err)))
     }
 };
 

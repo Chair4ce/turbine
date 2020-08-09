@@ -1,9 +1,8 @@
-import React, {lazy, Suspense, useEffect} from "react";
+import React, {lazy, useEffect, Suspense} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
 import CurrentRosterPanel from "../CurrentRosterPanel";
-import theme from "../../../style/theme";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../../store";
 import {
@@ -13,16 +12,12 @@ import {
     getOfficeCollection,
     getUniqueAFSCCollection
 } from "../../../store/members/thunks";
-import MemberModel from "../../../store/members/models/MemberModel";
 import GainingRosterPanel from "../GainingRosterPanel";
 import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
-import LoadingSpinner from "../../displayLoading/LoadingSpinner";
-import SkeletonPanelG from "../SkeletonPanelG";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Fade, Zoom} from "@material-ui/core";
-import SkeletonPanelC from "../SkeletonPanelC";
-import {Skeleton} from "@material-ui/lab";
+import {Simulate} from "react-dom/test-utils";
+import LoadingSpinner from "../../displayLoading/LoadingSpinner";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,8 +53,15 @@ const PanelsContainer: React.FC<Props> = props => {
     const classes = useStyles();
 
     const dispatch = useDispatch();
-
-
+    const currentMembers = useSelector(({members}: ApplicationState) => members.data);
+    const loading = useSelector(({members}: ApplicationState) => members.loading);
+    const gainingLoading = useSelector(({members}: ApplicationState) => members.gainingLoading);
+    const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
+    const currentCollectionOffices: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
+    const gainingMembers = useSelector(({members}: ApplicationState) => members.gainingData);
+    const gainingCollectionAFSCs: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
+    const CurrentRoster = lazy(() => import('../CurrentRosterPanel'));
+    const GainingRoster = lazy(() => import('../GainingRosterPanel'));
     useEffect(() => {
         dispatch(getMembers());
         dispatch(getGainingMembers());
@@ -72,11 +74,13 @@ const PanelsContainer: React.FC<Props> = props => {
     return (
         <section className={classNames(classes.root, props.className)}>
             <div className={classes.table}>
-
+                <Suspense fallback={<div>Loading...</div>}>
                 {props.showCurrentPanel ?
-                    <CurrentRosterPanel callback={props.callback}/> : null}
+                    <CurrentRoster members={currentMembers} loading={loading} collectionAFSC={currentCollectionAFSC} collectionOffice={currentCollectionOffices} callback={props.callback}/>
+                    : ''}
                 {props.showGainingPanel ?
-                    <GainingRosterPanel callback={props.callback}/> : null}
+                    <GainingRoster members={gainingMembers} loading={gainingLoading} collectionAFSC={gainingCollectionAFSCs} callback={props.callback}/> : ''}
+                    </Suspense>
 
             </div>
         </section>

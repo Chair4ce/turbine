@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
+import {CSSProperties, useState} from "react";
 import classNames from "classnames";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
@@ -33,7 +33,7 @@ import {
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
-import {useDispatch, useSelector} from "react-redux";
+import {useDispatch} from "react-redux";
 import MemberModel from "../../store/members/models/MemberModel";
 import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
@@ -41,7 +41,6 @@ import UniqueAFSCRows from "./rows/UniqueAFSCRows";
 import RowsByGrade from "./rows/RowsByRankContainer";
 import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
-import {ApplicationState} from "../../store";
 import SkeletonPanelC from "./SkeletonPanelC";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -420,6 +419,10 @@ const schema = {
 }
 
 interface Props {
+    members: MemberModel[];
+    loading: boolean;
+    collectionAFSC: GenericGroupCollectionModel[];
+    collectionOffice: GenericGroupCollectionModel[];
     callback: (type: string) => void;
     className?: string;
 }
@@ -427,10 +430,7 @@ interface Props {
 const CurrentRosterPanel: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const classes = useStyles();
-    const data = useSelector(({members}: ApplicationState) => members.data);
-    const loading = useSelector(({members}: ApplicationState) => members.loading);
-    const uniqueAFSCList: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
-    const officeCollection: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
+
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
@@ -451,14 +451,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         name: '',
     });
 
-
-    const Allsearcher = new FuzzySearch(data, ['fullName', 'dafsc'], {sort: true})
-    const AFSCsearcher = new FuzzySearch(uniqueAFSCList, ['members.fullName', 'genericGroup'], {sort: true})
-    const Officesearcher = new FuzzySearch(officeCollection, ['genericGroup'], {sort: true})
+    const Allsearcher = new FuzzySearch(props.members, ['fullName'],
+        {sort: true}
+        )
 
     const searchResultAll = Allsearcher.search(searchAll);
-    const searchResultAFSC = AFSCsearcher.search(searchAFSC);
-    const searchResultOffice = Officesearcher.search(searchOffice);
+
     //
 
 
@@ -468,12 +466,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: loading,
+        [classes.buttonLoading]: props.loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -621,7 +619,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(loading || success) &&
+                                            {(props.loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -630,12 +628,12 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(loading) &&
+                                                {(props.loading) &&
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
+                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
@@ -659,7 +657,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
-            {!loading ? (  <div className={classNames(classes.container)}>
+            {!props.loading ? (  <div className={classNames(classes.container)}>
                 <header className={classNames(classes.panelHeader)}>
 
                     <div className={classNames(classes.panelTitle)}>
@@ -668,13 +666,13 @@ const CurrentRosterPanel: React.FC<Props> = props => {
 
                     <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
-                            {data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
-                                <TextField label="Search" id="standard-size-small" value={searchAll} size="small"
+                            {props.members && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
+                                <TextField label="Search" value={searchAll} id="standard-size-small" size="small"
                                            onChange={handleFuzzy}/> : null}
-                            {data && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"
-                                                             onChange={handleFuzzy}/> : null}
-                            {data && sortByOffice ? <TextField label="Search" id="standard-size-small" size="small"
-                                                               onChange={handleFuzzy}/> : null}
+                            {/*{props.members && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"*/}
+                            {/*                                 onChange={handleFuzzy}/> : null}*/}
+                            {/*{props.members && sortByOffice ? <TextField label="Search" id="standard-size-small"  size="small"*/}
+                            {/*                                   onChange={handleFuzzy}/> : null}*/}
                         </div>
                         <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>
@@ -689,9 +687,9 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                 }}
                             >
                                 <option aria-label="A-Z" value="A-Z">A-Z</option>
-                                <option value={1}>Grade</option>
+                                {/*<option value={1}>Grade</option>*/}
                                 <option value={3}>AFSC</option>
-                                <option value={4}>Office</option>
+                                {/*<option value={4}>Office</option>*/}
                             </Select>
                         </FormControl>
 
@@ -729,7 +727,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     {'Total: ' + searchResultAll.length}
                                 </em>}
                             </div>
-                            {data && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice && searchResultAll.map((row: any) =>
+                            {props.members && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice && searchResultAll.map((row: any) =>
                                 <CurrentRosterRow
                                     key={row.id}
                                     className={classes.item}
@@ -737,10 +735,10 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     data={row}
                                 />)}
 
-                            {data && sortByGrade &&
-                            <RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)} bigSticky={false}/>}
-                            {data && sortByOffice && <RowsByOfficeContainer data={searchResultOffice}/>}
-                            {data && sortByAFSC && searchResultAFSC.map((m: GenericGroupCollectionModel, index) =>
+                            {/*{props.members && sortByGrade &&*/}
+                            {/*<RowsByGrade data={MemberModel.sortByDorAscending(searchResultAll)} bigSticky={false}/>}*/}
+                            {/*{props.members && sortByOffice && <RowsByOfficeContainer data={props.collectionOffice}/>}*/}
+                            {props.members && sortByAFSC && props.collectionAFSC.map((m: GenericGroupCollectionModel, index) =>
                                 <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
                                                 className={'dafsc'}/>)}
 

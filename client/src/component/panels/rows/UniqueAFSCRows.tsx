@@ -90,9 +90,9 @@ const UniqueAFSCRows: React.FC<Props> = props => {
             </div>
             {/*{props.members && expanded ?*/}
             <div className={classes.container}>
-            <Collapse in={expanded} style={{width: '100%'}}>
-                    {props.members && <RowsBySkillContainer data={props.members} />}
-            </Collapse>
+
+                    {props.members && expanded && <RowsBySkillContainer data={props.members} />}
+
             </div>
             {/*: null}*/}
         </div>

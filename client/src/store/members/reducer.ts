@@ -10,6 +10,7 @@ export const initialState: MembersState = {
     data: [] as MemberModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
+    gainingLoading: false,
     genericAFSCList: [] as GenericGroupCollectionModel[],
     genericGainingAFSCList: [] as GenericGainingGroupCollectionModel[],
     officeCollection: [] as GenericGroupCollectionModel[],
@@ -26,11 +27,17 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
                 loading: true
             };
         }
+        case MemberActionTypes.FETCH_GAINING_REQUEST: {
+            return {
+                ...state,
+                gainingLoading: true
+            };
+        }
         case MemberActionTypes.FETCH_SUCCESS: {
             return { ...state, loading: false, data: action.payload};
         }
         case MemberActionTypes.GAINING_FETCH_SUCCESS: {
-            return { ...state, loading: false, gainingData: action.payload};
+            return { ...state, gainingLoading: false, gainingData: action.payload};
         }
         case MemberActionTypes.UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS: {
             return { ...state, loading: false, genericAFSCList: action.payload};

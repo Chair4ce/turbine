@@ -89,11 +89,9 @@ const RowsForSkill: React.FC<Props> = props => {
                 </span>
             </div>
             <div className={classes.container}>
-                <Collapse in={expanded} style={{width: '100%'}}>
-                    <Paper className={classes.paper}>
-                        {props.members && <RowsByRankContainer data={props.members} bigSticky={true}/>}
-                    </Paper>
-                </Collapse>
+                {expanded && <Paper className={classes.paper}>
+                    {props.members && <RowsByRankContainer data={props.members} bigSticky={true}/>}
+                </Paper>}
             </div>
         </div>
     );

@@ -206,8 +206,8 @@ const CurrentRosterRow: React.FC<Props> = props => {
 
     return (
         <div className={classNames(classes.root, props.className)}>
-            <Collapse in={selected} className={BarClassName}>
-                <div className={classes.expandedView}>
+            {/*<Collapse in={selected} className={BarClassName}>*/}
+            {selected && <div className={classes.expandedView}>
                     <div className={classes.expandedViewTopBar}>
                         <div className={classNames(classes.collapseBtnArea, 'collapseBtnArea')}
                              onClick={handleCollapse}>
@@ -223,11 +223,11 @@ const CurrentRosterRow: React.FC<Props> = props => {
                     <div className={classes.detailArea}>
                         <DynamicInfoBox rows={DynamicInfoBoxData}/>
                     </div>
-                </div>
-            </Collapse>
+                </div>}
+          {/*  </Collapse>*/}
 
-                <Fade in={!selected} style={{width: 'inherit'}}>
-                    <div className={InfoClassName}>
+            {/*    <Fade in={!selected} style={{width: 'inherit'}}>*/}
+            {!selected && <div className={InfoClassName}>
                     <div className={classes.collapsedView} onClick={handleExpand}>
                         <div className={classNames(classes.AvataRoot)}>
                             <PersonIcon/>
@@ -248,8 +248,8 @@ const CurrentRosterRow: React.FC<Props> = props => {
                             </div>
                         </div>
                     </div>
-                    </div>
-                </Fade>
+                    </div>}
+               {/* </Fade>*/}
 
             {/*{ selected && <img src={AFAM} alt={""} className={classes.awardIcon}/>}*/}
             {/*<img src={AFCM} alt={""} className={classes.awardIcon}/>*/}

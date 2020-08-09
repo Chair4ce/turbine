@@ -90,11 +90,11 @@ const UniqueGainingAFSCRows: React.FC<Props> = props => {
                 </span>
             </div>
             <div className={classes.container}>
-                <Collapse in={expanded} style={{width: '100%'}}>
-                    <Paper className={classes.paper}>
+
+                {expanded &&  <Paper className={classes.paper}>
                         {props.members && <RowsByGainingSkillContainer data={props.members}/>}
-                    </Paper>
-                </Collapse>
+                    </Paper> }
+
 
             </div>
         </div>

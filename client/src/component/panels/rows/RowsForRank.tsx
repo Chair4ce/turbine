@@ -87,7 +87,7 @@ const RowsForRank: React.FC<Props> = props => {
     }
 
     return (
-        <div className={ classes.root}>
+        <div className={classes.root}>
             <div className={classNames(classes.gradedivider, BarClassName, props.className)} onClick={handleClick}>
                 {expanded && <ExpandMoreIcon fontSize={"small"}/>}
                 {!expanded && <NavigateNextIcon fontSize={"small"} style={{zIndex: 118}}/>}
@@ -99,17 +99,16 @@ const RowsForRank: React.FC<Props> = props => {
                 </span>
             </div>
             <div className={classes.container}>
-                <Collapse in={expanded} style={{width: '100%'}}>
-                    <Paper className={classes.paper}>
-                        {props.members ? props.members.map((rowData: any) =>
-                            <CurrentRosterRow
-                                key={rowData.id}
-                                className={classes.item}
-                                gradeClassName={rowData.grade}
-                                data={rowData}
-                            />): null}
-                    </Paper>
-                </Collapse>
+                {expanded && <Paper className={classes.paper}>
+                    {props.members ? props.members.map((rowData: any) =>
+                        <CurrentRosterRow
+                            key={rowData.id}
+                            className={classes.item}
+                            gradeClassName={rowData.grade}
+                            data={rowData}
+                        />) : null}
+                </Paper>}
+
             </div>
         </div>
     );
