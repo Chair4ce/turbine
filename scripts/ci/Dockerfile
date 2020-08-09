@@ -83,7 +83,7 @@ RUN apt-get -qqy update &&\
         /var/cache/apt/*
 
 # setup java version 8
-RUN rm /etc/alternatives/java &&\†
+RUN rm /etc/alternatives/java &&\
     ln -s /usr/lib/jvm/java-8-openjdk-amd64/jre/bin/java /etc/alternatives/java
 
 # setup mysql

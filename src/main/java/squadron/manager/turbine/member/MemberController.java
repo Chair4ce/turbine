@@ -25,7 +25,6 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @Autowired
     private MemberRepository memberRepository;
 
     @Autowired

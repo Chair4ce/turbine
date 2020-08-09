@@ -1,21 +1,19 @@
 import UploadMemberModel from "../store/members/models/UploadMemberModel";
-import moment from "moment";
 import MemberModel from "../store/members/models/MemberModel";
 import GenericGroupCollectionModel from "../store/members/models/GenericGroupCollectionModel";
 import GainingMemberModel from "../store/members/models/GainingMemberModel";
 import UploadGainingMemberModel from "../store/members/models/UploadGainingMemberModel";
 import GenericGainingGroupCollectionModel from "../store/members/models/GenericGainingGroupCollectionModel";
+
 const crypto = require('crypto');
 
 
-function convertToHash(mbrId: string, name: string) {
+function convertToHash(mbrId: string) {
     //This throws out everything except integers of the hash
-    let newSsanHash = crypto.createHash('sha1').update(mbrId).digest('hex').toString()
-        .match(/\d+/g).map(Number).join("").substring(1,10);
-
-    let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
-        .match(/\d+/g).map(Number).join("").substring(1,10);
-    return newSsanHash + newNameHash;
+    // let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
+    //     .match(/\d+/g).map(Number).join("").substring(1,10);
+    return crypto.createHash('sha1').update(mbrId.replace(/-/g,"")).digest('hex').toString()
+        .match(/\d+/g).map(Number).join("").substring(1, 10);
 }
 
 export class MemberSerializer {
@@ -23,7 +21,7 @@ export class MemberSerializer {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(
-                    convertToHash(item.ssan ? item.ssan : 0, item.fullName ? item.fullName : 0),
+                    convertToHash(item.ssan ? item.ssan : null),
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.assignedPas ? item.assignedPas : null ,
@@ -73,7 +71,7 @@ export class MemberSerializer {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadGainingMemberModel(
-                    convertToHash(item.mbrId ? item.mbrId : 0, item.fullName ? item.fullName : 0),
+                    convertToHash(item.mbrId ? item.mbrId : 0),
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.losingPas ? item.losingPas : null,
