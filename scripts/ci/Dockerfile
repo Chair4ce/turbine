@@ -2,8 +2,8 @@ FROM cloudfoundry/cflinuxfs3
 
 USER root
 # setup_env
-ENV PIE_DB_URL=jdbc:mysql://localhost:3306/piedev?useSSL=false
-ENV PIE_DB_USERNAME=pie
+ENV PIE_DB_URL="jdbc:mysql://localhost:3306/turbinedev?useSSL=false&serverTimezone=UTC"
+ENV PIE_DB_USERNAME=turbine
 ENV PIE_CI=true
 
 # create man directory
@@ -90,7 +90,7 @@ RUN rm /etc/alternatives/java &&\
 VOLUME /var/lib/mysql
 
 ENTRYPOINT service mysql start &&\
-    mysql -u root -e "create database piedev;" || true &&\
-    mysql -u root -e "create user 'pie'@'localhost';" || true &&\
-    mysql -u root -e "GRANT ALL PRIVILEGES ON piedev.* TO 'pie'@'localhost';" || true &&\
+    mysql -u root -e "create database turbinedev;" || true &&\
+    mysql -u root -e "create user 'turbine'@'localhost';" || true &&\
+    mysql -u root -e "GRANT ALL PRIVILEGES ON turbinedev.* TO 'turbine'@'localhost';" || true &&\
     /bin/bash
