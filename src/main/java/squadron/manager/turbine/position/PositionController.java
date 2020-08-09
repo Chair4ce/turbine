@@ -59,26 +59,26 @@ public class PositionController {
             }
 
 
-            if(newImport.getAssignedMbrId() != null ) {
-                if (newImport.getPosNr() != null && newImport.getCurrQtr() == null) {
-                    if (doubleBilletedRepository.findByMbrId(newImport.getAssignedMbrId()) == null) {
-                        doubleBilletedRepository.save(createDoubleBilletedMemberModel( date, newImport));
-                    } else {
-                        doubleBilletedRepository.deleteByMbrId(newImport.getAssignedMbrId());
-                        doubleBilletedRepository.save(createDoubleBilletedMemberModel(date, newImport));
-                    }
-                }
-
-                if (newImport.getPosNr() == null){
-                 if (unassignedMemberRepository.findByMbrId(newImport.getAssignedMbrId()) == null) {
-                     unassignedMemberRepository.save(createUnassignedMemberModel( date, newImport));
-                 } else {
-                     unassignedRepository.deleteByMbrId(newImport.getAssignedMbrId());
-                     unassignedMemberRepository.save(createUnassignedMemberModel(date, newImport));
-                 }
-
-                }
-            }
+//            if(newImport.getAssignedMbrId() != null ) {
+//                if (newImport.getPosNr() != null && newImport.getCurrQtr() == null) {
+//                    if (doubleBilletedRepository.findByMbrId(newImport.getAssignedMbrId()) == null) {
+//                        doubleBilletedRepository.save(createDoubleBilletedMemberModel( date, newImport));
+//                    } else {
+//                        doubleBilletedRepository.deleteByMbrId(newImport.getAssignedMbrId());
+//                        doubleBilletedRepository.save(createDoubleBilletedMemberModel(date, newImport));
+//                    }
+//                }
+//
+//                if (newImport.getPosNr() == null){
+//                 if (unassignedMemberRepository.findByMbrId(newImport.getAssignedMbrId()) == null) {
+//                     unassignedMemberRepository.save(createUnassignedMemberModel( date, newImport));
+//                 } else {
+//                     unassignedRepository.deleteByMbrId(newImport.getAssignedMbrId());
+//                     unassignedMemberRepository.save(createUnassignedMemberModel(date, newImport));
+//                 }
+//
+//                }
+//            }
         }));
         return positionRepository.findAll();
     }
