@@ -51,6 +51,7 @@ public class MemberService {
         return memberRepository.findAll();
     }
 
+
     public Iterable<GainingMember> saveAndGetAllGainingMembers(@RequestBody @Valid Iterable<GainingMemberJSON> json) {
         Date date = new Date();
         json.forEach((newImport -> {

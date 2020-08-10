@@ -19,34 +19,34 @@ public class Position {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
-        @Column(name= "pas_code")
+    @Column(name = "pas_code")
     private String pasCode;
-        @Column(name= "org_structure_id")
+    @Column(name = "org_structure_id")
     private String orgStructureId;
-        @Column(name= "afsc_auth")
+    @Column(name = "afsc_auth")
     private String afscAuth;
-        @Column(name= "grd_auth")
+    @Column(name = "grd_auth")
     private String grdAuth;
-        @Column(name= "curr_qtr")
-    private Boolean currQtr;
-        @Column(name= "proj_qtr_1")
-    private Boolean projQtr1;
-        @Column(name= "proj_qtr_2")
-    private Boolean projQtr2;
-        @Column(name= "proj_qtr_3")
-    private Boolean projQtr3;
-        @Column(name= "proj_qtr_4")
-    private Boolean projQtr4;
-        @Column(name= "pos_nr")
+    @Column(name = "curr_qtr")
+    private String currQtr;
+    @Column(name = "proj_qtr_1")
+    private String projQtr1;
+    @Column(name = "proj_qtr_2")
+    private String projQtr2;
+    @Column(name = "proj_qtr_3")
+    private String projQtr3;
+    @Column(name = "proj_qtr_4")
+    private String projQtr4;
+    @Column(name = "pos_nr")
     private String posNr;
-        @Column(name= "assigned_mbr_id")
+    @Column(name = "assigned_mbr_id")
     private String assignedMbrId;
-    @Column(name= "pos_type")
-    private String posType;
-    @Column(name= "last_updated")
+    @Column(name = "mbr_name")
+    private String mbrName;
+    @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Position(String pasCode, String orgStructureId, String afscAuth, String grdAuth, Boolean currQtr, Boolean projQtr1, Boolean projQtr2, Boolean projQtr3, Boolean projQtr4, String posNr, String assignedMbrId, String posType, Date lastUpdated) {
+    public Position(String pasCode, String orgStructureId, String afscAuth, String grdAuth, String currQtr, String projQtr1, String projQtr2, String projQtr3, String projQtr4, String posNr, String assignedMbrId, String mbrName, Date lastUpdated) {
         this.pasCode = pasCode;
         this.orgStructureId = orgStructureId;
         this.afscAuth = afscAuth;
@@ -58,10 +58,11 @@ public class Position {
         this.projQtr4 = projQtr4;
         this.posNr = posNr;
         this.assignedMbrId = assignedMbrId;
-        this.posType = posType;
+        this.mbrName = mbrName;
         this.lastUpdated = lastUpdated;
     }
-    public Position(Long id, String pasCode, String orgStructureId, String afscAuth, String grdAuth, Boolean currQtr, Boolean projQtr1, Boolean projQtr2, Boolean projQtr3, Boolean projQtr4, String posNr, String assignedMbrId, String posType, Date lastUpdated) {
+
+    public Position(Long id, String pasCode, String orgStructureId, String afscAuth, String grdAuth, String currQtr, String projQtr1, String projQtr2, String projQtr3, String projQtr4, String posNr, String assignedMbrId, String mbrName, Date lastUpdated) {
         this.id = id;
         this.pasCode = pasCode;
         this.orgStructureId = orgStructureId;
@@ -74,7 +75,7 @@ public class Position {
         this.projQtr4 = projQtr4;
         this.posNr = posNr;
         this.assignedMbrId = assignedMbrId;
-        this.posType = posType;
+        this.mbrName = mbrName;
         this.lastUpdated = lastUpdated;
     }
 }

@@ -17,13 +17,13 @@ public class PositionJSON {
     private String orgStructureId;
     private String afscAuth;
     private String grdAuth;
-    private Boolean currQtr;
-    private Boolean projQtr1;
-    private Boolean projQtr2;
-    private Boolean projQtr3;
-    private Boolean projQtr4;
+    private String currQtr;
+    private String projQtr1;
+    private String projQtr2;
+    private String projQtr3;
+    private String projQtr4;
     private String posNr;
     private String assignedMbrId;
-    private String posType;
+    private String mbrName;
     private Date lastUpdated;
 }
