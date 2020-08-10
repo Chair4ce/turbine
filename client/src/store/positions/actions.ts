@@ -1,7 +1,7 @@
 import {PositionActionTypes} from "./types";
 import {action} from "typesafe-actions";
 import PositionModel from "./models/PositionModel";
-import UnassignedMemberModel from "./models/UnassignedMemberModel";
+import MemberModel from "../members/models/MemberModel";
 
 
 export const positionsFetchRequest = () => action(PositionActionTypes.FETCH_REQUEST);
@@ -9,5 +9,13 @@ export const positionsFetchError = (message: string) => action(PositionActionTyp
 export const positionsFetchSuccess = (payload: PositionModel[]) => action(PositionActionTypes.FETCH_SUCCESS, payload);
 
 export const unassignedMembersFetchRequest = () => action(PositionActionTypes.FETCH_UNASSIGNED_REQUEST);
-export const unassignedMembersPostError = (message: string) => action(PositionActionTypes.FETCH_UNASSIGNED_REQUEST, message);
-export const unassignedMembersPostSuccess = (payload: UnassignedMemberModel[]) => action(PositionActionTypes.FETCH_UNASSIGNED_SUCCESS, payload);
+export const unassignedMembersFetchError = (message: string) => action(PositionActionTypes.FETCH_UNASSIGNED_REQUEST, message);
+export const unassignedMembersFetchSuccess = (payload: MemberModel[]) => action(PositionActionTypes.FETCH_UNASSIGNED_SUCCESS, payload);
+
+export const unFundedMembersFetchRequest = () => action(PositionActionTypes.FETCH_UNFUNDED_REQUEST);
+export const unFundedMembersFetchError = (message: string) => action(PositionActionTypes.FETCH_UNFUNDED_REQUEST, message);
+export const unFundedMembersFetchSuccess = (payload: MemberModel[]) => action(PositionActionTypes.FETCH_UNFUNDED_SUCCESS, payload);
+
+export const doubleBilletedFetchRequest = () => action(PositionActionTypes.FETCH_DOUBLEBILLET_REQUEST);
+export const doubleBilletedPostError = (message: string) => action(PositionActionTypes.FETCH_DOUBLEBILLET_ERROR, message);
+export const doubleBilletedPostSuccess = (payload: MemberModel[]) => action(PositionActionTypes.FETCH_DOUBLEBILLET_SUCCESS, payload);

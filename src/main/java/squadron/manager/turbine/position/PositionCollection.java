@@ -1,8 +1,8 @@
 package squadron.manager.turbine.position;
 
-
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 @Data
@@ -10,8 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Getter
 @Setter
-public class PositionJSON {
-
+public class PositionCollection {
     private Long id;
     private String pasCode;
     private String orgStructureId;
@@ -27,5 +26,8 @@ public class PositionJSON {
     private String dafscAssigned;
     private String nameAssigned;
     private String mbrIdAssigned;
+    private ArrayList<Position> doubleBillet;
+    private ArrayList<Position> unfunded;
     private Date lastUpdated;
+
 }

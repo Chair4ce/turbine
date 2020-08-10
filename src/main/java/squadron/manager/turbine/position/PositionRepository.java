@@ -10,9 +10,10 @@ import java.util.List;
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
     List<Position> findAllByCurrQtrIsTrue();
-    List<Position> findAllByPosNrAndCurrQtrIsFalse(String posNr);
+    List<Position> findAllByPosNrIsNotNullAndCurrQtr(String currQtr);
     List<Position> findAllByPosNr(String posNr);
-
+    List<Position> findAllByPosNrIsNull();
+    List<Position> findAllByPosNrIsNotNullAndCurrQtrIsNull();
 
     void deleteByPosNr(String posNr);
     void deleteAll();

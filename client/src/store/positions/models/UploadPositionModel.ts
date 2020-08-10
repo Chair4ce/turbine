@@ -1,19 +1,23 @@
 export default class UploadPositionModel {
     public pasCode: string;
     public orgStructureId: string | null;
-    public afscAuth: string;
-    public grdAuth: string;
-    public currQtr: boolean;
-    public projQtr1: boolean;
-    public projQtr2: boolean;
-    public projQtr3: boolean;
-    public projQtr4: boolean;
-    public posNr: string;
+    public afscAuth: string | null;
+    public grdAuth: string | null;
+    public currQtr: string | null;
+    public projQtr1: string | null;
+    public projQtr2: string | null;
+    public projQtr3: string | null;
+    public projQtr4: string | null;
+    public posNr: string | null;
+    public gradeAssigned: string | null;
+    public dafscAssigned: string | null;
+    public nameAssigned: string | null;
+    public mbrIdAssigned: string | null;
     public assignedMbrId: string | null;
     public lastUpdated: Date | null;
 
 
-    constructor(pasCode: string, orgStructureId: string | null, afscAuth: string, grdAuth: string, currQtr: boolean, projQtr1: boolean, projQtr2: boolean, projQtr3: boolean, projQtr4: boolean, posNr: string, assignedMbrId: string | null, lastUpdated: Date | null) {
+    constructor(pasCode: string, orgStructureId: string | null, afscAuth: string | null, grdAuth: string | null, currQtr: string | null, projQtr1: string | null, projQtr2: string | null, projQtr3: string | null, projQtr4: string | null, posNr: string | null, gradeAssigned: string | null, dafscAssigned: string | null, nameAssigned: string | null, mbrIdAssigned: string | null, assignedMbrId: string | null, lastUpdated: Date | null) {
         this.pasCode = pasCode;
         this.orgStructureId = orgStructureId;
         this.afscAuth = afscAuth;
@@ -24,6 +28,10 @@ export default class UploadPositionModel {
         this.projQtr3 = projQtr3;
         this.projQtr4 = projQtr4;
         this.posNr = posNr;
+        this.gradeAssigned = gradeAssigned;
+        this.dafscAssigned = dafscAssigned;
+        this.nameAssigned = nameAssigned;
+        this.mbrIdAssigned = mbrIdAssigned;
         this.assignedMbrId = assignedMbrId;
         this.lastUpdated = lastUpdated;
     }

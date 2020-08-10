@@ -1,6 +1,20 @@
 import {callApi} from "../../util/api";
-import {positionsFetchError, positionsFetchRequest, positionsFetchSuccess} from "./actions";
+import {
+    doubleBilletedFetchRequest,
+    doubleBilletedPostError,
+    doubleBilletedPostSuccess,
+    positionsFetchError,
+    positionsFetchRequest,
+    positionsFetchSuccess,
+    unassignedMembersFetchError,
+    unassignedMembersFetchRequest,
+    unassignedMembersFetchSuccess,
+    unFundedMembersFetchError,
+    unFundedMembersFetchRequest,
+    unFundedMembersFetchSuccess
+} from "./actions";
 import {PositionSerializer} from "../../util/PositionSerializer";
+import {MemberSerializer} from "../../util/MemberSerializer";
 
 
 export const getPositions = () => {
@@ -13,12 +27,32 @@ export const getPositions = () => {
     }
 };
 
+export const getUnfundedMembers = () => {
+    return (dispatch: any) => {
+        dispatch(unFundedMembersFetchRequest());
+        callApi('get', 'positions/unassigned')
+            .then(res => dispatch(unFundedMembersFetchSuccess(MemberSerializer.serializeFromBackend(res)))
+            ).catch(err => dispatch(unFundedMembersFetchError(err))
+        );
+    }
+};
+
 export const getUnassignedMembers = () => {
     return (dispatch: any) => {
-        dispatch(positionsFetchRequest());
+        dispatch(unassignedMembersFetchRequest());
         callApi('get', 'positions/unassigned')
-            .then(res => dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
-            ).catch(err => dispatch(positionsFetchError(err))
+            .then(res => dispatch(unassignedMembersFetchSuccess(MemberSerializer.serializeFromBackend(res)))
+            ).catch(err => dispatch(unassignedMembersFetchError(err))
+        );
+    }
+};
+
+export const getDoubleBilletedMembers = () => {
+    return (dispatch: any) => {
+        dispatch(doubleBilletedFetchRequest());
+        callApi('get', 'positions/double')
+            .then(res => dispatch(doubleBilletedPostSuccess(MemberSerializer.serializeFromBackend(res)))
+            ).catch(err => dispatch(doubleBilletedPostError(err))
         );
     }
 };
