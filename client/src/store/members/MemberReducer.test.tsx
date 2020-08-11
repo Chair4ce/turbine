@@ -125,6 +125,7 @@ describe('reducer', () => {
         ).toEqual({
             data: members,
             gainingData: [],
+            gainingLoading: false,
             errors: undefined,
             genericAFSCList: [],
             genericGainingAFSCList: [],

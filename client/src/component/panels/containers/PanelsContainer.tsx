@@ -1,8 +1,7 @@
-import React, {lazy, useEffect, Suspense} from "react";
+import React, {lazy, Suspense, useEffect} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
-import CurrentRosterPanel from "../CurrentRosterPanel";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../../store";
 import {
@@ -12,12 +11,9 @@ import {
     getOfficeCollection,
     getUniqueAFSCCollection
 } from "../../../store/members/thunks";
-import GainingRosterPanel from "../GainingRosterPanel";
 import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Simulate} from "react-dom/test-utils";
-import LoadingSpinner from "../../displayLoading/LoadingSpinner";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -77,9 +73,9 @@ const PanelsContainer: React.FC<Props> = props => {
                 <Suspense fallback={<div>Loading...</div>}>
                 {props.showCurrentPanel ?
                     <CurrentRoster members={currentMembers} loading={loading} collectionAFSC={currentCollectionAFSC} collectionOffice={currentCollectionOffices} callback={props.callback}/>
-                    : ''}
+                    : null}
                 {props.showGainingPanel ?
-                    <GainingRoster members={gainingMembers} loading={gainingLoading} collectionAFSC={gainingCollectionAFSCs} callback={props.callback}/> : ''}
+                    <GainingRoster members={gainingMembers} loading={gainingLoading} collectionAFSC={gainingCollectionAFSCs} callback={props.callback}/> : null}
                     </Suspense>
 
             </div>

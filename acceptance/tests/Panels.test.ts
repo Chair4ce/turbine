@@ -3,6 +3,7 @@ Feature('menu function');
 
 Scenario ('should toggle Alpha table', (I) => {
     I.amOnPage('/');
+    I.click('#MainSectionBtn');
     I.click('#alpha_roster_toggle_btn');
     I.waitForText('Alpha Roster');
     I.click('#alpha_roster_toggle_btn');
@@ -18,6 +19,7 @@ Scenario ('should toggle Alpha table', (I) => {
 // });
 Scenario ('should toggle Gaining table', (I) => {
     I.amOnPage('/');
+    I.click('#MainSectionBtn');
     I.click('#gaining_roster_toggle_btn');
     I.waitForText('Gaining Roster');
     I.click('#gaining_roster_toggle_btn');

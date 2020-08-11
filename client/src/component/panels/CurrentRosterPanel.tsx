@@ -1,5 +1,5 @@
 import * as React from "react";
-import {CSSProperties, useState} from "react";
+import {useState} from "react";
 import classNames from "classnames";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
@@ -38,8 +38,6 @@ import MemberModel from "../../store/members/models/MemberModel";
 import {saveCurrentRoster} from "../../store/members/thunks";
 import FuzzySearch from 'fuzzy-search';
 import UniqueAFSCRows from "./rows/UniqueAFSCRows";
-import RowsByGrade from "./rows/RowsByRankContainer";
-import RowsByOfficeContainer from "./rows/RowsByOfficeContainer";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
 import SkeletonPanelC from "./SkeletonPanelC";
 

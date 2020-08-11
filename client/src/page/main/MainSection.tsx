@@ -1,8 +1,9 @@
 import * as React from "react";
-import {useState} from "react";
+import {useLayoutEffect, useRef, useState} from "react";
 import SideBar from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -11,7 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             display: 'flex',
             flexDirection: 'row',
-            top: 36,
+            top: 68,
             overflow: 'hidden',
             left: 0,
             right: 0,
@@ -40,6 +41,9 @@ const MainSection: React.FC<Props> = props => {
     const [showGainingPanel, toggleGainingPanel] = useState(false);
     const [showLosingPanel, toggleLosingPanel] = useState(false);
     const [showPositionPanel, togglePositionPanel] = useState(false);
+
+    const chart = useRef(null);
+
 
     // const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
     // const [fileData, updateFileData] = useState();
@@ -76,14 +80,14 @@ const MainSection: React.FC<Props> = props => {
                 />
             </div>
             <article className={classes.main}>
-                {/*<StyledPanelsContainer*/}
-                {/*    showCurrentPanel={showCurrentPanel}*/}
-                {/*    showProjectedPanel={showProjectedPanel}*/}
-                {/*    showGainingPanel={showGainingPanel}*/}
-                {/*    showLosingPanel={showLosingPanel}*/}
-                {/*    showPositionPanel={showPositionPanel}*/}
-                {/*    callback={menuSelectHandler}*/}
-                {/*/>*/}
+                <StyledPanelsContainer
+                    showCurrentPanel={showCurrentPanel}
+                    showProjectedPanel={showProjectedPanel}
+                    showGainingPanel={showGainingPanel}
+                    showLosingPanel={showLosingPanel}
+                    showPositionPanel={showPositionPanel}
+                    callback={menuSelectHandler}
+                />
 
             </article>
         </section>
