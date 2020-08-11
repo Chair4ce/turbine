@@ -13,11 +13,10 @@ export default class UploadPositionModel {
     public dafscAssigned: string | null;
     public nameAssigned: string | null;
     public mbrIdAssigned: string | null;
-    public assignedMbrId: string | null;
     public lastUpdated: Date | null;
 
 
-    constructor(pasCode: string, orgStructureId: string | null, afscAuth: string | null, grdAuth: string | null, currQtr: string | null, projQtr1: string | null, projQtr2: string | null, projQtr3: string | null, projQtr4: string | null, posNr: string | null, gradeAssigned: string | null, dafscAssigned: string | null, nameAssigned: string | null, mbrIdAssigned: string | null, assignedMbrId: string | null, lastUpdated: Date | null) {
+    constructor(pasCode: string, orgStructureId: string | null, afscAuth: string | null, grdAuth: string | null, currQtr: string | null, projQtr1: string | null, projQtr2: string | null, projQtr3: string | null, projQtr4: string | null, posNr: string | null, gradeAssigned: string | null, dafscAssigned: string | null, nameAssigned: string | null, mbrIdAssigned: string | null, lastUpdated: Date | null) {
         this.pasCode = pasCode;
         this.orgStructureId = orgStructureId;
         this.afscAuth = afscAuth;
@@ -32,7 +31,6 @@ export default class UploadPositionModel {
         this.dafscAssigned = dafscAssigned;
         this.nameAssigned = nameAssigned;
         this.mbrIdAssigned = mbrIdAssigned;
-        this.assignedMbrId = assignedMbrId;
         this.lastUpdated = lastUpdated;
     }
 }

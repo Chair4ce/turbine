@@ -1,7 +1,6 @@
 import * as React from "react";
 import {useState} from "react";
 import SideBar from "../../component/sidebar/SideBar";
-import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
@@ -41,6 +40,8 @@ const MainSection: React.FC<Props> = props => {
     const [showGainingPanel, toggleGainingPanel] = useState(false);
     const [showLosingPanel, toggleLosingPanel] = useState(false);
     const [showPositionPanel, togglePositionPanel] = useState(false);
+
+    // const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
     // const [fileData, updateFileData] = useState();
     const menuSelectHandler = (type: string) => {
         switch (type) {
@@ -61,6 +62,7 @@ const MainSection: React.FC<Props> = props => {
         }
     }
 
+
     return (
         <section className={classes.root}>
             <div className={classes.sidebar_container}>
@@ -74,14 +76,15 @@ const MainSection: React.FC<Props> = props => {
                 />
             </div>
             <article className={classes.main}>
-                <StyledPanelsContainer
-                    showCurrentPanel={showCurrentPanel}
-                    showProjectedPanel={showProjectedPanel}
-                    showGainingPanel={showGainingPanel}
-                    showLosingPanel={showLosingPanel}
-                    showPositionPanel={showPositionPanel}
-                    callback={menuSelectHandler}
-                />
+                {/*<StyledPanelsContainer*/}
+                {/*    showCurrentPanel={showCurrentPanel}*/}
+                {/*    showProjectedPanel={showProjectedPanel}*/}
+                {/*    showGainingPanel={showGainingPanel}*/}
+                {/*    showLosingPanel={showLosingPanel}*/}
+                {/*    showPositionPanel={showPositionPanel}*/}
+                {/*    callback={menuSelectHandler}*/}
+                {/*/>*/}
+
             </article>
         </section>
     );

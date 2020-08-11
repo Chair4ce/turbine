@@ -29,7 +29,10 @@ export class PositionSerializer {
                     item.projQtr3 ? item.projQtr3 : null,
                     item.projQtr4 ? item.projQtr4 : null,
                     item.posNr ? item.posNr : null,
-                    item.assignedMbrId ? convertToHash(item.assignedMbrId) : null,
+                    item.gradeAssigned ? item.gradeAssigned: null,
+                    item.dafscAssigned ? item.dafscAssigned : null,
+                    item.nameAssigned ? item.nameAssigned : null,
+                    item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned) : null,
                     item.lastUpdated ? item.lastUpdated : null
                 );
             });
