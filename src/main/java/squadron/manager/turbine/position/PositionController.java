@@ -3,11 +3,13 @@ package squadron.manager.turbine.position;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import squadron.manager.turbine.manningChart.ManningChart;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -68,6 +70,35 @@ public class PositionController {
         ArrayList<Member> unAssigned = new ArrayList<>();
         positions.forEach(item -> unAssigned.add(memberRepository.findByMbrId(item.getMbrIdAssigned())));
         return unAssigned;
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/projected")
+    public @ResponseBody
+    List<ManningChart> getAuthorized() {
+        List<String> distinctAFSC = memberRepository.findDistinctAFSCs();
+        System.out.println( distinctAFSC);
+        List<ManningChart> ChartData = new ArrayList<>();
+        for (String AFSC : distinctAFSC) {
+            ChartData.add( new ManningChart(AFSC, memberRepository.countAllByDafscAndDafscIsNotNull(AFSC), positionRepository.countAllByAfscAuthAndCurrQtr(AFSC, "1")  ));
+        }
+        return ChartData;
+    }
+
+//    List<ManningChart> getCurrentCountOfEachAFSC() {
+//        List<String> distinctAFSC = memberRepository.findDistinctAFSCs();
+//        System.out.println( distinctAFSC);
+//        List<ManningChart> ChartData = new ArrayList<>();
+//        for (String AFSC : distinctAFSC) {
+//            ChartData.add( new ManningChart(AFSC, memberRepository.findAFSCCount(AFSC).size()));
+//        }
+//        return ChartData;
+//    }
+
+    void iterateBetweenDatesJava8(LocalDate start, LocalDate end) {
+        for (LocalDate date = start; date.isBefore(end); date = date.plusDays(1)) {
+
+        }
     }
 
     public Iterable<Position> saveOrUpdateAndReturnAllPositions(@RequestBody @Valid Iterable<PositionJSON> json) {
