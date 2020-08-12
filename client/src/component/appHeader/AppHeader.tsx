@@ -4,12 +4,14 @@ import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Button, Typography} from "@material-ui/core";
 import clsx from "clsx";
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import ProfileMenu from "./ProfileMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             textRendering: 'optimizeLegibility',
-            display: 'block',
+            display: 'flex',
             width: '100%',
             height: '100%',
             backgroundColor: '#313131',
@@ -19,6 +21,11 @@ const useStyles = makeStyles((theme: Theme) =>
         logo_area: {
             display: 'flex',
             alignContent: 'start',
+        },
+        titleArea: {
+            display: 'block',
+            width: '100%',
+            height: '100%',
         },
         turbineLogo: {
             margin: '4px 8px 4px 8px'
@@ -76,8 +83,13 @@ const useStyles = makeStyles((theme: Theme) =>
         selected: {
             borderBottom: '2px solid #5D8AA8',
         },
-        unSelected: {
-
+        unSelected: {},
+        profileActions: {
+            width: 100,
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
         }
 
     }),
@@ -88,10 +100,10 @@ interface Props {
     className?: string;
 }
 
-    const HEADER_MENU_SELECT_ITEM = {
-        SHOW_MAIN_SECTION: 'HEADER_MENU/SHOW_MAIN_SECTION',
-        SHOW_HEALTH_SECTION: 'HEADER_MENU/SHOW_HEALTH_SECTION',
-    }
+const HEADER_MENU_SELECT_ITEM = {
+    SHOW_MAIN_SECTION: 'HEADER_MENU/SHOW_MAIN_SECTION',
+    SHOW_HEALTH_SECTION: 'HEADER_MENU/SHOW_HEALTH_SECTION',
+}
 
 const MainHeader: React.FC<Props> = props => {
     const [selected, setSelected] = React.useState('HEADER_MENU/SHOW_MAIN_SECTION');
@@ -121,18 +133,29 @@ const MainHeader: React.FC<Props> = props => {
     });
     return (
         <header className={classNames(classes.root, props.className)}>
-            <div className={classes.logo_area}>
-                <div className={classes.turbineLogo}>
-                <TurbineLogo/>
+            <div className={classes.titleArea}>
+                <div className={classes.logo_area}>
+                    <div className={classes.turbineLogo}>
+                        <TurbineLogo/>
+                    </div>
+                    <Typography className={classes.app_title_text}>Turbine</Typography>
                 </div>
-            <Typography className={classes.app_title_text}>Turbine</Typography>
+                <div className={classes.headerMenu}>
+                    <div className={classes.headerMenuBtns}>
+                        <button id={'MainSectionBtn'} className={classNames(classes.menuBtn, MenuItemMainClassName)}
+                                onClick={showMainSection}> Members
+                        </button>
+                        <div className={classes.menuBtnDivider}/>
+                        <button id={'HealthSectionBtn'} className={classNames(classes.menuBtn, MenuItemHealthClassName)}
+                                onClick={showHealthSection}>Health
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div className={classes.headerMenu}>
-                <div className={classes.headerMenuBtns}>
-                <button id={'MainSectionBtn'} className={classNames(classes.menuBtn, MenuItemMainClassName)} onClick={showMainSection}> Members</button>
-                    <div className={classes.menuBtnDivider}/>
-                    <button id={'HealthSectionBtn'} className={classNames(classes.menuBtn, MenuItemHealthClassName)} onClick={showHealthSection}>Health</button>
-                </div>
+            <div className={classes.profileActions}>
+
+                <ProfileMenu/>
+
             </div>
         </header>
     )

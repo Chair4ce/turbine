@@ -3,10 +3,12 @@ import {connectRouter, RouterState} from 'connected-react-router';
 import {History} from 'history';
 import {showModalReducer} from "./modals/reducer";
 import {membersReducer, MembersState} from "./members";
+import {positionReducer, PositionState} from "./positions";
 
 // The top-level state object
 export interface ApplicationState {
     members: MembersState;
+    positions: PositionState;
     router: RouterState;
 }
 
@@ -16,6 +18,7 @@ export interface ApplicationState {
 export const createRootReducer = (history: History) =>
     combineReducers({
         showModal: showModalReducer,
+        positions: positionReducer,
         members: membersReducer,
         router: connectRouter(history),
     });
