@@ -208,6 +208,7 @@ public class MemberService {
                 newImport.getDateArrivedStation(),
                 newImport.getRnltd(),
                 newImport.getDor(),
+                newImport.getDeros(),
                 date
         );
     }
@@ -241,6 +242,7 @@ public class MemberService {
         existingMember.setSupvBeginDate(importingMember.getSupvBeginDate());
         existingMember.setDateArrivedStation(importingMember.getDateArrivedStation());
         existingMember.setDor(importingMember.getDor());
+        existingMember.setDeros(importingMember.getDeros());
         existingMember.setLastUpdated(importingMember.getLastUpdated());
 
         memberRepository.save(existingMember);

@@ -5,7 +5,9 @@ import classNames from "classnames";
 import {Button} from "@material-ui/core";
 import CollapseIcon from "../icon/CollapseIcon";
 import ExpandIcon from "../icon/ExpandIcon";
-import HealthMenu from "../menus/HealthMenu";
+import HealthMenu, {HEALTH_MENU_SELECT_ACTION} from "../menus/HealthMenu";
+import {SIDEBAR_ACTION} from "./SideBar";
+import {HEADER_MENU_SELECT_ACTION} from "../appHeader/AppHeader";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,37 +62,50 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    // showCurrentPanel: boolean;
+    showManningChart: boolean;
     // showProjectedPanel: boolean;
     // showGainingPanel: boolean;
     // showLosingPanel: boolean;
     // showPositionPanel: boolean;
-    // menu_item_select_callback: (type: string) => void;
+    sideBarExpanded: boolean;
+    callbackHandler: (type: string) => void;
     className?: string;
 }
 
 const HealthSideBar: React.FC<Props> = props => {
     const classes = useStyles();
-    const [expanded, toggleDrawer] = React.useState(true);
     const drawerToggleClassName = clsx({
-        [classes.expanded]: expanded,
-        [classes.collapsed]: !expanded,
+        [classes.expanded]: props.sideBarExpanded,
+        [classes.collapsed]: !props.sideBarExpanded,
     });
 
-    const handleClick = () => {
-        toggleDrawer(prev => !prev);
+    const callBackHandler = (type: string) => {
+        switch (type) {
+            case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
+                props.callbackHandler(HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART)
+                break;
+        }
+
+    }
+
+    const toggleSideBarWidth = () => {
+        props.callbackHandler(
+            SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND
+        )
     }
 
     return (
         <aside className={classNames(classes.root, drawerToggleClassName)}>
             <div className={classes.expand_btn_area}>
-                <Button className={classNames(classes.toggleWidthBtn)} onClick={handleClick}>
-                    {expanded ? <CollapseIcon/> : <ExpandIcon/>}
+                <Button className={classNames(classes.toggleWidthBtn)} onClick={toggleSideBarWidth}>
+                    {props.sideBarExpanded ? <CollapseIcon/> : <ExpandIcon/>}
                 </Button>
             </div>
             <div className={classes.menu_container}>
                 <HealthMenu
-                    expanded={expanded}
+                    expanded={props.sideBarExpanded}
+                    showManningChart={props.showManningChart}
+                    menuSelectHandler={callBackHandler}
                 />
             </div>
         </aside>

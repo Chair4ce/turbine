@@ -66,27 +66,34 @@ interface Props {
     showGainingPanel: boolean;
     showLosingPanel: boolean;
     showPositionPanel: boolean;
+    drawerExpanded: boolean;
     menu_item_select_callback: (type: string) => void;
     className?: string;
 }
 
+const SIDE_BAR_STATE = {
+    TOGGLE_SIDEBAR_EXPAND: 'SIDE_BAR/TOGGLE_SIDEBAR_EXPAND',
+}
+
 const SideBar: React.FC<Props> = props => {
     const classes = useStyles();
-    const [expanded, toggleDrawer] = React.useState(true);
     const drawerToggleClassName = clsx({
-        [classes.expanded]: expanded,
-        [classes.collapsed]: !expanded,
+        [classes.expanded]: props.drawerExpanded,
+        [classes.collapsed]: !props.drawerExpanded,
     });
 
-    const handleClick = () => {
-        toggleDrawer(prev => !prev);
+
+    const toggleExpand = () => {
+        props.menu_item_select_callback(
+            SIDE_BAR_STATE.TOGGLE_SIDEBAR_EXPAND
+        )
     }
 
     return (
         <aside className={classNames(classes.root, drawerToggleClassName)}>
             <div className={classes.expand_btn_area}>
-                <Button className={classNames(classes.toggleWidthBtn)} onClick={handleClick}>
-                    {expanded ? <CollapseIcon/> : <ExpandIcon/>}
+                <Button className={classNames(classes.toggleWidthBtn)} onClick={toggleExpand}>
+                    {props.drawerExpanded ? <CollapseIcon/> : <ExpandIcon/>}
                 </Button>
             </div>
             <div className={classes.menu_container}>
@@ -97,7 +104,7 @@ const SideBar: React.FC<Props> = props => {
                     showLosingPanel={props.showLosingPanel}
                     showPositionPanel={props.showPositionPanel}
                     menuSelectHandler={props.menu_item_select_callback}
-                    expanded={expanded}
+                    expanded={props.drawerExpanded}
                 />
             </div>
         </aside>
@@ -105,3 +112,7 @@ const SideBar: React.FC<Props> = props => {
 }
 
 export default SideBar;
+
+export {
+    SIDE_BAR_STATE as SIDEBAR_ACTION,
+};

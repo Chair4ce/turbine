@@ -39,5 +39,7 @@ public class MemberJSON {
 
     private Date dor;
 
+    private Date deros;
+
     private Date lastUpdated;
 }

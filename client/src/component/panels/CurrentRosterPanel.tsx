@@ -9,6 +9,7 @@ import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import CheckIcon from '@material-ui/icons/Check';
 import SaveIcon from '@material-ui/icons/Save';
 import clsx from 'clsx';
+import SearchIcon from '@material-ui/icons/Search';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {
@@ -23,7 +24,7 @@ import {
     DialogTitle,
     Fab,
     Fade,
-    FormControl,
+    FormControl, InputAdornment,
     InputLabel,
     Menu,
     MenuItem,
@@ -245,10 +246,12 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 120,
         },
         searchInput: {
-            height: 45,
+            height: 40,
             marginRight: 8,
-            marginBottom: 4,
             paddingLeft: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end'
         },
         totalMembersCount: {
             color: '#dcdcdc',
@@ -276,6 +279,8 @@ const useStyles = makeStyles((theme: Theme) =>
         panelTitle: {
             display: 'flex',
             alignItems: 'center',
+            height: '100%',
+            width: '100%',
             flexGrow: 0,
             flexShrink: 1,
         },
@@ -283,7 +288,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             marginLeft: 'auto',
-            flexShrink: 0,
+            flexShrink: .2,
             cursor: 'pointer',
         },
         closeBtn: {
@@ -325,6 +330,9 @@ const useStyles = makeStyles((theme: Theme) =>
             '&:hover': {
                 backgroundColor: 'rgba(180,180,180,0.27)',
             }
+        },
+        searchInputLabel: {
+            fontFamily: 'Rambla'
         }
     }),
 );
@@ -665,8 +673,15 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                     <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
                             {props.members && !sortByGrade && !sortBySkill && !sortByAFSC && !sortByOffice ?
-                                <TextField label="Search" value={searchAll} id="standard-size-small" size="small"
-                                           onChange={handleFuzzy}/> : null}
+                                <TextField className={classes.searchInputLabel} value={searchAll} id="standard-size-small" size="small"
+                                           onChange={handleFuzzy}
+                                           InputProps={{
+                                               startAdornment: (
+                                                   <InputAdornment position="start">
+                                                       <SearchIcon />
+                                                   </InputAdornment>
+                                               ),
+                                           }}/>: null}
                             {/*{props.members && sortByAFSC ? <TextField label="Search" id="standard-size-small" size="small"*/}
                             {/*                                 onChange={handleFuzzy}/> : null}*/}
                             {/*{props.members && sortByOffice ? <TextField label="Search" id="standard-size-small"  size="small"*/}

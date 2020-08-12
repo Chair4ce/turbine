@@ -3,9 +3,6 @@ import styled from "styled-components";
 
 const TurbineLogo = () => {
     return (
-        <Wrapper
-            className="turbineIcon"
-        >
                 <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path fillRule="evenodd" clipRule="evenodd"
                           d="M10 20C15.5228 20 20 15.5228 20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20ZM10.0239 18.5442C14.7427 18.5442 18.568 14.7188 18.568 10C18.568 5.28119 14.7427 1.45585 10.0239 1.45585C5.30506 1.45585 1.47971 5.28119 1.47971 10C1.47971 14.7188 5.30506 18.5442 10.0239 18.5442Z"
@@ -59,12 +56,7 @@ const TurbineLogo = () => {
                         d="M10.4947 2.61739C10.8533 2.61549 11.855 2.74993 12.4617 3.02004C13.6476 4.52886 13.8197 6.47476 12.6125 8.07192C12.4669 7.88714 12.3794 7.79025 12.2103 7.62748C12.7562 5.90895 12.0373 3.86958 10.4947 2.61739Z"
                         fill="#5D8AA8"/>
                 </svg>
-        </Wrapper>
     );
 };
 
 export default TurbineLogo;
-
-const Wrapper = styled('div')`
-padding: 7px;
-`;

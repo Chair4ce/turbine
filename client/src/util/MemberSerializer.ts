@@ -35,6 +35,7 @@ export class MemberSerializer {
                     item.dateArrivedStation ? item.dateArrivedStation : null,
                     item.rnltd ? item.rnltd : null,
                     item.dor ? item.dor : null,
+                    item.deros ? item.deros : null,
                 );
             });
         }
@@ -60,6 +61,7 @@ export class MemberSerializer {
                     item.dateArrivedStation ? item.dateArrivedStation : null,
                     item.rnltd ? item.rnltd : null,
                     item.dor ? item.dor : null,
+                    item.deros ? item.deros : null,
                     item.lastUpdated ? item.lastUpdated : null
                 );
             });

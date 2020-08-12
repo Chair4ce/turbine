@@ -17,10 +17,11 @@ export default class MemberModel {
     public dateArrivedStation: Date | undefined;
     public rnltd: Date | undefined;
     public dor: Date | undefined;
+    public deros: Date | undefined;
     public lastUpdated: Date | undefined;
 
 
-    constructor(id: number, mbrId: string, fullName: string, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | undefined, dutyTitle: string | undefined, dutyStartDate: Date | undefined, dutyPhone: string | undefined, supvName: string | undefined, supvBeginDate: Date | undefined, dateArrivedStation: Date | undefined, rnltd: Date | undefined, dor: Date | undefined, lastUpdated: Date | undefined) {
+    constructor(id: number, mbrId: string, fullName: string, grade: string, assignedPas: string, dafsc: string, officeSymbol: string | undefined, dutyTitle: string | undefined, dutyStartDate: Date | undefined, dutyPhone: string | undefined, supvName: string | undefined, supvBeginDate: Date | undefined, dateArrivedStation: Date | undefined, rnltd: Date | undefined, dor: Date | undefined, deros: Date | undefined, lastUpdated: Date | undefined) {
         this.id = id;
         this.mbrId = mbrId;
         this.fullName = fullName;
@@ -36,6 +37,7 @@ export default class MemberModel {
         this.dateArrivedStation = dateArrivedStation;
         this.rnltd = rnltd;
         this.dor = dor;
+        this.deros = deros;
         this.lastUpdated = lastUpdated;
     }
 

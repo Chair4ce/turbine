@@ -23,7 +23,7 @@ import {
     DialogTitle,
     Fab,
     Fade,
-    FormControl,
+    FormControl, InputAdornment,
     InputLabel,
     Menu,
     MenuItem,
@@ -44,6 +44,7 @@ import RowsByGainingRankContainer from "./rows/RowsByGainingRankContainer";
 import {ApplicationState} from "../../store";
 import SkeletonPanelC from "./SkeletonPanelC";
 import GainingMemberModel from "../../store/members/models/GainingMemberModel";
+import SearchIcon from "@material-ui/icons/Search";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -244,10 +245,11 @@ const useStyles = makeStyles((theme: Theme) =>
             minWidth: 120,
         },
         searchInput: {
-            height: 45,
+            height: 40,
             marginRight: 8,
-            marginBottom: 4,
-            paddingLeft: 20,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end'
         },
         totalMembersCount: {
             color: '#dcdcdc'
@@ -275,6 +277,8 @@ const useStyles = makeStyles((theme: Theme) =>
         panelTitle: {
             display: 'flex',
             alignItems: 'center',
+            height: '100%',
+            width: '100%',
             flexGrow: 0,
             flexShrink: 1,
         },
@@ -282,7 +286,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             marginLeft: 'auto',
-            flexShrink: 0,
+            flexShrink: .2,
             cursor: 'pointer',
         },
         closeBtn: {
@@ -597,10 +601,24 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
                             {props.members && !sortByGrade && !sortByAFSC ?
-                                <TextField label="Search All" id="standard-size-small" size="small"
-                                           onChange={handleFuzzy}/> :
-                                <TextField label="Search AFSC" id="standard-size-small" size="small"
-                                           onChange={handleFuzzy}/>}
+                                <TextField id="standard-size-small" size="small"
+                                           onChange={handleFuzzy}
+                                           InputProps={{
+                                               startAdornment: (
+                                                   <InputAdornment position="start">
+                                                       <SearchIcon />
+                                                   </InputAdornment>
+                                               ),
+                                           }}/> :
+                                <TextField id="standard-size-small" size="small"
+                                           onChange={handleFuzzy}
+                                           InputProps={{
+                                               startAdornment: (
+                                                   <InputAdornment position="start">
+                                                       <SearchIcon />
+                                                   </InputAdornment>
+                                               ),
+                                           }}/>}
                         </div>
                         <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
                             <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>

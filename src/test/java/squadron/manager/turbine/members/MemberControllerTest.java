@@ -37,6 +37,7 @@ public class MemberControllerTest extends BaseIntegrationTest {
                date,
                date,
                date,
+               date,
                date
                );
 

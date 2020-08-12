@@ -59,11 +59,12 @@ public class Member {
     private Date rnltd;
 
     private Date dor;
+    private Date deros;
 
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(String mbrId, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date lastUpdated) {
+    public Member(String mbrId, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor,Date deros, Date lastUpdated) {
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.grade = grade;
@@ -78,10 +79,11 @@ public class Member {
         this.dateArrivedStation = dateArrivedStation;
         this.rnltd = rnltd;
         this.dor = dor;
+        this.deros = deros;
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(Long id, String mbrId, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor, Date lastUpdated) {
+    public Member(Long id, String mbrId, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor,Date deros, Date lastUpdated) {
         this.id = id;
         this.mbrId = mbrId;
         this.fullName = fullName;
@@ -97,6 +99,7 @@ public class Member {
         this.dateArrivedStation = dateArrivedStation;
         this.rnltd = rnltd;
         this.dor = dor;
+        this.deros = deros;
         this.lastUpdated = lastUpdated;
     }
 
@@ -115,6 +118,7 @@ public class Member {
         this.setDateArrivedStation(json.getDateArrivedStation());
         this.setRnltd(json.getRnltd());
         this.setDor(json.getDor());
+        this.setDeros(json.getDeros());
         this.setLastUpdated(json.getLastUpdated());
         return this;
     }

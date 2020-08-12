@@ -1,6 +1,6 @@
 import * as React from "react";
 import {useLayoutEffect, useRef, useState} from "react";
-import SideBar from "../../component/sidebar/SideBar";
+import SideBar, {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
@@ -31,6 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+    sideBarExpandedState: boolean;
+    sideBarCallBack: (type: string) => void;
     className?: string;
 }
 
@@ -41,8 +43,8 @@ const MainSection: React.FC<Props> = props => {
     const [showGainingPanel, toggleGainingPanel] = useState(false);
     const [showLosingPanel, toggleLosingPanel] = useState(false);
     const [showPositionPanel, togglePositionPanel] = useState(false);
+    const [sideBarExpanded, toggleSideBarExpanded] = useState(false);
 
-    const chart = useRef(null);
 
 
     // const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
@@ -63,6 +65,10 @@ const MainSection: React.FC<Props> = props => {
                 break;
             case ROSTER_MENU_SELECT_ACTION.TOGGLE_POSITION_PANEL:
                 togglePositionPanel(prev => !prev)
+                break;
+            case SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND:
+                props.sideBarCallBack(SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND)
+                break;
         }
     }
 
@@ -76,6 +82,7 @@ const MainSection: React.FC<Props> = props => {
                     showGainingPanel={showGainingPanel}
                     showLosingPanel={showLosingPanel}
                     showPositionPanel={showPositionPanel}
+                    drawerExpanded={props.sideBarExpandedState}
                     menu_item_select_callback={menuSelectHandler}
                 />
             </div>

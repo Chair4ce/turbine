@@ -2,7 +2,8 @@ import * as React from "react";
 import classNames from "classnames";
 import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Button} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
+import clsx from "clsx";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,7 +19,9 @@ const useStyles = makeStyles((theme: Theme) =>
         logo_area: {
             display: 'flex',
             alignContent: 'start',
-            marginLeft: 3,
+        },
+        turbineLogo: {
+            margin: '4px 8px 4px 8px'
         },
         app_title_text: {
             color: '#ffffff',
@@ -30,7 +33,8 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             width: 'min-content',
             fontFamily: 'Rambla',
-            fontSize: 24,
+            fontSize: 16,
+            fontHeight: 19,
             fontStyle: 'normal',
             fontWeight: 'normal',
         },
@@ -44,12 +48,12 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             position: 'relative',
             width: 300,
-            height: 28
+            height: 35
         },
         menuBtn: {
             position: 'relative',
             width: 100,
-            height: 20,
+            height: 36,
             outline: 'none',
             border: 'none',
             fontSize: 13,
@@ -60,16 +64,22 @@ const useStyles = makeStyles((theme: Theme) =>
             borderRadius: 0,
             '&:hover': {
                 fontWeight: 'bold',
-                borderBottom: '1px solid #C4C4C4'
             },
             cursor: 'pointer'
         },
         menuBtnDivider: {
             position: 'relative',
-            backgroundColor: '#ffff',
-            height: 20,
-            width: 2
+            backgroundColor: 'rgb(196 196 196 / 43%)',
+            height: 15,
+            width: 1
+        },
+        selected: {
+            borderBottom: '2px solid #5D8AA8',
+        },
+        unSelected: {
+
         }
+
     }),
 );
 
@@ -84,30 +94,44 @@ interface Props {
     }
 
 const MainHeader: React.FC<Props> = props => {
+    const [selected, setSelected] = React.useState('HEADER_MENU/SHOW_MAIN_SECTION');
+
+
     const classes = useStyles();
 
     const showMainSection = () => {
+        setSelected(HEADER_MENU_SELECT_ITEM.SHOW_MAIN_SECTION);
         props.menuSelectHandler(
             HEADER_MENU_SELECT_ITEM.SHOW_MAIN_SECTION
         )
     }
 
     const showHealthSection = () => {
+        setSelected(HEADER_MENU_SELECT_ITEM.SHOW_HEALTH_SECTION);
         props.menuSelectHandler(
             HEADER_MENU_SELECT_ITEM.SHOW_HEALTH_SECTION
         )
     }
+
+    const MenuItemMainClassName = clsx({
+        [classes.selected]: selected == 'HEADER_MENU/SHOW_MAIN_SECTION',
+    });
+    const MenuItemHealthClassName = clsx({
+        [classes.selected]: selected == 'HEADER_MENU/SHOW_HEALTH_SECTION',
+    });
     return (
         <header className={classNames(classes.root, props.className)}>
             <div className={classes.logo_area}>
+                <div className={classes.turbineLogo}>
                 <TurbineLogo/>
-            <h1 className={classes.app_title_text}>Turbine</h1>
+                </div>
+            <Typography className={classes.app_title_text}>Turbine</Typography>
             </div>
             <div className={classes.headerMenu}>
                 <div className={classes.headerMenuBtns}>
-                <Button id={'MainSectionBtn'} className={classes.menuBtn} onClick={showMainSection}> Members</Button>
+                <button id={'MainSectionBtn'} className={classNames(classes.menuBtn, MenuItemMainClassName)} onClick={showMainSection}> Members</button>
                     <div className={classes.menuBtnDivider}/>
-                    <Button id={'HealthSectionBtn'} className={classes.menuBtn} onClick={showHealthSection}>Health</Button>
+                    <button id={'HealthSectionBtn'} className={classNames(classes.menuBtn, MenuItemHealthClassName)} onClick={showHealthSection}>Health</button>
                 </div>
             </div>
         </header>

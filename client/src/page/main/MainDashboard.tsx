@@ -1,19 +1,23 @@
-import React, {useState} from 'react';
+import React, {lazy, Suspense, useState} from 'react';
 import MainHeader, {HEADER_MENU_SELECT_ACTION} from "../../component/appHeader/AppHeader";
 import classNames from "classnames";
-import MainSection from "./MainSection";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import HealthSection from "./HealthSection";
+import LoadingSpinner from "../../component/displayLoading/LoadingSpinner";
+import {LinearProgress, Modal, Paper} from "@material-ui/core";
+import {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
+
+const Health = lazy(() => import('./HealthSection'));
+const Members = lazy(() => import('./MainSection'));
+
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        root: {
-        },
+        root: {},
         header_container: {
             minWidth: 973,
             height: 66,
-        }
-
+        },
+        loading: {}
     }),
 );
 
@@ -22,20 +26,24 @@ interface Props {
 }
 
 const MainDashboard: React.FC<Props> = props => {
-    const [showMainSection, toggleMainSection] = useState(false);
+    const [showMainSection, toggleMainSection] = useState(true);
     const [showHealthSection, toggleHealthSection] = useState(false);
+    const [sideBarExpanded, toggleExpandedSideBar] = useState(false);
     const classes = useStyles();
 
 
     const headerMenuSelectHandler = (type: string) => {
         switch (type) {
             case HEADER_MENU_SELECT_ACTION.SHOW_MAIN_SECTION:
-                toggleHealthSection(false);
-                toggleMainSection(true);
+                toggleHealthSection(false)
+                toggleMainSection(true)
                 break;
             case HEADER_MENU_SELECT_ACTION.SHOW_HEALTH_SECTION:
-                toggleMainSection(false);
-                toggleHealthSection(true);
+                toggleMainSection(false)
+                toggleHealthSection(true)
+                break;
+            case SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND:
+                toggleExpandedSideBar(prev => !prev)
                 break;
         }
     }
@@ -44,8 +52,17 @@ const MainDashboard: React.FC<Props> = props => {
             <div className={classes.header_container}>
                 <MainHeader menuSelectHandler={headerMenuSelectHandler}/>
             </div>
-            {showMainSection && <MainSection/> }
-            {showHealthSection && <HealthSection/> }
+            {showMainSection && <Suspense fallback={
+                <LinearProgress/>
+            }> <Members sideBarCallBack={headerMenuSelectHandler} sideBarExpandedState={sideBarExpanded}/>
+            </Suspense>}
+            {showHealthSection &&
+            <Suspense fallback={
+                <LinearProgress/>
+            }>
+                <Health callBackHandler={headerMenuSelectHandler} sideBarExpanded={sideBarExpanded}/>
+            </Suspense>
+            }
         </div>
     );
 };

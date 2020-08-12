@@ -6,7 +6,7 @@ import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import AddIcon from "@material-ui/icons/Add";
-
+import MultilineChartIcon from '@material-ui/icons/MultilineChart';
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
@@ -59,26 +59,24 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+    showManningChart: boolean;
     expanded: boolean;
+    menuSelectHandler: (type: string) => void;
     className?: string;
 }
 
-// const ROSTER_MENU_SELECT_ITEM = {
-//     TOGGLE_CURRENT_ROSTER: 'ROSTER_MENU/TOGGLE_CURRENT',
-//     TOGGLE_PROJECTED_ROSTER: 'ROSTER_MENU/TOGGLE_PROJECTED',
-//     TOGGLE_GAINING_ROSTER: 'ROSTER_MENU/TOGGLE_GAINING',
-//     TOGGLE_LOSING_ROSTER: 'ROSTER_MENU/TOGGLE_LOSING',
-//     TOGGLE_POSITION_PANEL: 'ROSTER_MENU/TOGGLE_POSITION'
-// }
+const HEALTH_MENU_SELECT_ITEM = {
+    TOGGLE_MANNING_CHART: 'HEALTH_MENU/TOGGLE_MANNING_CHART',
+}
 
 const HealthMenu: React.FC<Props> = props => {
     const classes = useStyles();
 
-    // const toggleCurrentPanel = () => {
-    //     props.menuSelectHandler(
-    //         ROSTER_MENU_SELECT_ITEM.TOGGLE_CURRENT_ROSTER
-    //     )
-    // }
+    const toggleManningChart = () => {
+        props.menuSelectHandler(
+            HEALTH_MENU_SELECT_ITEM.TOGGLE_MANNING_CHART
+        )
+    }
     //
     // const toggleProjectedPanel = () => {
     //     props.menuSelectHandler(
@@ -104,9 +102,6 @@ const HealthMenu: React.FC<Props> = props => {
     //     )
     // }
     //
-    // const handleCurrentClick = () => {
-    //     toggleCurrentPanel();
-    // }
 
     // const handleProjectedClick = () => {
     //     toggleProjectedPanel();
@@ -124,10 +119,10 @@ const HealthMenu: React.FC<Props> = props => {
     //     togglePositionPanel();
     // }
 
-    // const currentSelectorClassName = clsx({
-    //     [classes.selected]: props.showCurrentPanel,
-    //     [classes.unselected]: !props.showCurrentPanel,
-    // });
+    const chartSelectorClassName = clsx({
+        [classes.selected]: props.showManningChart,
+        [classes.unselected]: !props.showManningChart,
+    });
     //
     // const projectedSelectorClassName = clsx({
     //     [classes.selected]: props.showProjectedPanel,
@@ -152,16 +147,16 @@ const HealthMenu: React.FC<Props> = props => {
     return (
         <div className={classNames(classes.root, props.className)}>
             <MenuList>
-                {/*<MenuItem id={'alpha_roster_toggle_btn'} className={classNames(classes.menu_btn, currentSelectorClassName)}*/}
-                {/*          onClick={handleCurrentClick}>*/}
-                {/*    <div className={classes.iconArea}>*/}
-                {/*        <AssignmentIcon/>*/}
-                {/*    </div>*/}
-                {/*    {props.expanded ? <span className={classNames(classes.menu_item_text, currentSelectorClassName)}>*/}
-                {/*    Current*/}
-                {/*    </span> : ''}*/}
-                {/*    {props.showCurrentPanel ? <div className={classes.selected_item}/> : ''}*/}
-                {/*</MenuItem>*/}
+                <MenuItem id={'manning_chart_toggle_btn'} className={classNames(classes.menu_btn, chartSelectorClassName)}
+                          onClick={toggleManningChart}>
+                    <div className={classes.iconArea}>
+                        <MultilineChartIcon/>
+                    </div>
+                    {props.expanded ? <span className={classNames(classes.menu_item_text, chartSelectorClassName)}>
+                    Projected Manning
+                    </span> : ''}
+                    {props.showManningChart ? <div className={classes.selected_item}/> : ''}
+                </MenuItem>
                 {/*<MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, gainingSelectorClassName)}*/}
                 {/*          onClick={handleGainingClick}>*/}
                 {/*    <div className={classes.iconArea}>*/}
@@ -206,6 +201,6 @@ const HealthMenu: React.FC<Props> = props => {
 
 export default HealthMenu;
 
-// export {
-//     HEALTH_MENU_SELECT_ITEM as HEALTH_MENU_SELECT_ACTION,
-// };
+export {
+    HEALTH_MENU_SELECT_ITEM as HEALTH_MENU_SELECT_ACTION,
+};

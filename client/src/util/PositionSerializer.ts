@@ -72,6 +72,7 @@ export class PositionSerializer {
                         subItem.dateArrivedStation ? subItem.dateArrivedStation : null,
                         subItem.rnltd ? subItem.rnltd : null,
                         subItem.dor ? subItem.dor : null,
+                        subItem.deros ? subItem.deros : null,
                         subItem.lastUpdated ? subItem.lastUpdated : null
                     ) }),
                     item.unfunded.map((subItem: any) => { return new MemberModel(
@@ -89,6 +90,7 @@ export class PositionSerializer {
                         subItem.supvBeginDate ? subItem.supvBeginDate: null,
                         subItem.dateArrivedStation ? subItem.dateArrivedStation : null,
                         subItem.rnltd ? subItem.rnltd : null,
+                        subItem.dor ? subItem.dor : null,
                         subItem.dor ? subItem.dor : null,
                         subItem.lastUpdated ? subItem.lastUpdated : null
                     ) }),
