@@ -28,7 +28,7 @@ interface Props {
 const MainDashboard: React.FC<Props> = props => {
     const [showMainSection, toggleMainSection] = useState(true);
     const [showHealthSection, toggleHealthSection] = useState(false);
-    const [sideBarExpanded, toggleExpandedSideBar] = useState(false);
+    const [sideBarExpanded, toggleExpandedSideBar] = useState(true);
     const classes = useStyles();
 
 

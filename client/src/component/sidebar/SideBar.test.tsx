@@ -9,6 +9,7 @@ describe('SideBar Test', () => {
         let  Mockfn = jest.fn();
         subject = shallow(
             <SideBar
+                drawerExpanded={false}
                 showPositionPanel={false}
             showLosingPanel={false}
                 showGainingPanel={false}

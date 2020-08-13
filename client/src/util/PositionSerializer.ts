@@ -10,6 +10,7 @@ function convertToHash(mbrId: string) {
     //This throws out everything except integers of the hash
     // let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
     //     .match(/\d+/g).map(Number).join("").substring(1,10);
+    console.log(mbrId);
     return crypto.createHash('sha1').update(mbrId.replace(/-/g, "")).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1, 10);
 }
@@ -20,20 +21,20 @@ export class PositionSerializer {
             return items.map((item: any) => {
                 return new UploadPositionModel(
                     item.pasCode,
-                    item.orgStructureId ? item.orgStructureId : null,
-                    item.afscAuth ? item.afscAuth : null,
-                    item.grdAuth ? item.grdAuth : null,
-                    item.currQtr ? item.currQtr : null,
-                    item.projQtr1 ? item.projQtr1 : null,
-                    item.projQtr2 ? item.projQtr2 : null,
-                    item.projQtr3 ? item.projQtr3 : null,
-                    item.projQtr4 ? item.projQtr4 : null,
-                    item.posNr ? item.posNr : null,
-                    item.gradeAssigned ? item.gradeAssigned: null,
-                    item.dafscAssigned ? item.dafscAssigned : null,
-                    item.nameAssigned ? item.nameAssigned : null,
-                    item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned) : null,
-                    item.lastUpdated ? item.lastUpdated : null
+                    item.orgStructureId,
+                    item.afscAuth,
+                    item.grdAuth,
+                    item.currQtr,
+                    item.projQtr1,
+                    item.projQtr2,
+                    item.projQtr3,
+                    item.projQtr4,
+                    item.posNr,
+                    item.gradeAssigned,
+                    item.dafscAssigned,
+                    item.nameAssigned,
+                    item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned.toString()) : null,
+                    item.lastUpdated
                 );
             });
         }

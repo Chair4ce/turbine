@@ -15,12 +15,22 @@ import {
 } from "./actions";
 import {PositionSerializer} from "../../util/PositionSerializer";
 import {MemberSerializer} from "../../util/MemberSerializer";
-
+import UploadPositionModel from "./models/UploadPositionModel";
 
 export const getPositions = () => {
     return (dispatch: any) => {
         dispatch(positionsFetchRequest());
         callApi('get', 'positions')
+            .then(res => dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
+            ).catch(err => dispatch(positionsFetchError(err))
+        );
+    }
+};
+
+export const savePositions = (positions: UploadPositionModel[]) => {
+    return (dispatch: any) => {
+        dispatch(positionsFetchRequest());
+        callApi('POST', 'positions/save',PositionSerializer.serializeToBackend(positions))
             .then(res => dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
             ).catch(err => dispatch(positionsFetchError(err))
         );

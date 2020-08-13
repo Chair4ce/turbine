@@ -1,18 +1,22 @@
 import * as React from "react";
+import {useState} from "react";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {
-    Button, CircularProgress,
-    ClickAwayListener, Container,
-    Dialog, DialogActions, DialogContent, DialogContentText, DialogProps, DialogTitle, Fab, Fade, FormControl,
-    Grow,
-    IconButton,
-    Input, Menu,
-    MenuItem,
-    MenuList,
-    Paper,
-    Popper
+    Button,
+    CircularProgress,
+    Container,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogProps,
+    DialogTitle,
+    Fab,
+    Fade,
+    FormControl,
+    Menu,
+    MenuItem
 } from "@material-ui/core";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import classNames from "classnames";
 import CheckIcon from "@material-ui/icons/Check";
 import SaveIcon from "@material-ui/icons/Save";
@@ -21,13 +25,11 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import PublishIcon from "@material-ui/icons/Publish";
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
-import {saveCurrentRoster} from "../../store/members/thunks";
 import {green} from "@material-ui/core/colors";
 import clsx from "clsx";
-import {useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../store";
-
+import {savePositions} from "../../store/positions/thunks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -61,8 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             flexDirection: 'column',
         },
-
-
         fileDropDialog: {
             padding: 10
         },
@@ -159,93 +159,105 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const schema = {
-    'SSAN': {
-        prop: 'ssan',
+    'PASCODE': {
+        prop: 'pasCode',
         type: String,
         required: true
     },
-    'FULL_NAME': {
-        prop: 'fullName',
+    'ORGN_STRUCT_ID': {
+        prop: 'orgStructureId',
         type: String,
-        required: true
+        required: false
         // Excel stores dates as integers.
         // E.g. '24/03/2018' === 43183.
         // Such dates are parsed to UTC+0 timezone with time 12:00 .
     },
-    'GRADE': {
-        prop: 'grade',
+    'AFSC_AUTH': {
+        prop: 'afscAuth',
         type: String,
         required: false
     },
-    'ASSIGNED_PAS': {
-        prop: 'assignedPas',
+    'GRD_AUTH': {
+        prop: 'grdAuth',
         type: String,
         required: false
     },
-    'OFFICE_SYMBOL': {
-        prop: 'officeSymbol',
+    'CURR_QTR': {
+        prop: 'currQtr',
         type: String,
         required: false
     },
-    'DUTY_TITLE': {
-        prop: 'dutyTitle',
+    'PROJ_QTR1': {
+        prop: 'projQtr1',
         type: String,
         required: false
     },
-    'DUTY_START_DATE': {
-        prop: 'dutyStartDate',
-        type: Date,
+    'PROJ_QTR2': {
+        prop: 'projQtr2',
+        type: String,
         required: false
     },
-    'DOR': {
-        prop: 'dor',
-        type: Date,
+    'PROJ_QTR3': {
+        prop: 'projQtr3',
+        type: String,
+        required: false
+    },
+    'PROJ_QTR4': {
+        prop: 'projQtr4',
+        type: String,
+        required: false
+    },
+    'POS_NR': {
+        prop: 'posNr',
+        type: String,
+        required: false
+    },
+    'GR_ASGN': {
+        prop: 'gradeAssigned',
+        type: String,
         required: false
     },
     'DAFSC': {
-        prop: 'dafsc',
+        prop: 'dafscAssigned',
         type: String,
         required: false
     },
-    'PAFSC': {
-        prop: 'pafsc',
+    'NAME': {
+        prop: 'nameAssigned',
         type: String,
         required: false
     },
-    'DATE_ARRIVED_STATION': {
-        prop: 'dateArrivedStation',
-        type: Date,
-        required: false
-    },
-    'DOS': {
-        prop: 'dos',
-        type: Date,
-        required: false
-    },
-    'RNLTD': {
-        prop: 'rnltd',
-        type: Date,
-        required: false
-    },
-    'SUPV_NAME': {
-        prop: 'supvName',
+    'SSAN': {
+        prop: 'mbrIdAssigned',
         type: String,
         required: false
     },
-    'SUPV_BEGIN_DATE': {
-        prop: 'supvBeginDate',
-        type: Date,
+    //Alternate Misc Column Spellings/chars
+    'CURR QTR': {
+        prop: 'currQtr',
+        type: String,
         required: false
     },
-    'DEROS': {
-        prop: 'deros',
-        type: Date,
+    'PROJ QTR1': {
+        prop: 'projQtr1',
+        type: String,
+        required: false
+    },
+    'PROJ QTR2': {
+        prop: 'projQtr2',
+        type: String,
+        required: false
+    },
+    'PROJ QTR3': {
+        prop: 'projQtr3',
+        type: String,
+        required: false
+    },
+    'PROJ QTR4': {
+        prop: 'projQtr4',
+        type: String,
         required: false
     }
-}
-
-interface Props {
-    loading: boolean;
 }
 
 export const ProfileMenu: React.FC = () => {
@@ -264,38 +276,30 @@ export const ProfileMenu: React.FC = () => {
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
-
     const handleMenuClose = () => {
         setAnchorEl(null);
     };
-
     const handleMenuSelect = () => {
         setAnchorEl(null);
         handleShowUploadModal();
     };
-
     const handleShowUploadModal = () => {
         setOpen(true);
     };
-
     const handleClose = () => {
         setOpen(false);
     };
     const handleButtonClick = (e: any) => {
         handleFile(e);
     };
-
-
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
         [classes.buttonLoading]: loading,
     });
-
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
         [classes.buttonLoading]: loading,
     });
-
 
     function handleFile(e: HTMLInputElement) {
         if (e.files) {
@@ -308,18 +312,13 @@ export const ProfileMenu: React.FC = () => {
 
                     updateSuccess(false);
                 } else {
-                    dispatch(saveCurrentRoster(rows.rows));
+                    dispatch(savePositions(rows.rows));
                     updateSuccess(true);
                 }
-                ;
             }));
         }
         handleClose();
     }
-
-    const handleToggle = () => {
-        setOpen((prevOpen) => !prevOpen);
-    };
 
     // const handleClose = (event: React.MouseEvent<EventTarget>) => {
     //     if (anchorRef.current && anchorRef.current.contains(event.target as HTMLElement)) {
@@ -328,7 +327,6 @@ export const ProfileMenu: React.FC = () => {
     //
     //     setOpen(false);
     // };
-
     function handleListKeyDown(event: React.KeyboardEvent) {
         if (event.key === 'Tab') {
             event.preventDefault();
@@ -337,14 +335,14 @@ export const ProfileMenu: React.FC = () => {
     }
 
     // return focus to the button when we transitioned from !open -> open
-    const prevOpen = React.useRef(open);
-    React.useEffect(() => {
-        if (prevOpen.current === true && open === false) {
-            anchorRef.current!.focus();
-        }
-
-        prevOpen.current = open;
-    }, [open]);
+    // const prevOpen = React.useRef(open);
+    // React.useEffect(() => {
+    //     if (prevOpen.current === true && open === false) {
+    //         anchorRef.current!.focus();
+    //     }
+    //
+    //     prevOpen.current = open;
+    // }, [open]);
 
     return (
         <div className={classes.root}>
@@ -356,7 +354,7 @@ export const ProfileMenu: React.FC = () => {
                     onClose={handleClose}
                     aria-labelledby="max-width-dialog-title"
                 >
-                    <DialogTitle id="max-width-dialog-title">Upload Alpha Roster</DialogTitle>
+                    <DialogTitle id="max-width-dialog-title">Upload UPMR</DialogTitle>
                     <DialogContent>
                         <DialogContentText>
                             Compatable file type: '.xlsx'
@@ -384,7 +382,6 @@ export const ProfileMenu: React.FC = () => {
                                                }}
                                                onDrop={handleButtonClick}
                                     >
-
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
                                             {(loading || success) &&
                                             <div className={classes.wrapper}>
@@ -399,7 +396,6 @@ export const ProfileMenu: React.FC = () => {
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
-
                                             {(!loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
@@ -438,7 +434,7 @@ export const ProfileMenu: React.FC = () => {
                 TransitionComponent={Fade}
             >
                 <MenuItem onClick={handleMenuSelect}>
-                    <PublishIcon color={"action"}/>Upload</MenuItem>
+                    <PublishIcon color={"action"}/>Upload UPMR</MenuItem>
             </Menu>
             {/*<div>*/}
             {/*    <IconButton*/}

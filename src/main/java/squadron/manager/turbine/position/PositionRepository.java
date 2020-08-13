@@ -18,19 +18,20 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 
     void deleteByPosNr(String posNr);
     void deleteAll();
-    @Query("select DISTINCT posNr from Position " +
+    @Query("select DISTINCT afscAuth from Position " +
             "where currQtr = '1' " +
             "and projQtr1 = '1'" +
             "and projQtr2 = '1'" +
             "and projQtr3 = '1'" +
             "and projQtr4 = '1'")
-    List<String> findDistinctAuthorizedPositionNbrs();
+    List<String> findDistinctAfscAuth();
 
 //    @Query("select DISTINCT afscAuth from Position " +
 //            "where currQtr = '1'")
 //    Number countAllByAfscAuth(String afsc);
 
-    Number countAllByAfscAuthAndCurrQtr(String afsc, String code);
+    Number countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
+    Number countAllByDafscAssigned(String dafsc);
 
 //    @Query("select DISTINCT afscAuth from Position " +
 //            "where currQtr = ?1 " +

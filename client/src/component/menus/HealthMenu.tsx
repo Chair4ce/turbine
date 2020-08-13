@@ -4,9 +4,8 @@ import clsx from "clsx";
 import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
-import AssignmentIcon from "@material-ui/icons/Assignment";
-import AddIcon from "@material-ui/icons/Add";
 import MultilineChartIcon from '@material-ui/icons/MultilineChart';
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {

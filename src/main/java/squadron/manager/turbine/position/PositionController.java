@@ -76,11 +76,11 @@ public class PositionController {
     @GetMapping(path = "/projected")
     public @ResponseBody
     List<ManningChart> getAuthorized() {
-        List<String> distinctAFSC = memberRepository.findDistinctAFSCs();
+        List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
         System.out.println( distinctAFSC);
         List<ManningChart> ChartData = new ArrayList<>();
         for (String AFSC : distinctAFSC) {
-            ChartData.add( new ManningChart(AFSC, memberRepository.countAllByDafscAndDafscIsNotNull(AFSC), positionRepository.countAllByAfscAuthAndCurrQtr(AFSC, "1")  ));
+            ChartData.add( new ManningChart(AFSC, positionRepository.countAllByDafscAssigned(AFSC), positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(AFSC, "1")  ));
         }
         return ChartData;
     }

@@ -13,9 +13,13 @@ const mockStore = configureStore(history, initState);
 describe('MainSection test', () => {
     let subject: ReactWrapper;
     beforeEach(() => {
+        let  Mockfn = jest.fn();
         subject = mount(
             <Provider store={mockStore}>
-            <MainSection/>
+            <MainSection
+                sideBarExpandedState={true}
+                sideBarCallBack={Mockfn}
+            />
             </Provider>
         );
     });

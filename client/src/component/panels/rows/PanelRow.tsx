@@ -5,7 +5,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import MemberModel from "../../../store/members/models/MemberModel";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PersonIcon from "../../icon/PersonIcon";
-import {Button, Collapse, Fade, Typography} from "@material-ui/core";
+import {Button, Collapse, Fade, Grow, Typography, Zoom} from "@material-ui/core";
 import DynamicInfoBoxModel from "../forms/DynamicInfoBoxModel";
 import DynamicInfoBox from "../forms/DynamicInfoBox";
 import GainingMemberModel from "../../../store/members/models/GainingMemberModel";
@@ -97,8 +97,13 @@ const useStyles = makeStyles((theme: Theme) =>
         expandedViewTopBar: {
             display: 'flex',
             width: '100%',
+            cursor: 'pointer',
             flexDirection: 'row',
-            alignItems: 'center'
+            height: 64,
+            alignItems: 'center',
+            '&:hover': {
+                backgroundColor: 'rgb(132,132,132)',
+            },
         },
         collapseBtnArea: {
             borderRadius: 4,
@@ -119,7 +124,8 @@ const useStyles = makeStyles((theme: Theme) =>
         rowTitle: {
             fontFamily: 'Rambla',
             fontSize: '18px',
-            fontWeight: 400
+            fontWeight: 400,
+            color: '#ffffff'
         },
         displayed: {
             width: '100%'
@@ -154,6 +160,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         grade_amn: {
             background: '#69d93d'
+        },
+        selected: {
+            color: '#2b2b2b'
         }
     }),
 );
@@ -179,9 +188,8 @@ const CurrentRosterRow: React.FC<Props> = props => {
         [classes.hidden]: selected,
     });
 
-    const BarClassName = clsx({
-        [classes.displayed]: selected,
-        [classes.hidden]: !selected,
+    const TextClassName = clsx({
+        [classes.selected]: selected
     });
 
 
@@ -208,18 +216,15 @@ const CurrentRosterRow: React.FC<Props> = props => {
         <div className={classNames(classes.root, props.className)}>
             {/*<Collapse in={selected} className={BarClassName}>*/}
             {selected && <div className={classes.expandedView}>
-                    <div className={classes.expandedViewTopBar}>
+                    <div className={classes.expandedViewTopBar} onClick={handleCollapse}>
                         <div className={classNames(classes.collapseBtnArea, 'collapseBtnArea')}
                              onClick={handleCollapse}>
                             <ExpandLessIcon fontSize={'small'}/>
                         </div>
                         <div className={classNames(classes.column_data_name)}>
-                            <Typography className={classes.rowTitle}>{props.data.fullName}</Typography>
+                            <Typography className={classNames(classes.rowTitle, TextClassName)}>{props.data.fullName}</Typography>
                         </div>
                     </div>
-                    <Button className={classes.closeBtn} color="primary" variant="contained" onClick={handleCollapse}>
-                        Close
-                    </Button>
                     <div className={classes.detailArea}>
                         <DynamicInfoBox rows={DynamicInfoBoxData}/>
                     </div>
@@ -227,7 +232,8 @@ const CurrentRosterRow: React.FC<Props> = props => {
           {/*  </Collapse>*/}
 
             {/*    <Fade in={!selected} style={{width: 'inherit'}}>*/}
-            {!selected && <div className={InfoClassName}>
+            <div className={InfoClassName}>
+                <Collapse in={!selected} >
                     <div className={classes.collapsedView} onClick={handleExpand}>
                         <div className={classNames(classes.AvataRoot)}>
                             <PersonIcon/>
@@ -248,7 +254,9 @@ const CurrentRosterRow: React.FC<Props> = props => {
                             </div>
                         </div>
                     </div>
-                    </div>}
+                </Collapse>
+                    </div>
+
                {/* </Fade>*/}
 
             {/*{ selected && <img src={AFAM} alt={""} className={classes.awardIcon}/>}*/}
