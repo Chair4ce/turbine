@@ -1,9 +1,11 @@
 package squadron.manager.turbine.position;
 
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import squadron.manager.turbine.manningChart.AFSCIncrementLog;
+import squadron.manager.turbine.manningChart.AFSCIncrementRepository;
 import squadron.manager.turbine.member.GainingMemberRepository;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
@@ -16,6 +18,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @RestController
 @RequestMapping(PositionController.URI)
 public class PositionController {
@@ -24,10 +28,15 @@ public class PositionController {
     private PositionRepository positionRepository;
     private MemberRepository memberRepository;
     private GainingMemberRepository gainingRepository;
+    private AFSCIncrementRepository afscIncrementRepository;
 
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
+    }
+    @Autowired
+    public void ConstructorBasedInjection(AFSCIncrementRepository afscIncrementRepository) {
+        this.afscIncrementRepository = afscIncrementRepository;
     }
     @Autowired
     public void ConstructorBasedInjection(GainingMemberRepository gainingRepository) {
@@ -44,7 +53,7 @@ public class PositionController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public Iterable<Position> addPositions(@Valid @RequestBody Iterable<PositionJSON> json) {
+    public Iterable<Position> addPositions(@Valid @RequestBody List<PositionJSON> json) {
         return saveOrUpdateAndReturnAllPositions(json);
     }
 
@@ -122,11 +131,31 @@ public class PositionController {
         }
     }
 
-    public Iterable<Position> saveOrUpdateAndReturnAllPositions(@RequestBody @Valid Iterable<PositionJSON> json) {
+    public Iterable<Position> saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
         Date date = new Date();
         if (json != null) {
+            json.stream()
+                    .map(Member::getOfficeSymbol)
+                    .distinct()
+                    .collect(toList());
             positionRepository.deleteAll();
+
+            afscIncrementRepository.deleteAllByPasCode();
             json.forEach((newImport -> {
+                if (newImport.getDeros() != null){
+
+                    AFSCIncrementLog new_log = new AFSCIncrementLog(
+                            newImport.getAssignedPas(),
+                            newImport.getSsan(),
+                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
+                            new DateTime(newImport.getDeros()).toDate(),
+                            -1,
+                            "unfunded"
+                    );
+                    afscIncrementRepository.save(new_log);
+                }
+
+
                 positionRepository.save(new Position(
                         newImport.getPasCode(),
                         newImport.getOrgStructureId(),

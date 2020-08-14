@@ -50,10 +50,12 @@ public class MemberService {
     public Iterable<Member> saveAndGetAllMembers(@RequestBody @Valid Iterable<MemberJSON> json) {
         Date date = new Date();
         json.forEach((newImport -> {
+
             Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
+            if(newImport.getAssignedPas() != null || newImport.getDafsc() != null) {
             if (existingMember == null) {
                 if (newImport.getDeros() != null){
-//                    DateTime projectedDeros = new DateTime(newImport.getRnltd()).plusYears(2);
+
                     AFSCIncrementLog new_log = new AFSCIncrementLog(
                             newImport.getAssignedPas(),
                             newImport.getSsan(),
@@ -79,6 +81,9 @@ public class MemberService {
                 }
                 updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
             }
+
+            }
+
         }));
         return memberRepository.findAll();
     }
