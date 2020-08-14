@@ -73,6 +73,7 @@ export class MemberSerializer {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadGainingMemberModel(
+                    item.gainingPas ? item.gainingPas : null,
                     convertToHash(item.mbrId ? item.mbrId : 0),
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,

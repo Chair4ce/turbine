@@ -1,6 +1,7 @@
 
 
 export default class UploadGainingMemberModel {
+    public gainingPas: string;
     public mbrId: string;
     public fullName: string;
     public grade: string | null;
@@ -13,7 +14,8 @@ export default class UploadGainingMemberModel {
     public rnltd: string | null;
 
 
-    constructor(mbrId: string, fullName: string, grade: string | null, losingPas: string | null, losingPasCleartext: string | null, dafsc: string | null, sponsorId: string | null, dor: string | null, dos: string | null, rnltd: string | null) {
+    constructor(gainingPas: string,mbrId: string, fullName: string, grade: string | null, losingPas: string | null, losingPasCleartext: string | null, dafsc: string | null, sponsorId: string | null, dor: string | null, dos: string | null, rnltd: string | null) {
+        this.gainingPas = gainingPas;
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.grade = grade;

@@ -324,6 +324,11 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const schema = {
+    'GAINING_PAS': {
+        prop: 'gainingPas',
+        type: String,
+        required: true
+    },
     'SSAN': {
         prop: 'mbrId',
         type: String,

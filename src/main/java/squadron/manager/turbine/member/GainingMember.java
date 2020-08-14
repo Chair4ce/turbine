@@ -18,6 +18,9 @@ public class GainingMember {
 
     private Long id;
 
+    @Column(name= "gaining_pas")
+    private String gainingPas;
+
     @Column(name= "mbr_id")
     private String mbrId;
 
@@ -50,7 +53,8 @@ public class GainingMember {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public GainingMember(String mbrId, String fullName, String grade, String losingPas, String losingPasCleartext, String dafsc, String sponsorId, Date dor, Date dos, Date rnltd, Date lastUpdated) {
+    public GainingMember(String gaining_Pas,String mbrId, String fullName, String grade, String losingPas, String losingPasCleartext, String dafsc, String sponsorId, Date dor, Date dos, Date rnltd, Date lastUpdated) {
+        this.gainingPas = gaining_Pas;
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.grade = grade;

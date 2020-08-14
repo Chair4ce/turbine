@@ -1,0 +1,1 @@
+ALTER TABLE gaining_member ADD COLUMN gaining_pas TEXT AFTER id;

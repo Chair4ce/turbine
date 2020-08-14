@@ -1,8 +1,11 @@
 package squadron.manager.turbine.member;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import squadron.manager.turbine.manningChart.AFSCIncrementLog;
+import squadron.manager.turbine.manningChart.AFSCIncrementRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -17,11 +20,13 @@ public class MemberService {
 
     private MemberRepository memberRepository;
     private GainingMemberRepository gainingMemberRepository;
+    private AFSCIncrementRepository afscIncrementRepository;
 
     @Autowired
-    public MemberService(MemberRepository memberRepository, GainingMemberRepository gainingMemberRepository) {
+    public MemberService(MemberRepository memberRepository, GainingMemberRepository gainingMemberRepository, AFSCIncrementRepository afscIncrementRepository) {
         this.memberRepository = memberRepository;
         this.gainingMemberRepository = gainingMemberRepository;
+        this.afscIncrementRepository = afscIncrementRepository;
     }
 
     @Autowired
@@ -33,6 +38,10 @@ public class MemberService {
     public void setGainingMemberRepository(GainingMemberRepository gainingMemberRepository) {
         this.gainingMemberRepository = gainingMemberRepository;
     }
+    @Autowired
+    public void setAFSCIncrementRepository(AFSCIncrementRepository afscIncrementRepository) {
+        this.afscIncrementRepository = afscIncrementRepository;
+    }
 
     public Iterable<GainingMember> getAllGainingMembers() {
         return gainingMemberRepository.findAll();
@@ -43,8 +52,31 @@ public class MemberService {
         json.forEach((newImport -> {
             Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
             if (existingMember == null) {
+                if (newImport.getDeros() != null){
+//                    DateTime projectedDeros = new DateTime(newImport.getRnltd()).plusYears(2);
+                    AFSCIncrementLog new_log = new AFSCIncrementLog(
+                            newImport.getAssignedPas(),
+                            newImport.getSsan(),
+                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
+                            new DateTime(newImport.getDeros()).toDate(),
+                            -1,
+                            "departure"
+                    );
+                    afscIncrementRepository.save(new_log);
+                }
+
+
                 this.memberRepository.save(NewMemberModel(date, newImport));
             } else {
+                if (newImport.getDeros() != null){
+                    if(afscIncrementRepository.findByPasCodeAndMbrId(newImport.getAssignedPas(),newImport.getSsan()) != null) {
+                        AFSCIncrementLog existing_log = afscIncrementRepository.findByPasCodeAndMbrId(newImport.getAssignedPas(),newImport.getSsan());
+                        if (!new DateTime(existing_log.getIncrementDate()).equals(new DateTime(newImport.getDeros()))) {
+                            existing_log.setIncrementDate(new DateTime(newImport.getDeros()).toDate());
+                            afscIncrementRepository.save(existing_log);
+                        }
+                    }
+                }
                 updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
             }
         }));
@@ -58,8 +90,39 @@ public class MemberService {
             GainingMember existingMember = gainingMemberRepository.findByMbrId(newImport.getMbrId());
             GainingMember newMemberData = NewGainingMemberModel(date, newImport);
             if (existingMember == null) {
+                if (newImport.getRnltd() != null){
+                    AFSCIncrementLog new_log = new AFSCIncrementLog(
+                            newImport.getGainingPas(),
+                            newImport.getMbrId(),
+                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
+                            new DateTime(newImport.getRnltd()).plusYears(2).toDate(),
+                            1,
+                            "arrival"
+                    );
+                    afscIncrementRepository.save(new_log);
+                }
                 gainingMemberRepository.save(newMemberData);
             } else {
+                if (newImport.getRnltd() != null){
+                    if(afscIncrementRepository.findByPasCodeAndMbrId(newImport.getGainingPas(),newImport.getMbrId()) != null) {
+                        AFSCIncrementLog existing_log = afscIncrementRepository.findByPasCodeAndMbrId(newImport.getGainingPas(),newImport.getMbrId());
+                        DateTime newImportProjDepartDate = new DateTime(newImport.getRnltd()).plusYears(2);
+                        if (!new DateTime(existing_log.getIncrementDate()).equals(newImportProjDepartDate)) {
+                            existing_log.setIncrementDate(newImportProjDepartDate.toDate());
+                            afscIncrementRepository.save(existing_log);
+                        }
+                    } else {
+                        AFSCIncrementLog new_log = new AFSCIncrementLog(
+                                newImport.getGainingPas(),
+                                newImport.getMbrId(),
+                                newImport.getDafsc().replaceAll("-", ""),
+                                new DateTime(newImport.getRnltd()).plusYears(2).toDate(),
+                                1,
+                                "arrival"
+                        );
+                        afscIncrementRepository.save(new_log);
+                    }
+                }
                 updateExistingGainingMemberData(newMemberData, existingMember);
             }
         }));
@@ -215,6 +278,7 @@ public class MemberService {
 
     private GainingMember NewGainingMemberModel(Date date, GainingMemberJSON newImport) {
         return new GainingMember(
+                newImport.getGainingPas(),
                 newImport.getMbrId(),
                 newImport.getFullName(),
                 newImport.getGrade(),

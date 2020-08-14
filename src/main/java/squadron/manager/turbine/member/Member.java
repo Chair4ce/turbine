@@ -17,6 +17,7 @@ import java.util.List;
 @Table(name = "members")
 @DynamicUpdate
 public class Member {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
 

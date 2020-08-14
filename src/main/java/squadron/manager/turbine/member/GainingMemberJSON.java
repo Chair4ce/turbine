@@ -13,6 +13,8 @@ public class GainingMemberJSON {
 
     private Long id;
 
+    private String gainingPas;
+
     private String mbrId;
 
     private String fullName;

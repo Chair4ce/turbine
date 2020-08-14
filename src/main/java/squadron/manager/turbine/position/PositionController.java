@@ -1,14 +1,9 @@
 package squadron.manager.turbine.position;
 
 
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
-import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import squadron.manager.turbine.manningChart.ManningChart;
-import squadron.manager.turbine.manningChart.PercentageCalculator;
-import squadron.manager.turbine.member.GainingMember;
+import squadron.manager.turbine.manningChart.AFSCIncrementLog;
 import squadron.manager.turbine.member.GainingMemberRepository;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
@@ -86,13 +81,16 @@ public class PositionController {
     @CrossOrigin
     @GetMapping(path = "/manning_chart")
     public @ResponseBody
-    List<ManningChart> getManningChartData() {
+    List<AFSCIncrementLog> getManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
 
-        List<ManningChart> ChartData = new ArrayList<>();
+        List<AFSCIncrementLog> ChartData = new ArrayList<>();
         for (String AFSC : distinctAFSC) {
             double current = positionRepository.countAllByDafscAssigned(AFSC);
             double assigned = positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(AFSC, "1");
+
+
+
 //            Interval interval = null;
 //            if (interval.contains(dateTime) || interval.getEnd().isEqual(dateTime))
 //                DateTimeZone zone = DateTimeZone.forID( "America/Montreal" );
@@ -103,7 +101,7 @@ public class PositionController {
 //                // You have a hit.
 //            }
 
-            ChartData.add( new ManningChart(AFSC,"jan", PercentageCalculator.calculatePercentage(current, assigned) ));
+//            ChartData.add( new ManningChart(AFSC,"jan", PercentageCalculator.calculatePercentage(current, assigned) ));
         }
         return ChartData;
     }
