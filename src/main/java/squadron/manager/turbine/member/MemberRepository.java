@@ -23,6 +23,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
             nativeQuery = true
     )
     List<Member> findAFSCCount(String string);
+    List<Member> findAllByDerosIsNotNull();
 }
 
 

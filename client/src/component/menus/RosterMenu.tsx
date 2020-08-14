@@ -3,13 +3,11 @@ import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import {createStyles, makeStyles, Theme} from '@material-ui/core/styles';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
 // import UpdateIcon from '@material-ui/icons/Update';
 import AssignmentIcon from '@material-ui/icons/Assignment';
+import FlightLandIcon from '@material-ui/icons/FlightLand';
 // import AssignmentIndIcon from '@material-ui/icons/AssignmentInd';
 import clsx from 'clsx';
-import theme from "../../style/theme";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -175,16 +173,16 @@ const RosterMenu: React.FC<Props> = props => {
                 <MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, gainingSelectorClassName)}
                           onClick={handleGainingClick}>
                     <div className={classes.iconArea}>
-                        <AddIcon/>
+                        <FlightLandIcon/>
                     </div>
                     {props.expanded ? <span className={classNames(classes.menu_item_text, gainingSelectorClassName)}>
                         Gaining
                         </span> : ''}
                     {props.showGainingPanel ? <div className={classes.selected_item}/> : ''}
                 </MenuItem>
-                {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleLosingClick}>*/}
+                {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleUPMRClick}>*/}
                 {/*    <div className={classes.iconArea}>*/}
-                {/*        <RemoveIcon/>*/}
+                {/*   */}
                 {/*    </div>*/}
                 {/*    {props.expanded ? <span className={losingSelectorClassName}>*/}
                 {/*    Losing*/}

@@ -11,6 +11,6 @@ import java.util.ArrayList;
 @Setter
 public class ManningChart {
     private String afsc;
-    private Number current;
-    private Number authorized;
+    private String month;
+    private String manned;
 }

@@ -1,9 +1,15 @@
 package squadron.manager.turbine.position;
 
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Interval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import squadron.manager.turbine.manningChart.ManningChart;
+import squadron.manager.turbine.manningChart.PercentageCalculator;
+import squadron.manager.turbine.member.GainingMember;
+import squadron.manager.turbine.member.GainingMemberRepository;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 
@@ -22,10 +28,15 @@ public class PositionController {
 
     private PositionRepository positionRepository;
     private MemberRepository memberRepository;
+    private GainingMemberRepository gainingRepository;
 
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
+    }
+    @Autowired
+    public void ConstructorBasedInjection(GainingMemberRepository gainingRepository) {
+        this.gainingRepository = gainingRepository;
     }
 
 
@@ -73,14 +84,26 @@ public class PositionController {
     }
 
     @CrossOrigin
-    @GetMapping(path = "/projected")
+    @GetMapping(path = "/manning_chart")
     public @ResponseBody
-    List<ManningChart> getAuthorized() {
+    List<ManningChart> getManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
-        System.out.println( distinctAFSC);
+
         List<ManningChart> ChartData = new ArrayList<>();
         for (String AFSC : distinctAFSC) {
-            ChartData.add( new ManningChart(AFSC, positionRepository.countAllByDafscAssigned(AFSC), positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(AFSC, "1")  ));
+            double current = positionRepository.countAllByDafscAssigned(AFSC);
+            double assigned = positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(AFSC, "1");
+//            Interval interval = null;
+//            if (interval.contains(dateTime) || interval.getEnd().isEqual(dateTime))
+//                DateTimeZone zone = DateTimeZone.forID( "America/Montreal" );
+//            DateTime dateTime = new DateTime( yourJUDate, zone );  // Convert java.util.Date to Joda-Time, and assign time zone to adjust.
+//            DateTime now = DateTime.now( zone );
+// Now see if the month and year match.
+//            if ( ( dateTime.getMonthOfYear() == now.getMonthOfYear() ) && ( dateTime.getYear() == now.getYear() ) ) {
+//                // You have a hit.
+//            }
+
+            ChartData.add( new ManningChart(AFSC,"jan", PercentageCalculator.calculatePercentage(current, assigned) ));
         }
         return ChartData;
     }

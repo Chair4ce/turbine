@@ -152,7 +152,7 @@ const HealthMenu: React.FC<Props> = props => {
                         <MultilineChartIcon/>
                     </div>
                     {props.expanded ? <span className={classNames(classes.menu_item_text, chartSelectorClassName)}>
-                    Projected Manning
+                    Manning
                     </span> : ''}
                     {props.showManningChart ? <div className={classes.selected_item}/> : ''}
                 </MenuItem>
