@@ -13,6 +13,8 @@ import squadron.manager.turbine.member.MemberRepository;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -34,10 +36,12 @@ public class PositionController {
     public void ConstructorBasedInjection(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
     }
+
     @Autowired
     public void ConstructorBasedInjection(AFSCIncrementRepository afscIncrementRepository) {
         this.afscIncrementRepository = afscIncrementRepository;
     }
+
     @Autowired
     public void ConstructorBasedInjection(GainingMemberRepository gainingRepository) {
         this.gainingRepository = gainingRepository;
@@ -97,6 +101,11 @@ public class PositionController {
         for (String AFSC : distinctAFSC) {
             double current = positionRepository.countAllByDafscAssigned(AFSC);
             double assigned = positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(AFSC, "1");
+            List<AFSCIncrementLog> totalGaining = afscIncrementRepository.findAllByAfscAndIncrementType(AFSC,"arrival");
+            List<AFSCIncrementLog> totalDeparting = afscIncrementRepository.findAllByAfscAndIncrementType(AFSC,"departure");
+            List<AFSCIncrementLog> totalToBeUnfunded = afscIncrementRepository.findAllByAfscAndIncrementType(AFSC,"unfunded");
+            LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            int thisMonth = localDate.getMonthValue();
 
 
 
@@ -134,25 +143,36 @@ public class PositionController {
     public Iterable<Position> saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
         Date date = new Date();
         if (json != null) {
-            json.stream()
-                    .map(Member::getOfficeSymbol)
+            List<String> pasCodes = json.stream()
+                    .map(PositionJSON::getPasCode)
                     .distinct()
                     .collect(toList());
-            positionRepository.deleteAll();
 
-            afscIncrementRepository.deleteAllByPasCode();
+            for (String pasCode : pasCodes) {
+                positionRepository.deleteAllByPasCode(pasCode);
+            }
+
             json.forEach((newImport -> {
-                if (newImport.getDeros() != null){
 
-                    AFSCIncrementLog new_log = new AFSCIncrementLog(
-                            newImport.getAssignedPas(),
-                            newImport.getSsan(),
-                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
-                            new DateTime(newImport.getDeros()).toDate(),
-                            -1,
-                            "unfunded"
-                    );
-                    afscIncrementRepository.save(new_log);
+                if (newImport.getPosNr() != null && newImport.getCurrQtr() != null) {
+                    if (newImport.getCurrQtr().equals("1")) {
+                        if (isDefunded(newImport)) {
+                           Date DayPositionUnfunded = lastDayOfUnfundedQtr(newImport.getProjQtr1(), newImport.getProjQtr2(), newImport.getProjQtr3());
+                           if(memberRepository.findByMbrId(newImport.getMbrIdAssigned()) != null){
+                               Member mbrInUnfundedBillet = memberRepository.findByMbrId(newImport.getMbrIdAssigned());
+                               if(new DateTime(mbrInUnfundedBillet.getDeros()).toDate().before(DayPositionUnfunded)) {
+                                   System.out.println("unfunded date delayed");
+                                   logPositionChange(newImport, new DateTime(mbrInUnfundedBillet.getDeros()).toDate());
+                               } else {
+                                   System.out.println("unfunded date natural");
+                                   logPositionChange(newImport, DayPositionUnfunded);
+                               }
+                           }
+
+
+                        }
+                    }
+
                 }
 
 
@@ -177,6 +197,50 @@ public class PositionController {
         return positionRepository.findAll();
     }
 
+    public boolean isDefunded(PositionJSON newImport) {
+        return newImport.getCurrQtr().equals("1") && isProjUnfunded(newImport.getProjQtr1(), newImport.getProjQtr2(), newImport.getProjQtr3(), newImport.getProjQtr4());
+    }
+
+    public void logPositionChange(PositionJSON newImport, Date dateChanged) {
+        AFSCIncrementLog new_log = new AFSCIncrementLog(
+                newImport.getPasCode(),
+                newImport.getPosNr(),
+                newImport.getAfscAuth() != null ? newImport.getAfscAuth().replaceAll("-", "") : null,
+                dateChanged,
+                -1,
+                "unfunded"
+        );
+        afscIncrementRepository.save(new_log);
+    }
+
+    private Date lastDayOfUnfundedQtr(String qtr1, String qtr2, String qtr3) {
+        int thisYear = new DateTime().getYear();
+        String lastMonthQtr1 = "3/25/" + thisYear;
+        String lastMonthQtr2 = "6/25/" + thisYear;
+        String lastMonthQtr3 = "9/25/" + thisYear;
+        String lastMonthQtr4 = "12/25/" + thisYear;
+        if (qtr1.equals("0")) {
+            return new DateTime(getLastDayOfMonth(lastMonthQtr1).toString()).toDate();
+        } else if (qtr2.equals("0")) {
+            return new DateTime(getLastDayOfMonth(lastMonthQtr2).toString()).toDate();
+        } else if (qtr3.equals("0")) {
+            return new DateTime(getLastDayOfMonth(lastMonthQtr3).toString()).toDate();
+        } else {
+            return new DateTime(getLastDayOfMonth(lastMonthQtr4).toString()).toDate();
+        }
+    }
+
+    public boolean isProjUnfunded(String qtr1, String qtr2, String qtr3, String qtr4) {
+        return qtr1.equals("0") || qtr2.equals("0") || qtr3.equals("0") || qtr4.equals("0");
+    }
+
+    LocalDate getLastDayOfMonth(String lastMonthQtr1) {
+        LocalDate convertedDate = LocalDate.parse(lastMonthQtr1, DateTimeFormatter.ofPattern("M/d/yyyy"));
+        convertedDate = convertedDate.withDayOfMonth(
+                convertedDate.getMonth().length(convertedDate.isLeapYear()));
+        return convertedDate;
+    }
+
     private ArrayList<Position> getUnfundedMembers(String posNr) {
         List<Position> matchedPositions;
         if (positionRepository.findAllByPosNr(posNr).isEmpty()) {
@@ -187,7 +251,7 @@ public class PositionController {
         ArrayList<Position> unfundedPositions = new ArrayList<>();
 
         if (matchedPositions.equals(Collections.emptyList())) {
-           return unfundedPositions;
+            return unfundedPositions;
         } else {
             matchedPositions.forEach(item -> {
                 if (item.getCurrQtr().equals("0")) {

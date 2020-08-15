@@ -16,7 +16,7 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
     List<Position> findAllByPosNrIsNull();
     List<Position> findAllByPosNrIsNotNullAndCurrQtrIsNull();
 
-    void deleteByPosNr(String posNr);
+    void deleteAllByPasCode(String pas);
     void deleteAll();
     @Query("select DISTINCT afscAuth from Position " +
             "where currQtr = '1'" +

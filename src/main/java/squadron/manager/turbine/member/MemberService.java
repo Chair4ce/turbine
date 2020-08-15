@@ -38,6 +38,7 @@ public class MemberService {
     public void setGainingMemberRepository(GainingMemberRepository gainingMemberRepository) {
         this.gainingMemberRepository = gainingMemberRepository;
     }
+
     @Autowired
     public void setAFSCIncrementRepository(AFSCIncrementRepository afscIncrementRepository) {
         this.afscIncrementRepository = afscIncrementRepository;
@@ -50,42 +51,49 @@ public class MemberService {
     public Iterable<Member> saveAndGetAllMembers(@RequestBody @Valid Iterable<MemberJSON> json) {
         Date date = new Date();
         json.forEach((newImport -> {
-
+            System.out.println();
             Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
-            if(newImport.getAssignedPas() != null || newImport.getDafsc() != null) {
-            if (existingMember == null) {
-                if (newImport.getDeros() != null){
-
-                    AFSCIncrementLog new_log = new AFSCIncrementLog(
-                            newImport.getAssignedPas(),
-                            newImport.getSsan(),
-                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
-                            new DateTime(newImport.getDeros()).toDate(),
-                            -1,
-                            "departure"
-                    );
-                    afscIncrementRepository.save(new_log);
+                if (existingMember == null) {
+                    System.out.println("new import detected");
+                    saveNewDepartureLog(newImport);
+                    memberRepository.save(NewMemberModel(date, newImport));
+                } else {
+                    System.out.println("existing import detected");
+                    updateExistingDepartureLog(newImport);
+                    updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
                 }
-
-
-                this.memberRepository.save(NewMemberModel(date, newImport));
-            } else {
-                if (newImport.getDeros() != null){
-                    if(afscIncrementRepository.findByPasCodeAndMbrId(newImport.getAssignedPas(),newImport.getSsan()) != null) {
-                        AFSCIncrementLog existing_log = afscIncrementRepository.findByPasCodeAndMbrId(newImport.getAssignedPas(),newImport.getSsan());
-                        if (!new DateTime(existing_log.getIncrementDate()).equals(new DateTime(newImport.getDeros()))) {
-                            existing_log.setIncrementDate(new DateTime(newImport.getDeros()).toDate());
-                            afscIncrementRepository.save(existing_log);
-                        }
-                    }
-                }
-                updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
-            }
-
-            }
 
         }));
         return memberRepository.findAll();
+    }
+
+    public void saveNewDepartureLog(MemberJSON newImport) {
+        if (newImport.getDeros() != null && newImport.getDafsc() != null) {
+
+            AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
+                    newImport.getAssignedPas() != null ? newImport.getAssignedPas() : "No Data",
+                    newImport.getSsan(),
+                    newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
+                    new DateTime(newImport.getDeros()).toDate(),
+                    -1,
+                    "departure"
+            );
+            System.out.println("saving departure log");
+            afscIncrementRepository.save(new_departure_log);
+        }
+    }
+
+    public void updateExistingDepartureLog(MemberJSON newImport) {
+        if (newImport.getDeros() != null) {
+            if (afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getAssignedPas(), newImport.getSsan(), "departure") != null) {
+                AFSCIncrementLog existing_departure_log = afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getAssignedPas(), newImport.getSsan(), "departure");
+                if (!new DateTime(existing_departure_log.getIncrementDate()).equals(new DateTime(newImport.getDeros()))) {
+                    existing_departure_log.setIncrementDate(newImport.getDeros());
+                    System.out.println("updating departure log");
+                    afscIncrementRepository.save(existing_departure_log);
+                }
+            }
+        }
     }
 
 
@@ -94,44 +102,56 @@ public class MemberService {
         json.forEach((newImport -> {
             GainingMember existingMember = gainingMemberRepository.findByMbrId(newImport.getMbrId());
             GainingMember newMemberData = NewGainingMemberModel(date, newImport);
-            if (existingMember == null) {
-                if (newImport.getRnltd() != null){
-                    AFSCIncrementLog new_log = new AFSCIncrementLog(
-                            newImport.getGainingPas(),
-                            newImport.getMbrId(),
-                            newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : null,
-                            new DateTime(newImport.getRnltd()).plusYears(2).toDate(),
-                            1,
-                            "arrival"
-                    );
-                    afscIncrementRepository.save(new_log);
-                }
+
+            if (existingMember == null ) {
+                saveArrivalAndProjDepartureLog(newImport);
                 gainingMemberRepository.save(newMemberData);
             } else {
-                if (newImport.getRnltd() != null){
-                    if(afscIncrementRepository.findByPasCodeAndMbrId(newImport.getGainingPas(),newImport.getMbrId()) != null) {
-                        AFSCIncrementLog existing_log = afscIncrementRepository.findByPasCodeAndMbrId(newImport.getGainingPas(),newImport.getMbrId());
-                        DateTime newImportProjDepartDate = new DateTime(newImport.getRnltd()).plusYears(2);
-                        if (!new DateTime(existing_log.getIncrementDate()).equals(newImportProjDepartDate)) {
-                            existing_log.setIncrementDate(newImportProjDepartDate.toDate());
-                            afscIncrementRepository.save(existing_log);
-                        }
-                    } else {
-                        AFSCIncrementLog new_log = new AFSCIncrementLog(
-                                newImport.getGainingPas(),
-                                newImport.getMbrId(),
-                                newImport.getDafsc().replaceAll("-", ""),
-                                new DateTime(newImport.getRnltd()).plusYears(2).toDate(),
-                                1,
-                                "arrival"
-                        );
-                        afscIncrementRepository.save(new_log);
-                    }
-                }
+                updateArrivalAndProjDepartureLogs(newImport);
                 updateExistingGainingMemberData(newMemberData, existingMember);
             }
         }));
         return gainingMemberRepository.findAll();
+    }
+
+    public void updateArrivalAndProjDepartureLogs(GainingMemberJSON newImport) {
+        if (newImport.getRnltd() != null) {
+            if (afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getGainingPas(), newImport.getMbrId(), "arrival") != null) {
+                AFSCIncrementLog existing_arrival_log = afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getGainingPas(), newImport.getMbrId(), "arrival");
+                AFSCIncrementLog existing_departure_log = afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getGainingPas(), newImport.getMbrId(), "departure");
+                DateTime newImportProjDepartDate = new DateTime(newImport.getRnltd()).plusYears(3);
+                if (!new DateTime(existing_arrival_log.getIncrementDate()).equals(new DateTime(newImport.getRnltd()))) {
+                    existing_arrival_log.setIncrementDate(newImport.getRnltd());
+                    existing_departure_log.setIncrementDate(newImportProjDepartDate.toDate());
+                    afscIncrementRepository.save(existing_arrival_log);
+                    afscIncrementRepository.save(existing_departure_log);
+                }
+            }
+        }
+    }
+
+    public void saveArrivalAndProjDepartureLog(GainingMemberJSON newImport) {
+
+        if (newImport.getRnltd() != null) {
+            AFSCIncrementLog new_arrival_log = new AFSCIncrementLog(
+                    newImport.getGainingPas(),
+                    newImport.getMbrId(),
+                    newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : "No Data",
+                    new DateTime(newImport.getRnltd()).toDate(),
+                    1,
+                    "arrival"
+            );
+            AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
+                    newImport.getGainingPas(),
+                    newImport.getMbrId(),
+                    newImport.getDafsc() != null ? newImport.getDafsc().replaceAll("-", "") : "No Data",
+                    new DateTime(newImport.getRnltd()).plusYears(3).toDate(),
+                    1,
+                    "departure"
+            );
+            afscIncrementRepository.save(new_arrival_log);
+            afscIncrementRepository.save(new_departure_log);
+        }
     }
 
     public List<GroupCollection> getGroupOfficeCollections() {
