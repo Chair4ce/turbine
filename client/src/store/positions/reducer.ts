@@ -2,12 +2,14 @@ import {Reducer} from "redux";
 import {PositionActionTypes, PositionState} from "./types";
 import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
+import ManningChartModel from "./models/ManningChartModel";
 
 
 export const initialState: PositionState = {
     loading: false,
     positions: [] as PositionModel[],
     error: undefined,
+    chartData: [] as ManningChartModel[],
 
     unassignedLoading: false,
     unassignedMembers: [] as MemberModel[],
@@ -29,6 +31,7 @@ const reducer: Reducer<PositionState> = (state = initialState, action) => {
         case PositionActionTypes.FETCH_REQUEST: return {...state, loading: true};
         case PositionActionTypes.FETCH_ERROR: return {...state, loading: false, error: action.payload};
         case PositionActionTypes.FETCH_SUCCESS: return {...state, loading: false, data: action.payload};
+        case PositionActionTypes.FETCH_CHARTDATA_SUCCESS: return {...state, loading: false, chartData: action.payload};
         case PositionActionTypes.FETCH_UNASSIGNED_REQUEST: return {...state, unassignedLoading: true};
         case PositionActionTypes.FETCH_UNASSIGNED_ERROR: return {...state, unassignedLoading: false, unassignedError: action.payload};
         case PositionActionTypes.FETCH_UNASSIGNED_SUCCESS: return {...state, unassignedLoading: false, unassignedMembers: action.payload};

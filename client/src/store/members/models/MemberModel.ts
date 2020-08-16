@@ -1,5 +1,6 @@
 import moment from 'moment';
 import GainingMemberModel from "./GainingMemberModel";
+import UploadMemberModel from "./UploadMemberModel";
 
 export default class MemberModel {
     public id: number;
@@ -70,6 +71,9 @@ export default class MemberModel {
 
 
     public static filterEnlistedOnly = (members: MemberModel[]) => {
+        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+    }
+    public static filterEnlistedUploadOnly = (members: UploadMemberModel[]) => {
         return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
     }
 

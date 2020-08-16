@@ -4,14 +4,13 @@ import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import squadron.manager.turbine.manningChart.AFSCIncrementLog;
-import squadron.manager.turbine.manningChart.AFSCIncrementRepository;
+import squadron.manager.turbine.incrementLog.AFSCIncrementLog;
+import squadron.manager.turbine.incrementLog.AFSCIncrementRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -54,11 +53,9 @@ public class MemberService {
             System.out.println();
             Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
                 if (existingMember == null) {
-                    System.out.println("new import detected");
                     saveNewDepartureLog(newImport);
                     memberRepository.save(NewMemberModel(date, newImport));
                 } else {
-                    System.out.println("existing import detected");
                     updateExistingDepartureLog(newImport);
                     updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
                 }

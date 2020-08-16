@@ -5,6 +5,8 @@ import {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import HealthSideBar from "../../component/sidebar/HealthSideBar";
 import {HEALTH_MENU_SELECT_ACTION} from "../../component/menus/HealthMenu";
 import LoadingSpinner from "../../component/displayLoading/LoadingSpinner";
+import {useSelector} from "react-redux";
+import {ApplicationState} from "../../store";
 
 const Chart = lazy(() => import("../../component/panels/ManningChart"))
 
@@ -41,6 +43,7 @@ interface Props {
 
 const HealthSection: React.FC<Props> = props => {
     const classes = useStyles();
+    const chartDataAFSC = useSelector(({positions}: ApplicationState) => positions.chartData);
     const [showManningChart, toggleManningChart] = useState(false);
     // const [showProjectedPanel, toggleProjectedPanel] = useState(false);
     // const [showGainingPanel, toggleGainingPanel] = useState(false);
@@ -70,7 +73,7 @@ const HealthSection: React.FC<Props> = props => {
             <article className={classes.main}>
                 <Suspense fallback={
                     <LoadingSpinner />}>
-                {showManningChart &&  <Chart/>}
+                {showManningChart &&  <Chart chartData={chartDataAFSC}/>}
                 </Suspense>
             </article>
         </section>

@@ -26,8 +26,8 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 //            "where currQtr = '1'")
 //    Number countAllByAfscAuth(String afsc);
 
-    Double countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
-    Double countAllByDafscAssigned(String dafsc);
+    int countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
+    int countAllByDafscAssigned(String dafsc);
 
 //    @Query("select DISTINCT afscAuth from Position " +
 //            "where currQtr = ?1 " +

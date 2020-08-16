@@ -14,6 +14,7 @@ import {
 import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {getChartData} from "../../../store/positions/thunks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,6 +61,7 @@ const PanelsContainer: React.FC<Props> = props => {
     const GainingRoster = lazy(() => import('../GainingRosterPanel'));
     useEffect(() => {
         dispatch(getMembers());
+        dispatch(getChartData());
         dispatch(getGainingMembers());
         dispatch(getUniqueAFSCCollection());
         dispatch(getDistinctGainingAFSCCollection());

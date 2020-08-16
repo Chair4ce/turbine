@@ -36,4 +36,5 @@ export default class PositionModel {
         this.unfunded = unfunded;
         this.lastUpdated = lastUpdated;
     }
+
 }

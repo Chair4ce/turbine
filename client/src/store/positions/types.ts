@@ -1,10 +1,12 @@
 import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
+import ManningChartModel from "./models/ManningChartModel";
 
 export enum PositionActionTypes {
     FETCH_REQUEST = '@@positions/FETCH_REQUEST',
     FETCH_ERROR = '@@positions/FETCH_ERROR',
     FETCH_SUCCESS = '@@positions/FETCH_SUCCESS',
+    FETCH_CHARTDATA_SUCCESS = '@@positions/FETCH_CHARTDATA_SUCCESS',
 
     FETCH_DOUBLEBILLET_REQUEST = '@@positions/FETCH_DOUBLEBILLET_EQUEST',
     FETCH_DOUBLEBILLET_ERROR = '@@positions/FETCH_DOUBLEBILLET_ERROR',
@@ -21,7 +23,9 @@ export enum PositionActionTypes {
 export interface PositionState {
     readonly loading: boolean;
     readonly positions: PositionModel[];
-    readonly error?: string ;
+    readonly error?: string;
+
+    readonly chartData: ManningChartModel[];
 
     readonly unassignedLoading: boolean;
     readonly unassignedMembers: MemberModel[];
