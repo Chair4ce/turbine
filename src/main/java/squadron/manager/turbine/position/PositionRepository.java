@@ -19,7 +19,7 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
     void deleteAllByPasCode(String pas);
     void deleteAll();
     @Query("select DISTINCT afscAuth from Position " +
-            "where currQtr = '1'" +
+            "where posNr IS not null " +
             "and afscAuth IS not null")
     List<String> findDistinctAfscAuth();
 //    @Query("select DISTINCT afscAuth from Position " +
@@ -27,6 +27,7 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 //    Number countAllByAfscAuth(String afsc);
 
     int countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
+    int countAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNull(String afsc);
     int countAllByDafscAssigned(String dafsc);
 
 //    @Query("select DISTINCT afscAuth from Position " +

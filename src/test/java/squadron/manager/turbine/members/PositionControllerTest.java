@@ -222,6 +222,6 @@ public class PositionControllerTest extends BaseIntegrationTest {
                 .statusCode(200)
                 .body("[0].fullName", equalTo("Hoag, Jacy L"));
 
-        positionRepository.deleteAll();
+//        positionRepository.deleteAll();
     }
 }
