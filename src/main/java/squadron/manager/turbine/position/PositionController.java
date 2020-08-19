@@ -33,6 +33,7 @@ public class PositionController {
     private MemberRepository memberRepository;
     private GainingMemberRepository gainingRepository;
     private AFSCIncrementRepository afscIncrementRepository;
+    
 
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository) {
@@ -322,6 +323,12 @@ public class PositionController {
                 }
 
                 json.forEach((newImport -> {
+
+
+
+
+
+
 
                     if (newImport.getPosNr() != null && newImport.getCurrQtr() != null) {
                         if (newImport.getCurrQtr().equals("1")) {

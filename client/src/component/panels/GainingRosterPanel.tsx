@@ -463,15 +463,17 @@ const GainingRosterPanel: React.FC<Props> = props => {
                     return data.splice(2, data.length - 3)
                 }
             }).then(((rows: any, errors: any) => {
-                if (errors) {
+                if (errors)
+                {console.log(errors.rows, errors);
                     updateErrors(errors)
                     updateSuccess(false);
                 } else {
                     dispatch(saveGainingMembers(rows.rows));
                     updateSuccess(true);
                 }
-                ;
             }));
+
+            console.log(data);
         }
         handleClose();
     }

@@ -15,6 +15,8 @@ import GenericGroupCollectionModel from "../../../store/members/models/GenericGr
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {getChartData} from "../../../store/positions/thunks";
+import CurrentRosterPanel from "../CurrentRosterPanel";
+import GainingRosterPanel from "../GainingRosterPanel";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -57,29 +59,32 @@ const PanelsContainer: React.FC<Props> = props => {
     const currentCollectionOffices: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
     const gainingMembers = useSelector(({members}: ApplicationState) => members.gainingData);
     const gainingCollectionAFSCs: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
-    const CurrentRoster = lazy(() => import('../CurrentRosterPanel'));
-    const GainingRoster = lazy(() => import('../GainingRosterPanel'));
+    useEffect(() => {
+                dispatch(getGainingMembers());
+                dispatch(getDistinctGainingAFSCCollection());
+        return function cleanup() {
+        }
+    }, [props.showCurrentPanel]);
+
     useEffect(() => {
         dispatch(getMembers());
-        dispatch(getChartData());
-        dispatch(getGainingMembers());
-        dispatch(getUniqueAFSCCollection());
-        dispatch(getDistinctGainingAFSCCollection());
         dispatch(getOfficeCollection());
-    }, [dispatch]);
+        dispatch(getUniqueAFSCCollection());
+        dispatch(getOfficeCollection());
+        return function cleanup() {
+            console.log("done");
+        }
+    }, [props.showGainingPanel]);
+
 
 
     return (
         <section className={classNames(classes.root, props.className)}>
             <div className={classes.table}>
-                <Suspense fallback={<div>Loading...</div>}>
-                {props.showCurrentPanel ?
-                    <CurrentRoster members={currentMembers} loading={loading} collectionAFSC={currentCollectionAFSC} collectionOffice={currentCollectionOffices} callback={props.callback}/>
-                    : null}
-                {props.showGainingPanel ?
-                    <GainingRoster members={gainingMembers} loading={gainingLoading} collectionAFSC={gainingCollectionAFSCs} callback={props.callback}/> : null}
-                    </Suspense>
-
+                {props.showCurrentPanel &&
+                    <CurrentRosterPanel members={currentMembers} loading={loading} collectionAFSC={currentCollectionAFSC} collectionOffice={currentCollectionOffices} callback={props.callback}/>}
+                {props.showGainingPanel &&
+                    <GainingRosterPanel members={gainingMembers} loading={gainingLoading} collectionAFSC={gainingCollectionAFSCs} callback={props.callback}/>}
             </div>
         </section>
     )
