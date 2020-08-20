@@ -6,6 +6,7 @@ import squadron.manager.turbine.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public interface PositionRepository extends JpaRepository<Position, Long> {
@@ -15,6 +16,10 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
     List<Position> findAllByPosNr(String posNr);
     List<Position> findAllByPosNrIsNull();
     List<Position> findAllByPosNrIsNotNullAndCurrQtrIsNull();
+    List<Position> findAllByCurrQtrAndProjQtr1(String current,String projected);
+    List<Position> findAllByCurrQtrAndProjQtr2(String current,String projected);
+    List<Position> findAllByCurrQtrAndProjQtr3(String current,String projected);
+    List<Position> findAllByCurrQtrAndProjQtr4(String current,String projected);
 
     void deleteAllByPasCode(String pas);
     void deleteAll();
@@ -25,9 +30,9 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 //    @Query("select DISTINCT afscAuth from Position " +
 //            "where currQtr = '1'")
 //    Number countAllByAfscAuth(String afsc);
-
+    List<Position> findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
     int countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
-    int countAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNull(String afsc);
+    int countAllByAfscAuthAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
     int countAllByDafscAssigned(String dafsc);
 
 //    @Query("select DISTINCT afscAuth from Position " +

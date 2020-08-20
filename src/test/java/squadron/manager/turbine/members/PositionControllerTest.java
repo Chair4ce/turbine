@@ -95,21 +95,22 @@ public class PositionControllerTest extends BaseIntegrationTest {
 
 
         //Gaining Roster
-        GainingMember newGaining1 = new GainingMember( "OP1CF333", "54354345", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798798", new DateTime().minusMonths(24).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(20).toDate(),date);
-        GainingMember newGaining2 = new GainingMember( "OP1CF333", "54354346", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798898", new DateTime().minusMonths(43).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(19).toDate(),date);
-        GainingMember newGaining3 = new GainingMember( "OP1CF333", "54354347", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798998", new DateTime().minusMonths(2).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(18).toDate(),date);
-        GainingMember newGaining4 = new GainingMember( "OP1CF333", "54354348", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798799", new DateTime().minusMonths(4).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(17).toDate(),date);
-        GainingMember newGaining5 = new GainingMember( "OP1CF333", "54354349", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798800", new DateTime().minusMonths(5).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(16).toDate(),date);
-        GainingMember newGaining6 = new GainingMember( "OP1CF333", "54354350", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798801", new DateTime().minusMonths(7).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(15).toDate(),date);
-        GainingMember newGaining7 = new GainingMember( "OP1CF333", "54354351", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798802", new DateTime().minusMonths(9).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(14).toDate(),date);
-        GainingMember newGaining8 = new GainingMember( "OP1CF333", "54354352", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798803", new DateTime().minusMonths(0).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(13).toDate(),date);
-        GainingMember newGaining9 = new GainingMember( "OP1CF333", "543543453", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798804", new DateTime().minusMonths(8).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(12).toDate(),date);
-        GainingMember newGaining10 = new GainingMember( "OP1CF333", "54354354", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798904", new DateTime().minusMonths(7).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(11).toDate(),date);
+        GainingMember newGaining1 = new GainingMember( "OP1CF333", "54354345", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798798", new DateTime().minusMonths(24).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(20).toDate(),date);
+        GainingMember newGaining2 = new GainingMember( "OP1CF333", "54354346", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798898", new DateTime().minusMonths(43).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(19).toDate(),date);
+        GainingMember newGaining3 = new GainingMember( "OP1CF333", "54354347", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798998", new DateTime().minusMonths(2).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(18).toDate(),date);
+        GainingMember newGaining4 = new GainingMember( "OP1CF333", "54354348", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798799", new DateTime().minusMonths(4).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(17).toDate(),date);
+        GainingMember newGaining5 = new GainingMember( "OP1CF333", "54354349", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798800", new DateTime().minusMonths(5).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(16).toDate(),date);
+        GainingMember newGaining6 = new GainingMember( "OP1CF333", "54354350", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798801", new DateTime().minusMonths(7).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(15).toDate(),date);
+        GainingMember newGaining7 = new GainingMember( "OP1CF333", "54354351", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798802", new DateTime().minusMonths(9).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(14).toDate(),date);
+        GainingMember newGaining8 = new GainingMember( "OP1CF333", "54354352", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798803", new DateTime().minusMonths(0).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(13).toDate(),date);
+        GainingMember newGaining9 = new GainingMember( "OP1CF333", "543543453", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798804", new DateTime().minusMonths(8).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(12).toDate(),date);
+        GainingMember newGaining10 = new GainingMember( "OP1CF333", "54354354", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D132", "98798904", new DateTime().minusMonths(7).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(11).toDate(),date);
         GainingMember newGaining11 = new GainingMember( "OP1CF333", "54354355", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798004", new DateTime().minusMonths(35).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(10).toDate(),date);
         GainingMember newGaining12 = new GainingMember( "OP1CF333", "54354356", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798805", new DateTime().minusMonths(23).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(9).toDate(),date);
         GainingMember newGaining13 = new GainingMember( "OP1CF333", "54354357", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798806", new DateTime().minusMonths(2).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(8).toDate(),date);
         GainingMember newGaining14 = new GainingMember( "OP1CF333", "54354358", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798807", new DateTime().minusMonths(1).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(7).toDate(),date);
         GainingMember newGaining15 = new GainingMember( "OP1CF333", "54354359", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D152", "98798808", new DateTime().minusMonths(22).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusMonths(6).toDate(),date);
+        GainingMember newGaining16 = new GainingMember( "OP1CF333", "74354459", "HOAG, JACY L", "TSG", "OPQRT455", "DO NOTHING SQ", "3D172", "98798808", new DateTime().minusMonths(22).toDate(), new DateTime().plusYears(6).toDate(), new DateTime().plusYears(2).plusMonths(4).toDate(),date);
 
         gainingMemberRepository.save(newGaining1);
         gainingMemberRepository.save(newGaining2);
@@ -126,6 +127,7 @@ public class PositionControllerTest extends BaseIntegrationTest {
         gainingMemberRepository.save(newGaining13);
         gainingMemberRepository.save(newGaining14);
         gainingMemberRepository.save(newGaining15);
+        gainingMemberRepository.save(newGaining16);
 
         //Ideal manning
         Position newPosition1 = new Position("OP1CF333", "DOO", "1N131A", "A1C", "1", "1", "1", "1", "1", "10525331C", "A1C", "1N131", "BELL JAIME NICOLE", "98798798", date);
@@ -152,9 +154,15 @@ public class PositionControllerTest extends BaseIntegrationTest {
         Position newPosition32 = new Position("OP1CF333", "DOO", "3D032", "A1C", "1", "1", "1", "1", "1", "10625343C", "A1C", "3D032", "BELL JAIME NICOLE", "98794510", date);
         Position newPosition29 = new Position("OP1CF333", "DOO", "3D032", "A1C", "1", "1", "1", "1", "1", "10725343C", null, null, null, null, date);
         Position newPosition30 = new Position("OP1CF333", "DOO", "3D032", "A1C", "1", "1", "1", "1", "1", "10825343C", null, null, null, null, date);
+
+        //unfunded in 4th Qtr but not currently assigned
         Position newPosition31 = new Position("OP1CF333", "DOO", "3D032", "A1C", "1", "1", "1", "1", "0", "10925343C", null, null, null, null, date);
+
         Position newPosition33 = new Position("OP1CF333", "DOO", "3D052", "A1C", "1", "1", "1", "1", "1", "10125343C", "A1C", "3D052", "BELL JAIME NICOLE", "18794510", date);
+
+        //Unfunded in 3rd Qtr and currently assigned
         Position newPosition34 = new Position("OP1CF333", "DOO", "3D052", "A1C", "1", "1", "1", "0", "0", "11125343C", null, null, null, null, date);
+
         Position newPosition35 = new Position("OP1CF333", "DOO", "3D072", "A1C", "1", "1", "1", "1", "1", "11125343C", null, null, null, null, date);
         //Ideal manning
         Position newPosition13 = new Position("OP1CF333", "DOO", "3D132", "A1C", "1", "1", "1", "1", "1", "10525343C", "A1C", "3D132", "BELL JAIME NICOLE", "98798810", date);

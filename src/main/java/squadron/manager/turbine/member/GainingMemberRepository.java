@@ -8,6 +8,7 @@ import java.util.List;
 public interface GainingMemberRepository extends JpaRepository<GainingMember, Long> {
 
     GainingMember findByMbrId(String mbrId);
+    List<GainingMember> findAllByDafsc(String dafsc);
 
     @Query("select DISTINCT dafsc from GainingMember")
     List<String> findDistinctDAFSC();
