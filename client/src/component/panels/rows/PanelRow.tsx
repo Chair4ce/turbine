@@ -33,13 +33,14 @@ const useStyles = makeStyles((theme: Theme) =>
         grade_background: {
             width: 34,
             height: 21,
-            background: '#e2e2e2',
+            background: 'transparent',
             borderRadius: 3,
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'center',
             alignItems: 'center',
-            boxShadow: '0 1px 1px rgba(0,0,0,.5)'
+            boxShadow: '0 1px 1px rgba(0,0,0,.5)',
+            border: '.5px solid #C4C4C4'
         },
 
         column_data_name: {
@@ -134,33 +135,30 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'none'
         },
         grade_text: {
-            color: '#000000',
+            color: '#ffffff',
             fontSize: 13,
         },
-        grade_cms: {
-            background: '#3c09ea'
-        },
-        grade_sms: {
-            background: '#4636d5'
-        },
-        grade_msg: {
-            background: '#3665dc'
-        },
-        grade_tsg: {
-            background: '#3f87d5'
-        },
-        grade_ssg: {
-            background: '#38a8d4'
-        },
-        grade_sra: {
-            background: '#41d595'
-        },
-        grade_a1c: {
-            background: '#38d458'
-        },
-        grade_amn: {
-            background: '#69d93d'
-        },
+        // grade_sms: {
+        //     background: '#4636d5'
+        // },
+        // grade_msg: {
+        //     background: '#3665dc'
+        // },
+        // grade_tsg: {
+        //     background: '#3f87d5'
+        // },
+        // grade_ssg: {
+        //     background: '#38a8d4'
+        // },
+        // grade_sra: {
+        //     background: '#41d595'
+        // },
+        // grade_a1c: {
+        //     background: '#38d458'
+        // },
+        // grade_amn: {
+        //     background: '#69d93d'
+        // },
         selected: {
             color: '#2b2b2b'
         }
@@ -193,16 +191,16 @@ const CurrentRosterRow: React.FC<Props> = props => {
     });
 
 
-    const GradeClassName = clsx({
-        [classes.grade_cms]: props.gradeClassName == 'CMS',
-        [classes.grade_sms]: props.gradeClassName == 'SMS',
-        [classes.grade_msg]: props.gradeClassName == 'MSG',
-        [classes.grade_tsg]: props.gradeClassName == 'TSG',
-        [classes.grade_ssg]: props.gradeClassName == 'SSG',
-        [classes.grade_sra]: props.gradeClassName == 'SRA',
-        [classes.grade_a1c]: props.gradeClassName == 'A1C',
-        [classes.grade_amn]: props.gradeClassName == 'AMN',
-    });
+    // const GradeClassName = clsx({
+    //     [classes.grade_cms]: props.gradeClassName == 'CMS',
+    //     [classes.grade_sms]: props.gradeClassName == 'SMS',
+    //     [classes.grade_msg]: props.gradeClassName == 'MSG',
+    //     [classes.grade_tsg]: props.gradeClassName == 'TSG',
+    //     [classes.grade_ssg]: props.gradeClassName == 'SSG',
+    //     [classes.grade_sra]: props.gradeClassName == 'SRA',
+    //     [classes.grade_a1c]: props.gradeClassName == 'A1C',
+    //     [classes.grade_amn]: props.gradeClassName == 'AMN',
+    // });
 
     function handleExpand() {
         toggleSelected(true);
@@ -242,13 +240,13 @@ const CurrentRosterRow: React.FC<Props> = props => {
                         <div className={classNames(classes.info_area)}>
 
                             <div className={classNames(classes.column_data_grade)}>
-                                <div className={classNames(classes.grade_background, GradeClassName)}>
+                                <div className={classNames(classes.grade_background)}>
                                     <Typography className={classes.grade_text}>{props.data.grade ? props.data.grade : '? ?'}</Typography>
                                 </div>
                             </div>
-                            <div className={classNames(classes.column_data)}>
-                                <h4 className={classes.rowText}>{props.data.dafsc}</h4>
-                            </div>
+                            {/*<div className={classNames(classes.column_data)}>*/}
+                            {/*    <h4 className={classes.rowText}>{props.data.dafsc}</h4>*/}
+                            {/*</div>*/}
                             <div className={classNames(classes.column_data_name)}>
                                 <Typography className={classes.rowTitle}>{props.data.fullName}</Typography>
                             </div>

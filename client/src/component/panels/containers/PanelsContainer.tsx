@@ -73,7 +73,7 @@ const PanelsContainer: React.FC<Props> = props => {
         dispatch(getUniqueAFSCCollection());
         dispatch(getOfficeCollection());
         return function cleanup() {
-            console.log("done");
+
         }
     }, [props.showGainingPanel]);
 
