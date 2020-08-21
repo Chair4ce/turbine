@@ -14,7 +14,7 @@ public class AFSCIncrementLogJSON {
 
     private Long id;
     private String pasCode;
-    private String mbrId;
+    private String itemId;
     private String afsc;
     private Date incrementDate;
     private int month;

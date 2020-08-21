@@ -1,12 +1,13 @@
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as React from "react";
-import {lazy, Suspense, useState} from "react";
+import {lazy, useEffect, useState} from "react";
 import {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import HealthSideBar from "../../component/sidebar/HealthSideBar";
 import {HEALTH_MENU_SELECT_ACTION} from "../../component/menus/HealthMenu";
-import LoadingSpinner from "../../component/displayLoading/LoadingSpinner";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../store";
+import {getChartData} from "../../store/positions/thunks";
+import clsx from "clsx";
 
 const Chart = lazy(() => import("../../component/panels/ManningChart"))
 
@@ -31,6 +32,11 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'relative',
             width: '100%',
             height: '100%',
+        },
+        show: {
+        },
+        hide: {
+            display: 'none'
         }
     }),
 );
@@ -43,14 +49,21 @@ interface Props {
 
 const HealthSection: React.FC<Props> = props => {
     const classes = useStyles();
+    const dispatch = useDispatch();
     const chartDataAFSC = useSelector(({positions}: ApplicationState) => positions.chartData);
     const [showManningChart, toggleManningChart] = useState(false);
-    // const [showProjectedPanel, toggleProjectedPanel] = useState(false);
-    // const [showGainingPanel, toggleGainingPanel] = useState(false);
-    // const [showLosingPanel, toggleLosingPanel] = useState(false);
-    // const [showPositionPanel, togglePositionPanel] = useState(false);
-    // const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
-    // const [fileData, updateFileData] = useState();
+
+    useEffect(() => {
+        dispatch(getChartData())
+        return function cleanup() {
+        }
+    }, [dispatch]);
+
+    const chartClassName = clsx({
+        [classes.show]: showManningChart,
+        [classes.hide]: !showManningChart,
+    });
+
     const callBackHandler = (type: string) => {
         switch (type) {
             case SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND:
@@ -71,10 +84,7 @@ const HealthSection: React.FC<Props> = props => {
                  showManningChart={showManningChart}/>
             </div>
             <article className={classes.main}>
-                <Suspense fallback={
-                    <LoadingSpinner />}>
-                {showManningChart &&  <Chart chartData={chartDataAFSC}/>}
-                </Suspense>
+                <Chart chartData={chartDataAFSC} className={chartClassName}/>
             </article>
         </section>
     );

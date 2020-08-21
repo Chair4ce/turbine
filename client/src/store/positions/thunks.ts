@@ -38,6 +38,13 @@ export const getChartData = () => {
     }
 };
 
+export const generateChartData = () => {
+    return (dispatch: any) => {
+        return callApi('get','positions/manning_chart/generate')
+            .catch(err => dispatch(positionsFetchError(err)));
+    }
+};
+
 export const savePositions = (positions: UploadPositionModel[]) => {
     return (dispatch: any) => {
         dispatch(positionsFetchRequest());

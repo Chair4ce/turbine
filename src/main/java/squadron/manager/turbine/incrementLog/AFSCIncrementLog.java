@@ -18,8 +18,8 @@ public class AFSCIncrementLog {
     private Long id;
     @Column(name = "pas_code")
     private String pasCode;
-    @Column(name = "mbr_id")
-    private String mbrId;
+    @Column(name = "item_id")
+    private String itemId;
     private String afsc;
     @Column(name = "increment_date")
     private Date incrementDate;
@@ -30,10 +30,10 @@ public class AFSCIncrementLog {
     @Column(name = "increment_type")
     private String incrementType;
 
-    public AFSCIncrementLog(Long id, String pasCode, String mbrId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
+    public AFSCIncrementLog(Long id, String pasCode, String itemId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
         this.id = id;
         this.pasCode = pasCode;
-        this.mbrId = mbrId;
+        this.itemId = itemId;
         this.afsc = afsc;
         this.incrementDate = incrementDate;
         this.month = month;
@@ -42,9 +42,9 @@ public class AFSCIncrementLog {
         this.incrementType = incrementType;
     }
 
-    public AFSCIncrementLog(String pasCode, String mbrId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
+    public AFSCIncrementLog(String pasCode, String itemId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
         this.pasCode = pasCode;
-        this.mbrId = mbrId;
+        this.itemId = itemId;
         this.afsc = afsc;
         this.incrementDate = incrementDate;
         this.month = month;

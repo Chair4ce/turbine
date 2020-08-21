@@ -1,4 +1,4 @@
-package squadron.manager.turbine.position;
+package squadron.manager.turbine.afscChart;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

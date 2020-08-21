@@ -1,16 +1,17 @@
 package squadron.manager.turbine.position;
 
 
-import javafx.geometry.Pos;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import squadron.manager.turbine.afscChart.AfscChart;
+import squadron.manager.turbine.afscChart.AfscChartRepository;
 import squadron.manager.turbine.incrementLog.AFSCIncrementLog;
 import squadron.manager.turbine.incrementLog.AFSCIncrementRepository;
 import squadron.manager.turbine.incrementLog.PercentageCalculator;
 import squadron.manager.turbine.manningChart.AFSCManningChartData;
-import squadron.manager.turbine.member.GainingMember;
-import squadron.manager.turbine.member.GainingMemberRepository;
+import squadron.manager.turbine.gainingMember.GainingMember;
+import squadron.manager.turbine.gainingMember.GainingMemberRepository;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 
@@ -91,6 +92,17 @@ public class PositionController {
     @GetMapping(path = "/manning_chart")
     public @ResponseBody
     List<AfscChart> getManningChartData() {
+
+
+        //Search through each distinct AFSC and track the count all depatures and arrivals
+
+
+        return afscChartRepository.findAll();
+    }
+
+    @CrossOrigin
+    @GetMapping(path = "/manning_chart/generate")
+    void generateManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
         LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int thisMonth = localDate.getMonthValue();
@@ -101,39 +113,30 @@ public class PositionController {
             LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate end = new DateTime(new Date()).plusMonths(24 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
+            //Iterate by month until the rest of this year and the following two years.
             for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
                 int iMonth = date.getMonthValue();
                 int iYear = date.getYear();
-                List<Position> assignedPositions = positionRepository.findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);
 
-
-                List<GainingMember> newMembersInSameAfsc = gainingRepository.findAllByDafsc(afsc);
-                //find any gaining members arriving on this month
-                newMembersInSameAfsc.forEach((newMbr) -> {
-                    int rnltdMonth = new DateTime(newMbr.getRnltd()).getMonthOfYear();
-                    int rnltdYear = new DateTime(newMbr.getRnltd()).getYear();
-                    if (rnltdMonth == iMonth && rnltdYear == iYear) {
-                        assigned.incrementAndGet();
-
-                    }
-                });
-                assignedPositions.forEach((position) -> {
-                    if (memberRepository.findByMbrId(position.getMbrIdAssigned()) != null) {
-                        Member assignedMember = memberRepository.findByMbrId(position.getMbrIdAssigned());
-                        int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
-                        int derosYear = new DateTime(assignedMember.getDeros()).getYear();
-                        if (derosMonth == iMonth && derosYear == iYear) {
-                            assigned.decrementAndGet();
+                if(afscIncrementRepository.findAllByAfsc(afsc).size() > 0) {
+                    List<AFSCIncrementLog> arrivalAndDepartures = afscIncrementRepository.findAllByAfsc(afsc);
+                    arrivalAndDepartures.forEach((mbr) -> {
+                        if(mbr.getMonth() == iMonth && mbr.getYear() == iYear){
+                            if(mbr.getIncrementType() == "projected arrival") {
+                                assigned.incrementAndGet();
+                            }
+                            if(mbr.getIncrementType() == "departure") {
+                                assigned.decrementAndGet();
+                            }
                         }
-                    }
-
-
-                });
-                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+                    });
+                    afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+                }
             }
         });
 
-        return afscChartRepository.findAll();
+        //Search through each distinct AFSC and track the count all depatures and arrivals
+
     }
 
     private AtomicInteger adjustAssignedForMonth(AtomicInteger assigned, String afsc, int month) {
@@ -273,20 +276,19 @@ public class PositionController {
                     int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
                     int derosYear = new DateTime(assignedMember.getDeros()).getYear();
 
-                if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
-
-                    AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
-                            assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
-                            assignedMember.getMbrId(),
-                            assignedMember.getDafsc() != null ? assignedMember.getDafsc().replaceAll("-", "") : null,
-                            new DateTime(assignedMember.getDeros()).toDate(),
-                            derosMonth,
-                            derosYear,
-                            -1,
-                            "departure"
-                    );
-                    afscIncrementRepository.save(new_departure_log);
-                }
+                    if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
+                        AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
+                                assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
+                                assignedMember.getMbrId(),
+                                assignedMember.getDafsc() != null ? assignedMember.getDafsc().replaceAll("-", "") : null,
+                                new DateTime(assignedMember.getDeros()).toDate(),
+                                derosMonth,
+                                derosYear,
+                                -1,
+                                "departure"
+                        );
+                        afscIncrementRepository.save(new_departure_log);
+                    }
 
 
                 }
@@ -315,20 +317,6 @@ public class PositionController {
 
     public boolean isDefunded(PositionJSON newImport) {
         return newImport.getCurrQtr().equals("1") && isProjUnfunded(newImport.getProjQtr1(), newImport.getProjQtr2(), newImport.getProjQtr3(), newImport.getProjQtr4());
-    }
-
-    public void logPositionChange(PositionJSON newImport, Date dateChanged) {
-
-        AFSCIncrementLog new_log = new AFSCIncrementLog(
-                newImport.getPasCode(),
-                newImport.getPosNr(),
-                newImport.getAfscAuth() != null ? newImport.getAfscAuth().replaceAll("-", "") : null,
-                dateChanged,
-                -1,
-                "unfunded"
-        );
-        afscIncrementRepository.save(new_log);
-
     }
 
     private int lastDayOfUnfundedQtr(String qtr1, String qtr2, String qtr3, int year) {

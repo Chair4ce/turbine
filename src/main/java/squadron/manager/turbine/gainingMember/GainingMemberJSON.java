@@ -1,4 +1,4 @@
-package squadron.manager.turbine.member;
+package squadron.manager.turbine.gainingMember;
 
 import lombok.*;
 

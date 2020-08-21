@@ -1,4 +1,4 @@
-import React, {lazy, Suspense, useEffect} from "react";
+import React, {useEffect} from "react";
 
 import styled from "styled-components";
 import classNames from "classnames";
@@ -14,7 +14,7 @@ import {
 import GenericGroupCollectionModel from "../../../store/members/models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "../../../store/members/models/GenericGainingGroupCollectionModel";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {getChartData} from "../../../store/positions/thunks";
+import {generateChartData} from "../../../store/positions/thunks";
 import CurrentRosterPanel from "../CurrentRosterPanel";
 import GainingRosterPanel from "../GainingRosterPanel";
 
@@ -68,7 +68,7 @@ const PanelsContainer: React.FC<Props> = props => {
 
     useEffect(() => {
         dispatch(getMembers());
-        dispatch(getChartData());
+        dispatch(generateChartData());
         dispatch(getOfficeCollection());
         dispatch(getUniqueAFSCCollection());
         dispatch(getOfficeCollection());

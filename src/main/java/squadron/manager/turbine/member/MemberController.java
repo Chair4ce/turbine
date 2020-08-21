@@ -2,6 +2,9 @@ package squadron.manager.turbine.member;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import squadron.manager.turbine.gainingMember.GainingGroupCollection;
+import squadron.manager.turbine.gainingMember.GainingMember;
+import squadron.manager.turbine.gainingMember.GainingMemberJSON;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
