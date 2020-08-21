@@ -17,8 +17,6 @@ import {
 import {PositionSerializer} from "../../util/PositionSerializer";
 import {MemberSerializer} from "../../util/MemberSerializer";
 import UploadPositionModel from "./models/UploadPositionModel";
-import MemberModel from "../members/models/MemberModel";
-import PositionModel from "./models/PositionModel";
 
 export const getPositions = () => {
     return (dispatch: any) => {
@@ -34,7 +32,7 @@ export const getChartData = () => {
     return (dispatch: any) => {
         dispatch(positionsFetchRequest());
        return callApi('get','positions/manning_chart')
-            .then(res => dispatch(chartDataFetchSuccess(res))
+            .then(res => dispatch(chartDataFetchSuccess(PositionSerializer.serializeManningChartDataFromBackend(res)))
             ).catch(err => dispatch(positionsFetchError(err))
         );
     }

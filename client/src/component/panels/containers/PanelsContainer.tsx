@@ -68,6 +68,7 @@ const PanelsContainer: React.FC<Props> = props => {
 
     useEffect(() => {
         dispatch(getMembers());
+        dispatch(getChartData());
         dispatch(getOfficeCollection());
         dispatch(getUniqueAFSCCollection());
         dispatch(getOfficeCollection());

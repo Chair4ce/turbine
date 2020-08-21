@@ -1,6 +1,7 @@
 import MemberModel from "../store/members/models/MemberModel";
 import PositionModel from "../store/positions/models/PositionModel";
 import UploadPositionModel from "../store/positions/models/UploadPositionModel";
+import ManningChartModel from "../store/positions/models/ManningChartModel";
 
 
 const crypto = require('crypto');
@@ -96,6 +97,19 @@ export class PositionSerializer {
                         subItem.lastUpdated ? subItem.lastUpdated : null
                     ) }),
                     item.lastUpdated ? item.lastUpdated : null
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeManningChartDataFromBackend(items: any): ManningChartModel[] {
+        if (items.map) {
+            return items.map((item: any) => {
+                return new ManningChartModel(
+                    item.afsc,
+                    item.month.toString() + "-" + item.year.toString().substring(2,4),
+                    item.manning,
                 );
             });
         }

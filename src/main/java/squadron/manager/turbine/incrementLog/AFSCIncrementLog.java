@@ -23,26 +23,32 @@ public class AFSCIncrementLog {
     private String afsc;
     @Column(name = "increment_date")
     private Date incrementDate;
+    private int month;
+    private int year;
     @Column(name = "increment_change")
     private double incrementChange;
     @Column(name = "increment_type")
     private String incrementType;
 
-    public AFSCIncrementLog(Long id, String pasCode, String mbrId, String afsc, Date incrementDate, double incrementChange, String incrementType) {
+    public AFSCIncrementLog(Long id, String pasCode, String mbrId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
         this.id = id;
         this.pasCode = pasCode;
         this.mbrId = mbrId;
         this.afsc = afsc;
         this.incrementDate = incrementDate;
+        this.month = month;
+        this.year = year;
         this.incrementChange = incrementChange;
         this.incrementType = incrementType;
     }
 
-    public AFSCIncrementLog(String pasCode, String mbrId, String afsc, Date incrementDate, double incrementChange, String incrementType) {
+    public AFSCIncrementLog(String pasCode, String mbrId, String afsc, Date incrementDate,int month,int year, double incrementChange, String incrementType) {
         this.pasCode = pasCode;
         this.mbrId = mbrId;
         this.afsc = afsc;
         this.incrementDate = incrementDate;
+        this.month = month;
+        this.year = year;
         this.incrementChange = incrementChange;
         this.incrementType = incrementType;
     }

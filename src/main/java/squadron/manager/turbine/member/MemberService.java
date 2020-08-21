@@ -50,7 +50,6 @@ public class MemberService {
     public Iterable<Member> saveAndGetAllMembers(@RequestBody @Valid Iterable<MemberJSON> json) {
         Date date = new Date();
         json.forEach((newImport -> {
-            System.out.println();
             Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
                 if (existingMember == null) {
                     saveNewDepartureLog(newImport);
@@ -75,7 +74,6 @@ public class MemberService {
                     -1,
                     "departure"
             );
-            System.out.println("saving departure log");
             afscIncrementRepository.save(new_departure_log);
         }
     }
@@ -86,7 +84,6 @@ public class MemberService {
                 AFSCIncrementLog existing_departure_log = afscIncrementRepository.findByPasCodeAndMbrIdAndIncrementType(newImport.getAssignedPas(), newImport.getSsan(), "departure");
                 if (!new DateTime(existing_departure_log.getIncrementDate()).equals(new DateTime(newImport.getDeros()))) {
                     existing_departure_log.setIncrementDate(newImport.getDeros());
-                    System.out.println("updating departure log");
                     afscIncrementRepository.save(existing_departure_log);
                 }
             }

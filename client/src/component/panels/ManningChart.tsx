@@ -1,15 +1,13 @@
 import * as React from 'react';
+import {useLayoutEffect, useRef} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {useLayoutEffect, useRef} from "react";
 import * as am4core from "@amcharts/amcharts4/core";
 import * as am4charts from "@amcharts/amcharts4/charts";
 import am4themes_dark from "@amcharts/amcharts4/themes/dark";
 import am4themes_animated from "@amcharts/amcharts4/themes/animated";
-import {useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
 import ManningChartModel from "../../store/positions/models/ManningChartModel";
-import {red} from "@material-ui/core/colors";
+
 interface Props {
     chartData: ManningChartModel[];
 className?: string;
@@ -92,7 +90,7 @@ const ManningChart: React.FC<Props> = props => {
         series.dataFields.categoryY = "afsc";
         series.dataFields.value = "value";
         series.sequencedInterpolation = true;
-        series.defaultState.transitionDuration = 3000;
+        series.defaultState.transitionDuration = 2000;
 
         let bgColor = new am4core.InterfaceColorSet().getFor("background");
         // @ts-ignore
@@ -109,8 +107,8 @@ const ManningChart: React.FC<Props> = props => {
         series.heatRules.push({
             target: columnTemplate,
             property: "fill",
-            min: am4core.color(bgColor),
-            max: chart.colors.getIndex(0)
+            min: am4core.color("#863232"),
+            max: am4core.color(bgColor),
         });
 
 // heat legend

@@ -17,6 +17,8 @@ public class AFSCIncrementLogJSON {
     private String mbrId;
     private String afsc;
     private Date incrementDate;
+    private int month;
+    private int year;
     private double incrementChange;
     private String incrementType;
 }
