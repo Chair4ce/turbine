@@ -67,7 +67,7 @@ const DynamicInfoBox: React.FC<Props> = props => {
                 <em>{S(data.rowTitle).humanize().titleCase().s}</em>
             </div>
             <div className={classes.rowInfo}>
-                <em>{data.rowInfo != undefined ? data.rowInfo : "-"}</em>
+                <em>{data.rowInfo !== undefined ? data.rowInfo : "-"}</em>
             </div>
         </div>
         )

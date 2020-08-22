@@ -5,8 +5,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import GainingMemberModel from "../../../store/members/models/GainingMemberModel";
-import {Collapse, Paper} from "@material-ui/core";
-import clsx from "clsx";
+import {Paper} from "@material-ui/core";
 import RowsByGainingSkillContainer from "./RowsByGainingSkillContainer";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -71,11 +70,6 @@ const UniqueGainingAFSCRows: React.FC<Props> = props => {
     const handleClick = () => {
                 toggleExpanded(prev => !prev)
     }
-
-    const buttonClassname = clsx({
-        [classes.expanded]: expanded,
-        [classes.collapsed]: !expanded,
-    });
 
     return (
         <div className={classes.afscGroup}>

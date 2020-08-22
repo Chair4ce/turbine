@@ -266,7 +266,6 @@ export const ProfileMenu: React.FC = () => {
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [open, setOpen] = React.useState(false);
-    const anchorRef = React.useRef<HTMLButtonElement>(null);
     const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
@@ -327,12 +326,6 @@ export const ProfileMenu: React.FC = () => {
     //
     //     setOpen(false);
     // };
-    function handleListKeyDown(event: React.KeyboardEvent) {
-        if (event.key === 'Tab') {
-            event.preventDefault();
-            setOpen(false);
-        }
-    }
 
     // return focus to the button when we transitioned from !open -> open
     // const prevOpen = React.useRef(open);

@@ -23,28 +23,28 @@ import {
     DialogTitle,
     Fab,
     Fade,
-    FormControl, InputAdornment,
+    FormControl,
+    InputAdornment,
     InputLabel,
     Menu,
     MenuItem,
     Select,
-    TextField, Typography
+    TextField,
+    Typography
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
-import {Skeleton} from "@material-ui/lab";
 import {useDispatch, useSelector} from "react-redux";
-import MemberModel from "../../store/members/models/MemberModel";
 import FuzzySearch from 'fuzzy-search';
 import {saveGainingMembers} from "../../store/members/thunks";
 import GenericGainingGroupCollectionModel from "../../store/members/models/GenericGainingGroupCollectionModel";
 import UniqueGainingAFSCRows from "./rows/UniqueGainingAFSCRows";
-import RowsByGainingRankContainer from "./rows/RowsByGainingRankContainer";
-import {ApplicationState} from "../../store";
 import SkeletonPanelC from "./SkeletonPanelC";
 import GainingMemberModel from "../../store/members/models/GainingMemberModel";
 import SearchIcon from "@material-ui/icons/Search";
+import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
+import {ApplicationState} from "../../store";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -383,14 +383,14 @@ const schema = {
 }
 
 interface Props {
-    members: GainingMemberModel[];
-    loading: boolean;
-    collectionAFSC: GenericGainingGroupCollectionModel[];
     callback: (type: string) => void;
     className?: string;
 }
 
 const GainingRosterPanel: React.FC<Props> = props => {
+    const members: GainingMemberModel[] = useSelector(({members}: ApplicationState) => members.gainingData);
+    const loading: boolean = useSelector(({members}: ApplicationState) => members.gainingLoading);
+    const collectionAFSC: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
     const dispatch = useDispatch();
     const classes = useStyles();
 
@@ -401,34 +401,32 @@ const GainingRosterPanel: React.FC<Props> = props => {
     const [fullWidth, setFullWidth] = React.useState(true);
     const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
     const [success, updateSuccess] = useState(false);
-    const [errors, updateErrors] = useState("");
     const [sortByGrade, toggleSortByGrade] = useState(false);
     const [sortByAFSC, toggleSortByAFSC] = useState(false);
     const [searchAll, updateFuzzyAll] = useState("");
-    const [searchAFSC, updateFuzzyAFSC] = useState("");
     const [state, setState] = React.useState<{ group: string | number; name: string }>({
         group: '',
         name: '',
     });
 
-    const Allsearcher = new FuzzySearch(props.members, ['fullName'], {sort: true})
-    // const AFSCsearcher = new FuzzySearch(props.collectionAFSC, ['genericGroup'], {sort: true})
+    const Allsearcher = new FuzzySearch(members, ['fullName'], {sort: true})
+    // const AFSCsearcher = new FuzzySearch(collectionAFSC, ['genericGroup'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
     // const searchResultAFSC = AFSCsearcher.search(searchAFSC);
 
 
-    // const props.loading = useSelector(({importChanges}: ApplicationState) => importChanges.props.loading);
+    // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
     // const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
 
     const buttonClassname = clsx({
         [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const FileDropClassname = clsx({
         [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: props.loading,
+        [classes.buttonLoading]: loading,
     });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -465,7 +463,6 @@ const GainingRosterPanel: React.FC<Props> = props => {
             }).then(((rows: any, errors: any) => {
                 if (errors)
                 {console.log(errors.rows, errors);
-                    updateErrors(errors)
                     updateSuccess(false);
                 } else {
                     dispatch(saveGainingMembers(rows.rows));
@@ -483,14 +480,14 @@ const GainingRosterPanel: React.FC<Props> = props => {
             updateFuzzyAll(event.target.value);
         }
         if (sortByAFSC) {
-            updateFuzzyAFSC(event.target.value)
+            // updateFuzzyAFSC(event.target.value)
         }
 
     }
 
     const handleChange = (event: React.ChangeEvent<{ name?: string, value: unknown }>) => {
         updateFuzzyAll("");
-        updateFuzzyAFSC("");
+        // updateFuzzyAFSC("");
         const name = event.target.name as keyof typeof state;
         setState({
             ...state,
@@ -559,7 +556,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     >
 
                                         <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(props.loading || success) &&
+                                            {(loading || success) &&
                                             <div className={classes.wrapper}>
                                                 <Fab
                                                     aria-label="save"
@@ -568,12 +565,12 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                                 >
                                                     {success ? <CheckIcon/> : <SaveIcon/>}
                                                 </Fab>
-                                                {(props.loading) &&
+                                                {(loading) &&
                                                 <CircularProgress size={68} className={classes.fabProgress}/>}
                                             </div>
                                             }
 
-                                            {(!props.loading && !success) && <div className={classes.uploadButtonGrp}>
+                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
                                                 <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
                                                                          className={classes.uploadIcon}/>
                                                 <span id="simple-modal-dialog"
@@ -598,7 +595,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                 </Dialog>
             </React.Fragment>
 
-            {!props.loading ? ( <div className={classNames(classes.container)}>
+            <div className={classNames(classes.container)}>
                 <header className={classNames(classes.panelHeader)}>
 
                     <div className={classNames(classes.panelTitle)}>
@@ -607,7 +604,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
 
                     <div className={classNames(classes.actionArea)}>
                         <div className={classes.searchInput}>
-                            {props.members && !sortByGrade && !sortByAFSC ?
+                            {members && !sortByGrade && !sortByAFSC ?
                                 <TextField id="standard-size-small" size="small"
                                            onChange={handleFuzzy}
                                            InputProps={{
@@ -676,7 +673,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     {'Total: ' + searchResultAll.length}
                                 </em>}
                             </div>
-                            {props.members && !sortByGrade && !sortByAFSC && searchResultAll.map((row: any) =>
+                            {members && !sortByGrade && !sortByAFSC && searchResultAll.map((row: any) =>
                                 <CurrentRosterRow
                                     key={row.id}
                                     className={classes.item}
@@ -684,10 +681,10 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     data={row}
                                 />)}
 
-                            {/*{props.members && sortByGrade &&*/}
+                            {/*{members && sortByGrade &&*/}
                             {/*<RowsByGainingRankContainer data={MemberModel.sortGainingDorAscending(searchResultAll)}*/}
                             {/*                            bigSticky={false}/>}*/}
-                            {props.members && sortByAFSC && props.collectionAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
+                            {members && sortByAFSC && collectionAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
                                 <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
                                                        className={'dafsc'}/>)}
                             <div className={classNames(classes.endOfList, 'preview')}>
@@ -699,7 +696,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
                         {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
                     </section>
                 </div>
-            </div> ) : (<SkeletonPanelC/>)}
+            </div>
         </div>
     )
 }

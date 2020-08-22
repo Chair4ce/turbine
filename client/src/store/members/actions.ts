@@ -10,6 +10,7 @@ import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupColl
 // For more info: https://github.com/piotrwitek/typesafe-actions
 export const membersFetchRequest = () => action(MemberActionTypes.FETCH_REQUEST);
 export const gainingFetchRequest = () => action(MemberActionTypes.FETCH_GAINING_REQUEST);
+export const stagingUpload = (payload: boolean) => action(MemberActionTypes.STAGING_UPLOAD, payload);
 export const membersPostError = (message: string) => action(MemberActionTypes.POST_ERROR, message);
 export const gainingMembersFetchError = (message: string) => action(MemberActionTypes.GAINING_FETCH_ERROR, message);
 // Remember, you can also pass parameters into an action creator. Make sure to

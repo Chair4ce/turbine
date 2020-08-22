@@ -24,6 +24,7 @@ describe('reducer', () => {
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate()),
                 new MemberModel(
                     2,
@@ -41,6 +42,7 @@ describe('reducer', () => {
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate()),
                 new MemberModel(
                     3,
@@ -54,6 +56,7 @@ describe('reducer', () => {
                     moment(date).utc(false).toDate(),
                     '',
                     '',
+                    moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
                     moment(date).utc(false).toDate(),
@@ -85,6 +88,7 @@ describe('reducer', () => {
                 date,
                 date,
                 date,
+                date,
                 date),
             new MemberModel(
                 2,"987698752",
@@ -97,6 +101,7 @@ describe('reducer', () => {
                 date,
                 '',
                 '',
+                date,
                 date,
                 date,
                 date,
@@ -117,6 +122,7 @@ describe('reducer', () => {
                 date,
                 date,
                 date,
+                date,
                 date),
         ];
 
@@ -124,6 +130,7 @@ describe('reducer', () => {
             membersReducer(undefined, mockAction)
         ).toEqual({
             data: members,
+            staging: false,
             gainingData: [],
             gainingLoading: false,
             errors: undefined,

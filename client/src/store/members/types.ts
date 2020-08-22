@@ -33,6 +33,7 @@ export enum MemberActionTypes {
     FETCH_ERROR = '@@members/FETCH_ERROR',
     POST_ERROR = '@@members/POST_ERROR',
     POST_REQUEST = '@@members/POST_REQUEST',
+    STAGING_UPLOAD = '@@members/STAGING_UPLOAD',
     POST_SUCCESS = '@@members/POST_SUCCESS',
 }
 
@@ -40,6 +41,7 @@ export enum MemberActionTypes {
 // https://github.com/piotrwitek/react-redux-typescript-guide#state-with-type-level-immutability
 export interface MembersState {
     readonly loading: boolean;
+    readonly staging: boolean;
     readonly gainingLoading: boolean;
     readonly data: MemberModel[];
     readonly gainingData: GainingMemberModel[];

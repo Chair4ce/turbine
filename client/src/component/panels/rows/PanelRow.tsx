@@ -5,7 +5,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import MemberModel from "../../../store/members/models/MemberModel";
 import ExpandLessIcon from '@material-ui/icons/ExpandLess';
 import PersonIcon from "../../icon/PersonIcon";
-import {Button, Collapse, Fade, Grow, Typography, Zoom} from "@material-ui/core";
+import {Collapse, Typography} from "@material-ui/core";
 import DynamicInfoBoxModel from "../forms/DynamicInfoBoxModel";
 import DynamicInfoBox from "../forms/DynamicInfoBox";
 import GainingMemberModel from "../../../store/members/models/GainingMemberModel";

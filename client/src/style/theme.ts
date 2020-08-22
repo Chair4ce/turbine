@@ -65,8 +65,8 @@ const theme = {
     },
 
     font: {
-        title: 'Rambla',
-        tableHeader: 'Rambla',
+        title: 'Roboto',
+        tableHeader: 'Roboto',
         weightRow: 400,
         weightMedium: 500,
         weightBold: 700,

@@ -52,6 +52,7 @@
     "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
+    "react-spinners": "^0.9.0",
     "react-swipeable-views": "0.13.9",
     "read-excel-file": "^4.0.6",
     "recompose": "^0.30.0",

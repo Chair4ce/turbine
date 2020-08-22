@@ -1,4 +1,3 @@
-import moment from 'moment';
 import GainingMemberModel from "./GainingMemberModel";
 import UploadMemberModel from "./UploadMemberModel";
 

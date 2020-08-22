@@ -3,7 +3,6 @@ import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
 import {Skeleton} from "@material-ui/lab";
-import theme from "../../style/theme";
 
 interface Props {
     className?: string;

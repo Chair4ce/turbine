@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import classNames from "classnames";
 import ExpandIcon from "../icon/ExpandIcon";
 import CollapseIcon from "../icon/CollapseIcon";

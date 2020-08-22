@@ -5,7 +5,7 @@ import clsx from "clsx";
 import classNames from "classnames";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import {Collapse, Paper} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import GainingMemberModel from "../../../store/members/models/GainingMemberModel";
 import RowsByGainingRankContainer from "./RowsByGainingRankContainer";
 

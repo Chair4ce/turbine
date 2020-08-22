@@ -5,9 +5,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
 import MemberModel from "../../../store/members/models/MemberModel";
-import RowsBySkill from "./RowsBySkillContainer";
 import clsx from "clsx";
-import {Collapse, Paper} from "@material-ui/core";
 import RowsBySkillContainer from "./RowsBySkillContainer";
 
 

@@ -2,12 +2,11 @@ import {
     gainingFetchRequest,
     gainingMembersFetchError,
     gainingMembersFetchSuccess,
-    membersFetchError,
     membersFetchRequest,
     membersFetchSuccess,
     membersPostError,
     officeCollectionFetchError,
-    officeCollectionFetchSuccess,
+    officeCollectionFetchSuccess, stagingUpload,
     uniqueAFSCCollectionFetchError,
     uniqueAFSCCollectionFetchSuccess, uniqueGainingAFSCCollectionFetchSuccess
 } from './actions';
@@ -20,18 +19,26 @@ import MemberModel from "./models/MemberModel";
 export const getMembers = () => {
     return (dispatch: any) => {
         dispatch(membersFetchRequest());
-       return callApi('get', 'api/members')
-            .then(res => dispatch(membersFetchSuccess(MemberSerializer.serializeFromBackend(res)))
-            ).catch(err => dispatch(membersFetchError(err))
-        );
+        return fetch('api/members')
+            .then(response => response.json())
+            .then(mbrs => dispatch(membersFetchSuccess(MemberSerializer.serializeFromBackend(mbrs)))
+            ).catch((reason => {
+                console.log("Failed to fetch Alpha Roster: " + reason)
+            }));
     }
 };
+
+export const setStaging = (payload: boolean) => {
+    return (dispatch: any) => {
+        dispatch(stagingUpload(payload))
+    }
+}
 
 export const getGainingMembers = () => {
     return (dispatch: any) => {
 
         dispatch(gainingFetchRequest());
-       return callApi('get', 'api/members/gaining')
+        return callApi('get', 'api/members/gaining')
             .then(res => dispatch(gainingMembersFetchSuccess(MemberSerializer.serializeGainingMembersFromBackend(res)))
             ).catch(err => dispatch(gainingMembersFetchError(err))
             );
@@ -42,37 +49,37 @@ export const getGainingMembers = () => {
 export const getUniqueAFSCCollection = () => {
     return (dispatch: any) => {
         dispatch(membersFetchRequest());
-       return callApi('get', 'api/members/DAFSCCollection')
+        return callApi('get', 'api/members/DAFSCCollection')
             .then(res => dispatch(uniqueAFSCCollectionFetchSuccess(MemberSerializer.serializeUniqueCollectionFromBackend(res)))
             ).catch(err => dispatch(uniqueAFSCCollectionFetchError(err))
-        );
+            );
     }
 };
 
 export const getOfficeCollection = () => {
     return (dispatch: any) => {
         dispatch(membersFetchRequest());
-       return callApi('get', 'api/members/officeCollection')
+        return callApi('get', 'api/members/officeCollection')
             .then(res => dispatch(officeCollectionFetchSuccess(MemberSerializer.serializeUniqueCollectionFromBackend(res)))
             ).catch(err => dispatch(officeCollectionFetchError(err))
-        );
+            );
     }
 };
 
 export const getDistinctGainingAFSCCollection = () => {
     return (dispatch: any) => {
         dispatch(gainingFetchRequest());
-       return callApi('get', 'api/members/gaining/DAFSCCollection')
+        return callApi('get', 'api/members/gaining/DAFSCCollection')
             .then(res => dispatch(uniqueGainingAFSCCollectionFetchSuccess(MemberSerializer.serializeGainingCollectionFromBackend(res)))
             ).catch(err => dispatch(uniqueAFSCCollectionFetchError(err))
-        );
+            );
     }
 };
 
 export const saveCurrentRoster = (members: UploadMemberModel[]) => {
     return (dispatch: any) => {
         dispatch(membersFetchRequest());
-       return callApi('POST', 'api/members/save', MemberSerializer.serializeToBackend(MemberModel.filterEnlistedUploadOnly(members)))
+        return callApi('POST', 'api/members/save', MemberSerializer.serializeToBackend(MemberModel.filterEnlistedUploadOnly(members)))
             .then(res => dispatch(membersFetchSuccess(MemberSerializer.serializeFromBackend(res))))
             .catch(e => dispatch(membersPostError(e)))
     }
@@ -81,7 +88,7 @@ export const saveCurrentRoster = (members: UploadMemberModel[]) => {
 export const saveGainingMembers = (members: UploadGainingMemberModel[]) => {
     return (dispatch: any) => {
         dispatch(gainingFetchRequest());
-       return callApi('POST', 'api/members/gaining/save', MemberSerializer.serializeGainingMembersToBackend(members))
+        return callApi('POST', 'api/members/gaining/save', MemberSerializer.serializeGainingMembersToBackend(members))
             .then(res => dispatch(gainingMembersFetchSuccess(MemberSerializer.serializeGainingMembersFromBackend(res))))
             .catch(err => dispatch(gainingMembersFetchError(err)))
     }

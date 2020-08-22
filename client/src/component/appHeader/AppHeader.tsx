@@ -2,9 +2,8 @@ import * as React from "react";
 import classNames from "classnames";
 import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Button, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import clsx from "clsx";
-import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import ProfileMenu from "./ProfileMenu";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -126,10 +125,10 @@ const MainHeader: React.FC<Props> = props => {
     }
 
     const MenuItemMainClassName = clsx({
-        [classes.selected]: selected == 'HEADER_MENU/SHOW_MAIN_SECTION',
+        [classes.selected]: selected === 'HEADER_MENU/SHOW_MAIN_SECTION',
     });
     const MenuItemHealthClassName = clsx({
-        [classes.selected]: selected == 'HEADER_MENU/SHOW_HEALTH_SECTION',
+        [classes.selected]: selected === 'HEADER_MENU/SHOW_HEALTH_SECTION',
     });
     return (
         <header className={classNames(classes.root, props.className)}>

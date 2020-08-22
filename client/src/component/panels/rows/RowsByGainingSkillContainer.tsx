@@ -22,39 +22,23 @@ const RowsByGainingSkillContainer: React.FC<Props> = props => {
     const classes = useStyles();
 
     const lvl0members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
-            return rowData.dafsc.charAt(3) === "0";
-        }
+            return rowData.dafsc != null && rowData.dafsc.charAt(3) === "0";
     });
     const lvl1members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
-
-            return rowData.dafsc.charAt(3) === "1";
-        }
+            return rowData.dafsc != null && rowData.dafsc.charAt(3) === "1";
     });
     const lvl3members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
-
-            return rowData.dafsc.charAt(3) === "3";
-        }
+            return rowData.dafsc != null && rowData.dafsc.charAt(3) === "3";
     });
     const lvl5members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
-
-            return rowData.dafsc.charAt(3) === "5";
-        }
+            return rowData.dafsc != null && rowData.dafsc.charAt(3) === "5";
     });
     const lvl7members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
-
-            return rowData.dafsc.charAt(3) === "7";
-        }
+            return rowData.dafsc != null && rowData.dafsc.charAt(3) === "7";
     });
     const lvl9members: GainingMemberModel[] = MemberModel.sortByGradeGainingAscending(props.data).filter(rowData => {
-        if (rowData.dafsc != null) {
+        return rowData.dafsc != null && rowData.dafsc.charAt(3) === "9";
 
-            return rowData.dafsc.charAt(3) === "9";
-        }
     });
 
     return (

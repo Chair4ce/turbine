@@ -3,7 +3,7 @@ import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import NavigateNextIcon from "@material-ui/icons/NavigateNext";
-import {Collapse, Paper} from "@material-ui/core";
+import {Paper} from "@material-ui/core";
 import CurrentRosterRow from "./PanelRow";
 import MemberModel from "../../../store/members/models/MemberModel";
 import clsx from "clsx";

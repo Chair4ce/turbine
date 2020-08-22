@@ -10,6 +10,7 @@ export const initialState: MembersState = {
     data: [] as MemberModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
+    staging: false,
     gainingLoading: false,
     genericAFSCList: [] as GenericGroupCollectionModel[],
     genericGainingAFSCList: [] as GenericGainingGroupCollectionModel[],
@@ -25,6 +26,12 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true
+            };
+        }
+        case MemberActionTypes.STAGING_UPLOAD: {
+            return {
+                ...state,
+                staging: action.payload
             };
         }
         case MemberActionTypes.FETCH_GAINING_REQUEST: {

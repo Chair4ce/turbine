@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useLayoutEffect, useRef, useState} from "react";
+import {useState} from "react";
 import SideBar, {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -43,9 +43,6 @@ const MainSection: React.FC<Props> = props => {
     const [showGainingPanel, toggleGainingPanel] = useState(false);
     const [showLosingPanel, toggleLosingPanel] = useState(false);
     const [showPositionPanel, togglePositionPanel] = useState(false);
-    const [sideBarExpanded, toggleSideBarExpanded] = useState(false);
-
-
 
     // const currentCollectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
     // const [fileData, updateFileData] = useState();

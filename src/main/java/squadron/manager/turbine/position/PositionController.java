@@ -107,7 +107,9 @@ public class PositionController {
         LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int thisMonth = localDate.getMonthValue();
         AtomicInteger year = new AtomicInteger(new DateTime().getYear());
+            afscChartRepository.deleteAll();
         distinctAFSC.forEach((afsc) -> {
+
             AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
             AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
             LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();

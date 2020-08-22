@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
             textRendering: 'optimizeLegibility',
             textShadow: '0 1px 1px rgba(0,0,0,.5)',
             paddingLeft: 8,
+            fontFamily: 'Rambla'
         },
         selected_item: {
             position: 'absolute',
@@ -87,12 +88,12 @@ const RosterMenu: React.FC<Props> = props => {
             ROSTER_MENU_SELECT_ITEM.TOGGLE_CURRENT_ROSTER
         )
     }
-
-    const toggleProjectedPanel = () => {
-        props.menuSelectHandler(
-            ROSTER_MENU_SELECT_ITEM.TOGGLE_PROJECTED_ROSTER
-        )
-    }
+    //
+    // const toggleProjectedPanel = () => {
+    //     props.menuSelectHandler(
+    //         ROSTER_MENU_SELECT_ITEM.TOGGLE_PROJECTED_ROSTER
+    //     )
+    // }
 
     const toggleGainingPanel = () => {
         props.menuSelectHandler(
@@ -100,17 +101,17 @@ const RosterMenu: React.FC<Props> = props => {
         )
     }
 
-    const toggleLosingPanel = () => {
-        props.menuSelectHandler(
-            ROSTER_MENU_SELECT_ITEM.TOGGLE_LOSING_ROSTER
-        )
-    }
-
-    const togglePositionPanel = () => {
-        props.menuSelectHandler(
-            ROSTER_MENU_SELECT_ITEM.TOGGLE_POSITION_PANEL
-        )
-    }
+    // const toggleLosingPanel = () => {
+    //     props.menuSelectHandler(
+    //         ROSTER_MENU_SELECT_ITEM.TOGGLE_LOSING_ROSTER
+    //     )
+    // }
+    //
+    // const togglePositionPanel = () => {
+    //     props.menuSelectHandler(
+    //         ROSTER_MENU_SELECT_ITEM.TOGGLE_POSITION_PANEL
+    //     )
+    // }
 
     const handleCurrentClick = () => {
         toggleCurrentPanel();
@@ -137,25 +138,25 @@ const RosterMenu: React.FC<Props> = props => {
         [classes.unselected]: !props.showCurrentPanel,
     });
 
-    const projectedSelectorClassName = clsx({
-        [classes.selected]: props.showProjectedPanel,
-        [classes.unselected]: !props.showProjectedPanel,
-    });
+    // const projectedSelectorClassName = clsx({
+    //     [classes.selected]: props.showProjectedPanel,
+    //     [classes.unselected]: !props.showProjectedPanel,
+    // });
 
     const gainingSelectorClassName = clsx({
         [classes.selected]: props.showGainingPanel,
         [classes.unselected]: !props.showGainingPanel,
     });
-
-    const losingSelectorClassName = clsx({
-        [classes.selected]: props.showLosingPanel,
-        [classes.unselected]: !props.showLosingPanel,
-    });
-
-    const positionSelectorClassName = clsx({
-        [classes.selected]: props.showPositionPanel,
-        [classes.unselected]: !props.showPositionPanel,
-    });
+    //
+    // const losingSelectorClassName = clsx({
+    //     [classes.selected]: props.showLosingPanel,
+    //     [classes.unselected]: !props.showLosingPanel,
+    // });
+    //
+    // const positionSelectorClassName = clsx({
+    //     [classes.selected]: props.showPositionPanel,
+    //     [classes.unselected]: !props.showPositionPanel,
+    // });
 
     return (
         <div className={classNames(classes.root, props.className)}>

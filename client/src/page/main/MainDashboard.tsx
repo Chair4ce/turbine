@@ -2,13 +2,11 @@ import React, {lazy, Suspense, useState} from 'react';
 import MainHeader, {HEADER_MENU_SELECT_ACTION} from "../../component/appHeader/AppHeader";
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import LoadingSpinner from "../../component/displayLoading/LoadingSpinner";
 import {LinearProgress, Modal, Paper} from "@material-ui/core";
 import {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 
 const Health = lazy(() => import('./HealthSection'));
 const Members = lazy(() => import('./MainSection'));
-
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

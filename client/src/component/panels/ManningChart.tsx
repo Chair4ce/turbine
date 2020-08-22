@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useLayoutEffect, useRef} from 'react';
+import {useLayoutEffect} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as am4core from "@amcharts/amcharts4/core";
@@ -26,9 +26,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const ManningChart: React.FC<Props> = props => {
     const classes = useStyles();
-    const chart = useRef(null);
 
-    useLayoutEffect(() => {
+    useLayoutEffect(( ) => {
         am4core.useTheme(am4themes_dark);
         am4core.useTheme(am4themes_animated);
         // let x = am4core.create("chartdiv", am4charts.XYChart);
@@ -1105,7 +1104,7 @@ const ManningChart: React.FC<Props> = props => {
         //     }
         // ];
 
-    }, []);
+    }, [props.chartData]);
     return (
         <div className={classNames(props.className, classes.root)}>
             <div id="chartdiv" style={{width: "100%", height: "calc(100vh - 80px)"}}/>

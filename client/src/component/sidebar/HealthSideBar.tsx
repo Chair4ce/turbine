@@ -7,7 +7,6 @@ import CollapseIcon from "../icon/CollapseIcon";
 import ExpandIcon from "../icon/ExpandIcon";
 import HealthMenu, {HEALTH_MENU_SELECT_ACTION} from "../menus/HealthMenu";
 import {SIDEBAR_ACTION} from "./SideBar";
-import {HEADER_MENU_SELECT_ACTION} from "../appHeader/AppHeader";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
