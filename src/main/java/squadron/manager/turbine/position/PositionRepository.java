@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public interface PositionRepository extends JpaRepository<Position, Long> {
 
     List<Position> findAllByCurrQtrIsTrue();
-    List<Position> findAllByPosNrIsNotNullAndCurrQtr(String currQtr);
+    List<Position> findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(String afscAuth, String currQtr);
     List<Position> findAllByPosNr(String posNr);
     List<Position> findAllByPosNrIsNull();
     List<Position> findAllByPosNrIsNotNullAndCurrQtrIsNull();
@@ -20,6 +20,8 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
     List<Position> findAllByCurrQtrAndProjQtr2(String current,String projected);
     List<Position> findAllByCurrQtrAndProjQtr3(String current,String projected);
     List<Position> findAllByCurrQtrAndProjQtr4(String current,String projected);
+
+    List<Position> findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(String PosNr);
 
     void deleteAllByPasCode(String pas);
     void deleteAll();

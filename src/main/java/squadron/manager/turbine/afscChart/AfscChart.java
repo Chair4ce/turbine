@@ -3,8 +3,11 @@ package squadron.manager.turbine.afscChart;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
+import squadron.manager.turbine.position.Position;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Entity
