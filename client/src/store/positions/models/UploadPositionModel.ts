@@ -1,4 +1,5 @@
 export default class UploadPositionModel {
+    public pos_id: string;
     public pasCode: string;
     public orgStructureId: string | null;
     public afscAuth: string | null;

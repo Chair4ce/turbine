@@ -3,11 +3,13 @@ import {PositionActionTypes, PositionState} from "./types";
 import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
 import ManningChartModel from "./models/ManningChartModel";
+import UploadPositionModel from "./models/UploadPositionModel";
 
 
 export const initialState: PositionState = {
     loading: false,
     positions: [] as PositionModel[],
+    upload: [] as UploadPositionModel[],
     error: undefined,
     chartData: [] as ManningChartModel[],
 
@@ -31,6 +33,7 @@ const reducer: Reducer<PositionState> = (state = initialState, action) => {
         case PositionActionTypes.FETCH_REQUEST: return {...state, loading: true};
         case PositionActionTypes.FETCH_ERROR: return {...state, loading: false, error: action.payload};
         case PositionActionTypes.FETCH_SUCCESS: return {...state, loading: false, data: action.payload};
+        case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, upload: action.payload};
         case PositionActionTypes.FETCH_CHARTDATA_SUCCESS: return {...state, loading: false, chartData: action.payload};
         case PositionActionTypes.FETCH_UNASSIGNED_REQUEST: return {...state, unassignedLoading: true};
         case PositionActionTypes.FETCH_UNASSIGNED_ERROR: return {...state, unassignedLoading: false, unassignedError: action.payload};

@@ -18,6 +18,10 @@ import squadron.manager.turbine.gainingMember.GainingMemberRepository;
 import squadron.manager.turbine.member.GroupCollection;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
+import squadron.manager.turbine.member.SqidGenerator;
+import squadron.manager.turbine.positionAssignment.PositionAssignment;
+import squadron.manager.turbine.positionAssignment.PositionAssignmentRepository;
+import sun.jvmstat.perfdata.monitor.protocol.file.FileMonitoredVm;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -41,18 +45,21 @@ public class PositionController {
     private GainingMemberRepository gainingRepository;
     private AFSCIncrementRepository afscIncrementRepository;
     private AfscChartRepository afscChartRepository;
+    private PositionAssignmentRepository positionAssignmentRepository;
 
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository,
                                           AFSCIncrementRepository afscIncrementRepository,
                                           GainingMemberRepository gainingRepository,
                                           PositionRepository positionRepository,
-                                          AfscChartRepository afscChartRepository) {
+                                          AfscChartRepository afscChartRepository,
+                                          PositionAssignmentRepository positionAssignmentRepository) {
         this.memberRepository = memberRepository;
         this.afscIncrementRepository = afscIncrementRepository;
         this.gainingRepository = gainingRepository;
         this.positionRepository = positionRepository;
         this.afscChartRepository = afscChartRepository;
+        this.positionAssignmentRepository = positionAssignmentRepository;
     }
 
 
@@ -67,129 +74,125 @@ public class PositionController {
     @CrossOrigin
     @GetMapping(path = "/AFSCCardInfo")
     public @ResponseBody
-    List<AFSCCollection> getAFSCCardInfo(@RequestParam(value = "afsc") String afsc) {
+    List<AFSCCollection> getAFSCCardInfo(
+//            @RequestParam(value = "afsc") String dafsc
+    ) {
         List<Member> allMembers = memberRepository.findAll();
         List<Position> allPositions = positionRepository.findAll();
         List<AFSCIncrementLog> allIncrements = afscIncrementRepository.findAll();
+        List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
+        List<AFSCCollection> afscCollectionList = new ArrayList<>();
 
-        StringBuilder AFSCSkill3 = new StringBuilder(afsc);
-        StringBuilder AFSCSkill5 = new StringBuilder(afsc);
-        StringBuilder AFSCSkill7 = new StringBuilder(afsc);
+        for (String afsc : distinctAFSC) {
+            if (afsc.length() > 4) {
+
+                StringBuilder AFSCSkill3 = new StringBuilder(afsc);
+                StringBuilder AFSCSkill5 = new StringBuilder(afsc);
+                StringBuilder AFSCSkill7 = new StringBuilder(afsc);
 //        StringBuilder AFSCSkill9 = new StringBuilder(afsc);
 
-        AFSCSkill3.setCharAt(3, '3');
-        AFSCSkill5.setCharAt(3, '5');
-        AFSCSkill7.setCharAt(3, '7');
+                AFSCSkill3.setCharAt(3, '3');
+                AFSCSkill5.setCharAt(3, '5');
+                AFSCSkill7.setCharAt(3, '7');
 //        AFSCSkill9.setCharAt(3, '9');
 
-        //Find all funded positions by Skill level
-        List<Position> all3LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill3.toString(), "1");
-        List<Position> all5LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill5.toString(), "1");
-        List<Position> all7LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill7.toString(), "1");
+                //Find all funded positions by Skill level
+                List<Position> all3LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill3.toString(), "1");
+                List<Position> all5LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill5.toString(), "1");
+                List<Position> all7LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill7.toString(), "1");
 //        List<Position> all9LevelFundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill9.toString(), "1");
 
-        //Find all Members assigned to unfunded Positions by skill level
-        List<Position> all3LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill3.toString(), "0");
-        List<Position> all5LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill5.toString(), "0");
-        List<Position> all7LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill7.toString(), "0");
+                //Find all Members assigned to unfunded Positions by skill level
+                List<Position> all3LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill3.toString(), "0");
+                List<Position> all5LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill5.toString(), "0");
+                List<Position> all7LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill7.toString(), "0");
 //        List<Position> all9LevelUnfundedPositions = positionRepository.findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(AFSCSkill9.toString(), "0");
 
-        List<AFSCCollection> afscCollectionList = new ArrayList<>();
-        List<SkillLevelGroup> allAFSCSkilllvlGroups = new ArrayList<>();
+                List<SkillLevelGroup> allAFSCSkilllvlGroups = new ArrayList<>();
 
-        List<SkillLevelGroup> skill3lvlGroup = new ArrayList<>();
-        List<PositionType> all3lvlPositionTypes = new ArrayList<>();
-        List<SkillLevelGroup> skill5lvlGroup = new ArrayList<>();
-        List<PositionType> all5lvlPositionTypes = new ArrayList<>();
-        List<SkillLevelGroup> skill7lvlGroup = new ArrayList<>();
-        List<PositionType> all7lvlPositionTypes = new ArrayList<>();
+                List<SkillLevelGroup> skill3lvlGroup = new ArrayList<>();
+                List<PositionType> all3lvlPositionTypes = new ArrayList<>();
+                List<SkillLevelGroup> skill5lvlGroup = new ArrayList<>();
+                List<PositionType> all5lvlPositionTypes = new ArrayList<>();
+                List<SkillLevelGroup> skill7lvlGroup = new ArrayList<>();
+                List<PositionType> all7lvlPositionTypes = new ArrayList<>();
 //        List<SkillLevelGroup> skill9lvlGroup = new ArrayList<>();
 //        List<PositionType> all9lvlPositionTypes = new ArrayList<>();
 
-        List<PositionType> Funded3Lvl = new ArrayList<>();
-        List<PositionType> Funded5Lvl = new ArrayList<>();
-        List<PositionType> Funded7Lvl = new ArrayList<>();
+                List<PositionType> Funded3Lvl = new ArrayList<>();
+                List<PositionType> Funded5Lvl = new ArrayList<>();
+                List<PositionType> Funded7Lvl = new ArrayList<>();
 //        List<PositionType> Funded9Lvl = new ArrayList<>();
 
-        List<PositionType> Unfunded3Lvl = new ArrayList<>();
-        List<PositionType> Unfunded5Lvl = new ArrayList<>();
-        List<PositionType> Unfunded7Lvl = new ArrayList<>();
+                List<PositionType> Unfunded3Lvl = new ArrayList<>();
+                List<PositionType> Unfunded5Lvl = new ArrayList<>();
+                List<PositionType> Unfunded7Lvl = new ArrayList<>();
 //        List<PositionType> Unfunded9Lvl = new ArrayList<>();
 
 
-        List<PositionType> doubleBilleted3Level = new ArrayList<>();
-        List<PositionType> doubleBilleted5Level = new ArrayList<>();
-        List<PositionType> doubleBilleted7Level = new ArrayList<>();
+                List<PositionType> doubleBilleted3Level = new ArrayList<>();
+                List<PositionType> doubleBilleted5Level = new ArrayList<>();
+                List<PositionType> doubleBilleted7Level = new ArrayList<>();
 //        List<PositionType> doubleBilleted9Level = new ArrayList<>();
 
-        //Find all Members Assigned to DoubleBilleted Positions by skill Level
-        for (Position item : all3LevelFundedPositions) {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Funded3Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Funded3Lvl.add(new PositionType("Funded-Assigned-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            } else {
-                Funded3Lvl.add(new PositionType("Funded-Unassigned", item.getPosNr(), item.getGrdAuth(), null));
-            }
-
-            if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr()).size() > 0) {
-                for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr())) {
-                    if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                        doubleBilleted3Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                //Find all Members Assigned to DoubleBilleted Positions by skill Level
+                for (Position item : all3LevelFundedPositions) {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill3.toString(), "Funded-Assigned", item.getId(), member.getId()));
+                        Funded3Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), member));
                     } else {
-                        doubleBilleted3Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), null));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill3.toString(), "Funded-Unassigned", item.getId(), null));
+                        Funded3Lvl.add(new PositionType("Funded-Unassigned", item.getPosNr(), item.getGrdAuth(), null));
+                    }
+
+                    if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1").size() > 0) {
+                        for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1")) {
+                            Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                            positionAssignmentRepository.save(new PositionAssignment(AFSCSkill3.toString(), "Double", item.getId(), member.getId()));
+                            doubleBilleted3Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), member));
+                        }
                     }
                 }
-            }
-        }
 
 
-        //Find all Members Assigned to DoubleBilleted Positions by skill Level
-        for (Position item : all5LevelFundedPositions) {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Funded5Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Funded5Lvl.add(new PositionType("Funded-Assigned-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            } else {
-                Funded5Lvl.add(new PositionType("Unassigned", item.getPosNr(), item.getGrdAuth(), null));
-            }
-            if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr()).size() > 0) {
-                for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr())) {
-                    if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                        doubleBilleted5Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                //Find all Members Assigned to DoubleBilleted Positions by skill Level
+                for (Position item : all5LevelFundedPositions) {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill5.toString(), "Funded-Assigned", item.getId(), member.getId()));
+                        Funded5Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), member));
                     } else {
-                        doubleBilleted5Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), null));
+                        Funded5Lvl.add(new PositionType("Unassigned", item.getPosNr(), item.getGrdAuth(), null));
+                    }
+                    if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1").size() > 0) {
+                        for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1")) {
+                            Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                            positionAssignmentRepository.save(new PositionAssignment(AFSCSkill5.toString(), "Double", item.getId(), member.getId()));
+                            doubleBilleted5Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), member));
+                        }
                     }
                 }
-            }
-        }
 
 
-        //Find all Members Assigned to DoubleBilleted Positions by skill Level
-        for (Position item : all7LevelFundedPositions) {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Funded7Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Funded7Lvl.add(new PositionType("Funded-Assigned-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            } else {
-                Funded7Lvl.add(new PositionType("Unassigned", item.getPosNr(), item.getGrdAuth(), null));
-            }
-            if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr()).size() > 0) {
-                for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNull(item.getPosNr())) {
-                    if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                        doubleBilleted7Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                //Find all Members Assigned to DoubleBilleted Positions by skill Level
+                for (Position item : all7LevelFundedPositions) {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill7.toString(), "Funded-Assigned", item.getId(), member.getId()));
+                        Funded7Lvl.add(new PositionType("Funded-Assigned", item.getPosNr(), item.getGrdAuth(), member));
                     } else {
-                        doubleBilleted7Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), null));
+                        Funded7Lvl.add(new PositionType("Unassigned", item.getPosNr(), item.getGrdAuth(), null));
+                    }
+                    if (positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1").size() > 0) {
+                        for (Position position : positionRepository.findAllByPosNrAndAfscAuthIsNullAndCurrQtrIsNotContaining(item.getPosNr(), "1")) {
+                            Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                            positionAssignmentRepository.save(new PositionAssignment(AFSCSkill7.toString(), "Double", item.getId(), member.getId()));
+                            doubleBilleted7Level.add(new PositionType("Double", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+
+                        }
                     }
                 }
-            }
-        }
 
 
 //        //Find all Members Assigned to DoubleBilleted Positions by skill Level
@@ -214,35 +217,29 @@ public class PositionController {
 //            }
 //        }
 
-        all3LevelUnfundedPositions.forEach((item) -> {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Unfunded3Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Unfunded3Lvl.add(new PositionType("Unfunded-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            }
-        });
+                all3LevelUnfundedPositions.forEach((item) -> {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill3.toString(), "Unfunded-Assigned", item.getId(), member.getId()));
+                        Unfunded3Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                    }
+                });
 
-        all5LevelUnfundedPositions.forEach((item) -> {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Unfunded5Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Unfunded5Lvl.add(new PositionType("Unfunded-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            }
-        });
+                all5LevelUnfundedPositions.forEach((item) -> {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill5.toString(), "Unfunded-Assigned", item.getId(), member.getId()));
+                        Unfunded5Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                    }
+                });
 
-        all7LevelUnfundedPositions.forEach((item) -> {
-            if (item.getMbrIdAssigned() != null) {
-                if (memberRepository.findByMbrId(item.getMbrIdAssigned()) != null) {
-                    Unfunded7Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
-                } else {
-                    Unfunded7Lvl.add(new PositionType("Unfunded-NoMbrData", item.getPosNr(), item.getGrdAuth(), null));
-                }
-            }
-        });
+                all7LevelUnfundedPositions.forEach((item) -> {
+                    if (item.getMbrIdAssigned() != null) {
+                        Member member = memberRepository.getOne((long) Integer.parseInt(item.getMbrIdAssigned()));
+                        positionAssignmentRepository.save(new PositionAssignment(AFSCSkill7.toString(), "Unfunded-Assigned", item.getId(), member.getId()));
+                        Unfunded7Lvl.add(new PositionType("Unfunded-Assigned", item.getPosNr(), item.getGrdAuth(), memberRepository.findByMbrId(item.getMbrIdAssigned())));
+                    }
+                });
 
 //        all9LevelUnfundedPositions.forEach((item) -> {
 //            if (item.getMbrIdAssigned() != null) {
@@ -256,35 +253,36 @@ public class PositionController {
 //            }
 //        });
 
-        all3lvlPositionTypes.addAll(Funded3Lvl);
-        all3lvlPositionTypes.addAll(Unfunded3Lvl);
-        all3lvlPositionTypes.addAll(doubleBilleted3Level);
+                all3lvlPositionTypes.addAll(Funded3Lvl);
+                all3lvlPositionTypes.addAll(Unfunded3Lvl);
+                all3lvlPositionTypes.addAll(doubleBilleted3Level);
 
-        all5lvlPositionTypes.addAll(Funded5Lvl);
-        all5lvlPositionTypes.addAll(Unfunded5Lvl);
-        all5lvlPositionTypes.addAll(doubleBilleted5Level);
+                all5lvlPositionTypes.addAll(Funded5Lvl);
+                all5lvlPositionTypes.addAll(Unfunded5Lvl);
+                all5lvlPositionTypes.addAll(doubleBilleted5Level);
 
-        all7lvlPositionTypes.addAll(Funded7Lvl);
-        all7lvlPositionTypes.addAll(Unfunded7Lvl);
-        all7lvlPositionTypes.addAll(doubleBilleted7Level);
+                all7lvlPositionTypes.addAll(Funded7Lvl);
+                all7lvlPositionTypes.addAll(Unfunded7Lvl);
+                all7lvlPositionTypes.addAll(doubleBilleted7Level);
 
 //        all9lvlPositionTypes.addAll(Funded9Lvl);
 //        all9lvlPositionTypes.addAll(Unfunded9Lvl);
 //        all9lvlPositionTypes.addAll(doubleBilleted9Level);
 
 
-        skill3lvlGroup.add(new SkillLevelGroup(AFSCSkill3.toString(), 4,all3LevelFundedPositions.size(),4,4,"100%",all3lvlPositionTypes));
-        skill5lvlGroup.add(new SkillLevelGroup(AFSCSkill5.toString(), 4,all5LevelFundedPositions.size(),4,4,"100%",all5lvlPositionTypes));
-        skill7lvlGroup.add(new SkillLevelGroup(AFSCSkill7.toString(), 4,all7LevelFundedPositions.size(),4,4,"100%",all7lvlPositionTypes));
+                skill3lvlGroup.add(new SkillLevelGroup(AFSCSkill3.toString(), 4, all3LevelFundedPositions.size(), 4, 4, "100%", all3lvlPositionTypes));
+                skill5lvlGroup.add(new SkillLevelGroup(AFSCSkill5.toString(), 4, all5LevelFundedPositions.size(), 4, 4, "100%", all5lvlPositionTypes));
+                skill7lvlGroup.add(new SkillLevelGroup(AFSCSkill7.toString(), 4, all7LevelFundedPositions.size(), 4, 4, "100%", all7lvlPositionTypes));
 //        skill9lvlGroup.add(new SkillLevelGroup(AFSCSkill9.toString(), 4,4,4,4,"100%",all9lvlPositionTypes));
 
-        allAFSCSkilllvlGroups.addAll(skill3lvlGroup);
-        allAFSCSkilllvlGroups.addAll(skill5lvlGroup);
-        allAFSCSkilllvlGroups.addAll(skill7lvlGroup);
+                allAFSCSkilllvlGroups.addAll(skill3lvlGroup);
+                allAFSCSkilllvlGroups.addAll(skill5lvlGroup);
+                allAFSCSkilllvlGroups.addAll(skill7lvlGroup);
 //        allAFSCSkilllvlGroups.addAll(skill9lvlGroup);
 
-        afscCollectionList.add(new AFSCCollection(afsc,4,4,4,4,"100%", allAFSCSkilllvlGroups));
-
+                afscCollectionList.add(new AFSCCollection(afsc, 4, 4, 4, 4, "100%", allAFSCSkilllvlGroups));
+            }
+        }
         return afscCollectionList;
     }
 
@@ -321,41 +319,44 @@ public class PositionController {
     }
 
     @CrossOrigin
+    @RequestMapping(path = "/afscCardInfo/month/{afsc}/{month}/{year}", method = RequestMethod.GET)
+    public @ResponseBody
+    AfscChart getAFSCCardDataForMonth(@Valid @PathVariable String afsc, @PathVariable int month, @PathVariable int year) {
+        return afscChartRepository.findByAfscAndMonthAndYear(afsc, month, year);
+    }
+
+    @CrossOrigin
     @GetMapping(path = "/manning_chart/generate")
     void generateManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
+        System.out.println(distinctAFSC);
         LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int thisMonth = localDate.getMonthValue();
         AtomicInteger year = new AtomicInteger(new DateTime().getYear());
         afscChartRepository.deleteAll();
-        distinctAFSC.forEach((afsc) -> {
-
+        System.out.println("inital");
+        for (String afsc : distinctAFSC) {
+            System.out.println("iterating through afsc: " + afsc);
             AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
             AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
             LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate end = new DateTime(new Date()).plusMonths(24 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             //Iterate by month until the rest of this year and the following two years.
             for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
                 int iMonth = date.getMonthValue();
                 int iYear = date.getYear();
+                System.out.println("iterating through afsc: " + afsc + " for " + iMonth + "/" + iYear);
 
-                if (afscIncrementRepository.findAllByAfsc(afsc).size() > 0) {
-                    List<AFSCIncrementLog> arrivalAndDepartures = afscIncrementRepository.findAllByAfsc(afsc);
-                    arrivalAndDepartures.forEach((mbr) -> {
-                        if (mbr.getMonth() == iMonth && mbr.getYear() == iYear) {
-                            if (mbr.getIncrementType() == "projected arrival") {
-                                assigned.incrementAndGet();
-                            }
-                            if (mbr.getIncrementType() == "departure") {
-                                assigned.decrementAndGet();
-                            }
-                        }
-                    });
-                    afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+                List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
+                System.out.println("found " + increments.size() + " increments");
+                for (AFSCIncrementLog increment : increments) {
+                    assigned.decrementAndGet();
                 }
+
+                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
             }
-        });
+        }
 
         //Search through each distinct AFSC and track the count all depatures and arrivals
 
@@ -364,7 +365,8 @@ public class PositionController {
     private AtomicInteger adjustAssignedForMonth(AtomicInteger assigned, String afsc, int month) {
         List<Position> assignedPositions = positionRepository.findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);
         assignedPositions.forEach((position) -> {
-            Member assignedMember = memberRepository.findByMbrId(position.getMbrIdAssigned());
+            Member assignedMember = memberRepository.getOne((long) Integer.parseInt(position.getMbrIdAssigned()));
+            System.out.println(assignedMember);
             List<GainingMember> newMembersInSameAfsc = gainingRepository.findAllByDafsc(afsc);
             newMembersInSameAfsc.forEach((newMbr) -> {
                 if (new DateTime(newMbr.getRnltd()).getMonthOfYear() == month) {
@@ -379,7 +381,7 @@ public class PositionController {
         return assigned;
     }
 
-    private String getMonthFromValue(int month) {
+    public String getMonthFromValue(int month) {
         switch (month) {
             case 1:
                 return "Jan";
@@ -407,6 +409,39 @@ public class PositionController {
                 return "Dec";
             default:
                 return "";
+        }
+    }
+
+   static public boolean isEnlisted(String grd) {
+        switch (grd) {
+            case "AMN":
+                return true;
+            case "AB":
+                return true;
+            case "SRA":
+                return true;
+            case "SSGT":
+                return true;
+            case "SSG":
+                return true;
+            case "TSG":
+                return true;
+            case "TSGT":
+                return true;
+            case "MSG":
+                return true;
+            case "MSGT":
+                return true;
+            case "SMS":
+                return true;
+            case "SMGT":
+                return true;
+            case "CMS":
+                return true;
+            case "CMSGT":
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -493,45 +528,66 @@ public class PositionController {
 
             json.forEach((newImport -> {
 
-                if (memberRepository.findByMbrId(newImport.getMbrIdAssigned()) != null) {
-                    Member assignedMember = memberRepository.findByMbrId(newImport.getMbrIdAssigned());
-                    int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
-                    int derosYear = new DateTime(assignedMember.getDeros()).getYear();
+                if (isEnlisted(newImport.getGrdAuth())) {
+                    if (newImport.getMbrIdAssigned() != null) {
+                        SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
+                        if (memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName()) != null) {
+                            Member assignedMember = memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName());
+                            int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
+                            int derosYear = new DateTime(assignedMember.getDeros()).getYear();
 
-                    if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
-                        AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
-                                assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
-                                assignedMember.getMbrId(),
-                                assignedMember.getDafsc() != null ? assignedMember.getDafsc().replaceAll("-", "") : null,
-                                new DateTime(assignedMember.getDeros()).toDate(),
-                                derosMonth,
-                                derosYear,
-                                -1,
-                                "departure"
-                        );
-                        afscIncrementRepository.save(new_departure_log);
+                            if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
+                                AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
+                                        assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
+                                        assignedMember.getMbrId(),
+                                        assignedMember.getDafsc().replaceAll("-", ""),
+                                        new DateTime(assignedMember.getDeros()).toDate(),
+                                        derosMonth,
+                                        derosYear,
+                                        -1,
+                                        "departure"
+                                );
+                                afscIncrementRepository.save(new_departure_log);
+                            }
+                            positionRepository.save(new Position(
+                                    newImport.getPasCode(),
+                                    newImport.getOrgStructureId(),
+                                    newImport.getAfscAuth(),
+                                    newImport.getGrdAuth(),
+                                    newImport.getCurrQtr(),
+                                    newImport.getProjQtr1(),
+                                    newImport.getProjQtr2(),
+                                    newImport.getProjQtr3(),
+                                    newImport.getProjQtr4(),
+                                    newImport.getPosNr(),
+                                    newImport.getGradeAssigned(),
+                                    newImport.getDafscAssigned(),
+                                    sqidModel.getLastName() + ", " + sqidModel.getFirstName(),
+                                    assignedMember.getId().toString(),
+                                    date));
+
+                        }
+                    } else {
+                        positionRepository.save(new Position(
+                                newImport.getPasCode(),
+                                newImport.getOrgStructureId(),
+                                newImport.getAfscAuth(),
+                                newImport.getGrdAuth(),
+                                newImport.getCurrQtr(),
+                                newImport.getProjQtr1(),
+                                newImport.getProjQtr2(),
+                                newImport.getProjQtr3(),
+                                newImport.getProjQtr4(),
+                                newImport.getPosNr(),
+                                null,
+                                null,
+                                null,
+                                null,
+                                date));
+
                     }
-
-
                 }
 
-
-                positionRepository.save(new Position(
-                        newImport.getPasCode(),
-                        newImport.getOrgStructureId(),
-                        newImport.getAfscAuth(),
-                        newImport.getGrdAuth(),
-                        newImport.getCurrQtr(),
-                        newImport.getProjQtr1(),
-                        newImport.getProjQtr2(),
-                        newImport.getProjQtr3(),
-                        newImport.getProjQtr4(),
-                        newImport.getPosNr(),
-                        newImport.getGradeAssigned(),
-                        newImport.getDafscAssigned(),
-                        newImport.getNameAssigned(),
-                        newImport.getMbrIdAssigned(),
-                        date));
             }));
         }
         return positionRepository.findAll();

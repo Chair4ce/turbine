@@ -9,4 +9,5 @@ public interface AFSCIncrementRepository extends JpaRepository<AFSCIncrementLog,
     AFSCIncrementLog findByPasCodeAndItemIdAndIncrementType(String pas, String itemId, String iType);
     void deleteAllByPasCode(String pas);
     List<AFSCIncrementLog> findAllByAfsc(String afsc);
+    List<AFSCIncrementLog> findAllByAfscAndMonthAndYear(String afsc, int month, int year);
 }

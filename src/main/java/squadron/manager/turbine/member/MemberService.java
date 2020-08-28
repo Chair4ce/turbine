@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
+import static squadron.manager.turbine.position.PositionController.isEnlisted;
 
 @Service
 public class MemberService {
@@ -54,13 +55,15 @@ public class MemberService {
     public Iterable<Member> saveAndGetAllMembers(@RequestBody @Valid Iterable<MemberJSON> json) {
         Date date = new Date();
         json.forEach((newImport -> {
-            Member existingMember = memberRepository.findByMbrId(newImport.getSsan());
+            if (isEnlisted(newImport.getGrade())) {
+                SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getSsan());
+                Member existingMember = memberRepository.findByMbrId(sqidModel.getSqid());
                 if (existingMember == null) {
-                    memberRepository.save(NewMemberModel(date, newImport));
+                    memberRepository.save(NewMemberModel(date, newImport, sqidModel));
                 } else {
-                    updateExistingMemberData(NewMemberModel(date, newImport), existingMember);
+                    updateExistingMemberData(NewMemberModel(date, newImport, sqidModel), existingMember);
                 }
-
+            }
         }));
         return memberRepository.findAll();
     }
@@ -252,10 +255,12 @@ public class MemberService {
                 .collect(toList());
     }
 
-    private Member NewMemberModel(Date date, MemberJSON newImport) {
+    private Member NewMemberModel(Date date, MemberJSON newImport, SqidGenerator sqid) {
         return new Member(
-                newImport.getSsan(),
+                sqid.getSqid(),
                 newImport.getFullName(),
+                sqid.getFirstName(),
+                sqid.getLastName(),
                 newImport.getGrade(),
                 newImport.getAssignedPas(),
                 newImport.getDafsc() != null ? newImport.getDafsc() : "",
@@ -291,7 +296,10 @@ public class MemberService {
     }
 
     private void updateExistingMemberData(Member importingMember, Member existingMember) {
+        existingMember.setMbrId(importingMember.getMbrId());
         existingMember.setFullName(importingMember.getFullName());
+        existingMember.setFirstName(importingMember.getFirstName());
+        existingMember.setLastName(importingMember.getLastName());
         existingMember.setGrade(importingMember.getGrade());
         existingMember.setAssignedPas(importingMember.getAssignedPas());
         existingMember.setDafsc(importingMember.getDafsc() != null ? importingMember.getDafsc() : "");

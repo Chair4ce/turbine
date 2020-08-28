@@ -15,6 +15,10 @@ public class MemberJSON {
 
     private String fullName;
 
+    private String firstName;
+
+    private String lastName;
+
     private String grade;
 
     private String assignedPas;

@@ -1,4 +1,4 @@
-package squadron.manager.turbine.afscPositions;
+package squadron.manager.turbine.positionAssignment;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,23 +17,24 @@ public class PositionAssignment {
     @GeneratedValue(strategy = GenerationType.AUTO)
 
     private Long id;
-    private String afsc;
+    @Column(name = "afsc_group")
+    private String afscGroup;
     private String type;
-    private String posId;
-    private Long mbrTableId;
+    private Long posId;
+    private Long mbrId;
 
-    public PositionAssignment(String afsc, String type, String posId, Long mbrTableId) {
-        this.afsc = afsc;
+    public PositionAssignment(String afscGroup, String type, Long posId, Long mbrId) {
+        this.afscGroup = afscGroup;
         this.type = type;
         this.posId = posId;
-        this.mbrTableId = mbrTableId;
+        this.mbrId = mbrId;
     }
 
-    public PositionAssignment(Long id, String afsc, String type, String posId, Long mbrTableId) {
+    public PositionAssignment(Long id, String afscGroup, String type, Long posId, Long mbrId) {
         this.id = id;
-        this.afsc = afsc;
+        this.afscGroup = afscGroup;
         this.type = type;
         this.posId = posId;
-        this.mbrTableId = mbrTableId;
+        this.mbrId = mbrId;
     }
 }

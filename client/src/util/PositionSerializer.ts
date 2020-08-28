@@ -11,7 +11,11 @@ function convertToHash(mbrId: string) {
     //This throws out everything except integers of the hash
     // let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
     //     .match(/\d+/g).map(Number).join("").substring(1,10);
-    console.log(mbrId);
+    let oldMbrId = mbrId;
+    if(mbrId.length < 9) mbrId = "1" + mbrId;
+    if(mbrId.length < 9) mbrId = "1" + mbrId;
+    if(mbrId.length < 9) mbrId = "1" + mbrId;
+    console.log("before: " + oldMbrId + " After: " + mbrId);
     return crypto.createHash('sha1').update(mbrId.replace(/-/g, "")).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1, 10);
 }

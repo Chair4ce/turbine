@@ -4,10 +4,12 @@ import MemberModel from "./models/MemberModel";
 import GainingMemberModel from "./models/GainingMemberModel";
 import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
+import UploadMemberModel from "./models/UploadMemberModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
+    upload: [] as UploadMemberModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
     staging: false,
@@ -26,6 +28,12 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             return {
                 ...state,
                 loading: true
+            };
+        }
+        case MemberActionTypes.STAGE_UPLOAD_DATA: {
+            return {
+                ...state,
+                upload: action.payload
             };
         }
         case MemberActionTypes.STAGING_UPLOAD: {

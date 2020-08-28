@@ -25,6 +25,8 @@ public class MemberControllerTest extends BaseIntegrationTest {
                (long) 34768,
                 "876488",
                "Hoag, Jacy L",
+               "Jacy",
+               "Hoag",
                "TSgt",
                "UHBYGVYT",
                "3D1X2",

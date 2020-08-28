@@ -28,6 +28,10 @@ public class Member {
 
     @Column(name = "full_name")
     private String fullName;
+    @Column(name = "first_name")
+    private String firstName;
+    @Column(name = "last_name")
+    private String lastName;
 
     private String grade;
 
@@ -65,12 +69,15 @@ public class Member {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(String mbrId, String fullName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor,Date deros, Date lastUpdated) {
+    public Member(Long id, String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
+        this.id = id;
         this.mbrId = mbrId;
         this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.grade = grade;
         this.assignedPas = assignedPas;
-        this.dafsc = dafsc.replaceAll("-", "");
+        this.dafsc = dafsc;
         this.officeSymbol = officeSymbol;
         this.dutyTitle = dutyTitle;
         this.dutyStartDate = dutyStartDate;
@@ -84,10 +91,11 @@ public class Member {
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(Long id, String mbrId, String fullName,String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation,Date rnltd, Date dor,Date deros, Date lastUpdated) {
-        this.id = id;
+    public Member(String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
         this.mbrId = mbrId;
         this.fullName = fullName;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.grade = grade;
         this.assignedPas = assignedPas;
         this.dafsc = dafsc;
@@ -107,6 +115,8 @@ public class Member {
     public Member update(MemberJSON json) {
         this.setMbrId(json.getSsan());
         this.setFullName(json.getFullName());
+        this.setFirstName(json.getFirstName());
+        this.setLastName(json.getLastName());
         this.setGrade(json.getGrade());
         this.setAssignedPas(json.getAssignedPas());
         this.setDafsc(json.getDafsc());
