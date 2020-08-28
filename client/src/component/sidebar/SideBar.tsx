@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         collapsed: {
             transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
-            width: 50,
+            width: 65,
         },
         toggleWidthBtn: {
             color: '#C1C1C1',

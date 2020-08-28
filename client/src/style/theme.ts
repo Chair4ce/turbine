@@ -112,7 +112,6 @@ const theme = {
             overrides: {
                 MuiButton: {
                     root: {
-                        minWidth: 32
                     }
                 }
             },

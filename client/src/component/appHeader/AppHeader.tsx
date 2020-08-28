@@ -2,9 +2,12 @@ import * as React from "react";
 import classNames from "classnames";
 import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Typography} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import clsx from "clsx";
 import ProfileMenu from "./ProfileMenu";
+import {FullScreenDialog} from "./UploadModal";
+import {setStaging} from "../../store/members/thunks";
+import {useDispatch} from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,7 +68,7 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: 13,
             background: 'transparent',
             color: '#fff',
-            zIndex: 3000,
+            zIndex: 1200,
             fontFamily: 'Rambla',
             borderRadius: 0,
             '&:hover': {
@@ -89,6 +92,10 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
+        },
+        uploadModalBtn: {
+            width: 80,
+            whiteSpace: 'nowrap'
         }
 
     }),
@@ -106,9 +113,18 @@ const HEADER_MENU_SELECT_ITEM = {
 
 const MainHeader: React.FC<Props> = props => {
     const [selected, setSelected] = React.useState('HEADER_MENU/SHOW_MAIN_SECTION');
-
+    const dispatch = useDispatch();
 
     const classes = useStyles();
+    const [uploadDialog, setUploadDialog] = React.useState(false);
+    const handleClickOpen = () => {
+        dispatch(setStaging(true));
+        setUploadDialog(true);
+    };
+    const handleClickClose= () => {
+        dispatch(setStaging(false));
+        setUploadDialog(false);
+    };
 
     const showMainSection = () => {
         setSelected(HEADER_MENU_SELECT_ITEM.SHOW_MAIN_SECTION);
@@ -152,8 +168,11 @@ const MainHeader: React.FC<Props> = props => {
                 </div>
             </div>
             <div className={classes.profileActions}>
-
-                <ProfileMenu/>
+                <Button variant="outlined" size="small" color="primary" onClick={handleClickOpen} className={classes.uploadModalBtn}>
+                    Upload
+                </Button>
+                <FullScreenDialog callBack={handleClickClose} open={uploadDialog}/>
+                {/*<ProfileMenu/>*/}
 
             </div>
         </header>

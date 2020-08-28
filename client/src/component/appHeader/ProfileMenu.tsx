@@ -30,6 +30,7 @@ import clsx from "clsx";
 import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../store";
 import {savePositions} from "../../store/positions/thunks";
+import {FullScreenDialog} from "./UploadModal";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -272,6 +273,8 @@ export const ProfileMenu: React.FC = () => {
     const [success, updateSuccess] = useState(false);
     const loading = useSelector(({positions}: ApplicationState) => positions.loading);
 
+
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -413,11 +416,11 @@ export const ProfileMenu: React.FC = () => {
                     </DialogActions>
                 </Dialog>
             </React.Fragment>
+
             <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
                     onClick={handleClick}>
                 <MoreVertIcon/>
             </Button>
-
             <Menu
                 id="fade-menu"
                 anchorEl={anchorEl}

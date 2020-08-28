@@ -329,14 +329,11 @@ public class PositionController {
     @GetMapping(path = "/manning_chart/generate")
     void generateManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
-        System.out.println(distinctAFSC);
         LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int thisMonth = localDate.getMonthValue();
         AtomicInteger year = new AtomicInteger(new DateTime().getYear());
         afscChartRepository.deleteAll();
-        System.out.println("inital");
         for (String afsc : distinctAFSC) {
-            System.out.println("iterating through afsc: " + afsc);
             AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
             AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
             LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
@@ -346,10 +343,8 @@ public class PositionController {
             for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
                 int iMonth = date.getMonthValue();
                 int iYear = date.getYear();
-                System.out.println("iterating through afsc: " + afsc + " for " + iMonth + "/" + iYear);
 
                 List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
-                System.out.println("found " + increments.size() + " increments");
                 for (AFSCIncrementLog increment : increments) {
                     assigned.decrementAndGet();
                 }
@@ -366,7 +361,6 @@ public class PositionController {
         List<Position> assignedPositions = positionRepository.findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);
         assignedPositions.forEach((position) -> {
             Member assignedMember = memberRepository.getOne((long) Integer.parseInt(position.getMbrIdAssigned()));
-            System.out.println(assignedMember);
             List<GainingMember> newMembersInSameAfsc = gainingRepository.findAllByDafsc(afsc);
             newMembersInSameAfsc.forEach((newMbr) -> {
                 if (new DateTime(newMbr.getRnltd()).getMonthOfYear() == month) {
