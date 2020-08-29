@@ -67,7 +67,7 @@ interface Props {
     // showLosingPanel: boolean;
     // showPositionPanel: boolean;
     sideBarExpanded: boolean;
-    callbackHandler: (type: string) => void;
+    parentCallBack: (type: string) => void;
     className?: string;
 }
 
@@ -78,17 +78,17 @@ const HealthSideBar: React.FC<Props> = props => {
         [classes.collapsed]: !props.sideBarExpanded,
     });
 
-    const callBackHandler = (type: string) => {
+    const childCallBackHandler = (type: string) => {
         switch (type) {
             case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
-                props.callbackHandler(HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART)
+                props.parentCallBack(HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART)
                 break;
         }
 
     }
 
     const toggleSideBarWidth = () => {
-        props.callbackHandler(
+        props.parentCallBack(
             SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND
         )
     }
@@ -104,7 +104,7 @@ const HealthSideBar: React.FC<Props> = props => {
                 <HealthMenu
                     expanded={props.sideBarExpanded}
                     showManningChart={props.showManningChart}
-                    menuSelectHandler={callBackHandler}
+                    menuSelectHandler={childCallBackHandler}
                 />
             </div>
         </aside>

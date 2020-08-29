@@ -7,6 +7,7 @@ import GainingMemberModel from "./models/GainingMemberModel";
 import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
 import UploadMemberModel from "./models/UploadMemberModel";
+import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
 
 
 // This type is basically shorthand for `{ [key: string]: any }`. Feel free to replace `any` with
@@ -46,7 +47,7 @@ export interface MembersState {
     readonly staging: boolean;
     readonly gainingLoading: boolean;
     readonly data: MemberModel[];
-    readonly upload: UploadMemberModel[];
+    readonly upload: StagingUploadMemberModel[];
     readonly gainingData: GainingMemberModel[];
     readonly genericAFSCList: GenericGroupCollectionModel[];
     readonly genericGainingAFSCList: GenericGainingGroupCollectionModel[];

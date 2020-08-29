@@ -4,6 +4,10 @@ import SideBar, {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
+import {Container} from "@material-ui/core";
+import TurbineIris from "../../component/icon/TurbineIris";
+import Iris from "../../component/icon/iris";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -24,8 +28,29 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         main: {
             position: 'relative',
-            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             height: '100%',
+            width: '100%',
+        },
+        irisIcon: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: 60,
+            width: 270,
+        },
+        noContentMsg: {
+            display: 'flex',
+            height: 200,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        },
+        noContentTxt: {
+            color: '#6d6d6d',
+            fontSize: 32
         }
     }),
 );
@@ -84,14 +109,24 @@ const MainSection: React.FC<Props> = props => {
                 />
             </div>
             <article className={classes.main}>
-                <StyledPanelsContainer
+                {!showCurrentPanel && !showGainingPanel &&
+                    <div className={classes.noContentMsg}>
+
+                <div className={classes.irisIcon}>
+                    <TurbineIris/>
+                    <TurbineIris/>
+                </div>
+                        <Typography className={classes.noContentTxt}>Move along, nothing to see here...</Typography>
+                    </div>
+                }
+                {(showCurrentPanel || showGainingPanel) && <StyledPanelsContainer
                     showCurrentPanel={showCurrentPanel}
                     showProjectedPanel={showProjectedPanel}
                     showGainingPanel={showGainingPanel}
                     showLosingPanel={showLosingPanel}
                     showPositionPanel={showPositionPanel}
                     callback={menuSelectHandler}
-                />
+                />}
 
             </article>
         </section>

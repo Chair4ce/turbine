@@ -13,7 +13,16 @@ export const spin = keyframes`
 transform: rotateZ(0);
 }
 100% {
-transform: rotateZ(180deg);
+transform: rotateZ(120deg);
+}
+`;
+
+export const blink = keyframes`
+0% {
+display: block;
+}
+100% {
+display: none;
 }
 `;
 

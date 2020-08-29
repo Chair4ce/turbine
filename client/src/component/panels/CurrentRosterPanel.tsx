@@ -43,6 +43,7 @@ import UniqueAFSCRows from "./rows/UniqueAFSCRows";
 import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
 import {ApplicationState} from "../../store";
 import {Alert} from "@material-ui/lab";
+import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
             height: '100%',
+            overflowY: 'hidden'
         },
         fileDropArea: {
             display: 'flex',
@@ -232,7 +234,7 @@ const useStyles = makeStyles((theme: Theme) =>
         contentContainer: {
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh-122px)'
+            height: '100%'
         },
         item_container: {
             display: 'block',
@@ -688,7 +690,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                 <header className={classNames(classes.panelHeader)}>
 
                     <div className={classNames(classes.panelTitle)}>
-                        <h2>Alpha Roster</h2>
+                        <Typography>Alpha Roster</Typography>
                     </div>
 
                     <div className={classNames(classes.actionArea)}>

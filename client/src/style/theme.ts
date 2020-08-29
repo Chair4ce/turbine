@@ -110,10 +110,11 @@ const theme = {
     export const muiTheme = createMuiTheme(
         {
             overrides: {
-                MuiButton: {
-                    root: {
+                MuiDialog: {
+                    paper: {
+                        alignItems: 'center'
                     }
-                }
+                },
             },
             palette: muiPalette,
         });

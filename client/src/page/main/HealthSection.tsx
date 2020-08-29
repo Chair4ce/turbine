@@ -33,8 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
             height: '100%',
         },
-        show: {
-        },
+        show: {},
         hide: {
             display: 'none'
         }
@@ -64,12 +63,12 @@ const HealthSection: React.FC<Props> = props => {
         [classes.hide]: !showManningChart,
     });
 
-    const callBackHandler = (type: string) => {
+    const childCallBackHandler = (type: string) => {
         switch (type) {
             case SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND:
                 props.callBackHandler(SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND)
                 break;
-                case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
+            case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
                 toggleManningChart(prev => !prev)
                 break;
         }
@@ -80,8 +79,8 @@ const HealthSection: React.FC<Props> = props => {
             <div className={classes.sidebar_container}>
                 <HealthSideBar
                     sideBarExpanded={props.sideBarExpanded}
-                callbackHandler={callBackHandler}
-                 showManningChart={showManningChart}/>
+                    parentCallBack={childCallBackHandler}
+                    showManningChart={showManningChart}/>
             </div>
             <article className={classes.main}>
                 <Chart chartData={chartDataAFSC} className={chartClassName}/>

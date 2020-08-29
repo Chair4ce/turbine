@@ -130,6 +130,7 @@ describe('reducer', () => {
             membersReducer(undefined, mockAction)
         ).toEqual({
             data: members,
+            upload: [],
             staging: false,
             gainingData: [],
             gainingLoading: false,

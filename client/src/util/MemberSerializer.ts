@@ -4,6 +4,7 @@ import GenericGroupCollectionModel from "../store/members/models/GenericGroupCol
 import GainingMemberModel from "../store/members/models/GainingMemberModel";
 import UploadGainingMemberModel from "../store/members/models/UploadGainingMemberModel";
 import GenericGainingGroupCollectionModel from "../store/members/models/GenericGainingGroupCollectionModel";
+import StagingUploadMemberModel from "../store/members/models/StagingUploadMemberModel";
 
 const crypto = require('crypto');
 
@@ -26,6 +27,32 @@ export class MemberSerializer {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(
+                    convertToHash(item.ssan ? item.ssan : null),
+                    item.fullName ? item.fullName : null,
+                    item.grade ? item.grade : null ,
+                    item.assignedPas ? item.assignedPas : null ,
+                    item.dafsc ? item.dafsc : null ,
+                    item.officeSymbol ? item.officeSymbol : null,
+                    item.dutyTitle ? item.dutyTitle : null,
+                    item.dutyStartDate ? item.dutyStartDate : null,
+                    item.dutyPhone ? item.dutyPhone : null,
+                    item.supvName ? item.supvName : null,
+                    item.supvBeginDate ? item.supvBeginDate: null,
+                    item.dateArrivedStation ? item.dateArrivedStation : null,
+                    item.rnltd ? item.rnltd : null,
+                    item.dor ? item.dor : null,
+                    item.deros ? item.deros : null,
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeToStaging(items: any): StagingUploadMemberModel[] {
+        if (items.map) {
+            return items.map((item: any, index: number) => {
+                return new StagingUploadMemberModel(
+                    index + 1,
                     convertToHash(item.ssan ? item.ssan : null),
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,

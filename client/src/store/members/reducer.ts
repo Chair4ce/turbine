@@ -5,11 +5,12 @@ import GainingMemberModel from "./models/GainingMemberModel";
 import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
 import UploadMemberModel from "./models/UploadMemberModel";
+import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
-    upload: [] as UploadMemberModel[],
+    upload: [] as StagingUploadMemberModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
     staging: false,

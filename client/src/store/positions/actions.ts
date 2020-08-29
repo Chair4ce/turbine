@@ -9,7 +9,7 @@ import UploadPositionModel from "./models/UploadPositionModel";
 export const positionsFetchRequest = () => action(PositionActionTypes.FETCH_REQUEST);
 export const positionsFetchError = (message: string) => action(PositionActionTypes.FETCH_ERROR, message);
 export const positionsFetchSuccess = (payload: PositionModel[]) => action(PositionActionTypes.FETCH_SUCCESS, payload);
-export const stageUploadData = (payload: UploadPositionModel[]) => action(PositionActionTypes.STAGE_UPLOAD_DATA, payload);
+export const stagePositionUploadData = (payload: UploadPositionModel[]) => action(PositionActionTypes.STAGE_UPLOAD_DATA, payload);
 export const chartDataFetchSuccess = (payload: ManningChartModel[]) => action(PositionActionTypes.FETCH_CHARTDATA_SUCCESS, payload);
 
 export const unassignedMembersFetchRequest = () => action(PositionActionTypes.FETCH_UNASSIGNED_REQUEST);

@@ -73,6 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
             height: '100%',
+            overflowY: 'hidden'
         },
         panel_content: {
             display: 'block',
@@ -89,7 +90,7 @@ const useStyles = makeStyles((theme: Theme) =>
         contentContainer: {
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh-122px)'
+            height: '100%'
         },
         panelHeader: {
             display: 'flex',

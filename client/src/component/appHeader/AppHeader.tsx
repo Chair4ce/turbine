@@ -2,12 +2,14 @@ import * as React from "react";
 import classNames from "classnames";
 import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Button, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import clsx from "clsx";
-import ProfileMenu from "./ProfileMenu";
-import {FullScreenDialog} from "./UploadModal";
+import SettingsIcon from '@material-ui/icons/Settings';
+import {AppSettingsPage} from "./AppSettingsPage";
 import {setStaging} from "../../store/members/thunks";
 import {useDispatch} from "react-redux";
+import IconButton from "@material-ui/core/IconButton";
+import SettingsSpinIcon from "../icon/SettingsSpinIcon";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,7 +20,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%',
             backgroundColor: '#313131',
             borderBottom: '1px solid #212121',
-            minWidth: 1000,
         },
         logo_area: {
             display: 'flex',
@@ -94,7 +95,6 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: 'center'
         },
         uploadModalBtn: {
-            width: 80,
             whiteSpace: 'nowrap'
         }
 
@@ -121,7 +121,7 @@ const MainHeader: React.FC<Props> = props => {
         dispatch(setStaging(true));
         setUploadDialog(true);
     };
-    const handleClickClose= () => {
+    const handleClickClose = () => {
         dispatch(setStaging(false));
         setUploadDialog(false);
     };
@@ -168,10 +168,11 @@ const MainHeader: React.FC<Props> = props => {
                 </div>
             </div>
             <div className={classes.profileActions}>
-                <Button variant="outlined" size="small" color="primary" onClick={handleClickOpen} className={classes.uploadModalBtn}>
-                    Upload
-                </Button>
-                <FullScreenDialog callBack={handleClickClose} open={uploadDialog}/>
+                <IconButton size="small" onClick={handleClickOpen} className={classes.uploadModalBtn} style={{ backgroundColor: 'transparent' }} >
+                    <SettingsSpinIcon/>
+                    {/*<SettingsIcon fontSize="default"/>*/}
+                </IconButton>
+                <AppSettingsPage callBack={handleClickClose} open={uploadDialog}/>
                 {/*<ProfileMenu/>*/}
 
             </div>
