@@ -4,12 +4,14 @@ import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
 import ManningChartModel from "./models/ManningChartModel";
 import UploadPositionModel from "./models/UploadPositionModel";
+import StagingUploadPositionModel from "./models/StagingUploadPositionModel";
 
 
 export const positionsFetchRequest = () => action(PositionActionTypes.FETCH_REQUEST);
+export const setPositionsSuccess = (payload: boolean) => action(PositionActionTypes.SET_SUCCESS, payload);
 export const positionsFetchError = (message: string) => action(PositionActionTypes.FETCH_ERROR, message);
 export const positionsFetchSuccess = (payload: PositionModel[]) => action(PositionActionTypes.FETCH_SUCCESS, payload);
-export const stagePositionUploadData = (payload: UploadPositionModel[]) => action(PositionActionTypes.STAGE_UPLOAD_DATA, payload);
+export const stagePositionUploadData = (payload: StagingUploadPositionModel[]) => action(PositionActionTypes.STAGE_UPLOAD_DATA, payload);
 export const chartDataFetchSuccess = (payload: ManningChartModel[]) => action(PositionActionTypes.FETCH_CHARTDATA_SUCCESS, payload);
 
 export const unassignedMembersFetchRequest = () => action(PositionActionTypes.FETCH_UNASSIGNED_REQUEST);

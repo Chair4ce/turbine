@@ -6,12 +6,15 @@ import GenericGroupCollectionModel from "./models/GenericGroupCollectionModel";
 import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
 import UploadMemberModel from "./models/UploadMemberModel";
 import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
+import StagingUploadGainingModel from "./models/StagingUploadGainingModel";
 
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
-    success: false,
-    upload: [] as StagingUploadMemberModel[],
+    successAlpha: false,
+    successGaining: false,
+    uploadStagingMember: [] as StagingUploadMemberModel[],
+    uploadStagingGaining: [] as StagingUploadGainingModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
     staging: false,
@@ -32,16 +35,30 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
                 loading: true
             };
         }
-        case MemberActionTypes.RESET_SUCCESS: {
+        case MemberActionTypes.RESET_MEMBER_SUCCESS: {
             return {
                 ...state,
-                success: false
+                loading: false,
+                successAlpha: false,
+            };
+        }
+        case MemberActionTypes.RESET_GAINING_SUCCESS: {
+            return {
+                ...state,
+                gainingLoading: false,
+                successGaining: false
             };
         }
         case MemberActionTypes.STAGE_UPLOAD_DATA: {
             return {
                 ...state,
-                upload: action.payload
+                uploadStagingMember: action.payload
+            };
+        }
+        case MemberActionTypes.STAGE_UPLOAD_GAINING_DATA: {
+            return {
+                ...state,
+                uploadStagingGaining: action.payload
             };
         }
         case MemberActionTypes.STAGING_UPLOAD: {
@@ -57,10 +74,11 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             };
         }
         case MemberActionTypes.FETCH_SUCCESS: {
-            return { ...state, loading: false, success: true, data: action.payload};
+            return { ...state, loading: false, successAlpha: true, data: action.payload};
         }
         case MemberActionTypes.GAINING_FETCH_SUCCESS: {
-            return { ...state, gainingLoading: false, gainingData: action.payload};
+            console.log("setting gaining loading to false")
+            return { ...state, gainingLoading: false, successGaining: true, gainingData: action.payload};
         }
         case MemberActionTypes.UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS: {
             return { ...state, loading: false, genericAFSCList: action.payload};

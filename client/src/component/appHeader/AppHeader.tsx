@@ -5,12 +5,13 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Typography} from "@material-ui/core";
 import clsx from "clsx";
 import SettingsIcon from '@material-ui/icons/Settings';
-import {AppSettingsPage} from "./AppSettingsPage";
+import {AppSettingsPage} from "../settingsPage/AppSettingsPage";
 import {setStaging} from "../../store/members/thunks";
 import {useDispatch} from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import SettingsSpinIcon from "../icon/SettingsSpinIcon";
-import {resetSuccess} from "../../store/members";
+import {resetGainingSuccess, resetSuccess, stageGainingUploadData, stageMemberUploadData} from "../../store/members";
+import {stagePositionUploadData} from "../../store/positions";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -120,6 +121,10 @@ const MainHeader: React.FC<Props> = props => {
     const [uploadDialog, setUploadDialog] = React.useState(false);
     const handleClickOpen = () => {
         dispatch(resetSuccess());
+        dispatch(resetGainingSuccess());
+        dispatch(stageMemberUploadData([]));
+        dispatch(stageGainingUploadData([]));
+        dispatch(stagePositionUploadData([]));
         dispatch(setStaging(true));
         setUploadDialog(true);
     };

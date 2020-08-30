@@ -1,11 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import MaterialTable, {Column} from 'material-table';
 import StagingUploadMemberModel from "../../store/members/models/StagingUploadMemberModel";
-import {connect, useDispatch} from "react-redux";
+import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {stageMemberUploadData} from "../../store/members";
-import {MemberSerializer} from "../../util/MemberSerializer";
 import {Button} from "@material-ui/core";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
@@ -60,7 +58,7 @@ interface TableState {
 
 interface Props {
     upload: StagingUploadMemberModel[];
-    callback: (data?: StagingUploadMemberModel[]) => void;
+    callback: (data?: any[]) => void;
     loading: boolean;
     title: string;
     filtering: boolean,
@@ -232,7 +230,7 @@ export const AlphaReviewTable: React.FC<Props> = props => {
 };
 
 const mapStateToProps = ({members}: ApplicationState) => ({
-    upload: members.upload,
+    upload: members.uploadStagingMember,
 })
 const mapDispatchToProps = {
 }

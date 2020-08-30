@@ -2,9 +2,11 @@ import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
 import ManningChartModel from "./models/ManningChartModel";
 import UploadPositionModel from "./models/UploadPositionModel";
+import StagingUploadPositionModel from "./models/StagingUploadPositionModel";
 
 export enum PositionActionTypes {
     FETCH_REQUEST = '@@positions/FETCH_REQUEST',
+    SET_SUCCESS = '@@positions/SET_SUCCESS',
     STAGE_UPLOAD_DATA = '@@positions/STAGE_UPLOAD_DATA',
     FETCH_ERROR = '@@positions/FETCH_ERROR',
     FETCH_SUCCESS = '@@positions/FETCH_SUCCESS',
@@ -26,6 +28,8 @@ export interface PositionState {
     readonly loading: boolean;
     readonly positions: PositionModel[];
     readonly upload: UploadPositionModel[];
+    readonly uploadStagingPosition: StagingUploadPositionModel[];
+    readonly success: boolean;
     readonly error?: string;
 
     readonly chartData: ManningChartModel[];

@@ -4,12 +4,15 @@ import PositionModel from "./models/PositionModel";
 import MemberModel from "../members/models/MemberModel";
 import ManningChartModel from "./models/ManningChartModel";
 import UploadPositionModel from "./models/UploadPositionModel";
+import StagingUploadPositionModel from "./models/StagingUploadPositionModel";
 
 
 export const initialState: PositionState = {
     loading: false,
+    success: false,
     positions: [] as PositionModel[],
     upload: [] as UploadPositionModel[],
+    uploadStagingPosition: [] as StagingUploadPositionModel[],
     error: undefined,
     chartData: [] as ManningChartModel[],
 
@@ -31,8 +34,10 @@ export const initialState: PositionState = {
 const reducer: Reducer<PositionState> = (state = initialState, action) => {
     switch (action.type) {
         case PositionActionTypes.FETCH_REQUEST: return {...state, loading: true};
+        case PositionActionTypes.SET_SUCCESS: return {...state, success: action.payload};
+        case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, uploadStagingPosition: action.payload};
         case PositionActionTypes.FETCH_ERROR: return {...state, loading: false, error: action.payload};
-        case PositionActionTypes.FETCH_SUCCESS: return {...state, loading: false, data: action.payload};
+        case PositionActionTypes.FETCH_SUCCESS: return {...state, loading: false, success: true, data: action.payload};
         case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, upload: action.payload};
         case PositionActionTypes.FETCH_CHARTDATA_SUCCESS: return {...state, loading: false, chartData: action.payload};
         case PositionActionTypes.FETCH_UNASSIGNED_REQUEST: return {...state, unassignedLoading: true};

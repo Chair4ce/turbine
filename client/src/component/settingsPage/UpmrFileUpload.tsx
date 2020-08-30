@@ -3,18 +3,16 @@ import {useDropzone} from 'react-dropzone'
 import {Paper} from "@material-ui/core";
 import RootRef from "@material-ui/core/RootRef";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {saveCurrentRoster} from "../../store/members/thunks";
-import ErrorIcon from '@material-ui/icons/Error';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
-import {useDispatch, useSelector} from "react-redux";
-import {ApplicationState} from "../../store";
+import {useDispatch} from "react-redux";
 import {MemberSerializer} from "../../util/MemberSerializer";
 import MemberModel from "../../store/members/models/MemberModel";
-import {stageMemberUploadData} from "../../store/members";
-import UploadMemberModel from "../../store/members/models/UploadMemberModel";
-import Typography from "@material-ui/core/Typography";
-import ErrorDialog from "./ErrorDialog";
+import {stageGainingUploadData, stageMemberUploadData} from "../../store/members";
+import ErrorDialog from "../appHeader/ErrorDialog";
+import {FILE_UPLOAD} from "./AppSettingsPage";
+import {PositionSerializer} from "../../util/PositionSerializer";
+import {stagePositionUploadData} from "../../store/positions";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -43,46 +41,42 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
-    parentCallback: (type: string, status: boolean, data?: string) => void;
+    parentCallback: (type: string, status: boolean) => void;
     className?: string;
 }
-const FILE_UPLOAD_ACTIONS = {
-    ALPHA_SUCCESS: 'FILE_UPLOAD/ALPHA_SUCCESS',
-    GAINING_SUCCESS: 'FILE_UPLOAD/GAINING_SUCCESS',
-    UPMR_SUCCESS: 'FILE_UPLOAD/UPMR_SUCCESS',
-}
 
-export const FileUpload: React.FC<Props> = props => {
+
+export const UpmrFileUpload: React.FC<Props> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
     const [error, updateError] = useState("");
- function handleCallback() {
-     updateError("");
- }
+    function handleCallback() {
+        updateError("");
+    }
 
     const onDrop = useCallback(acceptedFiles => {
         acceptedFiles.forEach((file: any) => {
-                let fileName = file.name;
+            let fileName = file.name;
 
-                if(fileName.toString().includes("alpha" || "Alpha")) {console.log("found an Alpha roster")}
-                if(fileName.split('.').pop() === "xlsx") {
-                    const data = readXlsxFile(file, {
-                        schema, transformData(data: any) {
-                            return data.splice(2, data.length - 3)
-                        }
-                    }).then(((rows: any, errors: any) => {
-                        if (errors) {
-                            props.parentCallback(FILE_UPLOAD_ACTIONS.ALPHA_SUCCESS,false)
-                        } else {
-                            props.parentCallback(FILE_UPLOAD_ACTIONS.ALPHA_SUCCESS,true)
-                            dispatch(stageMemberUploadData(MemberSerializer.serializeToStaging(MemberModel.filterEnlistedStagingUploadOnly(rows.rows))));
-                        }
-                        ;
-                    }))
-                } else {
-                    updateError("Please convert file to xlsm before uploading again")
-                }
+            if(fileName.toString().includes("gaining" || "Gaining")) {console.log("found an Gaining roster")}
+            if(fileName.split('.').pop() === "xlsx") {
+                const data = readXlsxFile(file, {
+                    schema, transformData(data: any) {
+                        return data.splice(2, data.length - 3)
+                    }
+                }).then(((rows: any, errors: any) => {
+                    if (errors) {
+                        props.parentCallback(FILE_UPLOAD.UPMR_SUCCESS,false)
+                    } else {
+                        props.parentCallback(FILE_UPLOAD.UPMR_SUCCESS,true)
+                        dispatch(stagePositionUploadData(PositionSerializer.serializeToStaging(rows.rows)));
+                    }
+                    ;
+                }))
+            } else {
+                updateError("Please convert file to xlsm before uploading again")
+            }
 
 
 
@@ -112,107 +106,113 @@ export const FileUpload: React.FC<Props> = props => {
                 {
                     isDragActive ?
                         <p>Drop the files here ...</p> :
-                         <p>Drag 'n' drop some files here, or click to select files</p>
+                        <p>Drag 'n' drop some files here, or click to select files</p>
                 }
             </Paper>
         </RootRef>
     )
 }
 
-export default FileUpload;
-
-export {
-    FILE_UPLOAD_ACTIONS as FILE_UPLOAD
-}
+export default UpmrFileUpload;
 
 const schema = {
-    'SSAN': {
-        prop: 'ssan',
+    'PASCODE': {
+        prop: 'pasCode',
         type: String,
         required: true
     },
-    'FULL_NAME': {
-        prop: 'fullName',
+    'ORGN_STRUCT_ID': {
+        prop: 'orgStructureId',
         type: String,
-        required: true
+        required: false
         // Excel stores dates as integers.
         // E.g. '24/03/2018' === 43183.
         // Such dates are parsed to UTC+0 timezone with time 12:00 .
     },
-    'GRADE': {
-        prop: 'grade',
+    'AFSC_AUTH': {
+        prop: 'afscAuth',
         type: String,
         required: false
     },
-    'ASSIGNED_PAS': {
-        prop: 'assignedPas',
+    'GRD_AUTH': {
+        prop: 'grdAuth',
         type: String,
         required: false
     },
-    'OFFICE_SYMBOL': {
-        prop: 'officeSymbol',
+    'CURR_QTR': {
+        prop: 'currQtr',
         type: String,
         required: false
     },
-    'DUTY_TITLE': {
-        prop: 'dutyTitle',
+    'PROJ_QTR1': {
+        prop: 'projQtr1',
         type: String,
         required: false
     },
-    'DUTY_START_DATE': {
-        prop: 'dutyStartDate',
-        type: Date,
-        required: false
-    },
-    'DUTY_PHONE': {
-        prop: 'dutyPhone',
+    'PROJ_QTR2': {
+        prop: 'projQtr2',
         type: String,
         required: false
     },
-    'DOR': {
-        prop: 'dor',
-        type: Date,
+    'PROJ_QTR3': {
+        prop: 'projQtr3',
+        type: String,
+        required: false
+    },
+    'PROJ_QTR4': {
+        prop: 'projQtr4',
+        type: String,
+        required: false
+    },
+    'POS_NR': {
+        prop: 'posNr',
+        type: String,
+        required: false
+    },
+    'GR_ASGN': {
+        prop: 'gradeAssigned',
+        type: String,
         required: false
     },
     'DAFSC': {
-        prop: 'dafsc',
+        prop: 'dafscAssigned',
         type: String,
         required: false
     },
-    'PAFSC': {
-        prop: 'pafsc',
+    'NAME': {
+        prop: 'nameAssigned',
         type: String,
         required: false
     },
-    'DATE_ARRIVED_STATION': {
-        prop: 'dateArrivedStation',
-        type: Date,
-        required: false
-    },
-    'DOS': {
-        prop: 'dos',
-        type: Date,
-        required: false
-    },
-    'RNLTD': {
-        prop: 'rnltd',
-        type: Date,
-        required: false
-    },
-    'SUPV_NAME': {
-        prop: 'supvName',
+    'SSAN': {
+        prop: 'mbrIdAssigned',
         type: String,
         required: false
     },
-    'SUPV_BEGIN_DATE': {
-        prop: 'supvBeginDate',
-        type: Date,
+    //Alternate Misc Column Spellings/chars
+    'CURR QTR': {
+        prop: 'currQtr',
+        type: String,
         required: false
     },
-    'DEROS': {
-        prop: 'deros',
-        type: Date,
+    'PROJ QTR1': {
+        prop: 'projQtr1',
+        type: String,
+        required: false
+    },
+    'PROJ QTR2': {
+        prop: 'projQtr2',
+        type: String,
+        required: false
+    },
+    'PROJ QTR3': {
+        prop: 'projQtr3',
+        type: String,
+        required: false
+    },
+    'PROJ QTR4': {
+        prop: 'projQtr4',
+        type: String,
         required: false
     }
-
 }

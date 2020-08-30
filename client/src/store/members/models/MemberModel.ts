@@ -1,6 +1,7 @@
 import GainingMemberModel from "./GainingMemberModel";
 import UploadMemberModel from "./UploadMemberModel";
 import StagingUploadMemberModel from "./StagingUploadMemberModel";
+import StagingUploadGainingModel from "./StagingUploadGainingModel";
 
 export default class MemberModel {
     public id: number;
@@ -77,6 +78,9 @@ export default class MemberModel {
         return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
     }
     public static filterEnlistedStagingUploadOnly = (members: StagingUploadMemberModel[]) => {
+        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+    }
+    public static filterEnlistedStagingGainingUploadOnly = (members: StagingUploadGainingModel[]) => {
         return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
     }
 

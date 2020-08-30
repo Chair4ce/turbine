@@ -5,6 +5,7 @@ import GainingMemberModel from "../store/members/models/GainingMemberModel";
 import UploadGainingMemberModel from "../store/members/models/UploadGainingMemberModel";
 import GenericGainingGroupCollectionModel from "../store/members/models/GenericGainingGroupCollectionModel";
 import StagingUploadMemberModel from "../store/members/models/StagingUploadMemberModel";
+import StagingUploadGainingModel from "../store/members/models/StagingUploadGainingModel";
 
 const crypto = require('crypto');
 
@@ -47,7 +48,7 @@ export class MemberSerializer {
         return [];
     }
 
-    static serializeFromStagingToBackend(items: any): StagingUploadMemberModel[] {
+    static serializeStagedMembersToBackend(items: any): StagingUploadMemberModel[] {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(
@@ -72,7 +73,7 @@ export class MemberSerializer {
         return [];
     }
 
-    static serializeToStaging(items: any): StagingUploadMemberModel[] {
+    static serializeMembersToStaging(items: StagingUploadMemberModel[]) {
         if (items.map) {
             return items.map((item: any, index: number) => {
                 return new StagingUploadMemberModel(
@@ -92,6 +93,27 @@ export class MemberSerializer {
                     item.rnltd ? item.rnltd : null,
                     item.dor ? item.dor : null,
                     item.deros ? item.deros : null,
+                );
+            });
+        }
+        return [];
+    }
+    static serializeGainingToStaging(items: any) {
+        if (items.map) {
+            return items.map((item: any, index: number) => {
+                return new StagingUploadGainingModel(
+                    index + 1,
+                    item.gainingPas ? item.gainingPas : null,
+                    convertToHash(item.mbrId ? item.mbrId : 0),
+                    item.fullName ? item.fullName : null,
+                    item.grade ? item.grade : null ,
+                    item.losingPas ? item.losingPas : null,
+                    item.losingPasCleartext ? item.losingPasCleartext : null,
+                    item.dafsc ? item.dafsc : null,
+                    item.sponsorId ? item.sponsorId : null,
+                    item.dor ? item.dor : null,
+                    item.dos ? item.dos: null,
+                    item.rnltd ? item.rnltd : null,
                 );
             });
         }
@@ -146,6 +168,27 @@ export class MemberSerializer {
         return [];
     }
 
+    static serializeStagedGainingToBackend(items: any): StagingUploadGainingModel[] {
+        if (items.map) {
+            return items.map((item: any) => {
+                return new UploadGainingMemberModel(
+                    item.gainingPas ? item.gainingPas : null,
+                    convertToHash(item.mbrId ? item.mbrId : 0),
+                    item.fullName ? item.fullName : null,
+                    item.grade ? item.grade : null ,
+                    item.losingPas ? item.losingPas : null,
+                    item.losingPasCleartext ? item.losingPasCleartext : null,
+                    item.dafsc ? item.dafsc : null,
+                    item.sponsorId ? item.sponsorId : null,
+                    item.dor ? item.dor : null,
+                    item.dos ? item.dos: null,
+                    item.rnltd ? item.rnltd : null,
+                );
+            });
+        }
+        return [];
+    }
+
     static serializeGainingMembersFromBackend(items: any): GainingMemberModel[] {
         if (items.map) {
             return items.map((item: any) => {
@@ -157,7 +200,7 @@ export class MemberSerializer {
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    item.sponsorId ? item.sponsorId : null,
+                    convertToHash(item.sponsorId ? item.sponsorId : 0),
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,

@@ -2,6 +2,7 @@ import MemberModel from "../store/members/models/MemberModel";
 import PositionModel from "../store/positions/models/PositionModel";
 import UploadPositionModel from "../store/positions/models/UploadPositionModel";
 import ManningChartModel from "../store/positions/models/ManningChartModel";
+import StagingUploadPositionModel from "../store/positions/models/StagingUploadPositionModel";
 
 
 const crypto = require('crypto');
@@ -39,7 +40,55 @@ export class PositionSerializer {
                     item.dafscAssigned,
                     item.nameAssigned,
                     item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned.toString()) : null,
-                    item.lastUpdated
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeToStaging(items: any) {
+        if (items.map) {
+            return items.map((item: any, index: number) => {
+                return new StagingUploadPositionModel(
+                    index +1,
+                    item.pasCode,
+                    item.orgStructureId,
+                    item.afscAuth,
+                    item.grdAuth,
+                    item.currQtr,
+                    item.projQtr1,
+                    item.projQtr2,
+                    item.projQtr3,
+                    item.projQtr4,
+                    item.posNr,
+                    item.gradeAssigned,
+                    item.dafscAssigned,
+                    item.nameAssigned,
+                    item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned.toString()) : null,
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeStagingToBackend(items: any): StagingUploadPositionModel[] {
+        if (items.map) {
+            return items.map((item: any) => {
+                return new UploadPositionModel(
+                    item.pasCode,
+                    item.orgStructureId,
+                    item.afscAuth,
+                    item.grdAuth,
+                    item.currQtr,
+                    item.projQtr1,
+                    item.projQtr2,
+                    item.projQtr3,
+                    item.projQtr4,
+                    item.posNr,
+                    item.gradeAssigned,
+                    item.dafscAssigned,
+                    item.nameAssigned,
+                    item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned.toString()) : null,
                 );
             });
         }

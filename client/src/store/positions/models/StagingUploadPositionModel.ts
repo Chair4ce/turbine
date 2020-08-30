@@ -1,4 +1,5 @@
-export default class UploadPositionModel {
+export default class StagingUploadPositionModel {
+    public id: number;
     public pasCode: string;
     public orgStructureId: string | null;
     public afscAuth: string | null;
@@ -14,7 +15,9 @@ export default class UploadPositionModel {
     public nameAssigned: string | null;
     public mbrIdAssigned: string | null;
 
-    constructor(pasCode: string, orgStructureId: string | null, afscAuth: string | null, grdAuth: string | null, currQtr: string | null, projQtr1: string | null, projQtr2: string | null, projQtr3: string | null, projQtr4: string | null, posNr: string | null, gradeAssigned: string | null, dafscAssigned: string | null, nameAssigned: string | null, mbrIdAssigned: string | null) {
+
+    constructor(id: number, pasCode: string, orgStructureId: string | null, afscAuth: string | null, grdAuth: string | null, currQtr: string | null, projQtr1: string | null, projQtr2: string | null, projQtr3: string | null, projQtr4: string | null, posNr: string | null, gradeAssigned: string | null, dafscAssigned: string | null, nameAssigned: string | null, mbrIdAssigned: string | null) {
+        this.id = id;
         this.pasCode = pasCode;
         this.orgStructureId = orgStructureId;
         this.afscAuth = afscAuth;

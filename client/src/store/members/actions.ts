@@ -6,15 +6,18 @@ import GainingMemberModel from "./models/GainingMemberModel";
 import GenericGainingGroupCollectionModel from "./models/GenericGainingGroupCollectionModel";
 import UploadMemberModel from "./models/UploadMemberModel";
 import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
+import StagingUploadGainingModel from "./models/StagingUploadGainingModel";
 
 // Here we use the `action` helper function provided by `typesafe-actions`.
 // This library provides really useful helpers for writing Redux actions in a type-safe manner.
 // For more info: https://github.com/piotrwitek/typesafe-actions
 export const membersFetchRequest = () => action(MemberActionTypes.FETCH_REQUEST);
-export const resetSuccess = () => action(MemberActionTypes.RESET_SUCCESS);
+export const resetSuccess = () => action(MemberActionTypes.RESET_MEMBER_SUCCESS);
+export const resetGainingSuccess = () => action(MemberActionTypes.RESET_GAINING_SUCCESS);
 export const gainingFetchRequest = () => action(MemberActionTypes.FETCH_GAINING_REQUEST);
 export const stagingUpload = (payload: boolean) => action(MemberActionTypes.STAGING_UPLOAD, payload);
 export const stageMemberUploadData = (payload: StagingUploadMemberModel[]) => action(MemberActionTypes.STAGE_UPLOAD_DATA, payload);
+export const stageGainingUploadData = (payload: StagingUploadGainingModel[]) => action(MemberActionTypes.STAGE_UPLOAD_GAINING_DATA, payload);
 export const membersPostError = (message: string) => action(MemberActionTypes.POST_ERROR, message);
 export const gainingMembersFetchError = (message: string) => action(MemberActionTypes.GAINING_FETCH_ERROR, message);
 // Remember, you can also pass parameters into an action creator. Make sure to

@@ -83,10 +83,12 @@ public class MemberService {
 
 
     public Iterable<GainingMember> saveAndGetAllGainingMembers(@RequestBody @Valid Iterable<GainingMemberJSON> json) {
+
         Date date = new Date();
         json.forEach((newImport -> {
-            GainingMember existingMember = gainingMemberRepository.findByMbrId(newImport.getMbrId());
-            GainingMember newMemberData = NewGainingMemberModel(date, newImport);
+            SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
+            GainingMember existingMember = gainingMemberRepository.findByMbrId(sqidModel.getSqid());
+            GainingMember newMemberData = NewGainingMemberModel(date, newImport, sqidModel);
 
             if (existingMember == null ) {
                 logIncrement(newMemberData);
@@ -278,10 +280,10 @@ public class MemberService {
         );
     }
 
-    private GainingMember NewGainingMemberModel(Date date, GainingMemberJSON newImport) {
+    private GainingMember NewGainingMemberModel(Date date, GainingMemberJSON newImport, SqidGenerator sqid ) {
         return new GainingMember(
                 newImport.getGainingPas(),
-                newImport.getMbrId(),
+                sqid.getSqid(),
                 newImport.getFullName(),
                 newImport.getGrade(),
                 newImport.getLosingPas(),
