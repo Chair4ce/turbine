@@ -11,6 +11,7 @@ import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
 // This library provides really useful helpers for writing Redux actions in a type-safe manner.
 // For more info: https://github.com/piotrwitek/typesafe-actions
 export const membersFetchRequest = () => action(MemberActionTypes.FETCH_REQUEST);
+export const resetSuccess = () => action(MemberActionTypes.RESET_SUCCESS);
 export const gainingFetchRequest = () => action(MemberActionTypes.FETCH_GAINING_REQUEST);
 export const stagingUpload = (payload: boolean) => action(MemberActionTypes.STAGING_UPLOAD, payload);
 export const stageMemberUploadData = (payload: StagingUploadMemberModel[]) => action(MemberActionTypes.STAGE_UPLOAD_DATA, payload);

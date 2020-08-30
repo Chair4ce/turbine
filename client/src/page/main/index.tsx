@@ -31,11 +31,11 @@ export class MainIndexPage extends React.Component<Props, any> {
         this.props.getUniqueAFSCCollection();
         this.props.getGainingMembers();
         this.props.getDistinctGainingAFSCCollection();
-        setInterval(() => {
-            if (!this.props.staging) {
-                this.props.getMembers();
-            }
-        }, 5000)
+        // setInterval(() => {
+        //     if (!this.props.staging) {
+        //         this.props.getMembers();
+        //     }
+        // }, 5000)
     }
 
     public render() {

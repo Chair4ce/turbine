@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import MaterialTable, {Column} from 'material-table';
 import StagingUploadMemberModel from "../../store/members/models/StagingUploadMemberModel";
-import {connect} from "react-redux";
+import {connect, useDispatch} from "react-redux";
 import {ApplicationState} from "../../store";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {stageMemberUploadData} from "../../store/members";
+import {MemberSerializer} from "../../util/MemberSerializer";
+import {Button} from "@material-ui/core";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -18,7 +22,14 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             border: '2px dashed white',
-        }
+        },
+        uploadBtn: {
+            marginBottom: 10,
+            position: 'fixed',
+            bottom: 0,
+            left: '10px',
+            width: 'calc(100vw - 20px)',
+        },
 
     }),
 );
@@ -49,6 +60,7 @@ interface TableState {
 
 interface Props {
     upload: StagingUploadMemberModel[];
+    callback: (data?: StagingUploadMemberModel[]) => void;
     loading: boolean;
     title: string;
     filtering: boolean,
@@ -61,7 +73,7 @@ interface Props {
 }
 
 export const AlphaReviewTable: React.FC<Props> = props => {
-    // const stagedMembers: StagingUploadMemberModel[] = useSelector(({members}: ApplicationState) => members.upload);
+
     const classes = useStyles();
 
     const [state, setState] = React.useState<TableState>({
@@ -87,9 +99,17 @@ export const AlphaReviewTable: React.FC<Props> = props => {
         data: props.upload,
     });
 
+    function handleUpload() {
+        props.callback(state.data)
+    }
+
+
     // const timer = React.useRef<number>();
 
     return (
+        <div>
+
+
         <MaterialTable
             style={{maxWidth: "unset"}}
             title={props.title}
@@ -179,6 +199,7 @@ export const AlphaReviewTable: React.FC<Props> = props => {
                                     return {...prevState, data};
                                 });
                             }
+
                         }, 300);
                     }),
                 onRowDelete: oldData =>
@@ -196,6 +217,16 @@ export const AlphaReviewTable: React.FC<Props> = props => {
 
 
         />
+            <Button
+                onClick={handleUpload}
+                variant="contained"
+                color="default"
+                className={classes.uploadBtn}
+                startIcon={<CloudUploadIcon/>}
+            >
+                Upload
+            </Button>
+        </div>
 
     );
 };

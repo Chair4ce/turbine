@@ -10,6 +10,7 @@ import {setStaging} from "../../store/members/thunks";
 import {useDispatch} from "react-redux";
 import IconButton from "@material-ui/core/IconButton";
 import SettingsSpinIcon from "../icon/SettingsSpinIcon";
+import {resetSuccess} from "../../store/members";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -118,6 +119,7 @@ const MainHeader: React.FC<Props> = props => {
     const classes = useStyles();
     const [uploadDialog, setUploadDialog] = React.useState(false);
     const handleClickOpen = () => {
+        dispatch(resetSuccess());
         dispatch(setStaging(true));
         setUploadDialog(true);
     };

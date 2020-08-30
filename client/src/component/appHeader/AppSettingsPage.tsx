@@ -10,17 +10,22 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import {TransitionProps} from '@material-ui/core/transitions';
 import {Button, Dialog} from "@material-ui/core";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {useDispatch, useSelector} from "react-redux";
 // @ts-ignore
 import {ApplicationState} from "../../store";
 import {FILE_UPLOAD, FileUpload} from "./FileUpload";
 import {AlphaReviewTableConnected} from "./AlphaReviewTable";
 import StagingUploadMemberModel from "../../store/members/models/StagingUploadMemberModel";
-import {stageMemberUploadData} from "../../store/members";
+import {resetSuccess, stageMemberUploadData} from "../../store/members";
 import Grow from "@material-ui/core/Grow";
 import Collapse from "@material-ui/core/Collapse";
 import Fade from "@material-ui/core/Fade";
+import {saveCurrentRoster} from "../../store/members/thunks";
+import {MemberSerializer} from "../../util/MemberSerializer";
+import CircularProgress from '@material-ui/core/CircularProgress';
+import {green} from '@material-ui/core/colors';
+import clsx from 'clsx';
+import classNames from "classnames";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -58,13 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '100%',
             justifyContent: 'center'
         },
-        uploadBtn: {
-            marginBottom: 10,
-            position: 'fixed',
-            bottom: 0,
-            left: '10px',
-            width: 'calc(100vw - 20px)',
-        },
         table: {
             width: '100%'
         },
@@ -85,7 +83,25 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         fullScreenDialog: {
             alignItems: 'center'
-        }
+        },
+        buttonSuccess: {
+            backgroundColor: green[500],
+            '&:hover': {
+                backgroundColor: green[700],
+            },
+        },
+        wrapper: {
+            margin: theme.spacing(1),
+            position: 'relative',
+        },
+        buttonProgress: {
+            color: green[500],
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            marginTop: -12,
+            marginLeft: -12,
+        },
     }),
 );
 
@@ -104,10 +120,11 @@ interface Props {
 
 export const AppSettingsPage: React.FC<Props> = props => {
     const loading: boolean = useSelector(({members}: ApplicationState) => members.loading);
+    const success: boolean = useSelector(({members}: ApplicationState) => members.success);
     const stagedMembers: StagingUploadMemberModel[] = useSelector(({members}: ApplicationState) => members.upload);
-    const [error, updateError] = useState("");
     const [alphaSuccess, updateAlphaSuccess] = useState(false);
     const [alphaUpload, showAlphaUpload] = useState(false);
+    const [alphaUploaded, setAlphaUploaded] = useState(false);
     const [gainingSuccess, updateGainingSuccess] = useState(false);
     const [upmrSuccess, updateUpmrSuccess] = useState(false);
     const dispatch = useDispatch();
@@ -128,22 +145,45 @@ export const AppSettingsPage: React.FC<Props> = props => {
     }
 
 
-    const handleClose = () => {
+    const handleCallback = (data?: any) => {
+        dispatch(saveCurrentRoster(MemberSerializer.serializeFromStagingToBackend(data)));
+        cleanUp()
+    };
+
+    function cleanUp() {
         dispatch(stageMemberUploadData([]));
+        dispatch(resetSuccess());
+        setAlphaUploaded(true);
         showAlphaUpload(false);
+    }
+
+
+    const handleClose = () => {
+        if(alphaUpload) {
+            handleUploadButtonClick("alpha")
+        } else {
+
+        cleanUp();
         props.callBack();
+        }
+
     };
 
     function handleUploadButtonClick(type: string) {
         switch (type) {
             case "alpha":
-                showAlphaUpload(true);
+                showAlphaUpload(prev => !prev);
                 break;
             case "gaining":
                 break;
         }
 
     };
+
+
+    const AlphaUploadButtonClassname = clsx({
+        [classes.buttonSuccess]: success,
+    });
 
 
     return (
@@ -156,7 +196,7 @@ export const AppSettingsPage: React.FC<Props> = props => {
                             <CloseIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Upload Alpha Roster
+                            Settings
                         </Typography>
                         {/*<Button autoFocus color="inherit" onClick={handleClose}>*/}
                         {/*    save*/}
@@ -178,21 +218,32 @@ export const AppSettingsPage: React.FC<Props> = props => {
                         <List>
                             <ListItem className={classes.listItems}>
                                 <Typography className={classes.listItemContents}>Alpha Roster</Typography>
-                                <Button className={classes.listItemContents} variant={"outlined"}
-                                        onClick={() => handleUploadButtonClick("alpha")}>Upload</Button>
+                                <div className={classes.wrapper}>
+                                    <Button
+                                        variant="outlined"
+                                        className={AlphaUploadButtonClassname}
+                                        disabled={loading}
+                                        onClick={() => handleUploadButtonClick("alpha")}
+                                    >
+                                        Upload
+                                    </Button>
+                                    {loading && <CircularProgress size={24} className={classes.buttonProgress}/>}
+                                </div>
+                                {/*<Button className={classes.listItemContents} variant={"outlined"}*/}
+                                {/*        onClick={() => handleUploadButtonClick("alpha")}>Upload</Button>*/}
                             </ListItem>
 
-                            <ListItem className={classes.listItems}>
-                                <Typography className={classes.listItemContents}>Gaining Roster</Typography>
-                                <Button className={classes.listItemContents} variant={"outlined"}
-                                        onClick={() => handleUploadButtonClick("gaining")}>Upload</Button>
-                            </ListItem>
+                            {/*<ListItem className={classes.listItems}>*/}
+                            {/*    <Typography className={classes.listItemContents}>Gaining Roster</Typography>*/}
+                            {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
+                            {/*            onClick={() => handleUploadButtonClick("gaining")}>Upload</Button>*/}
+                            {/*</ListItem>*/}
 
-                            <ListItem className={classes.listItems}>
-                                <Typography className={classes.listItemContents}>UMPR Roster</Typography>
-                                <Button className={classes.listItemContents} variant={"outlined"}
-                                        onClick={() => handleUploadButtonClick("upmr")}>Upload</Button>
-                            </ListItem>
+                            {/*<ListItem className={classes.listItems}>*/}
+                            {/*    <Typography className={classes.listItemContents}>UMPR Roster</Typography>*/}
+                            {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
+                            {/*            onClick={() => handleUploadButtonClick("upmr")}>Upload</Button>*/}
+                            {/*</ListItem>*/}
                         </List>
                     </Fade>
                 </Collapse>
@@ -202,20 +253,10 @@ export const AppSettingsPage: React.FC<Props> = props => {
 
                         {stagedMembers.length > 0 ?
                             <div className={classes.uploadContent}>
-
                                 <AlphaReviewTableConnected loading={false} title={"Review Upload"} filtering={true}
                                                            edit={true}
                                                            grouping={true} search={true} selection={false}
-                                                           exportButton={false}/>
-                                <Button
-                                    onClick={handleClose}
-                                    variant="contained"
-                                    color="default"
-                                    className={classes.uploadBtn}
-                                    startIcon={<CloudUploadIcon/>}
-                                >
-                                    Upload
-                                </Button>
+                                                           exportButton={false} callback={handleCallback}/>
                             </div>
                             :
                             <FileUpload parentCallback={childCallBackHandler}/>}

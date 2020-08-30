@@ -4,9 +4,7 @@ import SideBar, {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
-import {Container} from "@material-ui/core";
 import TurbineIris from "../../component/icon/TurbineIris";
-import Iris from "../../component/icon/iris";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme: Theme) =>

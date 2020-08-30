@@ -10,6 +10,7 @@ import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
 // Type-safe initialState!
 export const initialState: MembersState = {
     data: [] as MemberModel[],
+    success: false,
     upload: [] as StagingUploadMemberModel[],
     gainingData: [] as GainingMemberModel[],
     loading: false,
@@ -31,6 +32,12 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
                 loading: true
             };
         }
+        case MemberActionTypes.RESET_SUCCESS: {
+            return {
+                ...state,
+                success: false
+            };
+        }
         case MemberActionTypes.STAGE_UPLOAD_DATA: {
             return {
                 ...state,
@@ -50,7 +57,7 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             };
         }
         case MemberActionTypes.FETCH_SUCCESS: {
-            return { ...state, loading: false, data: action.payload};
+            return { ...state, loading: false, success: true, data: action.payload};
         }
         case MemberActionTypes.GAINING_FETCH_SUCCESS: {
             return { ...state, gainingLoading: false, gainingData: action.payload};

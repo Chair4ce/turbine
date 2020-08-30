@@ -4,6 +4,7 @@ import {Paper} from "@material-ui/core";
 import RootRef from "@material-ui/core/RootRef";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {saveCurrentRoster} from "../../store/members/thunks";
+import ErrorIcon from '@material-ui/icons/Error';
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
 import {useDispatch, useSelector} from "react-redux";
@@ -12,6 +13,8 @@ import {MemberSerializer} from "../../util/MemberSerializer";
 import MemberModel from "../../store/members/models/MemberModel";
 import {stageMemberUploadData} from "../../store/members";
 import UploadMemberModel from "../../store/members/models/UploadMemberModel";
+import Typography from "@material-ui/core/Typography";
+import ErrorDialog from "./ErrorDialog";
 
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -28,6 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             border: '2px dashed white',
+        },
+        errorMsg: {
+            display: 'flex',
+            width: 300,
+            justifyContent: 'center',
+            alignItems: 'center'
         }
 
     }),
@@ -47,9 +56,12 @@ export const FileUpload: React.FC<Props> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const [error, updateError] = useState("");
+ function handleCallback() {
+     updateError("");
+ }
 
     const onDrop = useCallback(acceptedFiles => {
-        console.log("OOOOoooo Files! gimme gimme")
         acceptedFiles.forEach((file: any) => {
                 let fileName = file.name;
 
@@ -62,7 +74,6 @@ export const FileUpload: React.FC<Props> = props => {
                     }).then(((rows: any, errors: any) => {
                         if (errors) {
                             props.parentCallback(FILE_UPLOAD_ACTIONS.ALPHA_SUCCESS,false)
-
                         } else {
                             props.parentCallback(FILE_UPLOAD_ACTIONS.ALPHA_SUCCESS,true)
                             dispatch(stageMemberUploadData(MemberSerializer.serializeToStaging(MemberModel.filterEnlistedStagingUploadOnly(rows.rows))));
@@ -70,7 +81,7 @@ export const FileUpload: React.FC<Props> = props => {
                         ;
                     }))
                 } else {
-                    // updateError("Please convert file to xlsm before uploading again, thank you!")
+                    updateError("Please convert file to xlsm before uploading again")
                 }
 
 
@@ -97,10 +108,11 @@ export const FileUpload: React.FC<Props> = props => {
         <RootRef rootRef={ref}>
             <Paper {...rootProps} className={classes.fileDropArea}>
                 <input {...getInputProps()} />
+                {error.length > 0 ? <ErrorDialog title={"File Type Error"} error={error} callback={handleCallback}/> : null}
                 {
                     isDragActive ?
                         <p>Drop the files here ...</p> :
-                        <p>Drag 'n' drop some files here, or click to select files</p>
+                         <p>Drag 'n' drop some files here, or click to select files</p>
                 }
             </Paper>
         </RootRef>
@@ -150,6 +162,11 @@ const schema = {
     'DUTY_START_DATE': {
         prop: 'dutyStartDate',
         type: Date,
+        required: false
+    },
+    'DUTY_PHONE': {
+        prop: 'dutyPhone',
+        type: String,
         required: false
     },
     'DOR': {

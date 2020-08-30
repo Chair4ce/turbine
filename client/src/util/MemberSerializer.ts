@@ -17,13 +17,37 @@ function convertToHash(mbrId: string) {
     if(mbrId.length < 9) mbrId = "1" + mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
-    console.log("before: " + oldMbrId + " After: " + mbrId);
     return crypto.createHash('sha1').update(mbrId.replace(/-/g,"")).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1, 10);
 }
 
 export class MemberSerializer {
     static serializeToBackend(items: any): UploadMemberModel[] {
+        if (items.map) {
+            return items.map((item: any) => {
+                return new UploadMemberModel(
+                    convertToHash(item.ssan ? item.ssan : null),
+                    item.fullName ? item.fullName : null,
+                    item.grade ? item.grade : null ,
+                    item.assignedPas ? item.assignedPas : null ,
+                    item.dafsc ? item.dafsc : null ,
+                    item.officeSymbol ? item.officeSymbol : null,
+                    item.dutyTitle ? item.dutyTitle : null,
+                    item.dutyStartDate ? item.dutyStartDate : null,
+                    item.dutyPhone ? item.dutyPhone : null,
+                    item.supvName ? item.supvName : null,
+                    item.supvBeginDate ? item.supvBeginDate: null,
+                    item.dateArrivedStation ? item.dateArrivedStation : null,
+                    item.rnltd ? item.rnltd : null,
+                    item.dor ? item.dor : null,
+                    item.deros ? item.deros : null,
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeFromStagingToBackend(items: any): StagingUploadMemberModel[] {
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadMemberModel(

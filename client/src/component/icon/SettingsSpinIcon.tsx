@@ -64,7 +64,7 @@ cursor: pointer;
  
  .inner {
  position: absolute;
- fill: #777777;
+ fill: #56899F;
  transform-origin: 50% 14px;
  }
  

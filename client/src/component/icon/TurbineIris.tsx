@@ -66,12 +66,12 @@ const TurbineIris = () => {
                     className={"iris"}
                     d={pathC}
                     fill="#56899F">
-                    <animateTransform
-                        type="rotate"
-                        attributeName="transform"
-                        from="0 -2 -1" to="360 0 0"
-                        begin="10s" dur="30s"
-                        repeatCount="indefinite"/>
+                    {/*<animateTransform*/}
+                    {/*    type="rotate"*/}
+                    {/*    attributeName="transform"*/}
+                    {/*    from="0 -2 -1" to="360 0 0"*/}
+                    {/*    begin="10s" dur="30s"*/}
+                    {/*    repeatCount="indefinite"/>*/}
                     <animate
                         attributeType="XML"
                         attributeName="display"
