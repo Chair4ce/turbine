@@ -332,6 +332,13 @@ public class PositionController {
     }
 
     @CrossOrigin
+    @RequestMapping(path = "/byAfscAuth/{afsc}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<PositionAssignment> getPositionsForAfscAuth(@Valid @PathVariable String afsc) {
+        return positionAssignmentRepository.findAllByAfscGroup(afsc);
+    }
+
+    @CrossOrigin
     @GetMapping(path = "/manning_chart/generate")
     void generateManningChartData() {
         List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
@@ -352,7 +359,12 @@ public class PositionController {
 
                 List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
                 for (AFSCIncrementLog increment : increments) {
-                    assigned.decrementAndGet();
+                    if (increment.getIncrementType() == "departure") {
+                        assigned.decrementAndGet();
+                    }
+                    if (increment.getIncrementType() == "projected arrival") {
+                        assigned.incrementAndGet();
+                    }
                 }
 
                 afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
@@ -531,17 +543,16 @@ public class PositionController {
                 if (newImport.getGrdAuth() != null) {
                     if (isEnlisted(newImport.getGrdAuth())) {
                         if (newImport.getMbrIdAssigned() != null) {
-                            SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
-                            if (memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName()) != null) {
-                                Member assignedMember = memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName());
+                            if (memberRepository.findByMbrIdStartingWith(newImport.getMbrIdAssigned()) != null) {
+                                Member assignedMember = memberRepository.findByMbrIdStartingWith(newImport.getMbrIdAssigned());
                                 int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
                                 int derosYear = new DateTime(assignedMember.getDeros()).getYear();
 
-                                if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
+                                if (assignedMember.getDeros() != null) {
                                     AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
                                             assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
                                             assignedMember.getMbrId(),
-                                            assignedMember.getDafsc().replaceAll("-", ""),
+                                            newImport.getAfscAuth().replaceAll("-", ""),
                                             new DateTime(assignedMember.getDeros()).toDate(),
                                             derosMonth,
                                             derosYear,
@@ -563,12 +574,17 @@ public class PositionController {
                                         newImport.getPosNr(),
                                         newImport.getGradeAssigned(),
                                         newImport.getDafscAssigned(),
-                                        sqidModel.getLastName() + ", " + sqidModel.getFirstName(),
-                                        assignedMember.getId().toString(),
+                                        newImport.getNameAssigned(),
+                                        assignedMember.getMbrId(),
                                         date));
 
                             }
                         } else {
+                            SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
+                            if(memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName()) != null){
+
+                            }
+
                             positionRepository.save(new Position(
                                     newImport.getPasCode(),
                                     newImport.getOrgStructureId(),

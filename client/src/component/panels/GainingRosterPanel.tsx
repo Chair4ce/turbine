@@ -38,31 +38,20 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         panel: {
             marginRight: 10,
-            display: 'block',
             position: 'relative',
             width: '100%',
-            height: '100%',
+            height: 'calc(100vh - 148px)',
             minWidth: 500,
-            float: 'left',
-            font: 'inherit',
-            fontSize: '100%',
-            verticalAlign: 'baseline',
-            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
         },
         container: {
-            boxSizing: 'border-box',
-            position: 'absolute',
-            width: '100%',
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
-            height: '100%',
-            overflowY: 'hidden'
         },
         panel_content: {
             display: 'block',
             position: 'absolute',
             width: '100%',
-            height: 'calc(100vh - 99px)',
+            height: '100%',
         },
         item_container: {
             display: 'block',
@@ -77,39 +66,14 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         panelHeader: {
             display: 'flex',
-            minWidth: 230,
-            width: '100%',
-            alignItems: 'center',
-            flexGrow: 0,
-            flexShrink: 1,
-            margin: 0,
-            border: 0,
             height: 54,
             padding: '0 3px 0 10px',
             background: 'rgb(44, 45, 47)',
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
-            boxSizing: 'border-box',
-            lineHeight: 15,
-        },
-        fileDropArea: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 300,
-            height: 200,
-            border: '2px dashed white',
         },
         input: {},
-        fileDropContents: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
 
-        uploadIcon: {},
-        fileDropDialog: {
-            padding: 10
-        },
         uploadButtonGrp: {
             display: 'flex',
             alignItems: 'center',
@@ -129,13 +93,6 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             pointerEvents: 'none',
         },
-        fabProgress: {
-            color: green[500],
-            position: 'absolute',
-            top: -6,
-            left: -6,
-            zIndex: 1,
-        },
         buttonProgress: {
             color: green[500],
             position: 'absolute',
@@ -151,23 +108,11 @@ const useStyles = makeStyles((theme: Theme) =>
         fileDropSuccess: {
             pointerEvents: 'none',
         },
-        missingHeaderMsg: {
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
         alertIcon: {
             margin: theme.spacing(1),
         },
         buttonLoading: {
             pointerEvents: 'none',
-        },
-        morDots: {
-            marginRight: 4,
-            height: 44,
         },
         inputArea: {},
         form: {
@@ -442,10 +387,6 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                 <option value={2}>AFSC</option>
                             </Select>
                         </FormControl>
-                        <Button className={classes.morDots} aria-controls="fade-menu" aria-haspopup="true"
-                                onClick={handleClick}>
-                            <MoreVertIcon/>
-                        </Button>
                         <Menu
                             id="fade-menu"
                             anchorEl={anchorEl}

@@ -48,31 +48,6 @@ export class MemberSerializer {
         return [];
     }
 
-    static serializeStagedMembersToBackend(items: any): StagingUploadMemberModel[] {
-        if (items.map) {
-            return items.map((item: any) => {
-                return new UploadMemberModel(
-                    convertToHash(item.ssan ? item.ssan : null),
-                    item.fullName ? item.fullName : null,
-                    item.grade ? item.grade : null ,
-                    item.assignedPas ? item.assignedPas : null ,
-                    item.dafsc ? item.dafsc : null ,
-                    item.officeSymbol ? item.officeSymbol : null,
-                    item.dutyTitle ? item.dutyTitle : null,
-                    item.dutyStartDate ? item.dutyStartDate : null,
-                    item.dutyPhone ? item.dutyPhone : null,
-                    item.supvName ? item.supvName : null,
-                    item.supvBeginDate ? item.supvBeginDate: null,
-                    item.dateArrivedStation ? item.dateArrivedStation : null,
-                    item.rnltd ? item.rnltd : null,
-                    item.dor ? item.dor : null,
-                    item.deros ? item.deros : null,
-                );
-            });
-        }
-        return [];
-    }
-
     static serializeMembersToStaging(items: StagingUploadMemberModel[]) {
         if (items.map) {
             return items.map((item: any, index: number) => {
@@ -104,13 +79,13 @@ export class MemberSerializer {
                 return new StagingUploadGainingModel(
                     index + 1,
                     item.gainingPas ? item.gainingPas : null,
-                    convertToHash(item.mbrId ? item.mbrId : 0),
+                    item.mbrId ? convertToHash(item.mbrId) : null,
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    item.sponsorId ? item.sponsorId : null,
+                    item.sponsorId ? convertToHash(item.sponsorId) : null,
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,
@@ -152,13 +127,13 @@ export class MemberSerializer {
             return items.map((item: any) => {
                 return new UploadGainingMemberModel(
                     item.gainingPas ? item.gainingPas : null,
-                    convertToHash(item.mbrId ? item.mbrId : 0),
+                    item.mbrId ? convertToHash(item.mbrId) : null,
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    item.sponsorId ? item.sponsorId : null,
+                    item.sponsorId ? convertToHash(item.sponsorId) : null,
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,
@@ -173,13 +148,13 @@ export class MemberSerializer {
             return items.map((item: any) => {
                 return new UploadGainingMemberModel(
                     item.gainingPas ? item.gainingPas : null,
-                    convertToHash(item.mbrId ? item.mbrId : 0),
+                    item.mbrId ? item.mbrId : null,
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    item.sponsorId ? item.sponsorId : null,
+                    item.sponsorId ? item.sponsorId : 0,
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,

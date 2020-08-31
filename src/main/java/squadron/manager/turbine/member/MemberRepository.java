@@ -8,7 +8,7 @@ import java.util.List;
 
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-
+    Member findByMbrIdStartingWith(String prefix);
     Member findByMbrId(String mbrId);
     Member findMemberByFirstNameAndLastName(String first, String last);
     @Query("select DISTINCT dafsc from Member WHERE dafsc IS NOT null")

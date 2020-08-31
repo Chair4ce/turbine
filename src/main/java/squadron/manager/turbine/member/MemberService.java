@@ -86,11 +86,13 @@ public class MemberService {
 
         Date date = new Date();
         json.forEach((newImport -> {
+
+
             SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
             GainingMember existingMember = gainingMemberRepository.findByMbrId(sqidModel.getSqid());
             GainingMember newMemberData = NewGainingMemberModel(date, newImport, sqidModel);
 
-            if (existingMember == null ) {
+            if (existingMember == null) {
                 logIncrement(newMemberData);
                 gainingMemberRepository.save(newMemberData);
             } else {
@@ -280,7 +282,8 @@ public class MemberService {
         );
     }
 
-    private GainingMember NewGainingMemberModel(Date date, GainingMemberJSON newImport, SqidGenerator sqid ) {
+    private GainingMember NewGainingMemberModel(Date date, GainingMemberJSON newImport, SqidGenerator sqid) {
+
         return new GainingMember(
                 newImport.getGainingPas(),
                 sqid.getSqid(),
@@ -325,7 +328,17 @@ public class MemberService {
         existingMember.setLosingPas(importingMember.getLosingPas());
         existingMember.setLosingPasCleartext(importingMember.getLosingPasCleartext());
         existingMember.setDafsc(importingMember.getDafsc());
-        existingMember.setSponsorId(importingMember.getSponsorId());
+
+        if (importingMember.getSponsorId() != null) {
+            if (memberRepository.findByMbrIdStartingWith(importingMember.getSponsorId()) != null) {
+                Member sponsor = memberRepository.findByMbrIdStartingWith(importingMember.getSponsorId());
+                if (existingMember.getSponsorId() != sponsor.getMbrId()) {
+                    existingMember.setSponsorId(sponsor.getMbrId());
+                }
+            }
+        } else {
+            existingMember.setSponsorId(importingMember.getSponsorId());
+        }
         existingMember.setDor(importingMember.getDor());
         existingMember.setDos(importingMember.getDos());
         existingMember.setRnltd(importingMember.getRnltd());

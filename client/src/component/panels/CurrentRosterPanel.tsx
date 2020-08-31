@@ -4,23 +4,10 @@ import classNames from "classnames";
 import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
 import PublishIcon from '@material-ui/icons/Publish';
-import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
-import CheckIcon from '@material-ui/icons/Check';
-import SaveIcon from '@material-ui/icons/Save';
-import clsx from 'clsx';
 import SearchIcon from '@material-ui/icons/Search';
 // @ts-ignore
 import {
     Button,
-    CircularProgress,
-    Container,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogProps,
-    DialogTitle,
-    Fab,
     Fade,
     FormControl,
     InputAdornment,
@@ -31,7 +18,6 @@ import {
     TextField
 } from "@material-ui/core";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
 import {useDispatch, useSelector} from "react-redux";
 import MemberModel from "../../store/members/models/MemberModel";
@@ -54,11 +40,11 @@ const useStyles = makeStyles((theme: Theme) =>
             marginRight: 10,
             position: 'relative',
             width: '100%',
+            height: 'calc(100vh - 148px)',
             minWidth: 500,
         },
         panelHeader: {
             display: 'flex',
-
             height: 54,
             padding: '0 3px 0 10px',
             background: 'rgb(44, 45, 47)',
@@ -69,24 +55,7 @@ const useStyles = makeStyles((theme: Theme) =>
             borderTopLeftRadius: 4,
             borderTopRightRadius: 4,
         },
-        fileDropArea: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: 300,
-            height: 200,
-            border: '2px dashed white',
-        },
         input: {},
-        fileDropContents: {
-            display: 'flex',
-            flexDirection: 'column',
-        },
-
-
-        fileDropDialog: {
-            padding: 10
-        },
         uploadButtonGrp: {
             display: 'flex',
             alignItems: 'center',
@@ -99,71 +68,10 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: theme.spacing(1),
             position: 'relative',
         },
-        buttonSuccess: {
-            backgroundColor: green[500],
-            '&:hover': {
-                backgroundColor: green[700],
-            },
-            pointerEvents: 'none',
-        },
-        fabProgress: {
-            color: green[500],
-            position: 'absolute',
-            top: -6,
-            left: -6,
-            zIndex: 1,
-        },
-        buttonProgress: {
-            color: green[500],
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            marginTop: -12,
-            marginLeft: -12,
-
-        },
-        selectEmpty: {
-            marginTop: theme.spacing(2),
-        },
-        fileDropSuccess: {
-            pointerEvents: 'none',
-        },
-        missingHeaderMsg: {
-            width: '100%',
-            position: 'relative',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-        },
         alertIcon: {
             margin: theme.spacing(1),
         },
-        buttonLoading: {
-            pointerEvents: 'none',
-        },
-        morDots: {
-            marginRight: 4,
-            height: 44,
-            borderRadius: 4,
-            transition: 'background-color 100ms ease-in',
-            '&:hover': {
-                backgroundColor: 'rgba(119,119,119,0.27)',
-            }
-        },
         inputArea: {},
-        form: {
-            display: 'flex',
-            flexDirection: 'column',
-            margin: 'auto',
-            width: 'fit-content',
-        },
-        formControl: {
-            marginTop: theme.spacing(2),
-            minWidth: 120,
-            justifyContent: 'center',
-            alignItems: 'center',
-        },
         formControlLabel: {
             marginTop: theme.spacing(1),
         },
@@ -278,15 +186,6 @@ const useStyles = makeStyles((theme: Theme) =>
                 backgroundColor: 'rgba(119,119,119,0.27)',
             }
         },
-        uploadBtnArea: {
-            height: 44,
-            borderRadius: 4,
-            transition: 'background-color 100ms ease-in',
-            '&:hover': {
-                backgroundColor: 'rgba(119,119,119,0.27)',
-            }
-        },
-        uploadIcon: {},
         item: {
             display: 'flex',
             width: '100%',
@@ -300,14 +199,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         searchInputLabel: {
             fontFamily: 'Rambla'
-        },
-        paper: {
-            position: 'absolute',
-            width: 400,
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
         },
         closeButton: {
 
