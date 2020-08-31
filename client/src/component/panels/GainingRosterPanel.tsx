@@ -5,23 +5,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import {ROSTER_MENU_SELECT_ACTION} from "../menus/RosterMenu";
 import PublishIcon from '@material-ui/icons/Publish';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
-import CheckIcon from '@material-ui/icons/Check';
-import SaveIcon from '@material-ui/icons/Save';
-import clsx from 'clsx';
 // @ts-ignore
-import readXlsxFile from "read-excel-file";
 import {
     Button,
-    CircularProgress,
-    Container,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogProps,
-    DialogTitle,
-    Fab,
     Fade,
     FormControl,
     InputAdornment,
@@ -35,15 +21,12 @@ import {
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {green} from "@material-ui/core/colors";
 import CurrentRosterRow from "./rows/PanelRow";
-import {useDispatch, useSelector} from "react-redux";
+import {useSelector} from "react-redux";
 import FuzzySearch from 'fuzzy-search';
-import {saveGainingMembers} from "../../store/members/thunks";
 import GenericGainingGroupCollectionModel from "../../store/members/models/GenericGainingGroupCollectionModel";
 import UniqueGainingAFSCRows from "./rows/UniqueGainingAFSCRows";
-import SkeletonPanelC from "./SkeletonPanelC";
 import GainingMemberModel from "../../store/members/models/GainingMemberModel";
 import SearchIcon from "@material-ui/icons/Search";
-import GenericGroupCollectionModel from "../../store/members/models/GenericGroupCollectionModel";
 import {ApplicationState} from "../../store";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -324,64 +307,7 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
-const schema = {
-    'GAINING_PAS': {
-        prop: 'gainingPas',
-        type: String,
-        required: true
-    },
-    'SSAN': {
-        prop: 'mbrId',
-        type: String,
-        required: true
-    },
-    'FULL_NAME': {
-        prop: 'fullName',
-        type: String,
-        required: true
-    },
-    'GRADE': {
-        prop: 'grade',
-        type: String,
-        required: false
-    },
-    'LOSING_PAS': {
-        prop: 'losingPas',
-        type: String,
-        required: false
-    },
-    'LOSING_PAS_CLEARTEXT': {
-        prop: 'losingPasCleartext',
-        type: String,
-        required: false
-    },
-    'DAFSC': {
-        prop: 'dafsc',
-        type: String,
-        required: false
-    },
-    'SPONSOR_SSAN': {
-        prop: 'sponsorId',
-        type: String,
-        required: false
-    },
-    'DOR': {
-        prop: 'dor',
-        type: Date,
-        required: false
-    },
-    'DOS': {
-        prop: 'dos',
-        type: Date,
-        required: false
-    },
-    'RNLTD': {
-        prop: 'rnltd',
-        type: Date,
-        required: false
-    },
 
-}
 
 interface Props {
     callback: (type: string) => void;
@@ -392,16 +318,10 @@ const GainingRosterPanel: React.FC<Props> = props => {
     const members: GainingMemberModel[] = useSelector(({members}: ApplicationState) => members.gainingData);
     const loading: boolean = useSelector(({members}: ApplicationState) => members.gainingLoading);
     const collectionAFSC: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
-    const dispatch = useDispatch();
     const classes = useStyles();
-
-    const browseInputRef: any = React.createRef();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
     const [open, setOpen] = React.useState(false);
-    const [fullWidth, setFullWidth] = React.useState(true);
-    const [maxWidth, setMaxWidth] = React.useState<DialogProps['maxWidth']>('xs');
-    const [success, updateSuccess] = useState(false);
     const [sortByGrade, toggleSortByGrade] = useState(false);
     const [sortByAFSC, toggleSortByAFSC] = useState(false);
     const [searchAll, updateFuzzyAll] = useState("");
@@ -411,24 +331,9 @@ const GainingRosterPanel: React.FC<Props> = props => {
     });
 
     const Allsearcher = new FuzzySearch(members, ['fullName'], {sort: true})
-    // const AFSCsearcher = new FuzzySearch(collectionAFSC, ['genericGroup'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
-    // const searchResultAFSC = AFSCsearcher.search(searchAFSC);
 
-
-    // const loading = useSelector(({importChanges}: ApplicationState) => importChanges.loading);
-    // const success = useSelector(({importChanges}: ApplicationState) => importChanges.success);
-
-    const buttonClassname = clsx({
-        [classes.buttonSuccess]: success,
-        [classes.buttonLoading]: loading,
-    });
-
-    const FileDropClassname = clsx({
-        [classes.fileDropSuccess]: success,
-        [classes.buttonLoading]: loading,
-    });
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -450,31 +355,6 @@ const GainingRosterPanel: React.FC<Props> = props => {
         setOpen(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
-    };
-
-
-    function handleFile(e: HTMLInputElement) {
-        if (e.files) {
-            const data = readXlsxFile(e.files[0], {
-                schema, transformData(data: any) {
-                    return data.splice(2, data.length - 3)
-                }
-            }).then(((rows: any, errors: any) => {
-                if (errors)
-                {console.log(errors.rows, errors);
-                    updateSuccess(false);
-                } else {
-                    dispatch(saveGainingMembers(rows.rows));
-                    updateSuccess(true);
-                }
-            }));
-
-            console.log(data);
-        }
-        handleClose();
-    }
 
     function handleFuzzy(event: any) {
         if (!sortByAFSC && !sortByGrade && event.target.value.length !== "") {
@@ -512,90 +392,10 @@ const GainingRosterPanel: React.FC<Props> = props => {
     };
 
 
-    const handleButtonClick = (e: any) => {
-        handleFile(e);
-    };
 
     return (
 
         <div className={classes.panel}>
-            <React.Fragment>
-                <Dialog
-                    fullWidth={fullWidth}
-                    maxWidth={maxWidth}
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="max-width-dialog-title"
-                >
-                    <DialogTitle id="max-width-dialog-title">Upload Gaining Roster</DialogTitle>
-                    <DialogContent>
-                        <DialogContentText>
-                            Compatable file type: '.xlsx'
-                        </DialogContentText>
-                        <form className={classes.form} noValidate>
-                            <FormControl className={classes.formControl}>
-                                <input className={classes.inputArea} type="file" id="raised-button-file"
-                                       style={{display: 'none'}} onChange={(e) => {
-                                    const {target} = e;
-                                    if (target.value.length > 0) {
-                                        handleFile(e.target)
-                                    }
-                                }}
-                                       ref={browseInputRef}/>
-
-                                <div className={classes.root}>
-                                    <Container className={classNames(classes.fileDropArea, FileDropClassname)}
-                                               onDragEnter={(e: any) => {
-                                                   let evt = e as Event;
-                                                   evt.preventDefault();
-                                               }}
-                                               onDragOver={(e: any) => {
-                                                   let evt = e as Event;
-                                                   evt.preventDefault();
-                                               }}
-                                               onDrop={handleButtonClick}
-                                    >
-
-                                        <label htmlFor="raised-button-file" className={classes.fileDropContents}>
-                                            {(loading || success) &&
-                                            <div className={classes.wrapper}>
-                                                <Fab
-                                                    aria-label="save"
-                                                    color="primary"
-                                                    className={buttonClassname}
-                                                >
-                                                    {success ? <CheckIcon/> : <SaveIcon/>}
-                                                </Fab>
-                                                {(loading) &&
-                                                <CircularProgress size={68} className={classes.fabProgress}/>}
-                                            </div>
-                                            }
-
-                                            {(!loading && !success) && <div className={classes.uploadButtonGrp}>
-                                                <CloudUploadOutlinedIcon color={"primary"} fontSize={"large"}
-                                                                         className={classes.uploadIcon}/>
-                                                <span id="simple-modal-dialog"
-                                                      className={classes.fileDropDialog}>Do not Drag and Drop</span>
-                                                < Button variant={"outlined"} component={"span"}
-                                                         className={classes.button}>
-                                                    Please Browse
-                                                </Button>
-                                            </div>}
-                                        </label>
-                                    </Container>
-
-                                </div>
-                            </FormControl>
-                        </form>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </React.Fragment>
-
             <div className={classNames(classes.container)}>
                 <header className={classNames(classes.panelHeader)}>
 
@@ -681,20 +481,12 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     gradeClassName={row.grade}
                                     data={row}
                                 />)}
-
-                            {/*{members && sortByGrade &&*/}
-                            {/*<RowsByGainingRankContainer data={MemberModel.sortGainingDorAscending(searchResultAll)}*/}
-                            {/*                            bigSticky={false}/>}*/}
                             {members && sortByAFSC && collectionAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
                                 <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
                                                        className={'dafsc'}/>)}
                             <div className={classNames(classes.endOfList, 'preview')}>
-                                {/*{data && !sortByGrade && !sortBySkill && sortByAFSC && <span className={classes.totalMembersCount}>*/}
-                                {/*    {'Total: ' + searchResultAFSC.length}*/}
-                                {/*</span> }*/}
                             </div>
                         </div>
-                        {/*{fileData ? <div className={classNames('end_of_list', 'preview')}/> : ''}*/}
                     </section>
                 </div>
             </div>

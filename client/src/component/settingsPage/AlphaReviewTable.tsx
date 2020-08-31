@@ -222,7 +222,7 @@ export const AlphaReviewTable: React.FC<Props> = props => {
                 className={classes.uploadBtn}
                 startIcon={<CloudUploadIcon/>}
             >
-                Upload
+                Save
             </Button>
         </div>
 

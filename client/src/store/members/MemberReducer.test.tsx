@@ -132,15 +132,16 @@ describe('reducer', () => {
             data: members,
             successAlpha: true,
             successGaining: false,
-            upload: [],
-            staging: false,
+            uploadStagingMember: [],
+            uploadStagingGaining: [],
             gainingData: [],
+            loading: false,
+            staging: false,
             gainingLoading: false,
-            errors: undefined,
             genericAFSCList: [],
             genericGainingAFSCList: [],
             officeCollection: [],
-            loading: false
+            errors: undefined,
         });
     });
 

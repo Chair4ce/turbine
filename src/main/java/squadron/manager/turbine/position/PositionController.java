@@ -20,6 +20,9 @@ import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
 import squadron.manager.turbine.positionAssignment.PositionAssignment;
 import squadron.manager.turbine.positionAssignment.PositionAssignmentRepository;
+import squadron.manager.turbine.unAssigned.Unassigned;
+import squadron.manager.turbine.unAssigned.UnassignedJSON;
+import squadron.manager.turbine.unAssigned.UnassignedRepository;
 
 import javax.transaction.Transactional;
 import javax.validation.Valid;
@@ -46,6 +49,7 @@ public class PositionController {
     private AFSCIncrementRepository afscIncrementRepository;
     private AfscChartRepository afscChartRepository;
     private PositionAssignmentRepository positionAssignmentRepository;
+    private UnassignedRepository unassignedRepository;
 
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository,
@@ -53,15 +57,17 @@ public class PositionController {
                                           GainingMemberRepository gainingRepository,
                                           PositionRepository positionRepository,
                                           AfscChartRepository afscChartRepository,
-                                          PositionAssignmentRepository positionAssignmentRepository) {
+                                          PositionAssignmentRepository positionAssignmentRepository,
+                                          UnassignedRepository unassignedRepository
+    ) {
         this.memberRepository = memberRepository;
         this.afscIncrementRepository = afscIncrementRepository;
         this.gainingRepository = gainingRepository;
         this.positionRepository = positionRepository;
         this.afscChartRepository = afscChartRepository;
         this.positionAssignmentRepository = positionAssignmentRepository;
+        this.unassignedRepository = unassignedRepository;
     }
-
 
     @CrossOrigin
     @Transactional
@@ -406,7 +412,7 @@ public class PositionController {
         }
     }
 
-   static public boolean isEnlisted(String grd) {
+    static public boolean isEnlisted(String grd) {
         switch (grd) {
             case "AMN":
                 return true;
@@ -520,29 +526,49 @@ public class PositionController {
                 positionRepository.deleteAllByPasCode(pasCode);
             }
 
+
             json.forEach((newImport -> {
+                if (newImport.getGrdAuth() != null) {
+                    if (isEnlisted(newImport.getGrdAuth())) {
+                        if (newImport.getMbrIdAssigned() != null) {
+                            SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
+                            if (memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName()) != null) {
+                                Member assignedMember = memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName());
+                                int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
+                                int derosYear = new DateTime(assignedMember.getDeros()).getYear();
 
-                if (isEnlisted(newImport.getGrdAuth())) {
-                    if (newImport.getMbrIdAssigned() != null) {
-                        SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
-                        if (memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName()) != null) {
-                            Member assignedMember = memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName());
-                            int derosMonth = new DateTime(assignedMember.getDeros()).getMonthOfYear();
-                            int derosYear = new DateTime(assignedMember.getDeros()).getYear();
+                                if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
+                                    AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
+                                            assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
+                                            assignedMember.getMbrId(),
+                                            assignedMember.getDafsc().replaceAll("-", ""),
+                                            new DateTime(assignedMember.getDeros()).toDate(),
+                                            derosMonth,
+                                            derosYear,
+                                            -1,
+                                            "departure"
+                                    );
+                                    afscIncrementRepository.save(new_departure_log);
+                                }
+                                positionRepository.save(new Position(
+                                        newImport.getPasCode(),
+                                        newImport.getOrgStructureId(),
+                                        newImport.getAfscAuth(),
+                                        newImport.getGrdAuth(),
+                                        newImport.getCurrQtr(),
+                                        newImport.getProjQtr1(),
+                                        newImport.getProjQtr2(),
+                                        newImport.getProjQtr3(),
+                                        newImport.getProjQtr4(),
+                                        newImport.getPosNr(),
+                                        newImport.getGradeAssigned(),
+                                        newImport.getDafscAssigned(),
+                                        sqidModel.getLastName() + ", " + sqidModel.getFirstName(),
+                                        assignedMember.getId().toString(),
+                                        date));
 
-                            if (assignedMember.getDeros() != null && assignedMember.getDafsc() != null) {
-                                AFSCIncrementLog new_departure_log = new AFSCIncrementLog(
-                                        assignedMember.getAssignedPas() != null ? assignedMember.getAssignedPas() : "No Data",
-                                        assignedMember.getMbrId(),
-                                        assignedMember.getDafsc().replaceAll("-", ""),
-                                        new DateTime(assignedMember.getDeros()).toDate(),
-                                        derosMonth,
-                                        derosYear,
-                                        -1,
-                                        "departure"
-                                );
-                                afscIncrementRepository.save(new_departure_log);
                             }
+                        } else {
                             positionRepository.save(new Position(
                                     newImport.getPasCode(),
                                     newImport.getOrgStructureId(),
@@ -554,37 +580,37 @@ public class PositionController {
                                     newImport.getProjQtr3(),
                                     newImport.getProjQtr4(),
                                     newImport.getPosNr(),
-                                    newImport.getGradeAssigned(),
-                                    newImport.getDafscAssigned(),
-                                    sqidModel.getLastName() + ", " + sqidModel.getFirstName(),
-                                    assignedMember.getId().toString(),
+                                    null,
+                                    null,
+                                    null,
+                                    null,
                                     date));
 
                         }
-                    } else {
-                        positionRepository.save(new Position(
-                                newImport.getPasCode(),
-                                newImport.getOrgStructureId(),
-                                newImport.getAfscAuth(),
-                                newImport.getGrdAuth(),
-                                newImport.getCurrQtr(),
-                                newImport.getProjQtr1(),
-                                newImport.getProjQtr2(),
-                                newImport.getProjQtr3(),
-                                newImport.getProjQtr4(),
-                                newImport.getPosNr(),
-                                null,
-                                null,
-                                null,
-                                null,
-                                date));
-
+                    }
+                } else {
+                    if (newImport.getPosNr() == null) {
+                        SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
+                        Unassigned existingUnassigned = unassignedRepository.findByMbrId(sqidModel.getSqid());
+                        if (existingUnassigned == null) {
+                            unassignedRepository.save(createUnassignedModel(date, newImport));
+                        } else {
+                            updateExistingUnassigned(date, existingUnassigned, newImport);
+                        }
                     }
                 }
-
             }));
         }
         return positionRepository.findAll();
+    }
+
+    private void updateExistingUnassigned(Date date, Unassigned existingUnassigned, PositionJSON newImport) {
+        existingUnassigned.setFullName(newImport.getNameAssigned());
+        existingUnassigned.setDafsc(newImport.getDafscAssigned());
+        existingUnassigned.setGrade(newImport.getGradeAssigned());
+        existingUnassigned.setLastUpdated(date);
+
+        unassignedRepository.save(existingUnassigned);
     }
 
     public boolean isDefunded(PositionJSON newImport) {
@@ -664,6 +690,16 @@ public class PositionController {
             });
         }
         return doubleBilletedPositions;
+    }
+
+    private Unassigned createUnassignedModel(Date date, PositionJSON newImport) {
+        return new Unassigned(
+                newImport.getMbrIdAssigned(),
+                newImport.getNameAssigned(),
+                newImport.getDafscAssigned(),
+                newImport.getGradeAssigned(),
+                date
+        );
     }
 
     private Position createPositionModel(Date date, PositionJSON newImport, String positionType) {

@@ -37,7 +37,9 @@ const reducer: Reducer<PositionState> = (state = initialState, action) => {
         case PositionActionTypes.SET_SUCCESS: return {...state, success: action.payload};
         case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, uploadStagingPosition: action.payload};
         case PositionActionTypes.FETCH_ERROR: return {...state, loading: false, error: action.payload};
-        case PositionActionTypes.FETCH_SUCCESS: return {...state, loading: false, success: true, data: action.payload};
+        case PositionActionTypes.FETCH_SUCCESS:
+            console.log("Position Success");
+            return {...state, loading: false, success: true, positions: action.payload};
         case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, upload: action.payload};
         case PositionActionTypes.FETCH_CHARTDATA_SUCCESS: return {...state, loading: false, chartData: action.payload};
         case PositionActionTypes.FETCH_UNASSIGNED_REQUEST: return {...state, unassignedLoading: true};

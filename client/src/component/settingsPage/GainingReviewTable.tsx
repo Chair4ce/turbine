@@ -219,7 +219,7 @@ export const GainingReviewTable: React.FC<Props> = props => {
                 className={classes.uploadBtn}
                 startIcon={<CloudUploadIcon/>}
             >
-                Upload
+                Save
             </Button>
         </div>
 

@@ -16,29 +16,29 @@ function convertToHash(mbrId: string) {
     if(mbrId.length < 9) mbrId = "1" + mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
-    console.log("before: " + oldMbrId + " After: " + mbrId);
     return crypto.createHash('sha1').update(mbrId.replace(/-/g, "")).digest('hex').toString()
         .match(/\d+/g).map(Number).join("").substring(1, 10);
 }
 
 export class PositionSerializer {
-    static serializeToBackend(items: any): UploadPositionModel[] {
+    static serializeToBackend(items: any): StagingUploadPositionModel[] {
+        console.log("serializing to backend")
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadPositionModel(
                     item.pasCode,
-                    item.orgStructureId,
-                    item.afscAuth,
-                    item.grdAuth,
-                    item.currQtr,
-                    item.projQtr1,
-                    item.projQtr2,
-                    item.projQtr3,
-                    item.projQtr4,
-                    item.posNr,
-                    item.gradeAssigned,
-                    item.dafscAssigned,
-                    item.nameAssigned,
+                    item.orgStructureId ? item.orgStructureId : null,
+                    item.afscAuth ? item.afscAuth : null,
+                    item.grdAuth ? item.grdAuth : null,
+                    item.currQtr ? item.currQtr : null,
+                    item.projQtr1 ? item.projQtr1 : null,
+                    item.projQtr2 ? item.projQtr2 : null,
+                    item.projQtr3 ? item.projQtr3 : null,
+                    item.projQtr4 ? item.projQtr4 : null,
+                    item.posNr ? item.posNr : null,
+                    item.gradeAssigned ? item.gradeAssigned : null,
+                    item.dafscAssigned ? item.dafscAssigned : null,
+                    item.nameAssigned ? item.nameAssigned : null,
                     item.mbrIdAssigned ? convertToHash(item.mbrIdAssigned.toString()) : null,
                 );
             });
@@ -95,9 +95,10 @@ export class PositionSerializer {
         return [];
     }
 
-    static serializeFromBackend(items: any): PositionModel[] {
+    static serializeFromBackend(items: PositionModel[]): PositionModel[] {
+        console.log("serializing from backend")
         if (items.map) {
-            return items.map((item: any) => {
+            return items.map((item: PositionModel) => {
                 return new PositionModel(
                     item.id,
                     item.pasCode,

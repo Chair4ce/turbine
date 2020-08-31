@@ -200,7 +200,7 @@ export class MemberSerializer {
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    convertToHash(item.sponsorId ? item.sponsorId : 0),
+                    item.sponsorId ? item.sponsorId : 0,
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,

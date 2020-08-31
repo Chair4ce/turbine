@@ -9,7 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import {TransitionProps} from '@material-ui/core/transitions';
-import {Button, Dialog} from "@material-ui/core";
+import {Dialog} from "@material-ui/core";
 import {useDispatch, useSelector} from "react-redux";
 // @ts-ignore
 import {ApplicationState} from "../../store";
@@ -17,21 +17,13 @@ import {MemberFileUpload} from "./MemberFileUpload";
 import {AlphaReviewTableConnected} from "./AlphaReviewTable";
 import StagingUploadMemberModel from "../../store/members/models/StagingUploadMemberModel";
 import {resetGainingSuccess, resetSuccess, stageGainingUploadData, stageMemberUploadData} from "../../store/members";
-import Grow from "@material-ui/core/Grow";
-import Collapse from "@material-ui/core/Collapse";
 import Fade from "@material-ui/core/Fade";
 import {saveCurrentRoster, saveGainingMembers} from "../../store/members/thunks";
-import {MemberSerializer} from "../../util/MemberSerializer";
-import CircularProgress from '@material-ui/core/CircularProgress';
-import {green} from '@material-ui/core/colors';
-import clsx from 'clsx';
-import classNames from "classnames";
 import SettingsListItem from "./SettingsListItem";
 import {setPositionsSuccess, stagePositionUploadData} from "../../store/positions";
 import StagingUploadGainingModel from "../../store/members/models/StagingUploadGainingModel";
 import StagingUploadPositionModel from "../../store/positions/models/StagingUploadPositionModel";
 import {savePositions} from "../../store/positions/thunks";
-import {PositionSerializer} from "../../util/PositionSerializer";
 import GainingFileUpload from "./GainingFileUpload";
 import UpmrFileUpload from "./UpmrFileUpload";
 import {GainingReviewTableConnected} from "./GainingReviewTable";
@@ -78,10 +70,11 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center'
         },
         uploadContent: {
-            position: 'relative',
+            position: 'absolute',
+            top: 64,
+            height: 'calc(100vh - 65px)',
             display: 'block',
             width: '100%',
-            height: '100%',
             padding: theme.spacing(2),
         },
         paper: {
@@ -92,6 +85,12 @@ const useStyles = makeStyles((theme: Theme) =>
         fullScreenDialog: {
             alignItems: 'center'
         },
+        fileDrop: {
+            display: 'block',
+            width: '100%',
+            height: '100%',
+            padding: theme.spacing(2),
+        }
 
 
     }),
@@ -192,7 +191,6 @@ export const AppSettingsPage: React.FC<Props> = props => {
     };
 
     function handleUploadButtonClick(type: string) {
-        console.log(type)
         switch (type) {
             case "alpha":
                 showAlphaUpload(prev => !prev);
@@ -216,7 +214,7 @@ export const AppSettingsPage: React.FC<Props> = props => {
                                                edit={true}
                                                grouping={true} search={true} selection={false}
                                                exportButton={false} callback={handleAlphaCallback}/>
-                    : <div className={classes.uploadContent}>
+                    : <div className={classes.fileDrop}>
                         <MemberFileUpload parentCallback={childCallBackHandler}/>
                     </div>}
             </div>
@@ -232,7 +230,7 @@ export const AppSettingsPage: React.FC<Props> = props => {
                                                  grouping={true} search={true} selection={false}
                                                  exportButton={false} callback={handleGainingCallback}/>
                     :
-                    <div className={classes.uploadContent}>
+                    <div className={classes.fileDrop}>
                         <GainingFileUpload parentCallback={childCallBackHandler}/>
                     </div>}
             </div>
@@ -245,7 +243,7 @@ export const AppSettingsPage: React.FC<Props> = props => {
                                                                    grouping={true} search={true} selection={false}
                                                                    exportButton={false}
                                                                    callback={handleUpmrCallback}/> :
-                    <div className={classes.uploadContent}>
+                    <div className={classes.fileDrop}>
                         <UpmrFileUpload parentCallback={childCallBackHandler}/>
                     </div>}
             </div>
@@ -253,6 +251,19 @@ export const AppSettingsPage: React.FC<Props> = props => {
 
     }
 
+
+    function renderTitle() {
+        if (alphaUploadFileDrop) {
+            return "Upload Alpha Roster (.xlsx)"
+        } else if (gainingUploadFileDrop) {
+            return "Upload Gaining Roster (.xlsx)"
+        } else if (upmrUploadFileDrop) {
+            return "Upload UPMR (.xlsx)"
+        } else {
+            return "Settings"
+        }
+
+    }
 
     return (
         <div className={classes.root}>
@@ -264,7 +275,7 @@ export const AppSettingsPage: React.FC<Props> = props => {
                             <CloseIcon/>
                         </IconButton>
                         <Typography variant="h6" className={classes.title}>
-                            Settings
+                            {renderTitle()}
                         </Typography>
                         {/*<Button autoFocus color="inherit" onClick={handleClose}>*/}
                         {/*    save*/}
@@ -276,41 +287,37 @@ export const AppSettingsPage: React.FC<Props> = props => {
 
                 </Typography> : null}
 
-
                 {/*<ListItem>*/}
                 {/*    <ListItemText primary="Alpha Roster" secondary="Click to upload file"/>*/}
                 {/*</ListItem>*/}
 
-                <Collapse in={!alphaUploadFileDrop && !upmrUploadFileDrop && !gainingUploadFileDrop}>
-                    <Fade in={!alphaUploadFileDrop && !upmrUploadFileDrop && !gainingUploadFileDrop}>
-                        <List>
-                            <ListItem className={classes.listItems}>
-                                <SettingsListItem callback={handleUploadButtonClick} itemTitle={"Alpha Roster"}
-                                                  itemType={"alpha"}/>
-                            </ListItem>
-                            <ListItem className={classes.listItems}>
-                                <SettingsListItem callback={handleUploadButtonClick} itemTitle={"Gaining Roster"}
-                                                  itemType={"gaining"}/>
-                            </ListItem>
-                            <ListItem className={classes.listItems}>
-                                <SettingsListItem callback={handleUploadButtonClick} itemTitle={"UPMR"}
-                                                  itemType={"UPMR"}/>
-                            </ListItem>
+                <Fade in={!alphaUploadFileDrop && !upmrUploadFileDrop && !gainingUploadFileDrop}>
+                    <List>
+                        <ListItem className={classes.listItems} disabled={gainingUploadFileDrop || upmrUploadFileDrop}>
+                            <SettingsListItem callback={handleUploadButtonClick} itemTitle={"Alpha Roster"}
+                                              itemType={"alpha"}/>
+                        </ListItem>
+                        <ListItem className={classes.listItems} disabled={alphaUploadFileDrop || upmrUploadFileDrop}>
+                            <SettingsListItem callback={handleUploadButtonClick} itemTitle={"Gaining Roster"}
+                                              itemType={"gaining"}/>
+                        </ListItem>
+                        <ListItem className={classes.listItems} disabled={alphaUploadFileDrop || gainingUploadFileDrop}>
+                            <SettingsListItem callback={handleUploadButtonClick} itemTitle={"UPMR"}
+                                              itemType={"UPMR"}/>
+                        </ListItem>
+                        {/*<ListItem className={classes.listItems}>*/}
+                        {/*    <Typography className={classes.listItemContents}>Gaining Roster</Typography>*/}
+                        {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
+                        {/*            onClick={() => handleUploadButtonClick("gaining")}>Upload</Button>*/}
+                        {/*</ListItem>*/}
 
-                            {/*<ListItem className={classes.listItems}>*/}
-                            {/*    <Typography className={classes.listItemContents}>Gaining Roster</Typography>*/}
-                            {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
-                            {/*            onClick={() => handleUploadButtonClick("gaining")}>Upload</Button>*/}
-                            {/*</ListItem>*/}
-
-                            {/*<ListItem className={classes.listItems}>*/}
-                            {/*    <Typography className={classes.listItemContents}>UMPR Roster</Typography>*/}
-                            {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
-                            {/*            onClick={() => handleUploadButtonClick("upmr")}>Upload</Button>*/}
-                            {/*</ListItem>*/}
-                        </List>
-                    </Fade>
-                </Collapse>
+                        {/*<ListItem className={classes.listItems}>*/}
+                        {/*    <Typography className={classes.listItemContents}>UMPR Roster</Typography>*/}
+                        {/*    <Button className={classes.listItemContents} variant={"outlined"}*/}
+                        {/*            onClick={() => handleUploadButtonClick("upmr")}>Upload</Button>*/}
+                        {/*</ListItem>*/}
+                    </List>
+                </Fade>
 
                 {renderFileDrops()}
 

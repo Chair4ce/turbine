@@ -45,11 +45,14 @@ export const generateChartData = () => {
     }
 };
 
-export const savePositions = (positions: UploadPositionModel[]) => {
+export const savePositions = (positions: any[]) => {
     return (dispatch: any) => {
         dispatch(positionsFetchRequest());
        return callApi('POST', 'positions/save',PositionSerializer.serializeToBackend(positions))
-            .then(res => dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
+            .then((res) => {
+                console.log(res);
+                dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
+            }
             ).catch(err => dispatch(positionsFetchError(err))
         );
     }
@@ -59,8 +62,8 @@ export const getUnfundedMembers = () => {
     return (dispatch: any) => {
         dispatch(unFundedMembersFetchRequest());
        return callApi('get','positions/unassigned')
-            .then(res => dispatch(unFundedMembersFetchSuccess(MemberSerializer.serializeFromBackend(res)))
-            ).catch(err => dispatch(unFundedMembersFetchError(err))
+            .then(res => dispatch(unFundedMembersFetchSuccess(MemberSerializer.serializeFromBackend(res))))
+           .catch(err => dispatch(unFundedMembersFetchError(err))
         );
     }
 };

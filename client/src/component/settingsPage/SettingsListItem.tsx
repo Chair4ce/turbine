@@ -129,7 +129,7 @@ const SettingsListItem: React.FC<Props> = props => {
 
 
     return (
-        <div className={classes.root}>
+        <div className={classes.root} id={props.itemType}>
             <Typography className={classes.listItemContents}>{props.itemTitle}</Typography>
             {returnItemContents()}
         </div>

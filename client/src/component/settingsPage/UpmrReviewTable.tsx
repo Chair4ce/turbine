@@ -36,19 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
 interface Row {
      id: number;
      pasCode: string;
-     orgStructureId: string | undefined;
-     afscAuth: string | undefined;
-     grdAuth: string | undefined;
-     currQtr: string | undefined;
-     projQtr1: string | undefined;
-     projQtr2: string | undefined;
-     projQtr3: string | undefined;
-     projQtr4: string | undefined;
-     posNr: string | undefined;
-     gradeAssigned: string | undefined;
-     dafscAssigned: string | undefined;
-     nameAssigned: string | undefined;
-     mbrIdAssigned: string | undefined;
+     orgStructureId: string | null;
+     afscAuth: string | null;
+     grdAuth: string | null;
+     currQtr: string | null;
+     projQtr1: string | null;
+     projQtr2: string | null;
+     projQtr3: string | null;
+     projQtr4: string | null;
+     posNr: string | null;
+     gradeAssigned: string | null;
+     dafscAssigned: string | null;
+     nameAssigned: string | null;
+     mbrIdAssigned: string | null;
 }
 
 interface TableState {
@@ -225,7 +225,7 @@ export const UpmrReviewTable: React.FC<Props> = props => {
                 className={classes.uploadBtn}
                 startIcon={<CloudUploadIcon/>}
             >
-                Upload
+                Save
             </Button>
         </div>
 

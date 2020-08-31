@@ -77,7 +77,6 @@ const reducer: Reducer<MembersState> = (state = initialState, action) => {
             return { ...state, loading: false, successAlpha: true, data: action.payload};
         }
         case MemberActionTypes.GAINING_FETCH_SUCCESS: {
-            console.log("setting gaining loading to false")
             return { ...state, gainingLoading: false, successGaining: true, gainingData: action.payload};
         }
         case MemberActionTypes.UNIQUE_AFSC_COLLECTION_FETCH_SUCCESS: {
