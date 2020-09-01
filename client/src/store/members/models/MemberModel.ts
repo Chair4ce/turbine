@@ -78,10 +78,10 @@ export default class MemberModel {
         return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
     }
     public static filterEnlistedStagingUploadOnly = (members: StagingUploadMemberModel[]) => {
-        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+        return members.filter((m) => isEnlisted(m.grade))
     }
     public static filterEnlistedStagingGainingUploadOnly = (members: StagingUploadGainingModel[]) => {
-        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+        return members.filter((m) => isEnlisted(m.grade))
     }
 
     public static filterGainingEnlistedOnly = (members: GainingMemberModel[]) => {

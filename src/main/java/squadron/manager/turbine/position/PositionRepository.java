@@ -31,7 +31,18 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
 //    @Query("select DISTINCT afscAuth from Position " +
 //            "where currQtr = '1'")
 //    Number countAllByAfscAuth(String afsc);
+
+
     List<Position> findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
+
+    //Assigned in Funded || unFunded position
+    List<Position> findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc, String currQtr);
+
+    List<Position> findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNull(String afsc, String currQtr);
+    //double billeted
+    List<Position> findAllByAfscAuthAndCurrQtrIsNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
+
+
     int countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
     int countAllByAfscAuthAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
     int countAllByDafscAssigned(String dafsc);

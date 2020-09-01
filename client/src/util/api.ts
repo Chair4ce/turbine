@@ -8,6 +8,8 @@ export async function callApi(method: string, path: string, data?: any) {
         body: JSON.stringify(data),
     })
     if (res.ok) {
-        return await res.json();
+        return res;
+    } else {
+        return res.status;
     }
 }

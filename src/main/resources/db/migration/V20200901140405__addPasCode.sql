@@ -1,0 +1,1 @@
+ALTER TABLE position_assignment ADD COLUMN pas_code TEXT AFTER id;
