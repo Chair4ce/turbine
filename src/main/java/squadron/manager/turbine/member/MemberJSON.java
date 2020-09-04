@@ -23,7 +23,9 @@ public class MemberJSON {
 
     private String assignedPas;
 
+    private String cafsc;
     private String dafsc;
+    private String pafsc;
 
     private String officeSymbol;
 

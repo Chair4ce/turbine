@@ -12,7 +12,7 @@ import {
     unassignedMembersFetchSuccess,
     unFundedMembersFetchError,
     unFundedMembersFetchRequest,
-    unFundedMembersFetchSuccess
+    unFundedMembersFetchSuccess, uploadPositionsSuccess
 } from "./actions";
 import {PositionSerializer} from "../../util/PositionSerializer";
 import {MemberSerializer} from "../../util/MemberSerializer";
@@ -50,8 +50,7 @@ export const savePositions = (positions: any[]) => {
         dispatch(positionsFetchRequest());
        return callApi('POST', 'positions/save',PositionSerializer.serializeToBackend(positions))
             .then((res) => {
-                console.log(res);
-                dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
+                dispatch(uploadPositionsSuccess());
             }
             ).catch(err => dispatch(positionsFetchError(err))
         );

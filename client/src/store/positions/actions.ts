@@ -8,6 +8,7 @@ import StagingUploadPositionModel from "./models/StagingUploadPositionModel";
 
 
 export const positionsFetchRequest = () => action(PositionActionTypes.FETCH_REQUEST);
+export const uploadPositionsSuccess = () => action(PositionActionTypes.UPLOAD_POSITIONS_SUCCESS);
 export const setPositionsSuccess = (payload: boolean) => action(PositionActionTypes.SET_SUCCESS, payload);
 export const positionsFetchError = (message: string) => action(PositionActionTypes.FETCH_ERROR, message);
 export const positionsFetchSuccess = (payload: PositionModel[]) => action(PositionActionTypes.FETCH_SUCCESS, payload);

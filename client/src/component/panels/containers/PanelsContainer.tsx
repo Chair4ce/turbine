@@ -1,5 +1,4 @@
 import React from "react";
-import styled from "styled-components";
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import CurrentRosterPanel from "../CurrentRosterPanel";
@@ -50,51 +49,5 @@ const PanelsContainer: React.FC<Props> = props => {
     )
 }
 
-export const StyledPanelsContainer = styled(PanelsContainer)`
+export default PanelsContainer;
 
-//.panel_header_action_area_upload {
-//height: 32px;
-//    -webkit-transition: background-color 100ms ease-in;
-//    -moz-transition: background-color 100ms ease-in;
-//    -o-transition: background-color 100ms ease-in;
-//    transition: background-color 100ms ease-in;
-//  :hover {
-//  background-color: rgba(119,119,119,0.27);
-//  }
-//}
-
-
-
-.moreDots {
-width: 10px;
-}
-
-.upload_btn {
-display: flex;
-align-items: center;
-justify-content: center;
-background-color: transparent;
-color: white;
-border: none;
-outline: none;
-cursor: pointer;
-height: 34px;
-width: 90px;
-padding: 0;
-border-radius: 4px;
--webkit-transition: background-color 100ms ease-in;
--moz-transition: background-color 100ms ease-in;
--o-transition: background-color 100ms ease-in;
-transition: background-color 100ms ease-in;
- :hover {
-  background-color: rgb(255,133,36);
- }
-}
-
-
-
-
-  
-
-
-`;

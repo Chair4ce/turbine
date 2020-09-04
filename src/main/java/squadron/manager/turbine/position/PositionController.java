@@ -1,12 +1,15 @@
 package squadron.manager.turbine.position;
 
 
+import javafx.geometry.Pos;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import squadron.manager.turbine.afscChart.AfscChart;
 import squadron.manager.turbine.afscChart.AfscChartRepository;
 import squadron.manager.turbine.afscPositions.PositionType;
+import squadron.manager.turbine.doubleBilleted.DoubleBilleted;
+import squadron.manager.turbine.doubleBilleted.DoubleBilletedRepository;
 import squadron.manager.turbine.gainingMember.GainingMember;
 import squadron.manager.turbine.gainingMember.GainingMemberRepository;
 import squadron.manager.turbine.incrementLog.AFSCIncrementLog;
@@ -16,7 +19,6 @@ import squadron.manager.turbine.manningChart.AFSCManningChartData;
 import squadron.manager.turbine.member.Member;
 import squadron.manager.turbine.member.MemberRepository;
 import squadron.manager.turbine.member.SqidGenerator;
-import squadron.manager.turbine.positionAssignment.PositionAssignment;
 import squadron.manager.turbine.positionAssignment.PositionAssignmentRepository;
 import squadron.manager.turbine.unAssigned.Unassigned;
 import squadron.manager.turbine.unAssigned.UnassignedRepository;
@@ -47,7 +49,7 @@ public class PositionController {
     private AfscChartRepository afscChartRepository;
     private PositionAssignmentRepository positionAssignmentRepository;
     private UnassignedRepository unassignedRepository;
-
+private DoubleBilletedRepository doubleBilletedRepository;
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository,
                                           AFSCIncrementRepository afscIncrementRepository,
@@ -55,8 +57,10 @@ public class PositionController {
                                           PositionRepository positionRepository,
                                           AfscChartRepository afscChartRepository,
                                           PositionAssignmentRepository positionAssignmentRepository,
-                                          UnassignedRepository unassignedRepository
+                                          UnassignedRepository unassignedRepository,
+                                          DoubleBilletedRepository doubleBilletedRepository
     ) {
+        this.doubleBilletedRepository = doubleBilletedRepository;
         this.memberRepository = memberRepository;
         this.afscIncrementRepository = afscIncrementRepository;
         this.gainingRepository = gainingRepository;
@@ -69,8 +73,8 @@ public class PositionController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public List<Position> addPositions(@Valid @RequestBody List<PositionJSON> json) {
-        return saveOrUpdateAndReturnAllPositions(json);
+    public void addPositions(@Valid @RequestBody List<PositionJSON> json) {
+        saveOrUpdateAndReturnAllPositions(json);
     }
 
 
@@ -78,24 +82,23 @@ public class PositionController {
     @RequestMapping(path = "/{afsc}", method = RequestMethod.GET)
     public @ResponseBody
     List<PositionType> getAFSCCardInfo(@Valid @PathVariable String afsc) {
-                List<PositionType> positions = new ArrayList<>();
+        List<PositionType> positions = new ArrayList<>();
         //Assigned in Funded || unFunded position 3 lvl
 
-
         for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc, "1")) {
-        positions.add( new PositionType("funded_assigned", position ));
+            positions.add(new PositionType("funded_assigned", position));
         }
 
         for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc, "0")) {
-        positions.add( new PositionType("unfunded_assigned", position));
+            positions.add(new PositionType("unfunded_assigned", position));
         }
 
         for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNull(afsc, "1")) {
-        positions.add( new PositionType("funded_unassigned", position));
+            positions.add(new PositionType("funded_unassigned", position));
         }
 
         for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrIsNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc)) {
-        positions.add( new PositionType("double_billeted", position ));
+            positions.add(new PositionType("double_billeted", position));
         }
 
 
@@ -142,48 +145,56 @@ public class PositionController {
     }
 
     @CrossOrigin
-    @RequestMapping(path = "/byAfscAuth/{pas}/{afsc}", method = RequestMethod.GET)
+    @RequestMapping(path = "/{pas}/{afsc}", method = RequestMethod.GET)
     public @ResponseBody
-    List<PositionAssignment> getPositionsForAfscAuth(@Valid @PathVariable String afsc, @PathVariable String pas) {
-        return positionAssignmentRepository.findAllByAfscGroup(afsc);
+    Iterable<Position> getPositionsForAfscAuth(@Valid @PathVariable String afsc, @PathVariable String pas) {
+        return positionRepository.findAllByPasCodeAndAfscAuth(pas, afsc);
     }
 
     @CrossOrigin
-    @GetMapping(path = "/manning_chart/generate")
-    void generateManningChartData() {
-        List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
-        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int thisMonth = localDate.getMonthValue();
-        AtomicInteger year = new AtomicInteger(new DateTime().getYear());
-        afscChartRepository.deleteAll();
-        for (String afsc : distinctAFSC) {
-            AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
-            AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
-            LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-            //Iterate by month until the rest of this year and the following two years.
-            for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
-                int iMonth = date.getMonthValue();
-                int iYear = date.getYear();
-
-                List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
-                for (AFSCIncrementLog increment : increments) {
-                    if (increment.getIncrementType() == "departure") {
-                        assigned.decrementAndGet();
-                    }
-                    if (increment.getIncrementType() == "projected arrival") {
-                        assigned.incrementAndGet();
-                    }
-                }
-
-                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
-            }
-        }
-
-        //Search through each distinct AFSC and track the count all depatures and arrivals
-
+    @RequestMapping(path = "/afscList/{pas}", method = RequestMethod.GET)
+    public @ResponseBody
+    List<String> getDistinctAfscAuthForPas(@Valid @PathVariable String pas) {
+        List<Position> positions = positionRepository.findAllByPasCodeAndPosNrIsNotNullAndAfscAuthIsNotNullAndCurrQtr(pas, "1");
+        return positions.stream().map(position -> position.getAfscAuth()).distinct().collect(toList());
     }
+
+//    @CrossOrigin
+//    @GetMapping(path = "/manning_chart/generate")
+//    void generateManningChartData() {
+//        List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
+//        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//        int thisMonth = localDate.getMonthValue();
+//        AtomicInteger year = new AtomicInteger(new DateTime().getYear());
+//        afscChartRepository.deleteAll();
+//        for (String afsc : distinctAFSC) {
+//            AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
+//            AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
+//            LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+//
+//            //Iterate by month until the rest of this year and the following two years.
+//            for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
+//                int iMonth = date.getMonthValue();
+//                int iYear = date.getYear();
+//
+//                List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
+//                for (AFSCIncrementLog increment : increments) {
+//                    if (increment.getIncrementType() == "departure") {
+//                        assigned.decrementAndGet();
+//                    }
+//                    if (increment.getIncrementType() == "projected arrival") {
+//                        assigned.incrementAndGet();
+//                    }
+//                }
+//
+//                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+//            }
+//        }
+//
+//        //Search through each distinct AFSC and track the count all depatures and arrivals
+//
+//    }
 
     private AtomicInteger adjustAssignedForMonth(AtomicInteger assigned, String afsc, int month) {
         List<Position> assignedPositions = positionRepository.findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);
@@ -239,6 +250,8 @@ public class PositionController {
             case "AMN":
                 return true;
             case "AB":
+                return true;
+            case "A1C":
                 return true;
             case "SRA":
                 return true;
@@ -336,7 +349,7 @@ public class PositionController {
 //    }
 
 
-    public List<Position> saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
+    public void saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
         Date date = new Date();
         if (json != null) {
             List<String> pasCodes = json.stream()
@@ -346,6 +359,8 @@ public class PositionController {
 
             for (String pasCode : pasCodes) {
                 positionRepository.deleteAllByPasCode(pasCode);
+                doubleBilletedRepository.deleteAllByPasCode(pasCode);
+                unassignedRepository.deleteAllByPasCode(pasCode);
             }
 
 
@@ -353,6 +368,7 @@ public class PositionController {
                 if (newImport.getGrdAuth() != null) {
                     if (isEnlisted(newImport.getGrdAuth())) {
                         if (newImport.getMbrIdAssigned() != null) {
+                            //catch assigned members to funded billets
                             if (memberRepository.findByMbrIdStartingWith(newImport.getMbrIdAssigned()) != null) {
                                 Member assignedMember = memberRepository.findByMbrIdStartingWith(newImport.getMbrIdAssigned());
                                 saveNewIncrementLog(newImport, assignedMember);
@@ -364,7 +380,7 @@ public class PositionController {
                                     Member assignedMember = memberRepository.findMemberByFirstNameAndLastName(sqidModel.getFirstName(), sqidModel.getLastName());
                                     saveNewIncrementLog(newImport, assignedMember);
                                     saveImportedPosition(date, newImport, assignedMember);
-                                }else {
+                                } else {
                                     positionRepository.save(new Position(
                                             newImport.getPasCode(),
                                             newImport.getOrgStructureId(),
@@ -405,18 +421,25 @@ public class PositionController {
                     }
                 } else {
                     if (newImport.getPosNr() == null) {
-                        SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
-                        Unassigned existingUnassigned = unassignedRepository.findByMbrId(sqidModel.getSqid());
-                        if (existingUnassigned == null) {
+                        //catch unassigned
                             unassignedRepository.save(createUnassignedModel(date, newImport));
-                        } else {
-                            updateExistingUnassigned(date, existingUnassigned, newImport);
-                        }
+                    } else {
+                        //Double Billeted
+                            doubleBilletedRepository.save(createDoubleBilletedModel(date, newImport));
                     }
                 }
             }));
         }
-        return positionRepository.findAll();
+    }
+
+    private DoubleBilleted createDoubleBilletedModel(Date date, PositionJSON newImport) {
+        return new DoubleBilleted(
+                newImport.getPasCode(),
+                newImport.getPosNr(),
+                newImport.getNameAssigned(),
+                newImport.getMbrIdAssigned(),
+                date
+        );
     }
 
     private void saveNewIncrementLog(PositionJSON newImport, Member assignedMember) {
@@ -457,14 +480,6 @@ public class PositionController {
                 date));
     }
 
-    private void updateExistingUnassigned(Date date, Unassigned existingUnassigned, PositionJSON newImport) {
-        existingUnassigned.setFullName(newImport.getNameAssigned());
-        existingUnassigned.setDafsc(newImport.getDafscAssigned());
-        existingUnassigned.setGrade(newImport.getGradeAssigned());
-        existingUnassigned.setLastUpdated(date);
-
-        unassignedRepository.save(existingUnassigned);
-    }
 
     public boolean isDefunded(PositionJSON newImport) {
         return newImport.getCurrQtr().equals("1") && isProjUnfunded(newImport.getProjQtr1(), newImport.getProjQtr2(), newImport.getProjQtr3(), newImport.getProjQtr4());
@@ -547,6 +562,7 @@ public class PositionController {
 
     private Unassigned createUnassignedModel(Date date, PositionJSON newImport) {
         return new Unassigned(
+                newImport.getPasCode(),
                 newImport.getMbrIdAssigned(),
                 newImport.getNameAssigned(),
                 newImport.getDafscAssigned(),

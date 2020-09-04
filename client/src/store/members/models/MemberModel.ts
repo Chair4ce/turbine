@@ -70,12 +70,11 @@ export default class MemberModel {
     }
 
 
-
     public static filterEnlistedOnly = (members: MemberModel[]) => {
-        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+        return members.filter((m) => isEnlisted(m.grade))
     }
-    public static filterEnlistedUploadOnly = (members: UploadMemberModel[]) => {
-        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+    public static filterEnlistedUploadOnly = (members: StagingUploadMemberModel[]) => {
+        return members.filter((m) => isEnlisted(m.grade))
     }
     public static filterEnlistedStagingUploadOnly = (members: StagingUploadMemberModel[]) => {
         return members.filter((m) => isEnlisted(m.grade))
@@ -85,7 +84,7 @@ export default class MemberModel {
     }
 
     public static filterGainingEnlistedOnly = (members: GainingMemberModel[]) => {
-        return members.filter((m) => isEnlisted(m.grade) && (m.dafsc))
+        return members.filter((m) => isEnlisted(m.grade))
     }
 
     public static membersMatchingGafsc = (uAFSC: string, members: MemberModel[]) => {
@@ -105,20 +104,46 @@ function isEnlisted(grade: string) {
     switch (grade) {
         case 'AMN':
             return true;
+
+        case 'AB':
+            return true;
+
         case 'A1C':
             return true;
+
         case 'SRA':
             return true;
+
         case 'SSG':
             return true;
+
+        case 'SSGT':
+            return true;
+
         case 'TSG':
             return true;
+
+        case 'TSGT':
+            return true;
+
         case 'MSG':
             return true;
+
+        case 'MSGT':
+            return true;
+
         case 'SMS':
             return true;
+
+        case 'SMSGT':
+            return true;
+
         case 'CMS':
             return true;
+
+        case 'CMSGT':
+            return true;
+
         default :
             return false;
     }
@@ -128,22 +153,34 @@ function convertGradeValue(grade: string) {
     switch (grade) {
         case 'AMN':
             return 1;
+        case 'AB':
+            return 1;
         case 'A1C':
             return 2;
         case 'SRA':
             return 3;
         case 'SSG':
             return 4;
+        case 'SSGT':
+            return 4;
         case 'TSG':
+            return 5;
+        case 'TSGT':
             return 5;
         case 'MSG':
             return 6;
+        case 'MSGT':
+            return 6;
         case 'SMS':
+            return 7;
+        case 'SMSGT':
             return 7;
         case 'CMS':
             return 8;
+        case 'CMSGT':
+            return 8;
         default :
-            return 9;
+            return 0;
     }
 }
 

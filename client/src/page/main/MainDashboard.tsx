@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {},
         header_container: {
+            minWidth: 973,
             height: 66,
         },
         loading: {}

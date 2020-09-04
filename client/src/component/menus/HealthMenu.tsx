@@ -5,6 +5,7 @@ import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import MultilineChartIcon from '@material-ui/icons/MultilineChart';
+import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -59,6 +60,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface Props {
     showManningChart: boolean;
+    showAFSCPanelView: boolean;
     expanded: boolean;
     menuSelectHandler: (type: string) => void;
     className?: string;
@@ -66,6 +68,7 @@ interface Props {
 
 const HEALTH_MENU_SELECT_ITEM = {
     TOGGLE_MANNING_CHART: 'HEALTH_MENU/TOGGLE_MANNING_CHART',
+    TOGGLE_AFSC_PANEL_VIEW: 'HEALTHMENU/TOGGLE_AFSC_PANEL_VIEW',
 }
 
 const HealthMenu: React.FC<Props> = props => {
@@ -77,11 +80,11 @@ const HealthMenu: React.FC<Props> = props => {
         )
     }
     //
-    // const toggleProjectedPanel = () => {
-    //     props.menuSelectHandler(
-    //         ROSTER_MENU_SELECT_ITEM.TOGGLE_PROJECTED_ROSTER
-    //     )
-    // }
+    const toggleAFSCPanelView = () => {
+        props.menuSelectHandler(
+            HEALTH_MENU_SELECT_ITEM.TOGGLE_AFSC_PANEL_VIEW
+        )
+    }
     //
     // const toggleGainingPanel = () => {
     //     props.menuSelectHandler(
@@ -122,6 +125,10 @@ const HealthMenu: React.FC<Props> = props => {
         [classes.selected]: props.showManningChart,
         [classes.unselected]: !props.showManningChart,
     });
+    const AFSCPanelSelectorClassName = clsx({
+        [classes.selected]: props.showAFSCPanelView,
+        [classes.unselected]: !props.showAFSCPanelView,
+    });
     //
     // const projectedSelectorClassName = clsx({
     //     [classes.selected]: props.showProjectedPanel,
@@ -156,16 +163,16 @@ const HealthMenu: React.FC<Props> = props => {
                     </span> : ''}
                     {props.showManningChart ? <div className={classes.selected_item}/> : ''}
                 </MenuItem>
-                {/*<MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, gainingSelectorClassName)}*/}
-                {/*          onClick={handleGainingClick}>*/}
-                {/*    <div className={classes.iconArea}>*/}
-                {/*        <AddIcon/>*/}
-                {/*    </div>*/}
-                {/*    {props.expanded ? <span className={classNames(classes.menu_item_text, gainingSelectorClassName)}>*/}
-                {/*        Gaining*/}
-                {/*        </span> : ''}*/}
-                {/*    {props.showGainingPanel ? <div className={classes.selected_item}/> : ''}*/}
-                {/*</MenuItem>*/}
+                <MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, AFSCPanelSelectorClassName)}
+                          onClick={toggleAFSCPanelView}>
+                    <div className={classes.iconArea}>
+                        <AmpStoriesIcon/>
+                    </div>
+                    {props.expanded ? <span className={classNames(classes.menu_item_text, AFSCPanelSelectorClassName)}>
+                       AFSC info
+                        </span> : ''}
+                    {props.showAFSCPanelView ? <div className={classes.selected_item}/> : ''}
+                </MenuItem>
                 {/*<MenuItem className={classNames("losing_roster_toggle_btn",losingSelectorClassName)} onClick={handleLosingClick}>*/}
                 {/*    <div className={classes.iconArea}>*/}
                 {/*        <RemoveIcon/>*/}

@@ -38,7 +38,9 @@ public class Member {
     @Column(name = "assigned_pas")
     private String assignedPas;
 
+    private String cafsc;
     private String dafsc;
+    private String pafsc;
 
     @Column(name = "office_symbol")
     private String officeSymbol;
@@ -69,7 +71,7 @@ public class Member {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Member(Long id, String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
+    public Member(Long id, String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String cafsc, String dafsc,String pafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
         this.id = id;
         this.mbrId = mbrId;
         this.fullName = fullName;
@@ -77,7 +79,9 @@ public class Member {
         this.lastName = lastName;
         this.grade = grade;
         this.assignedPas = assignedPas;
+        this.cafsc = cafsc;
         this.dafsc = dafsc;
+        this.pafsc = pafsc;
         this.officeSymbol = officeSymbol;
         this.dutyTitle = dutyTitle;
         this.dutyStartDate = dutyStartDate;
@@ -91,14 +95,16 @@ public class Member {
         this.lastUpdated = lastUpdated;
     }
 
-    public Member(String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String dafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
+    public Member(String mbrId, String fullName, String firstName, String lastName, String grade, String assignedPas, String cafsc, String dafsc,String pafsc, String officeSymbol, String dutyTitle, Date dutyStartDate, String dutyPhone, String supvName, Date supvBeginDate, Date dateArrivedStation, Date rnltd, Date dor, Date deros, Date lastUpdated) {
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.firstName = firstName;
         this.lastName = lastName;
         this.grade = grade;
         this.assignedPas = assignedPas;
-        this.dafsc = dafsc;
+        this.cafsc = cafsc != null ? cafsc.replaceAll("-", "") : null;
+        this.dafsc = dafsc != null ? dafsc.replaceAll("-", "") : null;
+        this.pafsc = pafsc != null ? pafsc.replaceAll("-", "") : null;
         this.officeSymbol = officeSymbol;
         this.dutyTitle = dutyTitle;
         this.dutyStartDate = dutyStartDate;
@@ -112,27 +118,6 @@ public class Member {
         this.lastUpdated = lastUpdated;
     }
 
-    public Member update(MemberJSON json) {
-        this.setMbrId(json.getSsan());
-        this.setFullName(json.getFullName());
-        this.setFirstName(json.getFirstName());
-        this.setLastName(json.getLastName());
-        this.setGrade(json.getGrade());
-        this.setAssignedPas(json.getAssignedPas());
-        this.setDafsc(json.getDafsc());
-        this.setOfficeSymbol(json.getOfficeSymbol());
-        this.setDutyTitle(json.getDutyTitle());
-        this.setDutyStartDate(json.getDutyStartDate());
-        this.setDutyPhone(json.getDutyPhone());
-        this.setSupvName(json.getSupvName());
-        this.setSupvBeginDate(json.getSupvBeginDate());
-        this.setDateArrivedStation(json.getDateArrivedStation());
-        this.setRnltd(json.getRnltd());
-        this.setDor(json.getDor());
-        this.setDeros(json.getDeros());
-        this.setLastUpdated(json.getLastUpdated());
-        return this;
-    }
 
 
     public List<String> compare(Member importingMember) throws NullPointerException {

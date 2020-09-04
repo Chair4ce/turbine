@@ -50,8 +50,8 @@ const RowsByRankContainer: React.FC<Props> = props => {
             {Ssg.length > 0 ? <RowsForRank members={Ssg} rank={'SSG'} className={BarClassName}/> : null}
             {Tsg.length > 0 ? <RowsForRank members={Tsg} rank={'TSG'} className={BarClassName}/> : null}
             {Msg.length > 0 ? <RowsForRank members={Msg} rank={'MSG'} className={BarClassName}/> : null}
-            {Sms.length > 0 ? <RowsForRank members={Amn} rank={'SMS'} className={BarClassName}/> : null}
-            {Cms.length > 0 ? <RowsForRank members={Amn} rank={'CMS'} className={BarClassName}/> : null}
+            {Sms.length > 0 ? <RowsForRank members={Sms} rank={'SMS'} className={BarClassName}/> : null}
+            {Cms.length > 0 ? <RowsForRank members={Cms} rank={'CMS'} className={BarClassName}/> : null}
             {NoGrd.length > 0 ? <RowsForRank members={NoGrd} rank={'No Data'} className={BarClassName}/> : null}
         </div>
     );

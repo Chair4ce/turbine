@@ -86,18 +86,38 @@ public class MemberService {
 
         Date date = new Date();
         json.forEach((newImport -> {
+            if (newImport.getSponsorId() != null) {
+                if (memberRepository.findByMbrIdStartingWith(newImport.getSponsorId()) != null) {
+                    Member sponsor = memberRepository.findByMbrIdStartingWith(newImport.getSponsorId());
+                    SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
+                    GainingMember existingMember = gainingMemberRepository.findByMbrId(sqidModel.getSqid());
+                    GainingMember newMemberData = NewGainingMemberModelWithSponsor(date, newImport, sqidModel, sponsor.getMbrId());
 
-
-            SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
-            GainingMember existingMember = gainingMemberRepository.findByMbrId(sqidModel.getSqid());
-            GainingMember newMemberData = NewGainingMemberModel(date, newImport, sqidModel);
-
-            if (existingMember == null) {
-                logIncrement(newMemberData);
-                gainingMemberRepository.save(newMemberData);
+                    if (existingMember == null) {
+                        logIncrement(newMemberData);
+                        gainingMemberRepository.save(newMemberData);
+                    } else {
+                        updateArrivalLog(newImport);
+                        updateExistingGainingMemberData(newMemberData, existingMember);
+                    }
+                } else {
+                    SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
+                    GainingMember newMemberData = NewGainingMemberModelWithSponsor(date, newImport, sqidModel, "Not Listed");
+                    logIncrement(newMemberData);
+                    gainingMemberRepository.save(newMemberData);
+                }
             } else {
-                updateArrivalLog(newImport);
-                updateExistingGainingMemberData(newMemberData, existingMember);
+                SqidGenerator sqidModel = new SqidGenerator(newImport.getFullName(), newImport.getMbrId());
+                GainingMember existingMember = gainingMemberRepository.findByMbrId(sqidModel.getSqid());
+                GainingMember newMemberData = NewGainingMemberModel(date, newImport, sqidModel);
+
+                if (existingMember == null) {
+                    logIncrement(newMemberData);
+                    gainingMemberRepository.save(newMemberData);
+                } else {
+                    updateArrivalLog(newImport);
+                    updateExistingGainingMemberData(newMemberData, existingMember);
+                }
             }
         }));
         return gainingMemberRepository.findAll();
@@ -166,16 +186,41 @@ public class MemberService {
         List<String> distinctAFSCs = getArrayOfDistinctDAFSCs(members);
         List<GroupCollection> dafscCollection = new ArrayList<>();
 
+
         for (String afsc : distinctAFSCs) {
+
             List<Member> memberCollection = new ArrayList<>();
             StringBuilder newAFSC = new StringBuilder(afsc);
-            if (afsc.length() >= 4) {
-                newAFSC.setCharAt(3, 'X');
-                for (Member member : members) {
-                    StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
-                    if (compareAFSC.length() >= 4) {
-                        compareAFSC.setCharAt(3, 'X');
-                        if (newAFSC.toString().equals(compareAFSC.toString())) {
+
+            if (afsc != "No DAFSC Listed") {
+                if (afsc.length() >= 4) {
+                    if (newAFSC.charAt(3) != '0' && newAFSC.charAt(4) != '0') {
+                        for (Member member : members) {
+                            if (member.getDafsc() != null) {
+                                StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                                if (compareAFSC.length() >= 4) {
+
+                                    compareAFSC.setCharAt(3, 'X');
+                                    if (newAFSC.toString().equals(compareAFSC.toString())) {
+                                        memberCollection.add(member);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        for (Member member : members) {
+                            if (member.getDafsc() != null) {
+                                if (newAFSC.equals(member.getDafsc())) {
+                                    memberCollection.add(member);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (newAFSC.equals("No DAFSC Listed")) {
+                    for (Member member : members) {
+                        if (member.getDafsc() == null || member.getDafsc() == "" || member.getDafsc().length() == 0) {
                             memberCollection.add(member);
                         }
                     }
@@ -190,30 +235,32 @@ public class MemberService {
     public List<GainingGroupCollection> getGroupGainingDAFSCCollections() {
         List<GainingMember> members = gainingMemberRepository.findAll();
         List<String> distinctAFSCs = getArrayOfDistinctGainingDAFSCs(members);
+                System.out.println(distinctAFSCs);
         List<GainingGroupCollection> dafscCollection = new ArrayList<>();
-
         for (String afsc : distinctAFSCs) {
             List<GainingMember> memberCollection = new ArrayList<>();
             StringBuilder newAFSC = new StringBuilder(afsc);
             if (afsc.length() > 4) {
-                newAFSC.setCharAt(3, 'X');
-                for (GainingMember member : members) {
-                    if (member.getDafsc() != null) {
-                        StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
-                        if (compareAFSC.length() > 4) {
-                            compareAFSC.setCharAt(3, 'X');
-                            if (newAFSC.toString().equals(compareAFSC.toString())) {
-                                memberCollection.add(member);
+                if (afsc.charAt(3) == '3' || afsc.charAt(4) == '5' || afsc.charAt(4) == '7') {
+                System.out.println("found skill lvl " + newAFSC.charAt(3) + "in afsc : " + afsc);
+                    for (GainingMember member : members) {
+                        if (member.getDafsc() != null) {
+                            StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
+                            if (compareAFSC.length() > 4) {
+                                compareAFSC.setCharAt(3, 'X');
+                                if (newAFSC.toString().equals(compareAFSC.toString())) {
+                System.out.println("found a match with i: " + afsc + " and member afsc: " + compareAFSC);
+                                    memberCollection.add(member);
+                                }
                             }
                         }
                     }
-                }
-            } else {
-                for (GainingMember member : members) {
-                    if (member.getDafsc() != null) {
-                        StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
-                        if (newAFSC.toString().equals(compareAFSC.toString())) {
-                            memberCollection.add(member);
+                } else {
+                    for (GainingMember member : members) {
+                        if (member.getDafsc() != null) {
+                            if (newAFSC.equals(member.getDafsc())) {
+                                memberCollection.add(member);
+                            }
                         }
                     }
                 }
@@ -227,13 +274,23 @@ public class MemberService {
     public List<String> getArrayOfDistinctDAFSCs(List<Member> members) {
         return members.stream().map(member -> {
             if (member.getDafsc() != null) {
-                StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-                if (newAFSC.length() > 4) {
-                    newAFSC.setCharAt(3, 'X');
+                if (member.getDafsc().length() >= 4) {
+                    try {
+                        if (member.getDafsc().charAt(3) == '3' || member.getDafsc().charAt(4) == '5' || member.getDafsc().charAt(4) == '7') {
+                            StringBuilder newAFSC = new StringBuilder(member.getDafsc());
+
+                            newAFSC.setCharAt(3, 'X');
+
+                            return newAFSC.toString();
+
+                        }
+                    } catch (Exception e) {
+                        return member.getDafsc();
+                    }
                 }
-                return newAFSC.toString();
+                return member.getDafsc();
             } else {
-                return "";
+                return "No DAFSC Listed";
             }
         }).distinct().collect(toList());
     }
@@ -241,13 +298,23 @@ public class MemberService {
     public List<String> getArrayOfDistinctGainingDAFSCs(List<GainingMember> members) {
         return members.stream().map(member -> {
             if (member.getDafsc() != null) {
-                StringBuilder newAFSC = new StringBuilder(member.getDafsc());
-                if (newAFSC.length() > 4) {
-                    newAFSC.setCharAt(3, 'X');
+                if (member.getDafsc().length() >= 4) {
+                    try {
+                        if (member.getDafsc().charAt(3) == '3' || member.getDafsc().charAt(4) == '5' || member.getDafsc().charAt(4) == '7') {
+                            StringBuilder newAFSC = new StringBuilder(member.getDafsc());
+
+                            newAFSC.setCharAt(3, 'X');
+
+                            return newAFSC.toString();
+
+                        }
+                    } catch (Exception e) {
+                        return member.getDafsc();
+                    }
                 }
-                return newAFSC.toString();
+                return member.getDafsc();
             } else {
-                return "";
+                return "No DAFSC Listed";
             }
         }).distinct().collect(toList());
     }
@@ -267,7 +334,9 @@ public class MemberService {
                 sqid.getLastName(),
                 newImport.getGrade(),
                 newImport.getAssignedPas(),
-                newImport.getDafsc() != null ? newImport.getDafsc() : "",
+                newImport.getCafsc(),
+                newImport.getDafsc(),
+                newImport.getPafsc(),
                 newImport.getOfficeSymbol(),
                 newImport.getDutyTitle(),
                 newImport.getDutyStartDate(),
@@ -300,6 +369,25 @@ public class MemberService {
         );
     }
 
+    private GainingMember NewGainingMemberModelWithSponsor(Date date, GainingMemberJSON newImport, SqidGenerator
+            sqid, String sponsorId) {
+
+        return new GainingMember(
+                newImport.getGainingPas(),
+                sqid.getSqid(),
+                newImport.getFullName(),
+                newImport.getGrade(),
+                newImport.getLosingPas(),
+                newImport.getLosingPasCleartext(),
+                newImport.getDafsc(),
+                sponsorId,
+                newImport.getDor(),
+                newImport.getDos(),
+                newImport.getRnltd(),
+                date
+        );
+    }
+
     private void updateExistingMemberData(Member importingMember, Member existingMember) {
         existingMember.setMbrId(importingMember.getMbrId());
         existingMember.setFullName(importingMember.getFullName());
@@ -307,7 +395,9 @@ public class MemberService {
         existingMember.setLastName(importingMember.getLastName());
         existingMember.setGrade(importingMember.getGrade());
         existingMember.setAssignedPas(importingMember.getAssignedPas());
-        existingMember.setDafsc(importingMember.getDafsc() != null ? importingMember.getDafsc() : "");
+        existingMember.setDafsc(importingMember.getDafsc());
+        existingMember.setDafsc(importingMember.getDafsc());
+        existingMember.setDafsc(importingMember.getDafsc());
         existingMember.setOfficeSymbol(importingMember.getOfficeSymbol());
         existingMember.setDutyTitle(importingMember.getDutyTitle());
         existingMember.setDutyStartDate(importingMember.getDutyStartDate());

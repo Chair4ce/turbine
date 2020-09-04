@@ -1,0 +1,1 @@
+ALTER TABLE unassigned ADD COLUMN pas_code TEXT AFTER id;

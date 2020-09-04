@@ -262,7 +262,7 @@ interface Props {
 const GainingRosterPanel: React.FC<Props> = props => {
     const members: GainingMemberModel[] = useSelector(({members}: ApplicationState) => members.gainingData);
     const loading: boolean = useSelector(({members}: ApplicationState) => members.gainingLoading);
-    const collectionAFSC: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
+    // const collectionAFSC: GenericGainingGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericGainingAFSCList);
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const opens = Boolean(anchorEl);
@@ -275,7 +275,7 @@ const GainingRosterPanel: React.FC<Props> = props => {
         name: '',
     });
 
-    const Allsearcher = new FuzzySearch(members, ['fullName'], {sort: true})
+    const Allsearcher = new FuzzySearch(members, ['fullName', 'dafsc'], {sort: true})
 
     const searchResultAll = Allsearcher.search(searchAll);
 
@@ -370,23 +370,23 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                                ),
                                            }}/>}
                         </div>
-                        <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>
-                            <Select
-                                native
-                                value={state.group}
-                                onChange={handleChange}
-                                label="List By"
-                                inputProps={{
-                                    name: 'group',
-                                    id: 'outlined-age-native-simple',
-                                }}
-                            >
-                                <option aria-label="A-Z" value={"A-Z"}>A-Z</option>
-                                {/*<option value={1}>Grade</option>*/}
-                                <option value={2}>AFSC</option>
-                            </Select>
-                        </FormControl>
+                        {/*<FormControl variant="outlined" size="small" className={classes.sortFormControl}>*/}
+                        {/*    <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>*/}
+                        {/*    <Select*/}
+                        {/*        native*/}
+                        {/*        value={state.group}*/}
+                        {/*        onChange={handleChange}*/}
+                        {/*        label="List By"*/}
+                        {/*        inputProps={{*/}
+                        {/*            name: 'group',*/}
+                        {/*            id: 'outlined-age-native-simple',*/}
+                        {/*        }}*/}
+                        {/*    >*/}
+                        {/*        <option aria-label="A-Z" value={"A-Z"}>A-Z</option>*/}
+                        {/*        /!*<option value={1}>Grade</option>*!/*/}
+                        {/*        /!*<option value={2}>AFSC</option>*!/*/}
+                        {/*    </Select>*/}
+                        {/*</FormControl>*/}
                         <Menu
                             id="fade-menu"
                             anchorEl={anchorEl}
@@ -422,9 +422,9 @@ const GainingRosterPanel: React.FC<Props> = props => {
                                     gradeClassName={row.grade}
                                     data={row}
                                 />)}
-                            {members && sortByAFSC && collectionAFSC.map((m: GenericGainingGroupCollectionModel, index) =>
-                                <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
-                                                       className={'dafsc'}/>)}
+                            {/*{members && sortByAFSC && collectionAFSC.map((m: GenericGainingGroupCollectionModel, index) =>*/}
+                            {/*    <UniqueGainingAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}*/}
+                            {/*                           className={'dafsc'}/>)}*/}
                             <div className={classNames(classes.endOfList, 'preview')}>
                             </div>
                         </div>

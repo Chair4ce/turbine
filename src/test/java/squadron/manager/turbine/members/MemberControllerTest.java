@@ -30,6 +30,8 @@ public class MemberControllerTest extends BaseIntegrationTest {
                "TSgt",
                "UHBYGVYT",
                "3D1X2",
+               "3D1X2",
+               "3D1X2",
                "SCXP",
                "NCOIC",
                date,

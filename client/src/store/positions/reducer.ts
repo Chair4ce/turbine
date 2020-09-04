@@ -35,6 +35,7 @@ const reducer: Reducer<PositionState> = (state = initialState, action) => {
     switch (action.type) {
         case PositionActionTypes.FETCH_REQUEST: return {...state, loading: true};
         case PositionActionTypes.SET_SUCCESS: return {...state, success: action.payload};
+        case PositionActionTypes.UPLOAD_POSITIONS_SUCCESS: return {...state, loading: false, success: true};
         case PositionActionTypes.STAGE_UPLOAD_DATA: return {...state, uploadStagingPosition: action.payload};
         case PositionActionTypes.FETCH_ERROR: return {...state, loading: false, error: action.payload};
         case PositionActionTypes.FETCH_SUCCESS:

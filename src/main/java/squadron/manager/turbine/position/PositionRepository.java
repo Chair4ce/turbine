@@ -10,9 +10,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 public interface PositionRepository extends JpaRepository<Position, Long> {
+    List<Position> findAllByPasCodeAndPosNrIsNotNullAndAfscAuthIsNotNullAndCurrQtr(String pasCode, String currQtr);
     List<Position> findAllByCurrQtrIsTrue();
     List<Position> findAllByAfscAuthAndPosNrIsNotNullAndCurrQtr(String afscAuth, String currQtr);
     List<Position> findAllByPosNr(String posNr);
+    List<Position> findAllByPasCodeAndAfscAuth(String pasCode, String afsc);
     List<Position> findAllByPosNrIsNull();
     List<Position> findAllByPosNrIsNotNullAndCurrQtrIsNull();
     List<Position> findAllByCurrQtrAndProjQtr1(String current,String projected);
@@ -28,10 +30,6 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
             "where posNr IS not null " +
             "and afscAuth IS not null")
     List<String> findDistinctAfscAuth();
-//    @Query("select DISTINCT afscAuth from Position " +
-//            "where currQtr = '1'")
-//    Number countAllByAfscAuth(String afsc);
-
 
     List<Position> findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
 

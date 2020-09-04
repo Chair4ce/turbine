@@ -26,11 +26,7 @@ export class MainIndexPage extends React.Component<Props, any> {
 
     componentDidMount(): void {
         this.props.getMembers();
-        this.props.generateChartData();
-        this.props.getOfficeCollection();
-        this.props.getUniqueAFSCCollection();
         this.props.getGainingMembers();
-        this.props.getDistinctGainingAFSCCollection();
         // setInterval(() => {
         //     if (!this.props.staging) {
         //         this.props.getMembers();

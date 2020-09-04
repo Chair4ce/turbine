@@ -8,6 +8,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ApplicationState} from "../../store";
 import {getChartData} from "../../store/positions/thunks";
 import clsx from "clsx";
+import AFSCPanelContainer from "../../component/panels/AFSCPanelContainer";
 
 const Chart = lazy(() => import("../../component/panels/ManningChart"))
 
@@ -51,6 +52,9 @@ const HealthSection: React.FC<Props> = props => {
     const dispatch = useDispatch();
     const chartDataAFSC = useSelector(({positions}: ApplicationState) => positions.chartData);
     const [showManningChart, toggleManningChart] = useState(false);
+    const [showAFSCPanelView, toggleAFSCPanelView] = useState(false);
+
+    let pas = "HL0RFB09";
 
     useEffect(() => {
         dispatch(getChartData())
@@ -71,6 +75,8 @@ const HealthSection: React.FC<Props> = props => {
             case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
                 toggleManningChart(prev => !prev)
                 break;
+            case HEALTH_MENU_SELECT_ACTION.TOGGLE_AFSC_PANEL_VIEW:
+                toggleAFSCPanelView(prev => !prev)
         }
     }
 
@@ -80,10 +86,13 @@ const HealthSection: React.FC<Props> = props => {
                 <HealthSideBar
                     sideBarExpanded={props.sideBarExpanded}
                     parentCallBack={childCallBackHandler}
-                    showManningChart={showManningChart}/>
+                    showManningChart={showManningChart}
+                    showAFSCPanelView={showAFSCPanelView}
+                    />
             </div>
             <article className={classes.main}>
-                <Chart chartData={chartDataAFSC} className={chartClassName}/>
+                {/*<Chart chartData={chartDataAFSC} className={chartClassName}/>*/}
+                {showAFSCPanelView && <AFSCPanelContainer pas={pas}/> }
             </article>
         </section>
     );

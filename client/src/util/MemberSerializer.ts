@@ -6,6 +6,7 @@ import UploadGainingMemberModel from "../store/members/models/UploadGainingMembe
 import GenericGainingGroupCollectionModel from "../store/members/models/GenericGainingGroupCollectionModel";
 import StagingUploadMemberModel from "../store/members/models/StagingUploadMemberModel";
 import StagingUploadGainingModel from "../store/members/models/StagingUploadGainingModel";
+import AFSCListModel from "../store/positions/models/AFSCListModel";
 
 const crypto = require('crypto');
 
@@ -31,7 +32,36 @@ export class MemberSerializer {
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.assignedPas ? item.assignedPas : null ,
+                    item.cafsc ? item.cafsc : null ,
                     item.dafsc ? item.dafsc : null ,
+                    item.pafsc ? item.pafsc : null ,
+                    item.officeSymbol ? item.officeSymbol : null,
+                    item.dutyTitle ? item.dutyTitle : null,
+                    item.dutyStartDate ? item.dutyStartDate : null,
+                    item.dutyPhone ? item.dutyPhone : null,
+                    item.supvName ? item.supvName : null,
+                    item.supvBeginDate ? item.supvBeginDate: null,
+                    item.dateArrivedStation ? item.dateArrivedStation : null,
+                    item.rnltd ? item.rnltd : null,
+                    item.dor ? item.dor : null,
+                    item.deros ? item.deros : null,
+                );
+            });
+        }
+        return [];
+    }
+
+    static serializeStagingMembersToBackend(items: any): StagingUploadMemberModel[] {
+        if (items.map) {
+            return items.map((item: StagingUploadMemberModel) => {
+                return new UploadMemberModel(
+                    convertToHash(item.ssan ? item.ssan : null),
+                    item.fullName ? item.fullName : null,
+                    item.grade ? item.grade : null ,
+                    item.assignedPas ? item.assignedPas : null ,
+                    item.cafsc ? item.cafsc : null ,
+                    item.dafsc ? item.dafsc : null,
+                    item.pafsc ? item.pafsc : null ,
                     item.officeSymbol ? item.officeSymbol : null,
                     item.dutyTitle ? item.dutyTitle : null,
                     item.dutyStartDate ? item.dutyStartDate : null,
@@ -57,7 +87,9 @@ export class MemberSerializer {
                     item.fullName ? item.fullName : null,
                     item.grade ? item.grade : null ,
                     item.assignedPas ? item.assignedPas : null ,
+                    item.cafsc ? item.cafsc : null ,
                     item.dafsc ? item.dafsc : null ,
+                    item.pafsc ? item.pafsc : null ,
                     item.officeSymbol ? item.officeSymbol : null,
                     item.dutyTitle ? item.dutyTitle : null,
                     item.dutyStartDate ? item.dutyStartDate : null,
@@ -154,7 +186,7 @@ export class MemberSerializer {
                     item.losingPas ? item.losingPas : null,
                     item.losingPasCleartext ? item.losingPasCleartext : null,
                     item.dafsc ? item.dafsc : null,
-                    item.sponsorId ? item.sponsorId : 0,
+                    item.sponsorId ? convertToHash(item.sponsorId) : null,
                     item.dor ? item.dor : null,
                     item.dos ? item.dos: null,
                     item.rnltd ? item.rnltd : null,
@@ -205,6 +237,20 @@ export class MemberSerializer {
                     item.id,
                     item.genericGroup,
                     item.members,
+                );
+            });
+        }
+        return [];
+    }
+
+    static deSerializeAFSCList(items: any) {
+        if (items.map) {
+            return items.map((item: AFSCListModel) => {
+                return new AFSCListModel(
+                    item.afscGroup,
+                    item.type,
+                    item.posId,
+                    item.mbrId
                 );
             });
         }

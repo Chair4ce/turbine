@@ -17,14 +17,20 @@ public class Unassigned {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "pas_code")
+    private String pasCode;
+    @Column(name = "mbr_id")
     private String mbrId;
+    @Column(name = "full_name")
     private String fullName;
     private String dafsc;
     private String grade;
+    @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public Unassigned(Long id, String mbrId, String fullName, String dafsc, String grade, Date lastUpdated) {
+    public Unassigned(Long id, String pasCode, String mbrId, String fullName, String dafsc, String grade, Date lastUpdated) {
         this.id = id;
+        this.pasCode = pasCode;
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.dafsc = dafsc;
@@ -32,7 +38,8 @@ public class Unassigned {
         this.lastUpdated = lastUpdated;
     }
 
-    public Unassigned(String mbrId, String fullName, String dafsc, String grade, Date lastUpdated) {
+    public Unassigned( String pasCode, String mbrId, String fullName, String dafsc, String grade, Date lastUpdated) {
+        this.pasCode = pasCode;
         this.mbrId = mbrId;
         this.fullName = fullName;
         this.dafsc = dafsc;

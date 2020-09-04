@@ -65,7 +65,7 @@ interface Props {
     // showProjectedPanel: boolean;
     // showGainingPanel: boolean;
     // showLosingPanel: boolean;
-    // showPositionPanel: boolean;
+    showAFSCPanelView: boolean;
     sideBarExpanded: boolean;
     parentCallBack: (type: string) => void;
     className?: string;
@@ -83,6 +83,8 @@ const HealthSideBar: React.FC<Props> = props => {
             case HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART:
                 props.parentCallBack(HEALTH_MENU_SELECT_ACTION.TOGGLE_MANNING_CHART)
                 break;
+            case HEALTH_MENU_SELECT_ACTION.TOGGLE_AFSC_PANEL_VIEW:
+                props.parentCallBack(HEALTH_MENU_SELECT_ACTION.TOGGLE_AFSC_PANEL_VIEW)
         }
 
     }
@@ -104,6 +106,7 @@ const HealthSideBar: React.FC<Props> = props => {
                 <HealthMenu
                     expanded={props.sideBarExpanded}
                     showManningChart={props.showManningChart}
+                    showAFSCPanelView={props.showAFSCPanelView}
                     menuSelectHandler={childCallBackHandler}
                 />
             </div>

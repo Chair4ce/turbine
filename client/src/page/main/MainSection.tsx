@@ -3,7 +3,7 @@ import {useState} from "react";
 import SideBar, {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
 import {ROSTER_MENU_SELECT_ACTION} from "../../component/menus/RosterMenu";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {StyledPanelsContainer} from "../../component/panels/containers/PanelsContainer";
+import PanelsContainer from "../../component/panels/containers/PanelsContainer";
 import TurbineIris from "../../component/icon/TurbineIris";
 import Typography from "@material-ui/core/Typography";
 
@@ -117,7 +117,7 @@ const MainSection: React.FC<Props> = props => {
                         <Typography className={classes.noContentTxt}>Move along, nothing to see here...</Typography>
                     </div>
                 }
-                {(showCurrentPanel || showGainingPanel) && <StyledPanelsContainer
+                {(showCurrentPanel || showGainingPanel) && <PanelsContainer
                     showCurrentPanel={showCurrentPanel}
                     showProjectedPanel={showProjectedPanel}
                     showGainingPanel={showGainingPanel}

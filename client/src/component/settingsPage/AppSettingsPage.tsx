@@ -166,7 +166,6 @@ export const AppSettingsPage: React.FC<Props> = props => {
         dispatch(stagePositionUploadData([]));
         dispatch(resetSuccess());
         dispatch(resetGainingSuccess());
-
         dispatch(setPositionsSuccess(false));
         setAlphaUploaded(false);
         setGainingUploaded(false);

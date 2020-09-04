@@ -7,6 +7,7 @@ import StagingUploadPositionModel from "./models/StagingUploadPositionModel";
 export enum PositionActionTypes {
     FETCH_REQUEST = '@@positions/FETCH_REQUEST',
     SET_SUCCESS = '@@positions/SET_SUCCESS',
+    UPLOAD_POSITIONS_SUCCESS = '@@positions/UPLOAD_POSITIONS_SUCCESS',
     STAGE_UPLOAD_DATA = '@@positions/STAGE_UPLOAD_DATA',
     FETCH_ERROR = '@@positions/FETCH_ERROR',
     FETCH_SUCCESS = '@@positions/FETCH_SUCCESS',

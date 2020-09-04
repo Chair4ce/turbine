@@ -213,7 +213,7 @@ interface Props {
 }
 
 const CurrentRosterPanel: React.FC<Props> = props => {
-    const collectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
+    // const collectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
     // const collectionOffice: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
     const loading: boolean = useSelector(({members}: ApplicationState) => members.loading);
     const members: MemberModel[] = useSelector(({members}: ApplicationState) => members.data);
@@ -233,7 +233,7 @@ const CurrentRosterPanel: React.FC<Props> = props => {
         name: '',
     });
 
-    const Allsearcher = new FuzzySearch(members, ['fullName'],
+    const Allsearcher = new FuzzySearch(members, ['fullName', 'dafsc'],
         {sort: true}
     )
 
@@ -331,22 +331,22 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                                ),
                                            }}/> : null}
                         </div>
-                        <FormControl variant="outlined" size="small" className={classes.sortFormControl}>
-                            <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>
-                            <Select
-                                native
-                                value={state.group}
-                                onChange={handleChange}
-                                label="List By"
-                                inputProps={{
-                                    name: 'group',
-                                    id: 'outlined-age-native-simple',
-                                }}
-                            >
-                                <option aria-label="A-Z" value="A-Z">A-Z</option>
-                                <option value={3}>AFSC</option>
-                            </Select>
-                        </FormControl>
+                        {/*<FormControl variant="outlined" size="small" className={classes.sortFormControl}>*/}
+                        {/*    <InputLabel htmlFor="outlined-age-native-simple">List By</InputLabel>*/}
+                        {/*    <Select*/}
+                        {/*        native*/}
+                        {/*        value={state.group}*/}
+                        {/*        onChange={handleChange}*/}
+                        {/*        label="List By"*/}
+                        {/*        inputProps={{*/}
+                        {/*            name: 'group',*/}
+                        {/*            id: 'outlined-age-native-simple',*/}
+                        {/*        }}*/}
+                        {/*    >*/}
+                        {/*        <option aria-label="A-Z" value="A-Z">A-Z</option>*/}
+                        {/*        /!*<option value={3}>AFSC</option>*!/*/}
+                        {/*    </Select>*/}
+                        {/*</FormControl>*/}
                         <Menu
                             id="fade-menu"
                             anchorEl={anchorEl}
@@ -383,9 +383,11 @@ const CurrentRosterPanel: React.FC<Props> = props => {
                                     data={row}
                                 />)}
 
-                            {members && sortByAFSC && collectionAFSC.map((m: GenericGroupCollectionModel, index) =>
-                                <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}
-                                                className={'dafsc'}/>)}
+                            {/*{members && sortByAFSC && collectionAFSC.map((m: GenericGroupCollectionModel, index: number) =>*/}
+                            {/*    <UniqueAFSCRows key={index} uAFSC={m.genericGroup} members={m.members}*/}
+                            {/*                    className={'dafsc'}/>*/}
+                            {/*                    )*/}
+                            {/*}*/}
                             <div className={classNames(classes.endOfList, 'preview')}>
                             </div>
                         </div>

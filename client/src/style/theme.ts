@@ -115,6 +115,11 @@ const theme = {
                         alignItems: 'center'
                     }
                 },
+                MuiList: {
+                    root: {
+                        outline: 'none'
+                    }
+                }
             },
             palette: muiPalette,
         });

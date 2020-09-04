@@ -38,7 +38,9 @@ interface Row {
      fullName: string;
      grade: string | undefined;
      assignedPas: string| undefined;
+     cafsc: string| undefined;
      dafsc: string | undefined;
+     pafsc: string | undefined;
      officeSymbol: string | undefined;
      dutyTitle: string | undefined;
      dutyStartDate: string | undefined;
@@ -79,6 +81,8 @@ export const AlphaReviewTable: React.FC<Props> = props => {
             {title: 'Name', field: 'fullName'},
             {title: 'Rank', field: 'grade'},
             {title: 'DAFSC', field: 'dafsc'},
+            {title: 'PAFSC', field: 'pafsc'},
+            {title: 'CAFSC', field: 'cafsc'},
             {title: 'Office', field: 'officeSymbol'},
             {title: 'Duty Title', field: 'dutyTitle'},
             {title: 'Phone', field: 'dutyPhone'},

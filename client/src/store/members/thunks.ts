@@ -15,6 +15,7 @@ import UploadMemberModel from "./models/UploadMemberModel";
 import {MemberSerializer} from "../../util/MemberSerializer";
 import UploadGainingMemberModel from "./models/UploadGainingMemberModel";
 import MemberModel from "./models/MemberModel";
+import StagingUploadMemberModel from "./models/StagingUploadMemberModel";
 
 export const getMembers = () => {
     return (dispatch: any) => {
@@ -76,10 +77,10 @@ export const getDistinctGainingAFSCCollection = () => {
     }
 };
 
-export const saveCurrentRoster = (members: UploadMemberModel[]) => {
+export const saveCurrentRoster = (members: StagingUploadMemberModel[]) => {
     return (dispatch: any) => {
         dispatch(membersFetchRequest());
-        return callApi('POST', 'api/members/save', MemberSerializer.serializeToBackend(MemberModel.filterEnlistedUploadOnly(members)))
+        return callApi('POST', 'api/members/save', MemberSerializer.serializeStagingMembersToBackend(MemberModel.filterEnlistedUploadOnly(members)))
             .then(res => dispatch(membersFetchSuccess(MemberSerializer.serializeFromBackend(res))))
             .catch(e => dispatch(membersPostError(e)))
     }
