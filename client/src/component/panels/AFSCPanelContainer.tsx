@@ -91,7 +91,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 borderBottom: '1px solid #000',
 
                 height: 50,
-                width: 100,
+                width: 98,
             },
             toggleBtnOpen: {
                 display: 'flex',

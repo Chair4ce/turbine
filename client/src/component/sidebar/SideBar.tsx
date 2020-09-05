@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme: Theme) =>
         expand_btn_area: {
             position: 'relative',
             boxShadow: '5px 0 10px 0 rgba(0,0,0,.15)',
-            borderRight: '1px solid #000',
             justifyContent: 'start',
             // backgroundColor: '#2f3337',
             display: 'flex',

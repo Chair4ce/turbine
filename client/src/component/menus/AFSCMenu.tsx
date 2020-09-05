@@ -84,6 +84,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         toggleShowHideBtn: {
             width: 85
+        },
+        toggled: {
+            background: "#5D8AA8"
         }
     }),
 );
@@ -93,6 +96,7 @@ const AFSCMenu: React.FC<Props> = props => {
     const dispatch = useDispatch();
 
     const [distinctAfscList, setDistinctAFSCList] = useState();
+    const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
 
@@ -114,13 +118,15 @@ const AFSCMenu: React.FC<Props> = props => {
         props.callback(selected);
     }
 
-    function showAll() {
-        props.showAll(distinctAfscList)
+    function toggleAll() {
+        if(showAll) {
+            props.showAll(distinctAfscList)
+        } else {
+            props.showAll([]);
+        }
+        setShowAll(prev => !prev)
     }
 
-    function hideAll(){
-        props.showAll([]);
-    }
 
     function renderDistinctAFSCs() {
         return distinctAfscList.map((afsc: string, index: number) => {
@@ -137,13 +143,9 @@ const AFSCMenu: React.FC<Props> = props => {
     return (
         <div className={classes.root}>
             <div className={classes.toggleBtnGrp}>
-            <Button onClick={showAll} className={classes.toggleShowHideBtn}>
+            <Button onClick={toggleAll} className={classNames(classes.toggleShowHideBtn, !showAll ? classes.toggled : "")}>
                 Show All
             </Button>
-            <Button onClick={hideAll} className={classes.toggleShowHideBtn}>
-                Hide All
-            </Button>
-
             </div>
                 {distinctAfscList && renderDistinctAFSCs()}
         </div>
