@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
         selected_item: {
             position: 'absolute',
             height: '100%',
-            right: 0,
+            left: 0,
             flexShrink: 0,
             width: 3,
             backgroundColor: '#5D8AA8',

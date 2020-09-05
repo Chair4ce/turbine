@@ -119,6 +119,12 @@ const theme = {
                     root: {
                         outline: 'none'
                     }
+                },
+                MuiButton: {
+                    text: {
+                        minWidth: 0,
+                        minHeight: 0
+                    }
                 }
             },
             palette: muiPalette,

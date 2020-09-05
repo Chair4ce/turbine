@@ -8,6 +8,8 @@ import Typography from "@material-ui/core/Typography";
 import Collapse from "@material-ui/core/Collapse";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import {Slide} from "@material-ui/core";
+import Fade from "@material-ui/core/Fade";
 
 interface Props {
     pas: string;
@@ -62,15 +64,15 @@ const useStyles = makeStyles((theme: Theme) =>
 
             },
             toggleBtn: {
-                width: 20,
+                width: 30,
                 display: 'flex',
                 justifyContent: 'start',
                 alignItems: 'center',
-                background: '#565656',
                 height: '100%',
                 position: 'relative',
                 right: 0,
-                transition: 'width 200ms',
+                background: '#5D8AA8',
+                transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
                 '&:hover': {
                     backgroundColor: '#90bbdd',
                     cursor: 'pointer',
@@ -85,27 +87,30 @@ const useStyles = makeStyles((theme: Theme) =>
                 justifyContent: 'start',
                 alignItems: 'center',
                 borderBottom: '1px solid #000',
+
                 height: 50,
-                width: 98,
-
-
+                width: 100,
             },
             toggleBtnOpen: {
                 display: 'flex',
                 zIndex: 199,
-                justifyContent: 'start',
+                justifyContent: 'flex-end',
                 alignItems: 'center',
-                background: '#4e5456',
+                background: '#5D8AA8',
                 position: 'absolute',
-                width: 14,
+                width: 24,
                 height: 50,
+                borderRadius: '1px',
                 borderBottom: '1px solid #000',
-                transition: 'width 200ms',
+                transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
                 '&:hover': {
                     backgroundColor: '#90bbdd',
                     cursor: 'pointer',
                     width: 50,
                 },
+            },
+            MenuContainer: {
+                zIndex: 1
             }
         }),
     )
@@ -136,7 +141,7 @@ const AFSCPanelContainer: React.FC<Props> = props => {
         return (
             <React.Fragment>
                 {selectedAFSC && selectedAFSC.map((item: string, index: number) => {
-                    return <AFSCCard key={index} pas={props.pas} afsc={item} mapKi={index}/>
+                    return <AFSCCard key={index} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
                 })}
             </React.Fragment>
         )
@@ -148,10 +153,11 @@ const AFSCPanelContainer: React.FC<Props> = props => {
 
     return (
         <div className={classes.root}>
-            <Collapse in={open} exit={true} >
+            <Slide direction="right" in={open} mountOnEnter unmountOnExit>
+                <div className={classes.MenuContainer}>
                 <div className={classes.AFSCMenuTitleArea}>
                     <div className={classes.AFSCMenuTitle}>
-                        <Typography color={"primary"}>
+                        <Typography>
                             AFSC
                         </Typography>
 
@@ -160,8 +166,9 @@ const AFSCPanelContainer: React.FC<Props> = props => {
                         <ArrowLeftIcon/>
                     </div>
                 </div>
-                {open && <AFSCMenu callback={handleCallback} selected={selectedAFSC}/> }
-            </Collapse>
+                <AFSCMenu callback={handleCallback} selected={selectedAFSC}/>
+                </div>
+            </Slide>
             {!open &&  <div className={classes.toggleBtnOpen} onClick={handleClick}>
                 <ArrowRightIcon fontSize={"small"}/>
             </div> }

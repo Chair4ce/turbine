@@ -17,8 +17,10 @@ const useStyles = makeStyles((theme: Theme) =>
             position: 'relative',
             top: 51,
             zIndex: 200,
-            width: 99,
+            width: 98,
+            paddingTop: 12,
             overflowY: 'auto',
+            background: '#2b2b2b',
             height: 'calc(100vh - 121px)'
         },
         container: {
@@ -26,38 +28,51 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         menuBtn: {
             background: 'none',
-            height: 40
+            height: 30
         },
         menuItem: {
-            height: 48,
+            height: 40,
             borderRadius: '4px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
         },
         selected: {
-            '&:hover': {
-                backgroundColor: '#90bbdd',
-            },
+            // '&:hover': {
+            //     backgroundColor: '#90bbdd',
+            // },
         },
         unselected: {
-            background: '#404040'
+            background: '#404040',
+            width: 66,
+            height: 32,
+
+            '&:hover': {
+            border: '1px solid #5D8AA8',
+            },
         },
         BorderSelected: {
             background: 'none',
             borderRadius: 3,
+            width: 66,
+            height: 38,
+            overflow: 'hidden',
+            transition: theme.transitions.create(["width","height"],{ duration: theme.transitions.duration.shortest }),
+            // transition: 'width 600ms ease-out, height 600ms ease-out',
             border: '1px solid #5D8AA8',
         },
         BorderUnselected: {
+            width: 54,
+            height: 22,
             background: 'none',
+            transition: theme.transitions.create(["width","height"],{ duration: theme.transitions.duration.shortest }),
         },
         btnBorder: {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            width: 70,
-            height: 46,
-            borderRadius: 4
+            borderRadius: 4,
+
         }
     }),
 );
@@ -91,7 +106,7 @@ const AFSCMenu: React.FC<Props> = props => {
     function renderDistinctAFSCs() {
         return distinctAfscList.map((afsc: string, index: number) => {
             return <div key={index} className={classes.menuItem}>
-                <div className={classNames(props.selected.indexOf(afsc) > -1 ? classes.BorderSelected : classes.BorderUnselected, classes.btnBorder)}>
+                <div className={classNames(classes.btnBorder, props.selected.indexOf(afsc) > -1 ? classes.BorderSelected : classes.BorderUnselected )}>
                     <Button className={classNames(props.selected.indexOf(afsc) > -1 ? classes.selected : classes.unselected, classes.menuBtn)} onClick={() => handleClick(afsc)}>
                     {afsc}
                     </Button>

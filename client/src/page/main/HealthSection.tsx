@@ -28,6 +28,7 @@ const useStyles = makeStyles((theme: Theme) =>
         sidebar_container: {
             position: 'relative',
             height: '100%',
+            zIndex: 2
         },
         main: {
             position: 'relative',
