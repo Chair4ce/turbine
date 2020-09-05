@@ -3,9 +3,11 @@ import {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import classNames from "classnames";
+import {useDispatch} from "react-redux";
 
 interface Props {
     callback: (selected: string) => void;
+    showAll: (afsclist: string[]) => void;
     selected: string[];
 className?: string;
 }
@@ -18,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
             top: 51,
             zIndex: 200,
             width: 98,
-            paddingTop: 12,
+            paddingTop: 5,
             overflowY: 'auto',
             background: '#2b2b2b',
             height: 'calc(100vh - 121px)'
@@ -73,13 +75,22 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             borderRadius: 4,
 
+        },
+        toggleBtnGrp: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexDirection: 'column'
+        },
+        toggleShowHideBtn: {
+            width: 85
         }
     }),
 );
 
 const AFSCMenu: React.FC<Props> = props => {
     const classes = useStyles();
-    // const dispatch = useDispatch();
+    const dispatch = useDispatch();
 
     const [distinctAfscList, setDistinctAFSCList] = useState();
 
@@ -93,7 +104,7 @@ const AFSCMenu: React.FC<Props> = props => {
             .then(json => handle1stResponse(json))
             .catch(reason => console.log(`Fetch failed: ${reason}`));
 
-    }, [classes]);
+    }, [dispatch]);
 
     const handle1stResponse = (afscs: string[]) => {
         setDistinctAFSCList(afscs);
@@ -101,6 +112,14 @@ const AFSCMenu: React.FC<Props> = props => {
 
     function handleClick(selected: string) {
         props.callback(selected);
+    }
+
+    function showAll() {
+        props.showAll(distinctAfscList)
+    }
+
+    function hideAll(){
+        props.showAll([]);
     }
 
     function renderDistinctAFSCs() {
@@ -117,6 +136,15 @@ const AFSCMenu: React.FC<Props> = props => {
 
     return (
         <div className={classes.root}>
+            <div className={classes.toggleBtnGrp}>
+            <Button onClick={showAll} className={classes.toggleShowHideBtn}>
+                Show All
+            </Button>
+            <Button onClick={hideAll} className={classes.toggleShowHideBtn}>
+                Hide All
+            </Button>
+
+            </div>
                 {distinctAfscList && renderDistinctAFSCs()}
         </div>
     );

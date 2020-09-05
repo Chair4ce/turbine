@@ -5,11 +5,9 @@ import AFSCMenu from "../menus/AFSCMenu";
 import AFSCCard from "./AFSCCard";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
-import Collapse from "@material-ui/core/Collapse";
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import {Slide} from "@material-ui/core";
-import Fade from "@material-ui/core/Fade";
 
 interface Props {
     pas: string;
@@ -49,11 +47,13 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: 'calc(100vh - 70px)',
                 overflowY: 'auto',
                 flexWrap: 'wrap',
-                justifyContent: 'space-around',
+                justifyContent: 'start',
             },
             divider: {
-                position: 'absolute',
-                left: '100px'
+                position: 'relative',
+                left: 0,
+                width: 20,
+                background: 'none'
             },
             AFSCMenuTitle: {
                 display: 'flex',
@@ -61,10 +61,11 @@ const useStyles = makeStyles((theme: Theme) =>
                 alignItems: 'center',
                 width: '100%',
                 height: '100%',
+                marginLeft: 9
 
             },
             toggleBtn: {
-                width: 30,
+                width: 24,
                 display: 'flex',
                 justifyContent: 'start',
                 alignItems: 'center',
@@ -72,6 +73,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 position: 'relative',
                 right: 0,
                 background: '#5D8AA8',
+                borderRadius: '2px 0 0 2px',
                 transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
                 '&:hover': {
                     backgroundColor: '#90bbdd',
@@ -81,7 +83,7 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             AFSCMenuTitleArea: {
                 zIndex: 200,
-                background: '#4e5456',
+                // background: '#4e5456',
                 position: 'absolute',
                 display: 'inline-flex',
                 justifyContent: 'start',
@@ -100,7 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 position: 'absolute',
                 width: 24,
                 height: 50,
-                borderRadius: '1px',
+                borderRadius: '0 2px 2px 0',
                 borderBottom: '1px solid #000',
                 transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
                 '&:hover': {
@@ -133,6 +135,12 @@ const AFSCPanelContainer: React.FC<Props> = props => {
         }
     }
 
+    function showAll(afsclist: string[]) {
+        setSelectedAFSC([]);
+        setSelectedAFSC(afsclist);
+
+    }
+
     useEffect(() => {
         console.log(selectedAFSC);
     }, [selectedAFSC]);
@@ -151,6 +159,7 @@ const AFSCPanelContainer: React.FC<Props> = props => {
         toggleOpen(prev => !prev)
     }
 
+
     return (
         <div className={classes.root}>
             <Slide direction="right" in={open} mountOnEnter unmountOnExit>
@@ -158,7 +167,7 @@ const AFSCPanelContainer: React.FC<Props> = props => {
                 <div className={classes.AFSCMenuTitleArea}>
                     <div className={classes.AFSCMenuTitle}>
                         <Typography>
-                            AFSC
+                            Show AFSC
                         </Typography>
 
                     </div>
@@ -166,13 +175,13 @@ const AFSCPanelContainer: React.FC<Props> = props => {
                         <ArrowLeftIcon/>
                     </div>
                 </div>
-                <AFSCMenu callback={handleCallback} selected={selectedAFSC}/>
+                <AFSCMenu callback={handleCallback} selected={selectedAFSC} showAll={showAll}/>
                 </div>
             </Slide>
             {!open &&  <div className={classes.toggleBtnOpen} onClick={handleClick}>
                 <ArrowRightIcon fontSize={"small"}/>
             </div> }
-            {open && <Divider orientation={"vertical"} className={classes.divider}/>}
+            {!open && <Divider orientation={"vertical"} className={classes.divider}/>}
             <div className={classes.AFSCCardContainer}>
                 {GridItems()}
             </div>

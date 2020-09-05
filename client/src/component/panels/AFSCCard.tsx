@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             height: 300,
-            width: 494,
+            width: 200,
             color: theme.palette.text.secondary,
             margin: 10,
             overflowY: 'hidden'
