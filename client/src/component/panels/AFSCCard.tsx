@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 300,
             width: 200,
             color: theme.palette.text.secondary,
-            margin: 10,
+            margin: 2,
             overflowY: 'hidden'
         },
         afscCard: {

@@ -58,15 +58,15 @@ const HealthSection: React.FC<Props> = props => {
     let pas = "HL0RFB09";
 
     useEffect(() => {
-        dispatch(getChartData())
+        // dispatch(getChartData())
         return function cleanup() {
         }
     }, [dispatch]);
 
-    const chartClassName = clsx({
-        [classes.show]: showManningChart,
-        [classes.hide]: !showManningChart,
-    });
+    // const chartClassName = clsx({
+    //     [classes.show]: showManningChart,
+    //     [classes.hide]: !showManningChart,
+    // });
 
     const childCallBackHandler = (type: string) => {
         switch (type) {

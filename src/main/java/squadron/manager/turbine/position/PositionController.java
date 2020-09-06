@@ -49,7 +49,8 @@ public class PositionController {
     private AfscChartRepository afscChartRepository;
     private PositionAssignmentRepository positionAssignmentRepository;
     private UnassignedRepository unassignedRepository;
-private DoubleBilletedRepository doubleBilletedRepository;
+    private DoubleBilletedRepository doubleBilletedRepository;
+
     @Autowired
     public void ConstructorBasedInjection(MemberRepository memberRepository,
                                           AFSCIncrementRepository afscIncrementRepository,
@@ -148,7 +149,33 @@ private DoubleBilletedRepository doubleBilletedRepository;
     @RequestMapping(path = "/{pas}/{afsc}", method = RequestMethod.GET)
     public @ResponseBody
     Iterable<Position> getPositionsForAfscAuth(@Valid @PathVariable String afsc, @PathVariable String pas) {
-        return positionRepository.findAllByPasCodeAndAfscAuth(pas, afsc);
+        List<Position> allSpecificAFSCPositions = new ArrayList<>();
+        if (afsc != null) {
+            StringBuilder genericAFSC = new StringBuilder(afsc);
+            if (genericAFSC.length() >= 4 && genericAFSC.substring(3, 4).equals("X")) {
+                genericAFSC.setCharAt(3, '3');
+                allSpecificAFSCPositions.addAll(positionRepository.findAllByPasCodeAndAfscAuth(pas, genericAFSC.toString()));
+                genericAFSC.setCharAt(3, '5');
+                allSpecificAFSCPositions.addAll(positionRepository.findAllByPasCodeAndAfscAuth(pas, genericAFSC.toString()));
+                genericAFSC.setCharAt(3, '7');
+                allSpecificAFSCPositions.addAll(positionRepository.findAllByPasCodeAndAfscAuth(pas, genericAFSC.toString()));
+                genericAFSC.setCharAt(3, '9');
+                allSpecificAFSCPositions.addAll(positionRepository.findAllByPasCodeAndAfscAuth(pas, genericAFSC.toString()));
+
+                for (Position position : allSpecificAFSCPositions) {
+                    if (doubleBilletedRepository.findByPosNr(position.getPosNr()) != null) {
+                        DoubleBilleted dbPos = doubleBilletedRepository.findByPosNr(position.getPosNr());
+                        if (memberRepository.findByMbrId(dbPos.getMbrIdAssigned()) != null) {
+                            Member member = memberRepository.findByMbrId(dbPos.getMbrIdAssigned());
+                            allSpecificAFSCPositions.add(new Position(dbPos.getId(), dbPos.getPasCode(), null, null, null, null, null, null, null, null, dbPos.getPosNr(), member.getGrade(), member.getDafsc(), member.getFullName(), dbPos.getMbrIdAssigned(), dbPos.getLastUpdated()));
+                        }
+                    }
+                }
+            } else {
+                return positionRepository.findAllByPasCodeAndAfscAuth(pas, afsc);
+            }
+        }
+        return allSpecificAFSCPositions;
     }
 
     @CrossOrigin
@@ -156,7 +183,20 @@ private DoubleBilletedRepository doubleBilletedRepository;
     public @ResponseBody
     List<String> getDistinctAfscAuthForPas(@Valid @PathVariable String pas) {
         List<Position> positions = positionRepository.findAllByPasCodeAndPosNrIsNotNullAndAfscAuthIsNotNullAndCurrQtr(pas, "1");
-        return positions.stream().map(position -> position.getAfscAuth()).distinct().collect(toList());
+        List<String> specificAFSCList = positions.stream().map(Position::getAfscAuth).distinct().collect(toList());
+        List<String> genericAfscList = new ArrayList<>();
+        for (String afsc : specificAFSCList) {
+            if (afsc != null) {
+                StringBuilder specificAFSC = new StringBuilder(afsc);
+                if (specificAFSC.length() >= 4) {
+                    if (specificAFSC.substring(3, 4).equals("3") || specificAFSC.substring(3, 4).equals("5") || specificAFSC.substring(3, 4).equals("7")) {
+                        specificAFSC.setCharAt(3, 'X');
+                    }
+                }
+                genericAfscList.add(specificAFSC.toString());
+            }
+        }
+        return genericAfscList.stream().distinct().collect(toList());
     }
 
 //    @CrossOrigin
@@ -422,22 +462,23 @@ private DoubleBilletedRepository doubleBilletedRepository;
                 } else {
                     if (newImport.getPosNr() == null) {
                         //catch unassigned
-                            unassignedRepository.save(createUnassignedModel(date, newImport));
+                        unassignedRepository.save(createUnassignedModel(date, newImport));
                     } else {
                         //Double Billeted
-                            doubleBilletedRepository.save(createDoubleBilletedModel(date, newImport));
+                        SqidGenerator sqidModel = new SqidGenerator(newImport.getNameAssigned(), newImport.getMbrIdAssigned());
+                        doubleBilletedRepository.save(createDoubleBilletedModel(date, newImport, sqidModel));
                     }
                 }
             }));
         }
     }
 
-    private DoubleBilleted createDoubleBilletedModel(Date date, PositionJSON newImport) {
+    private DoubleBilleted createDoubleBilletedModel(Date date, PositionJSON newImport, SqidGenerator sqid) {
         return new DoubleBilleted(
                 newImport.getPasCode(),
                 newImport.getPosNr(),
                 newImport.getNameAssigned(),
-                newImport.getMbrIdAssigned(),
+                sqid.getSqid(),
                 date
         );
     }

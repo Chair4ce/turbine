@@ -1,5 +1,6 @@
 package squadron.manager.turbine.position;
 
+import javafx.geometry.Pos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import squadron.manager.turbine.member.Member;
@@ -37,8 +38,9 @@ public interface PositionRepository extends JpaRepository<Position, Long> {
     List<Position> findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc, String currQtr);
 
     List<Position> findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNull(String afsc, String currQtr);
-    //double billeted
     List<Position> findAllByAfscAuthAndCurrQtrIsNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(String afsc);
+    //double billeted
+    List<Position> findAllByPasCodeAndPosNrAndCurrQtrIsNullAndAfscAuthIsNullAndMbrIdAssignedIsNotNull(String pas, String pos);
 
 
     int countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(String afsc, String code);
