@@ -3,6 +3,7 @@ import PositionModel from "../store/positions/models/PositionModel";
 import UploadPositionModel from "../store/positions/models/UploadPositionModel";
 import ManningChartModel from "../store/positions/models/ManningChartModel";
 import StagingUploadPositionModel from "../store/positions/models/StagingUploadPositionModel";
+import AssignedPositionModel from "../store/positions/models/AssignedPositionModel";
 
 
 const crypto = require('crypto');
@@ -117,6 +118,51 @@ export class PositionSerializer {
                     item.mbrIdAssigned,
                     item.lastUpdated ? item.lastUpdated : null
                 );
+            });
+        }
+        return [];
+    }
+
+    static serializeAssignedPositionsFromBackend(items: AssignedPositionModel[]): AssignedPositionModel[] {
+        if (items.map) {
+            return items.map((item: AssignedPositionModel) => {
+                return new AssignedPositionModel(
+                new PositionModel(
+                    item.position.id,
+                    item.position.pasCode,
+                    item.position.orgStructureId ? item.position.orgStructureId : null,
+                    item.position.afscAuth ? item.position.afscAuth : null,
+                    item.position.grdAuth ? item.position.grdAuth : null,
+                    item.position.currQtr,
+                    item.position.projQtr1,
+                    item.position.projQtr2,
+                    item.position.projQtr3,
+                    item.position.projQtr4,
+                    item.position.posNr,
+                    item.position.gradeAssigned,
+                    item.position.dafscAssigned,
+                    item.position.nameAssigned,
+                    item.position.mbrIdAssigned,
+                    item.position.lastUpdated ? item.position.lastUpdated : null),
+                   item.assigned ? new MemberModel(
+                        item.assigned.id,
+                        item.assigned.mbrId ? item.assigned.mbrId : "0",
+                        item.assigned.fullName ? item.assigned.fullName : null,
+                        item.assigned.grade ? item.assigned.grade : null ,
+                        item.assigned.assignedPas ? item.assigned.assignedPas : null ,
+                        item.assigned.dafsc ? item.assigned.dafsc : null ,
+                        item.assigned.officeSymbol ? item.assigned.officeSymbol : null,
+                        item.assigned.dutyTitle ? item.assigned.dutyTitle : null,
+                        item.assigned.dutyStartDate ? item.assigned.dutyStartDate : null,
+                        item.assigned.dutyPhone ? item.assigned.dutyPhone : null,
+                        item.assigned.supvName ? item.assigned.supvName : null,
+                        item.assigned.supvBeginDate ? item.assigned.supvBeginDate: null,
+                        item.assigned.dateArrivedStation ? item.assigned.dateArrivedStation : null,
+                        item.assigned.rnltd ? item.assigned.rnltd : null,
+                        item.assigned.dor ? item.assigned.dor : null,
+                        item.assigned.deros ? item.assigned.deros : null,
+                        item.assigned.lastUpdated ? item.assigned.lastUpdated : null
+                ) : null);
             });
         }
         return [];

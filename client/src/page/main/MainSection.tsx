@@ -112,10 +112,10 @@ const MainSection: React.FC<Props> = props => {
                     <div className={classes.noContentMsg}>
 
                 <div className={classes.irisIcon}>
-                    <TurbineIris/>
-                    <TurbineIris/>
+                    {/*<TurbineIris/>*/}
+                    {/*<TurbineIris/>*/}
                 </div>
-                        <Typography className={classes.noContentTxt}>Move along, nothing to see here...</Typography>
+                        <Typography className={classes.noContentTxt}>No Panels are open</Typography>
                     </div>
                 }
                 {(showCurrentPanel || showGainingPanel) && <PanelsContainer

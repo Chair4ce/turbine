@@ -148,8 +148,9 @@ public class PositionController {
     @CrossOrigin
     @RequestMapping(path = "/{pas}/{afsc}", method = RequestMethod.GET)
     public @ResponseBody
-    Iterable<Position> getPositionsForAfscAuth(@Valid @PathVariable String afsc, @PathVariable String pas) {
+    Iterable<AssignedPosition> getPositionsForAfscAuth(@Valid @PathVariable String afsc, @PathVariable String pas) {
         List<Position> allSpecificAFSCPositions = new ArrayList<>();
+        List<AssignedPosition> assignedPositions = new ArrayList<>();
         if (afsc != null) {
             StringBuilder genericAFSC = new StringBuilder(afsc);
             if (genericAFSC.length() >= 4 && genericAFSC.substring(3, 4).equals("X")) {
@@ -172,10 +173,20 @@ public class PositionController {
                     }
                 }
             } else {
-                return positionRepository.findAllByPasCodeAndAfscAuth(pas, afsc);
+                allSpecificAFSCPositions.addAll(positionRepository.findAllByPasCodeAndAfscAuth(pas, afsc));
+            }
+
+            for (Position position : allSpecificAFSCPositions) {
+                if (memberRepository.findByMbrId(position.getMbrIdAssigned()) != null) {
+                    Member member = memberRepository.findByMbrId(position.getMbrIdAssigned());
+                    assignedPositions.add(new AssignedPosition(position,member));
+                } else {
+                    assignedPositions.add(new AssignedPosition(position, null));
+                }
             }
         }
-        return allSpecificAFSCPositions;
+        System.out.println(assignedPositions);
+        return assignedPositions;
     }
 
     @CrossOrigin

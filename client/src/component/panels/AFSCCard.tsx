@@ -8,6 +8,9 @@ import {Button, Typography} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import classNames from "classnames";
 import Fade from "@material-ui/core/Fade";
+import AFSCSkillRow from "./AFSCSkillContent";
+import AFSCSkillContent from "./AFSCSkillContent";
+import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
 
 interface Props {
     afsc: string;
@@ -28,8 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'center',
             alignItems: 'center',
             justifyContent: 'center',
-            height: 300,
-            width: 200,
+            height: 433,
+            width: 496,
             color: theme.palette.text.secondary,
             margin: 2,
             overflowY: 'hidden'
@@ -67,14 +70,23 @@ const useStyles = makeStyles((theme: Theme) =>
         headerActionArea: {
             marginLeft: 'auto',
         },
-        panelContent: {},
+        panelContent: {
+            overflowY: 'auto',
+            width: '100%',
+            height: '100%',
+            display: 'block',
+            padding: 4
+        },
         panelFooter: {}
     }),
 );
 
 const AFSCCard: React.FC<Props> = props => {
     const classes = useStyles();
-    const [positions, setPositions] = useState([] as PositionModel[]);
+    const [allOtherPositions, setAllOtherPositions] = useState([] as AssignedPositionModel[]);
+    const [lvl3Positions, setlvl3Positions] = useState([] as AssignedPositionModel[]);
+    const [lvl5Positions, setlvl5Positions] = useState([] as AssignedPositionModel[]);
+    const [lvl7Positions, setlvl7Positions] = useState([] as AssignedPositionModel[]);
 
     useEffect(() => {
 
@@ -83,13 +95,20 @@ const AFSCCard: React.FC<Props> = props => {
                 method: 'get',
             })
             .then(response => response.json())
-            .then(json => handleResponse(PositionSerializer.serializeFromBackend(json)))
+            .then(json => handleResponse(PositionSerializer.serializeAssignedPositionsFromBackend(json)))
             .catch(reason => console.log(`Fetch failed: ${reason}`));
 
     }, []);
 
-    const handleResponse = (positions: PositionModel[]) => {
-        setPositions(positions);
+    const handleResponse = (positions: AssignedPositionModel[]) => {
+        setAllOtherPositions(positions.filter((apos: AssignedPositionModel) => {
+            return apos.position.afscAuth.charAt(3) !== "3" && apos.position.afscAuth.charAt(3) !== "5" && apos.position.afscAuth.charAt(3) !== "7"
+        }));
+        if (props.afsc.charAt(3) === "X") {
+            setlvl3Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "3"));
+            setlvl5Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "5"));
+            setlvl7Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "7"));
+        }
     };
 
     function handlePanelClose() {
@@ -99,15 +118,10 @@ const AFSCCard: React.FC<Props> = props => {
     function renderCardInfo() {
         return (
             <React.Fragment>
-                {positions && positions.map((item: PositionModel, index: number) => {
-                    return <div key={index}>
-                        <span>{"POS NR: " + item.posNr} </span>
-                        <span>{"AFSC Auth: " + item.afscAuth} </span>
-                        <span>{"Grade Auth: " + item.grdAuth} </span>
-                        <span>{"Member Assigned: " + item.mbrIdAssigned} </span>
-                        <span>{"DAFSC Assigned: " + item.dafscAssigned} </span>
-                    </div>
-                })}
+                <AFSCSkillContent skillLevel={"3 level"} apositions={lvl3Positions}/>
+                <AFSCSkillContent skillLevel={"5 level"} apositions={lvl5Positions}/>
+                <AFSCSkillContent skillLevel={"7 level"} apositions={lvl7Positions}/>
+                <AFSCSkillContent skillLevel={"Misc"} apositions={allOtherPositions}/>
             </React.Fragment>
         )
     }

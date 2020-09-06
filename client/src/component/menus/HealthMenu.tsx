@@ -153,16 +153,16 @@ const HealthMenu: React.FC<Props> = props => {
     return (
         <div className={classNames(classes.root, props.className)}>
             <MenuList>
-                <MenuItem id={'manning_chart_toggle_btn'} className={classNames(classes.menu_btn, chartSelectorClassName)}
-                          onClick={toggleManningChart}>
-                    <div className={classes.iconArea}>
-                        <MultilineChartIcon/>
-                    </div>
-                    {props.expanded ? <span className={classNames(classes.menu_item_text, chartSelectorClassName)}>
-                    Manning
-                    </span> : ''}
-                    {props.showManningChart ? <div className={classes.selected_item}/> : ''}
-                </MenuItem>
+                {/*<MenuItem id={'manning_chart_toggle_btn'} className={classNames(classes.menu_btn, chartSelectorClassName)}*/}
+                {/*          onClick={toggleManningChart}>*/}
+                {/*    <div className={classes.iconArea}>*/}
+                {/*        <MultilineChartIcon/>*/}
+                {/*    </div>*/}
+                {/*    {props.expanded ? <span className={classNames(classes.menu_item_text, chartSelectorClassName)}>*/}
+                {/*    Manning*/}
+                {/*    </span> : ''}*/}
+                {/*    {props.showManningChart ? <div className={classes.selected_item}/> : ''}*/}
+                {/*</MenuItem>*/}
                 <MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, AFSCPanelSelectorClassName)}
                           onClick={toggleAFSCPanelView}>
                     <div className={classes.iconArea}>

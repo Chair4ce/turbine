@@ -139,9 +139,9 @@ const AFSCPanelContainer: React.FC<Props> = props => {
 
     }
 
-    useEffect(() => {
-        console.log(selectedAFSC);
-    }, [selectedAFSC]);
+    // useEffect(() => {
+    //     console.log(selectedAFSC);
+    // }, [selectedAFSC]);
 
     function GridItems() {
         return (

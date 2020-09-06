@@ -78,15 +78,20 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         toggleBtnGrp: {
             display: 'flex',
+            marginBottom: 5,
             justifyContent: 'center',
             alignItems: 'center',
             flexDirection: 'column'
         },
         toggleShowHideBtn: {
-            width: 85
+            width: 88
         },
         toggled: {
             background: "#5D8AA8"
+        },
+        showAllBtnText: {
+            fontSize: '11px',
+            lineHeight: '15px'
         }
     }),
 );
@@ -144,7 +149,7 @@ const AFSCMenu: React.FC<Props> = props => {
         <div className={classes.root}>
             <div className={classes.toggleBtnGrp}>
             <Button onClick={toggleAll} className={classNames(classes.toggleShowHideBtn, !showAll ? classes.toggled : "")}>
-                Show All
+                <span className={classes.showAllBtnText}>Show All</span>
             </Button>
             </div>
                 {distinctAfscList && renderDistinctAFSCs()}
