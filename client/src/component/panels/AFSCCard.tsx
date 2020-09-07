@@ -77,7 +77,21 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block',
             padding: 4
         },
-        panelFooter: {}
+        panelFooter: {},
+        critical: {
+            color: '#c47f7f'
+        },
+        low: {
+            color: '#c3ba7f'
+        },
+        full: {
+            color: '#89b87c'
+        },
+        manningText: {
+            lineHeight: '20px',
+            cursor: 'pointer',
+            paddingLeft: theme.spacing(2)
+        }
     }),
 );
 
@@ -87,6 +101,11 @@ const AFSCCard: React.FC<Props> = props => {
     const [lvl3Positions, setlvl3Positions] = useState([] as AssignedPositionModel[]);
     const [lvl5Positions, setlvl5Positions] = useState([] as AssignedPositionModel[]);
     const [lvl7Positions, setlvl7Positions] = useState([] as AssignedPositionModel[]);
+    const [AFSCManned, setAFSCManned] = useState();
+    const [lvl3AFSCManned, setlvl3AFSCManned] = useState();
+    const [lvl5AFSCManned, setlvl5AFSCManned] = useState();
+    const [lvl7AFSCManned, selvl7AFSCManned] = useState();
+
 
     useEffect(() => {
 
@@ -102,6 +121,7 @@ const AFSCCard: React.FC<Props> = props => {
 
     const handleResponse = (positions: AssignedPositionModel[]) => {
 
+        setAFSCManned(manningPercent(positions));
 
         setAllOtherPositions(positions.filter((apos: AssignedPositionModel) => {
             return apos.position.afscAuth.charAt(3) !== "3" && apos.position.afscAuth.charAt(3) !== "5" && apos.position.afscAuth.charAt(3) !== "7"
@@ -111,9 +131,17 @@ const AFSCCard: React.FC<Props> = props => {
             setlvl5Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "5"));
             setlvl7Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "7"));
         }
-
-
     };
+
+    const manningPercent = (positions: AssignedPositionModel[]) => {
+        let assigned = positions.filter(item => item.assigned != null).length
+        let total = positions.filter(item => item.position.currQtr == "1").length
+        return Math.round((assigned * 100) / total);
+    }
+    function between(x: number, min: number, max: number) {
+        return x >= min && x <= max;
+    }
+
 
     function handlePanelClose() {
         props.callback(props.afsc)
@@ -138,6 +166,9 @@ const AFSCCard: React.FC<Props> = props => {
                         <Typography className={classes.headerTitle}>
                             {props.afsc.toUpperCase()}
                         </Typography>
+                        <span className={classNames(classes.manningText, between(AFSCManned, 0, 70) ? classes.critical : "", between(AFSCManned, 70, 80) ? classes.low : "", between(AFSCManned, 80, 5000) ? classes.full : "" )}>
+                            {AFSCManned ? AFSCManned + "%": ""}
+                        </span>
                         <div className={classes.headerActionArea}>
 
                         </div>

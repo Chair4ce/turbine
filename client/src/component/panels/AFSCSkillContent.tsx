@@ -1,12 +1,11 @@
 import * as React from 'react';
+import {useState} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import PositionModel from "../../store/positions/models/PositionModel";
-import {useEffect, useState} from "react";
 import AFSCSkillContentRow from "./AFSCCkillContentRow";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
 import FundedAndUnfundedModel from "../../store/positions/models/FundedAndUnfundedModel";
-import {PositionSerializer} from "../../util/PositionSerializer";
 import {useDispatch} from "react-redux";
 
 interface Props {
@@ -23,8 +22,9 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         positionGroupHeader: {
             paddingLeft: 4,
-            cursor: 'pointer',
             display: 'flex',
+            justifyContent: 'start',
+            cursor: 'pointer',
             width: '100%',
             height: 20,
             '&:hover': {
@@ -61,12 +61,38 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
             fontSize: '11px'
         },
+        critical: {
+            color: '#c47f7f'
+        },
+        low: {
+            color: '#c3ba7f'
+        },
+        full: {
+            color: '#89b87c'
+        },
+        manningText: {
+            lineHeight: '20px',
+            cursor: 'pointer',
+            paddingLeft: theme.spacing(12)
+        }
     }),
 );
 
 const AFSCSkillContent: React.FC<Props> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
+    const [manning, setManning] = useState();
+
+    const manningPercent = () => {
+       let assigned = props.apositions.filter(item => item.assigned != null).length
+       let total = props.apositions.filter(item => item.position.currQtr == "1").length
+            return Math.round((assigned * 100) / total);
+    }
+
+        function between(x: number, min: number, max: number) {
+            return x >= min && x <= max;
+        }
+
 
     const funFunded = sortPositions();
 
@@ -106,6 +132,9 @@ return (
                 <span className={classes.positionGroupHeaderText}>
                 {props.skillLevel}
                 </span>
+            <span className={classNames(classes.manningText, between(manningPercent(), 0, 70) ? classes.critical : "", between(manningPercent(), 70, 80) ? classes.low : "", between(manningPercent(), 80, 5000) ? classes.full : "" )}>
+                {props.apositions.length > 0 ? manningPercent() + "%" : ""}
+            </span>
         </header>
         <div className={classes.positionContent}>
             <div className={classes.AFSCContentSubHeader}>

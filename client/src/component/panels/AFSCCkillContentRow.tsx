@@ -24,11 +24,27 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             flexDirection: 'row',
             justifyContent: 'space-around',
-            height: 20,
+            height: 22,
             borderRadius: 3,
             background: '#ffffff',
             width: '172px',
-            borderBottom: '5px solid #56899F',
+            borderBottom: '3px solid #56899F',
+        },
+        assignedInfoArea: {
+            marginLeft: 4,
+            width: '100%',
+            height: 22,
+            borderRadius: 3,
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            background: '#ffffff',
+            borderBottom: '3px solid #C4C4C4',
+            cursor: 'pointer',
+            '&:hover': {
+                backgroundColor: 'rgb(132,132,132)',
+            },
         },
         posInfoGradeAuth: {
             width: 36
@@ -37,26 +53,14 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 80
         },
         unfunded: {
-            borderBottom: '5px solid #906868'
+            background: '#c8c8c8',
+            borderBottom: '3px solid #ffffff'
         },
         funded: {
-            borderBottom: '5px solid #56899F'
+            borderBottom: '3px solid #56899F'
         },
         doubleBilleted: {
-            borderBottom: '5px solid #000000'
-        },
-        assignedInfoArea: {
-            marginLeft: 4,
-            width: '100%',
-            height: 20,
-            borderRadius: 3,
-            display: 'flex',
-            alignItems: 'center',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            background: '#ffffff',
-            padding: 4,
-            borderBottom: '5px solid #C4C4C4',
+            borderBottom: '3px solid #000000'
         },
         assignedInfoGrade: {
             width: 45
@@ -118,7 +122,7 @@ const AFSCSkillContentRow: React.FC<Props> = props => {
                         {props.aposition.position.grdAuth}
                     </div>
                 </div>
-                <div className={classes.assignedInfoArea}>
+                <div className={classNames(classes.assignedInfoArea, props.aposition.position.currQtr == "1" ? classes.funded : classes.unfunded)}>
                     <span className={classNames(classes.assignedInfoGrade, classes.infoText)}>
                         {props.aposition.position.gradeAssigned}
                     </span>
