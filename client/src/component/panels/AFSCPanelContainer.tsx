@@ -147,7 +147,7 @@ const AFSCPanelContainer: React.FC<Props> = props => {
         return (
             <React.Fragment>
                 {selectedAFSC && selectedAFSC.map((item: string, index: number) => {
-                    return <AFSCCard key={index} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
+                    return <AFSCCard key={item} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
                 })}
             </React.Fragment>
         )

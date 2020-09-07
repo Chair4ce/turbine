@@ -101,6 +101,8 @@ const AFSCCard: React.FC<Props> = props => {
     }, []);
 
     const handleResponse = (positions: AssignedPositionModel[]) => {
+
+
         setAllOtherPositions(positions.filter((apos: AssignedPositionModel) => {
             return apos.position.afscAuth.charAt(3) !== "3" && apos.position.afscAuth.charAt(3) !== "5" && apos.position.afscAuth.charAt(3) !== "7"
         }));
@@ -109,6 +111,8 @@ const AFSCCard: React.FC<Props> = props => {
             setlvl5Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "5"));
             setlvl7Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "7"));
         }
+
+
     };
 
     function handlePanelClose() {

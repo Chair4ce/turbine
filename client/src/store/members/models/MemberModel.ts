@@ -45,17 +45,17 @@ export default class MemberModel {
 
     public static sortByGradeDecending = (members: MemberModel[]) => {
         return members.sort(function (a, b) {
-            return convertGradeValue(a.grade) > convertGradeValue(b.grade) ? -1 : 1;
+            return MemberModel.convertGradeValue(a.grade) > MemberModel.convertGradeValue(b.grade) ? -1 : 1;
         });
     }
     public static sortByGradeAscending = (members: MemberModel[]) => {
         return members.sort(function (a, b) {
-            return convertGradeValue(a.grade) < convertGradeValue(b.grade) ? -1 : 1;
+            return MemberModel.convertGradeValue(a.grade) < MemberModel.convertGradeValue(b.grade) ? -1 : 1;
         });
     }
     public static sortByGradeGainingAscending = (members: GainingMemberModel[]) => {
         return members.sort(function (a, b) {
-            return convertGradeValue(a.grade) < convertGradeValue(b.grade) ? -1 : 1;
+            return MemberModel.convertGradeValue(a.grade) < MemberModel.convertGradeValue(b.grade) ? -1 : 1;
         });
     }
     public static sortByDorAscending = (members: MemberModel[]) => {
@@ -96,6 +96,41 @@ export default class MemberModel {
 
     public static generateUniqueAFSCList = (members: MemberModel[]) => {
         return [...new Set(members.map(item => item.dafsc.substring(0, 3) + "X" + item.dafsc.substring(4)))];
+    }
+
+    public static convertGradeValue = (grade: string) => {
+        switch (grade) {
+            case 'AMN':
+                return 1;
+            case 'AB':
+                return 1;
+            case 'A1C':
+                return 2;
+            case 'SRA':
+                return 3;
+            case 'SSG':
+                return 4;
+            case 'SSGT':
+                return 4;
+            case 'TSG':
+                return 5;
+            case 'TSGT':
+                return 5;
+            case 'MSG':
+                return 6;
+            case 'MSGT':
+                return 6;
+            case 'SMS':
+                return 7;
+            case 'SMSGT':
+                return 7;
+            case 'CMS':
+                return 8;
+            case 'CMSGT':
+                return 8;
+            default :
+                return 0;
+        }
     }
 }
 
@@ -149,40 +184,7 @@ function isEnlisted(grade: string) {
     }
 }
 
-function convertGradeValue(grade: string) {
-    switch (grade) {
-        case 'AMN':
-            return 1;
-        case 'AB':
-            return 1;
-        case 'A1C':
-            return 2;
-        case 'SRA':
-            return 3;
-        case 'SSG':
-            return 4;
-        case 'SSGT':
-            return 4;
-        case 'TSG':
-            return 5;
-        case 'TSGT':
-            return 5;
-        case 'MSG':
-            return 6;
-        case 'MSGT':
-            return 6;
-        case 'SMS':
-            return 7;
-        case 'SMSGT':
-            return 7;
-        case 'CMS':
-            return 8;
-        case 'CMSGT':
-            return 8;
-        default :
-            return 0;
-    }
-}
+
 
 
 

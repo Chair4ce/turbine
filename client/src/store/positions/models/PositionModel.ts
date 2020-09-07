@@ -25,9 +25,17 @@ export default class PositionModel {
     ) {
     }
 
-    public static sortPosNrAscending = (pos: AssignedPositionModel[]) => {
+    public static sortPosDescending = (pos: AssignedPositionModel[]) => {
         return pos.sort(function (a, b) {
-            return (parseInt(a.position.posNr.slice(0, -1))! - parseInt(b.position.posNr.slice(0, -1))!) || (parseInt(b.position.currQtr!) - parseInt(a.position.currQtr!)) ;
+           try {
+               if(a.assigned.deros != null && b.assigned.deros != null) {
+                   return (new Date(a.assigned.deros) > new Date(b.assigned.deros)) ? 1 : -1
+               } else {
+                   return -1
+               }
+           } catch (e) {
+               return -1
+           }
         });
     }
 
