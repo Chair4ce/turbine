@@ -59,7 +59,6 @@ export const UpmrFileUpload: React.FC<Props> = props => {
         acceptedFiles.forEach((file: any) => {
             let fileName = file.name;
 
-            if(fileName.toString().includes("gaining" || "Gaining")) {console.log("found an Gaining roster")}
             if(fileName.split('.').pop() === "xlsx") {
                 const data = readXlsxFile(file, {
                     schema, transformData(data: any) {

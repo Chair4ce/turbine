@@ -57,7 +57,6 @@ export const MemberFileUpload: React.FC<Props> = props => {
         acceptedFiles.forEach((file: any) => {
                 let fileName = file.name;
 
-                if(fileName.toString().includes("alpha" || "Alpha")) {console.log("found an Alpha roster")}
                 if(fileName.split('.').pop() === "xlsx") {
                     const data = readXlsxFile(file, {
                         schema, transformData(data: any) {

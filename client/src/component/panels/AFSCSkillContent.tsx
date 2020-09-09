@@ -36,16 +36,19 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         positionGroupHeaderText: {
             lineHeight: '20px',
-            cursor: 'pointer'
+            cursor: 'pointer',
+            width: 124
         },
         subheader_posNr: {
-            width: 77
+            width: 84,
+            textAlign: 'center'
         },
         subheader_grdAuth: {
             width: 50
         },
         subheader_assigned: {
-            width: 95
+            width: 95,
+            marginLeft: 16
         },
         subheader_deros: {
             marginLeft: 'auto',
@@ -53,7 +56,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         subHeader: {
             height: 18,
-            lineHeight: '18px'
+            lineHeight: '18px',
+            fontSize: '11px'
         },
         AFSCContentSubHeader: {
             width: '100%',
@@ -73,91 +77,88 @@ const useStyles = makeStyles((theme: Theme) =>
         manningText: {
             lineHeight: '20px',
             cursor: 'pointer',
-            paddingLeft: theme.spacing(12)
         }
     }),
 );
 
 const AFSCSkillContent: React.FC<Props> = props => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
-    const [manning, setManning] = useState();
+        const classes = useStyles();
 
-    const manningPercent = () => {
-       let assigned = props.apositions.filter(item => item.assigned != null).length
-       let total = props.apositions.filter(item => item.position.currQtr == "1").length
+        const manningPercent = () => {
+            const assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
+            const total = props.apositions.filter(item => item.position.currQtr == "1").length
             return Math.round((assigned * 100) / total);
-    }
+        }
 
         function between(x: number, min: number, max: number) {
             return x >= min && x <= max;
         }
 
+        const funFunded = sortPositions();
 
-    const funFunded = sortPositions();
-
-    function sortPositions() {
-        let fundedAndUnfunded = [] as FundedAndUnfundedModel[];
-        for (let i = 0; i < props.apositions.length; i++) {
-
-            if (props.apositions[i].position.currQtr == "1") {
-                let unfundedPositions = [] as AssignedPositionModel[];
-                unfundedPositions = props.apositions.filter((fpos: AssignedPositionModel) => fpos.position.posNr == props.apositions[i].position.posNr && fpos.position.currQtr == "0");
+        function sortPositions() {
+            let fundedAndUnfunded = [] as FundedAndUnfundedModel[];
+            for (let i = 0; i < props.apositions.length; i++) {
+                if (props.apositions[i].position.currQtr == "1") {
+                    let unfundedPositions = [] as AssignedPositionModel[];
+                    unfundedPositions = props.apositions.filter((fpos: AssignedPositionModel) => fpos.position.posNr == props.apositions[i].position.posNr && fpos.position.currQtr == "0");
                     fundedAndUnfunded.push(new FundedAndUnfundedModel(props.apositions[i], unfundedPositions))
-                console.log(unfundedPositions)
+                }
             }
-
+            return fundedAndUnfunded;
         }
 
-        return fundedAndUnfunded;
-    }
+        const [showPositions, toggleShowPositions] = useState(true);
 
-    const [showPositions, toggleShowPositions] = useState(true);
+        function renderFunded(funded: AssignedPositionModel, unfunded: AssignedPositionModel[], index: number) {
+            return (
+                <React.Fragment key={index}>
+                    < AFSCSkillContentRow
+                        aposition={funded}
+                    />
+                    {unfunded ? PositionModel.sortPosDescending(unfunded).map((pos: AssignedPositionModel) =>
+                        <AFSCSkillContentRow key={pos.position.id} aposition={pos}/>) : null}
+                </React.Fragment>
+            )
+        }
 
-
-function renderFunded(funded: AssignedPositionModel, unfunded: AssignedPositionModel[], index: number) {
-    return (
-        <React.Fragment key={funded.position.posNr}>
-            < AFSCSkillContentRow
-                aposition={funded}
-            />
-            {unfunded ? PositionModel.sortPosDescending(unfunded).map((pos: AssignedPositionModel) => <AFSCSkillContentRow key={pos.position.id} aposition={pos}/>) : null}
-        </React.Fragment>
-    )
-}
-
-return (
-    <div className={classNames(props.className, classes.root)}>
-        <header className={classes.positionGroupHeader}>
-                <span className={classes.positionGroupHeaderText}>
-                {props.skillLevel}
-                </span>
-            <span className={classNames(classes.manningText, between(manningPercent(), 0, 70) ? classes.critical : "", between(manningPercent(), 70, 80) ? classes.low : "", between(manningPercent(), 80, 5000) ? classes.full : "" )}>
-                {props.apositions.length > 0 ? manningPercent() + "%" : ""}
-            </span>
-        </header>
-        <div className={classes.positionContent}>
-            <div className={classes.AFSCContentSubHeader}>
+        return (
+            <div className={classNames(props.className, classes.root)}>
+                <header className={classes.positionGroupHeader}>
+                    <span className={classes.positionGroupHeaderText}>
+                    {props.skillLevel}
+                    </span>
+                    <span
+                        className={classNames(classes.manningText, between(manningPercent(), 0, 70) ? classes.critical : "", between(manningPercent(), 70, 80) ? classes.low : "", between(manningPercent(), 80, 5000) ? classes.full : "")}>
+                    {props.apositions.length > 0 ? manningPercent() + "%" : ""}
+                    </span>
+                    <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
+                                {props.apositions ? "Assigned " + props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length : ""}
+                    </span>
+                    <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
+                                {props.apositions ? "funded " + props.apositions.filter(item => item.position.currQtr == "1").length : ""}
+                    </span>
+                    <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
+                                {props.apositions ? "unfunded " + props.apositions.filter(item => item.position.currQtr == "0").length : ""}
+                    </span>
+                </header>
+                <div className={classes.positionContent}>
+                    <div className={classes.AFSCContentSubHeader}>
                 <span className={classNames(classes.subHeader, classes.subheader_posNr)}>
                     POS NR
                 </span>
-                <span className={classNames(classes.subHeader, classes.subheader_grdAuth)}>
-                    Grd
-                </span>
-                <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
-                    Assigned
-                </span>
-                <span className={classNames(classes.subHeader, classes.subheader_deros)}>
+
+                        <span className={classNames(classes.subHeader, classes.subheader_deros)}>
                     DEROS
                 </span>
+                    </div>
+                    {showPositions && funFunded.map((fundedAndUnfunded: FundedAndUnfundedModel, index) => {
+                        return renderFunded(fundedAndUnfunded.position, fundedAndUnfunded.unfunded, index)
+                    })}
+                </div>
             </div>
-            {showPositions && funFunded.map((fundedAndUnfunded: FundedAndUnfundedModel, index) => {
-                return renderFunded(fundedAndUnfunded.position, fundedAndUnfunded.unfunded, index)
-            })}
-        </div>
-    </div>
-);
-}
+        );
+    }
 ;
 
 export default AFSCSkillContent;

@@ -79,52 +79,6 @@ public class PositionController {
     }
 
 
-    @CrossOrigin
-    @RequestMapping(path = "/{afsc}", method = RequestMethod.GET)
-    public @ResponseBody
-    List<PositionType> getAFSCCardInfo(@Valid @PathVariable String afsc) {
-        List<PositionType> positions = new ArrayList<>();
-        //Assigned in Funded || unFunded position 3 lvl
-
-        for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc, "1")) {
-            positions.add(new PositionType("funded_assigned", position));
-        }
-
-        for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc, "0")) {
-            positions.add(new PositionType("unfunded_assigned", position));
-        }
-
-        for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrAndPosNrIsNotNullAndMbrIdAssignedIsNull(afsc, "1")) {
-            positions.add(new PositionType("funded_unassigned", position));
-        }
-
-        for (Position position : positionRepository.findAllByAfscAuthAndCurrQtrIsNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc)) {
-            positions.add(new PositionType("double_billeted", position));
-        }
-
-
-        return positions;
-    }
-
-    @CrossOrigin
-    @GetMapping(path = "/double")
-    public @ResponseBody
-    List<Member> getDouble() {
-        List<Position> positions = positionRepository.findAllByPosNrIsNotNullAndCurrQtrIsNull();
-        ArrayList<Member> unAssigned = null;
-        positions.forEach(item -> unAssigned.add(memberRepository.findByMbrId(item.getMbrIdAssigned())));
-        return unAssigned;
-    }
-
-    @CrossOrigin
-    @GetMapping(path = "/unassigned")
-    public @ResponseBody
-    List<Member> getUnassigned() {
-        List<Position> positions = positionRepository.findAllByPosNrIsNull();
-        ArrayList<Member> unAssigned = null;
-        positions.forEach(item -> unAssigned.add(memberRepository.findByMbrId(item.getMbrIdAssigned())));
-        return unAssigned;
-    }
 
     @CrossOrigin
     @GetMapping(path = "/manning_chart")
@@ -185,7 +139,6 @@ public class PositionController {
                 }
             }
         }
-        System.out.println(assignedPositions);
         return assignedPositions;
     }
 
@@ -210,42 +163,43 @@ public class PositionController {
         return genericAfscList.stream().distinct().collect(toList());
     }
 
-//    @CrossOrigin
-//    @GetMapping(path = "/manning_chart/generate")
-//    void generateManningChartData() {
-//        List<String> distinctAFSC = positionRepository.findDistinctAfscAuth();
-//        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//        int thisMonth = localDate.getMonthValue();
-//        AtomicInteger year = new AtomicInteger(new DateTime().getYear());
-//        afscChartRepository.deleteAll();
-//        for (String afsc : distinctAFSC) {
-//            AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
-//            AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
-//            LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//
-//            //Iterate by month until the rest of this year and the following two years.
-//            for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
-//                int iMonth = date.getMonthValue();
-//                int iYear = date.getYear();
-//
-//                List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
-//                for (AFSCIncrementLog increment : increments) {
-//                    if (increment.getIncrementType() == "departure") {
-//                        assigned.decrementAndGet();
-//                    }
-//                    if (increment.getIncrementType() == "projected arrival") {
-//                        assigned.incrementAndGet();
-//                    }
-//                }
-//
-//                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
-//            }
-//        }
-//
-//        //Search through each distinct AFSC and track the count all depatures and arrivals
-//
-//    }
+    @CrossOrigin
+    @GetMapping(path = "/projected/{pas}/{afsc}")
+    void generateManningChartData(@Valid @PathVariable String afsc, @PathVariable String pas) {
+
+
+        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        int thisMonth = localDate.getMonthValue();
+        AtomicInteger year = new AtomicInteger(new DateTime().getYear());
+        afscChartRepository.deleteAll();
+
+            AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
+            AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
+            LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+            //Iterate by month until the rest of this year and the following two years.
+            for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
+                int iMonth = date.getMonthValue();
+                int iYear = date.getYear();
+
+                List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
+                for (AFSCIncrementLog increment : increments) {
+                    if (increment.getIncrementType() == "departure") {
+                        assigned.decrementAndGet();
+                    }
+                    if (increment.getIncrementType() == "projected arrival") {
+                        assigned.incrementAndGet();
+                    }
+                }
+
+                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+            }
+
+
+        //Search through each distinct AFSC and track the count all depatures and arrivals
+
+    }
 
     private AtomicInteger adjustAssignedForMonth(AtomicInteger assigned, String afsc, int month) {
         List<Position> assignedPositions = positionRepository.findAllByAfscAuthAndCurrQtrIsNotNullAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);

@@ -1,10 +1,14 @@
 import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import PositionModel from "../../store/positions/models/PositionModel";
 import moment from "moment";
-import {Divider} from "@material-ui/core";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
+import {useEffect, useState} from "react";
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import Tooltip from "@material-ui/core/Tooltip";
+import withStyles from "@material-ui/core/styles/withStyles";
+import {Typography} from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
 
 interface Props {
     aposition: AssignedPositionModel;
@@ -47,10 +51,12 @@ const useStyles = makeStyles((theme: Theme) =>
             },
         },
         posInfoGradeAuth: {
-            width: 36
+            width: 36,
+            textAlign: 'center'
         },
         posInfoPosNr: {
-            width: 80
+            width: 80,
+            textAlign: 'center'
         },
         unfunded: {
             background: '#c8c8c8',
@@ -63,7 +69,8 @@ const useStyles = makeStyles((theme: Theme) =>
             borderBottom: '3px solid #000000'
         },
         assignedInfoGrade: {
-            width: 45
+            width: 45,
+            textAlign: 'center'
         },
         assignedInfoName: {
             width: 232,
@@ -72,7 +79,8 @@ const useStyles = makeStyles((theme: Theme) =>
             overflowY: 'hidden'
         },
         assignedInfoDeros: {
-            width: 63
+            width: 63,
+            textAlign: 'center'
         },
         posDivider: {
             background: '#000000'
@@ -91,21 +99,32 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: '13px',
             height: 20,
             lineHeight: '20px',
+        },
+        positionErrorIcon: {
         }
     }),
 );
 
-
 const AFSCSkillContentRow: React.FC<Props> = props => {
     const classes = useStyles();
 
-    function renderDeros() {
-        if (props.aposition.assigned != null) {
-            if (props.aposition.assigned.deros != null) {
-                return moment(props.aposition.assigned.deros).format("MMM YY")
-            }
+    const [positionError, setPositionError] = useState("");
+
+    useEffect(() => {
+        if (props.aposition.position.nameAssigned != null && props.aposition.assigned == null) {
+            setPositionError("Could not find " + props.aposition.position.nameAssigned + " from Alpha Roster");
         }
-    }
+    }, [props.aposition.assigned,props.aposition.position.nameAssigned])
+
+    const HtmlTooltip = withStyles((theme: Theme) => ({
+        tooltip: {
+            backgroundColor: '#f5f5f9',
+            color: 'rgba(0, 0, 0, 0.87)',
+            maxWidth: 240,
+            fontSize: theme.typography.pxToRem(12),
+            border: '1px solid #dadde9',
+        },
+    }))(Tooltip);
 
     return (
         <div className={classNames(props.className, classes.root)}>
@@ -122,15 +141,28 @@ const AFSCSkillContentRow: React.FC<Props> = props => {
                         {props.aposition.position.grdAuth}
                     </div>
                 </div>
-                <div className={classNames(classes.assignedInfoArea, props.aposition.position.currQtr == "1" ? classes.funded : classes.unfunded)}>
+                <div
+                    className={classNames(classes.assignedInfoArea, props.aposition.position.currQtr == "1" ? classes.funded : classes.unfunded)}>
                     <span className={classNames(classes.assignedInfoGrade, classes.infoText)}>
                         {props.aposition.position.gradeAssigned}
                     </span>
                     <span className={classNames(classes.assignedInfoName, classes.infoText)}>
-                        {props.aposition.position.nameAssigned}
+                        {props.aposition.position.nameAssigned ? props.aposition.position.nameAssigned.toUpperCase() : ""}
                     </span>
                     <span className={classNames(classes.assignedInfoDeros, classes.infoText)}>
-                        {renderDeros()}
+                        {props.aposition.position.nameAssigned != null ? props.aposition.assigned != null ? props.aposition.assigned.deros != null ? moment(props.aposition.assigned.deros).format("MMM YY") : "No Data" : null : null}
+                        {positionError ? <HtmlTooltip
+                                title={
+                                    <React.Fragment>
+                                        <Typography color="inherit">Missing Data from Alpha Roster</Typography>
+                                        <em>{"Could not find member: "}</em>
+                                        {' '}<u>{props.aposition.position.nameAssigned}</u>
+                                    </React.Fragment>
+                                }
+                            >
+                                <ErrorOutlineIcon fontSize="small" className={classes.positionErrorIcon}/>
+                            </HtmlTooltip>
+                            : null}
                     </span>
                 </div>
             </div>

@@ -235,21 +235,18 @@ public class MemberService {
     public List<GainingGroupCollection> getGroupGainingDAFSCCollections() {
         List<GainingMember> members = gainingMemberRepository.findAll();
         List<String> distinctAFSCs = getArrayOfDistinctGainingDAFSCs(members);
-                System.out.println(distinctAFSCs);
         List<GainingGroupCollection> dafscCollection = new ArrayList<>();
         for (String afsc : distinctAFSCs) {
             List<GainingMember> memberCollection = new ArrayList<>();
             StringBuilder newAFSC = new StringBuilder(afsc);
             if (afsc.length() > 4) {
                 if (afsc.charAt(3) == '3' || afsc.charAt(4) == '5' || afsc.charAt(4) == '7') {
-                System.out.println("found skill lvl " + newAFSC.charAt(3) + "in afsc : " + afsc);
                     for (GainingMember member : members) {
                         if (member.getDafsc() != null) {
                             StringBuilder compareAFSC = new StringBuilder(member.getDafsc());
                             if (compareAFSC.length() > 4) {
                                 compareAFSC.setCharAt(3, 'X');
                                 if (newAFSC.toString().equals(compareAFSC.toString())) {
-                System.out.println("found a match with i: " + afsc + " and member afsc: " + compareAFSC);
                                     memberCollection.add(member);
                                 }
                             }

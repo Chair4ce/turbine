@@ -23,7 +23,6 @@ function convertToHash(mbrId: string) {
 
 export class PositionSerializer {
     static serializeToBackend(items: any): StagingUploadPositionModel[] {
-        console.log("serializing to backend")
         if (items.map) {
             return items.map((item: any) => {
                 return new UploadPositionModel(

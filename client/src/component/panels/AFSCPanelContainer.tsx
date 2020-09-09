@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 overflowY: 'auto',
                 flexWrap: 'wrap',
                 justifyContent: 'start',
-                transition: theme.transitions.create(["padding-left"],{ duration: theme.transitions.duration.complex }),
+                transition: theme.transitions.create(["padding-left"], {duration: theme.transitions.duration.complex}),
             },
             divider: {
                 paddingLeft: 25,
@@ -72,11 +72,11 @@ const useStyles = makeStyles((theme: Theme) =>
                 right: 0,
                 background: '#5D8AA8',
                 borderRadius: '2px 0 0 2px',
-                transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.shortest }),
+                transition: theme.transitions.create(["width"], {duration: theme.transitions.duration.shortest}),
                 '&:hover': {
                     backgroundColor: '#90bbdd',
                     cursor: 'pointer',
-                        width: 80,
+                    width: 80,
                 },
             },
             AFSCMenuTitleArea: {
@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme: Theme) =>
                 height: 50,
                 borderRadius: '0 2px 2px 0',
                 borderBottom: '1px solid #000',
-                transition: theme.transitions.create(["width"],{ duration: theme.transitions.duration.short }),
+                transition: theme.transitions.create(["width"], {duration: theme.transitions.duration.short}),
                 '&:hover': {
                     backgroundColor: '#90bbdd',
                     cursor: 'pointer',
@@ -136,53 +136,51 @@ const AFSCPanelContainer: React.FC<Props> = props => {
     function showAll(afsclist: string[]) {
         setSelectedAFSC([]);
         setSelectedAFSC(afsclist);
-
     }
 
     // useEffect(() => {
     //     console.log(selectedAFSC);
     // }, [selectedAFSC]);
 
-    function GridItems() {
-        return (
-            <React.Fragment>
-                {selectedAFSC && selectedAFSC.map((item: string, index: number) => {
-                    return <AFSCCard key={item} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
-                })}
-            </React.Fragment>
-        )
-    }
+    // function GridItems() {
+    //     return (
+    //         <React.Fragment>
+    //
+    //         </React.Fragment>
+    //     )
+    // }
 
     function handleClick() {
         toggleOpen(prev => !prev)
     }
 
-
     return (
         <div className={classes.root}>
             <Slide direction="right" in={open} mountOnEnter unmountOnExit>
                 <div className={classes.MenuContainer}>
-                <div className={classes.AFSCMenuTitleArea}>
-                    <div className={classes.AFSCMenuTitle}>
-                        <Typography>
-                            Show AFSC
-                        </Typography>
+                    <div className={classes.AFSCMenuTitleArea}>
+                        <div className={classes.AFSCMenuTitle}>
+                            <Typography>
+                                Show AFSC
+                            </Typography>
 
+                        </div>
+                        <div className={classes.toggleBtn} onClick={handleClick}>
+                            <ArrowLeftIcon/>
+                        </div>
                     </div>
-                    <div className={classes.toggleBtn} onClick={handleClick}>
-                        <ArrowLeftIcon/>
-                    </div>
-                </div>
-                <AFSCMenu callback={handleCallback} selected={selectedAFSC} showAll={showAll}/>
+                    <AFSCMenu callback={handleCallback} selected={selectedAFSC} showAll={showAll}/>
                 </div>
             </Slide>
-             <Slide direction="right" in={!open} mountOnEnter unmountOnExit>
-            <div className={classes.toggleBtnOpen} onClick={handleClick}>
-                <ArrowRightIcon fontSize={"small"}/>
-            </div>
-             </Slide>
+            <Slide direction="right" in={!open} mountOnEnter unmountOnExit>
+                    <div className={classes.toggleBtnOpen} onClick={handleClick}>
+                        <ArrowRightIcon fontSize={"small"}/>
+                    </div>
+            </Slide>
             <div className={classNames(classes.AFSCCardContainer, !open ? classes.divider : "")}>
-                {GridItems()}
+                {selectedAFSC && selectedAFSC.map((item: string, index: number) => {
+                    return <AFSCCard key={item} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
+                })}
             </div>
         </div>
     );

@@ -2,13 +2,11 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {PositionSerializer} from "../../util/PositionSerializer";
-import PositionModel from "../../store/positions/models/PositionModel";
 import Paper from "@material-ui/core/Paper";
 import {Button, Typography} from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import classNames from "classnames";
 import Fade from "@material-ui/core/Fade";
-import AFSCSkillRow from "./AFSCSkillContent";
 import AFSCSkillContent from "./AFSCSkillContent";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
 
@@ -26,16 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
         },
         paper: {
-            display: 'flex',
-            flexDirection: 'column',
-            textAlign: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: 433,
-            width: 496,
+            height: 'fit-content',
+            width: 490,
             color: theme.palette.text.secondary,
             margin: 2,
-            overflowY: 'hidden'
+            marginTop: 0
         },
         afscCard: {
             margin: 0,
@@ -61,6 +54,7 @@ const useStyles = makeStyles((theme: Theme) =>
             background: '#303030',
             display: 'flex',
             alignItems: 'center',
+            borderRadius: '4px 4px 0 0'
         },
         headerTitle: {
             fontSize: 22,
@@ -73,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) =>
         panelContent: {
             overflowY: 'auto',
             width: '100%',
-            height: '100%',
+            height: 440,
             display: 'block',
             padding: 4
         },
@@ -150,16 +144,16 @@ const AFSCCard: React.FC<Props> = props => {
     function renderCardInfo() {
         return (
             <React.Fragment>
-                <AFSCSkillContent skillLevel={"3 level"} apositions={lvl3Positions}/>
-                <AFSCSkillContent skillLevel={"5 level"} apositions={lvl5Positions}/>
-                <AFSCSkillContent skillLevel={"7 level"} apositions={lvl7Positions}/>
-                <AFSCSkillContent skillLevel={"Misc"} apositions={allOtherPositions}/>
+                {lvl3Positions.length > 0 && <AFSCSkillContent skillLevel={"3 level"} apositions={lvl3Positions}/>}
+                {lvl5Positions.length > 0 &&  <AFSCSkillContent skillLevel={"5 level"} apositions={lvl5Positions}/> }
+                {lvl7Positions.length > 0 &&  <AFSCSkillContent skillLevel={"7 level"} apositions={lvl7Positions}/> }
+                {allOtherPositions.length > 0 &&  <AFSCSkillContent skillLevel={"Others"} apositions={allOtherPositions}/> }
             </React.Fragment>
         )
     }
 
     return (
-        <Paper className={classes.paper} key={props.mapKi}>
+        <Paper className={classes.paper}>
             <Fade in={true} exit={true}>
                 <div className={classes.afscCard}>
                     <header className={classes.cardHeader}>

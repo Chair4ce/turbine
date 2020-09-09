@@ -169,7 +169,7 @@ const HealthMenu: React.FC<Props> = props => {
                         <AmpStoriesIcon/>
                     </div>
                     {props.expanded ? <span className={classNames(classes.menu_item_text, AFSCPanelSelectorClassName)}>
-                       AFSC info
+                       AFSC manning
                         </span> : ''}
                     {props.showAFSCPanelView ? <div className={classes.selected_item}/> : ''}
                 </MenuItem>
