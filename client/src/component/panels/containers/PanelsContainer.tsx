@@ -37,6 +37,8 @@ interface Props {
 const PanelsContainer: React.FC<Props> = props => {
     const classes = useStyles();
 
+
+
     return (
         <section className={classNames(classes.root, props.className)}>
             <div className={classes.table}>

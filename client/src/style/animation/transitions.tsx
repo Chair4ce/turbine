@@ -13,7 +13,7 @@ export const spin = keyframes`
 transform: rotateZ(0);
 }
 100% {
-transform: rotateZ(120deg);
+transform: rotateZ(360deg);
 }
 `;
 
@@ -58,7 +58,7 @@ export const reverseSpin = keyframes`
 transform: rotateZ(0);
 }
 100% {
-transform: rotateZ(-180deg);
+transform: rotateZ(-360deg);
 }
 `;
 

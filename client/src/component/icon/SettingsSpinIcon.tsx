@@ -75,10 +75,10 @@ cursor: pointer;
  
   :hover {
     .inner {
-    animation: ${spin} 1s ease-out 1;
+    animation: ${spin} 20s ease-out 1;
     }
     .outer {
-    animation: ${reverseSpin} 1s ease-out 1;
+    animation: ${reverseSpin} 20s ease-out 1;
     }
 }
 

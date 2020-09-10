@@ -9,6 +9,9 @@ import classNames from "classnames";
 import Fade from "@material-ui/core/Fade";
 import AFSCSkillContent from "./AFSCSkillContent";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
+import ManningChartModel from "../../store/positions/models/ManningChartModel";
+import ContentModal from "./ContentModal";
+import * as am4core from "@amcharts/amcharts4/core";
 
 interface Props {
     afsc: string;
@@ -30,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: 2,
             marginTop: 0
         },
+
         afscCard: {
             margin: 0,
             padding: 0,
@@ -95,10 +99,18 @@ const AFSCCard: React.FC<Props> = props => {
     const [lvl3Positions, setlvl3Positions] = useState([] as AssignedPositionModel[]);
     const [lvl5Positions, setlvl5Positions] = useState([] as AssignedPositionModel[]);
     const [lvl7Positions, setlvl7Positions] = useState([] as AssignedPositionModel[]);
+    const [chartData, setChartData] = useState([] as ManningChartModel[]);
     const [AFSCManned, setAFSCManned] = useState();
-    const [lvl3AFSCManned, setlvl3AFSCManned] = useState();
-    const [lvl5AFSCManned, setlvl5AFSCManned] = useState();
-    const [lvl7AFSCManned, selvl7AFSCManned] = useState();
+    const [open, setOpen] = React.useState(false);
+
+    const handleOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+
+        setOpen(false);
+    };
 
 
     useEffect(() => {
@@ -120,6 +132,7 @@ const AFSCCard: React.FC<Props> = props => {
         setAllOtherPositions(positions.filter((apos: AssignedPositionModel) => {
             return apos.position.afscAuth.charAt(3) !== "3" && apos.position.afscAuth.charAt(3) !== "5" && apos.position.afscAuth.charAt(3) !== "7"
         }));
+
         if (props.afsc.charAt(3) === "X") {
             setlvl3Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "3"));
             setlvl5Positions(positions.filter((apos: AssignedPositionModel) => apos.position.afscAuth.charAt(3) === "5"));
@@ -136,24 +149,56 @@ const AFSCCard: React.FC<Props> = props => {
         return x >= min && x <= max;
     }
 
+    function handleCallback(afsc: string, assigned: number, authorized: number) {
+
+        fetch(`/positions/projected/${props.pas}/${afsc}/${authorized}/${assigned}/${62}`,
+            {
+                method: 'get',
+            })
+            .then(response => response.json())
+            .then(json => handleChartData(json))
+            .catch(reason => console.log(`Fetch failed: ${reason}`));
+
+    }
+
+    function handleChartData(json: ManningChartModel[]) {
+        setChartData(json);
+        handleOpen();
+    }
 
     function handlePanelClose() {
-        props.callback(props.afsc)
+        if(!chartsExist()) {
+        am4core.disposeAllCharts();
+            }
+        props.callback(props.afsc);
+    }
+
+    function chartsExist() {
+        let charts = am4core.registry.baseSprites;
+        for(let i = 0; i < charts.length; i++) {
+            if (charts[i].svgContainer != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function renderCardInfo() {
         return (
             <React.Fragment>
-                {lvl3Positions.length > 0 && <AFSCSkillContent skillLevel={"3 level"} apositions={lvl3Positions}/>}
-                {lvl5Positions.length > 0 &&  <AFSCSkillContent skillLevel={"5 level"} apositions={lvl5Positions}/> }
-                {lvl7Positions.length > 0 &&  <AFSCSkillContent skillLevel={"7 level"} apositions={lvl7Positions}/> }
-                {allOtherPositions.length > 0 &&  <AFSCSkillContent skillLevel={"Others"} apositions={allOtherPositions}/> }
+                {lvl3Positions.length > 0 && <AFSCSkillContent afsc={props.afsc} skillLevel={"3 level"} apositions={lvl3Positions} callBack={handleCallback}/>}
+                {lvl5Positions.length > 0 &&  <AFSCSkillContent afsc={props.afsc} skillLevel={"5 level"} apositions={lvl5Positions} callBack={handleCallback}/> }
+                {lvl7Positions.length > 0 &&  <AFSCSkillContent afsc={props.afsc} skillLevel={"7 level"} apositions={lvl7Positions} callBack={handleCallback}/> }
+                {allOtherPositions.length > 0 &&  <AFSCSkillContent afsc={props.afsc} skillLevel={"Others"} apositions={allOtherPositions} callBack={handleCallback}/> }
             </React.Fragment>
         )
     }
 
     return (
         <Paper className={classes.paper}>
+            <>
+            <ContentModal open={open} callback={handleClose} chartData={chartData}/>
+            </>
             <Fade in={true} exit={true}>
                 <div className={classes.afscCard}>
                     <header className={classes.cardHeader}>
@@ -179,6 +224,7 @@ const AFSCCard: React.FC<Props> = props => {
                     </div>
                 </div>
             </Fade>
+
         </Paper>
 
     );

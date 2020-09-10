@@ -96,7 +96,6 @@ export class PositionSerializer {
     }
 
     static serializeFromBackend(items: any): PositionModel[] {
-        console.log("serializing from backend")
         if (items.map) {
             return items.map((item: any) => {
                 return new PositionModel(

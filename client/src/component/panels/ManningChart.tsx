@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useLayoutEffect} from 'react';
+import {useEffect, useLayoutEffect} from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import * as am4core from "@amcharts/amcharts4/core";
@@ -10,1104 +10,155 @@ import ManningChartModel from "../../store/positions/models/ManningChartModel";
 
 interface Props {
     chartData: ManningChartModel[];
-className?: string;
+    className?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: '100%',
-            height: '100%'
+            height: '500px'
         }
     }),
 );
 
-
-
 const ManningChart: React.FC<Props> = props => {
     const classes = useStyles();
 
-    useLayoutEffect(( ) => {
-        am4core.useTheme(am4themes_dark);
+    useLayoutEffect(() => {
+         am4core.useTheme(am4themes_dark);
         am4core.useTheme(am4themes_animated);
-        // let x = am4core.create("chartdiv", am4charts.XYChart);
-        // x.paddingRight = 20;
-        //
-        // let data = [];
-        // let visits = 10;
-        //
-        // for (let i = 1; i < 366; i++) {
-        //     visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-        //     data.push({ date: new Date(2018, 0, i), name: "name" + i, value: visits });
-        // }
-        //
-        // x.data = data;
-        //
-        // let dateAxis = x.xAxes.push(new am4charts.DateAxis());
-        // dateAxis.renderer.grid.template.location = 0;
-        //
-        // let valueAxis = x.yAxes.push(new am4charts.ValueAxis());
-        //
-        // valueAxis.tooltip.disabled = true;
-        // valueAxis.renderer.minWidth = 35;
-        //
-        // let series = x.series.push(new am4charts.LineSeries());
-        // series.dataFields.dateX = "date";
-        //
-        // //on hover datapoint tab lookin thing
-        // // series.fill = am4core.color('white')
-        // valueAxis.renderer.labels.template.fill = am4core.color('white')
-        // dateAxis.renderer.labels.template.fill = am4core.color('white')
-        // series.dataFields.valueY = "value";
-        // series.tooltipText = "{valueY.value}";
-        // x.cursor = new am4charts.XYCursor();
-        // let scrollbarX = new am4charts.XYChartScrollbar();
-        // scrollbarX.series.push(series);
-        // x.scrollbarX = scrollbarX;
-        //
-        //
-        // chart.current = x;
-
         let chart = am4core.create("chartdiv", am4charts.XYChart);
-        chart.maskBullets = false;
-
-        let xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
-        let yAxis = chart.yAxes.push(new am4charts.CategoryAxis());
-
-        xAxis.dataFields.category = "month";
-        yAxis.dataFields.category = "afsc";
-
-        xAxis.renderer.grid.template.disabled = true;
-        xAxis.renderer.minGridDistance = 40;
-
-        yAxis.renderer.grid.template.disabled = true;
-        yAxis.renderer.inversed = true;
-        yAxis.renderer.minGridDistance = 60;
-
-        let series = chart.series.push(new am4charts.ColumnSeries());
-        series.dataFields.categoryX = "month";
-        series.dataFields.categoryY = "afsc";
-        series.dataFields.value = "value";
-        series.sequencedInterpolation = true;
-        series.defaultState.transitionDuration = 2000;
-
-        let bgColor = new am4core.InterfaceColorSet().getFor("background");
-        // @ts-ignore
-
-
-        let columnTemplate = series.columns.template;
-        columnTemplate.strokeWidth = 1;
-        columnTemplate.strokeOpacity = 0.2;
-        columnTemplate.stroke = bgColor;
-        columnTemplate.tooltipText = "{month}, {afsc}: {value.workingValue.formatNumber('#.')}";
-        columnTemplate.width = am4core.percent(100);
-        columnTemplate.height = am4core.percent(100);
-
-        series.heatRules.push({
-            target: columnTemplate,
-            property: "fill",
-            min: am4core.color("#863232"),
-            max: am4core.color(bgColor),
-        });
-
-// heat legend
-        let heatLegend = chart.bottomAxesContainer.createChild(am4charts.HeatLegend);
-        heatLegend.width = am4core.percent(100);
-        heatLegend.series = series;
-        heatLegend.valueAxis.renderer.labels.template.fontSize = 8;
-        heatLegend.valueAxis.renderer.minGridDistance = 60;
-
-// heat legend behavior
-        series.columns.template.events.on("over", function(event) {
-            handleHover(event.target);
-        })
-
-        series.columns.template.events.on("hit", function(event) {
-            handleHover(event.target);
-        })
-
-        function handleHover(column: any) {
-            if (!isNaN(column.dataItem.value)) {
-                heatLegend.valueAxis.showTooltipAt(column.dataItem.value)
-            }
-            else {
-                heatLegend.valueAxis.hideTooltip();
-            }
-        }
-
-        series.columns.template.events.on("out", function(event) {
-            heatLegend.valueAxis.hideTooltip();
-        })
 
         chart.data = props.chartData;
 
-        // chart.data = [
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "29%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "25%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "23%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "22%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "23%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "20%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "21%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "22%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "24%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "27%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "29%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "31%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "31%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "37%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "36%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X3",
-        //         "month": "Jan",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "27%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "38%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "44%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "39%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "46%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "57%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "70%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "80%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "84%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "93%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "90%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "85%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "85%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "83%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "86%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "78%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "69%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "59%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "55%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "54%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "50%"
-        //     },
-        //     {
-        //         "afsc": "3D0X2",
-        //         "month": "Feb",
-        //         "value": "48%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "44%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "39%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "44%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "47%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "45%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "57%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "65%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "81%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "88%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "92%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "104%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "101%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "92%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "92%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "96%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "97%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "96%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "87%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "86%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "99%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "102%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "91%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "Mar",
-        //         "value": "85%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "81%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "71%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "56%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "68%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "81%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "84%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "94%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "99%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "114%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "124%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "93%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "99%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "96%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "90%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "89%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "90%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "88%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "83%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "69%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "58%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "51%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "49%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "44%"
-        //     },
-        //     {
-        //         "afsc": "3D1X1",
-        //         "month": "Apr",
-        //         "value": "41%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "36%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "65%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "62%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "69%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "65%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "64%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "81%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "85%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "85%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "88%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "94%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "89%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "81%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "82%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "83%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "82%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "76%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "64%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "54%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "49%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "46%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "43%"
-        //     },
-        //     {
-        //         "afsc": "3D0X3",
-        //         "month": "May",
-        //         "value": "40%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "40%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "36%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "39%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "40%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "40%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "45%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "54%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "69%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "77%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "78%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "86%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "82%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "76%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "74%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "74%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "74%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "69%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "59%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "50%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "46%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "42%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "38%"
-        //     },
-        //     {
-        //         "afsc": "1N051A",
-        //         "month": "Jun",
-        //         "value": "38%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "23%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "22%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "21%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "25%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "29%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "31%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Aug",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "26%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "23%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "22%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "21%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "25%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "29%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "35%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "33%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "34%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Sep",
-        //         "value": "31%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "32%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "30%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "28%"
-        //     },
-        //     {
-        //         "afsc": "3D1X2",
-        //         "month": "Oct",
-        //         "value": "26%"
-        //     }
-        // ];
+        let dateAxis = chart.xAxes.push(new am4charts.DateAxis());
+        dateAxis.renderer.grid.template.location = 0;
+        dateAxis.renderer.minGridDistance = 60;
 
-    }, [props.chartData]);
+        let valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+        valueAxis.tooltip.disabled = true;
+
+// only for the legend
+        let iconSeries = chart.series.push(new am4charts.ColumnSeries())
+        iconSeries.fill = am4core.color("#ec0800");
+        iconSeries.strokeOpacity = 0;
+        iconSeries.stroke = am4core.color("#ec0800");
+        iconSeries.name = "Events";
+        iconSeries.dataFields.dateX = "date";
+        iconSeries.dataFields.valueY = "v";
+
+        let series = chart.series.push(new am4charts.LineSeries());
+        series.dataFields.dateX = "date";
+        series.dataFields.openValueY = "authorized";
+        series.dataFields.valueY = "assigned";
+        series.tooltipText = "authorized: {openValueY.value} assigned: {valueY.value}";
+        series.sequencedInterpolation = true;
+        series.stroke = am4core.color("#1b7cb3");
+        series.strokeWidth = 2;
+        series.name = "District Metered Usage";
+        series.stroke = chart.colors.getIndex(0);
+        series.fill = series.stroke;
+        series.fillOpacity = 0.8;
+
+        let bullet = series.bullets.push(new am4charts.CircleBullet())
+        bullet.fill = new am4core.InterfaceColorSet().getFor("background");
+        bullet.fillOpacity = 1;
+        bullet.strokeWidth = 2;
+        bullet.circle.radius = 4;
+
+        let series2 = chart.series.push(new am4charts.LineSeries());
+        series2.dataFields.dateX = "date";
+        series2.dataFields.valueY = "authorized";
+        series2.sequencedInterpolation = true;
+        series2.strokeWidth = 2;
+        series2.tooltip.getFillFromObject = false;
+        series2.tooltip.getStrokeFromObject = true;
+        series2.tooltip.label.fill = am4core.color("#000");
+        series2.name = "SP Aggregate usage";
+        series2.stroke = chart.colors.getIndex(7);
+        series2.fill = series2.stroke;
+
+        let bullet2 = series2.bullets.push(new am4charts.CircleBullet())
+        bullet2.fill = bullet.fill;
+        bullet2.fillOpacity = 1;
+        bullet2.strokeWidth = 2;
+        bullet2.circle.radius = 4;
+
+        chart.cursor = new am4charts.XYCursor();
+        chart.cursor.xAxis = dateAxis;
+        chart.scrollbarX = new am4core.Scrollbar();
+
+        let negativeRange: any;
+
+// create ranges
+
+// create ranges
+        chart.events.on("datavalidated", function () {
+            series.dataItems.each(function (s1DataItem) {
+                let s1PreviousDataItem;
+                let s2PreviousDataItem;
+
+                let s2DataItem = series2.dataItems.getIndex(s1DataItem.index);
+
+                if (s1DataItem.index > 0) {
+                    s1PreviousDataItem = series.dataItems.getIndex(s1DataItem.index - 1);
+                    s2PreviousDataItem = series2.dataItems.getIndex(s1DataItem.index - 1);
+                }
+
+                let startTime = am4core.time.round(new Date(s1DataItem.dateX.getTime()), dateAxis.baseInterval.timeUnit, dateAxis.baseInterval.count).getTime();
+
+                // intersections
+                if (s1PreviousDataItem && s2PreviousDataItem) {
+                    let x0 = am4core.time.round(new Date(s1PreviousDataItem.dateX.getTime()), dateAxis.baseInterval.timeUnit, dateAxis.baseInterval.count).getTime() + dateAxis.baseDuration / 2;
+                    let y01 = s1PreviousDataItem.valueY;
+                    let y02 = s2PreviousDataItem.valueY;
+
+                    let x1 = startTime + dateAxis.baseDuration / 2;
+                    let y11 = s1DataItem.valueY;
+                    let y12 = s2DataItem.valueY;
+
+                    let intersection = am4core.math.getLineIntersection({x: x0, y: y01}, {x: x1, y: y11}, {
+                        x: x0,
+                        y: y02
+                    }, {x: x1, y: y12});
+
+                    startTime = Math.round(intersection.x);
+                }
+
+                // start range here
+                if (s2DataItem.valueY > s1DataItem.valueY) {
+                    if (!negativeRange) {
+                        negativeRange = dateAxis.createSeriesRange(series);
+                        negativeRange.date = new Date(startTime);
+                        negativeRange.contents.fill = series2.fill;
+                        negativeRange.contents.fillOpacity = 0.8;
+                    }
+                } else {
+                    // if negative range started
+                    if (negativeRange) {
+                        negativeRange.endDate = new Date(startTime);
+                    }
+                    negativeRange = undefined;
+                }
+                // end if last
+                if (s1DataItem.index == series.dataItems.length - 1) {
+                    if (negativeRange) {
+                        negativeRange.endDate = new Date(s1DataItem.dateX.getTime() + dateAxis.baseDuration / 2);
+                        negativeRange = undefined;
+                    }
+                }
+            })
+        })
+
+// return () => {
+//             chart.dispose();
+// }
+    }, []);
+
     return (
         <div className={classNames(props.className, classes.root)}>
-            <div id="chartdiv" style={{width: "100%", height: "calc(100vh - 80px)"}}/>
+            <div id="chartdiv" style={{width: "100%", height: "500px"}}/>
         </div>
     );
 };

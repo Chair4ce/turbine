@@ -72,30 +72,11 @@ public class PositionController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public void addPositions(@Valid @RequestBody List<PositionJSON> json) {
-        saveOrUpdateAndReturnAllPositions(json);
+    Iterable<Position> addPositions(@Valid @RequestBody List<PositionJSON> json) {
+       return saveOrUpdatePositions(json);
+
     }
 
-
-
-    @CrossOrigin
-    @GetMapping(path = "/manning_chart")
-    public @ResponseBody
-    List<AfscChart> getManningChartData() {
-
-
-        //Search through each distinct AFSC and track the count all depatures and arrivals
-
-
-        return afscChartRepository.findAll();
-    }
-
-    @CrossOrigin
-    @RequestMapping(path = "/afscCardInfo/month/{afsc}/{month}/{year}", method = RequestMethod.GET)
-    public @ResponseBody
-    AfscChart getAFSCCardDataForMonth(@Valid @PathVariable String afsc, @PathVariable int month, @PathVariable int year) {
-        return afscChartRepository.findByAfscAndMonthAndYear(afsc, month, year);
-    }
 
     @CrossOrigin
     @RequestMapping(path = "/{pas}/{afsc}", method = RequestMethod.GET)
@@ -162,41 +143,33 @@ public class PositionController {
     }
 
     @CrossOrigin
-    @GetMapping(path = "/projected/{pas}/{afsc}")
-    void generateManningChartData(@Valid @PathVariable String afsc, @PathVariable String pas) {
+    @GetMapping(path = "/projected/{pas}/{afsc}/{auth}/{asgnd}/{months}")
+    Iterable<ProjectedAFSCManning> generateManningChartData(@Valid @PathVariable String afsc, @PathVariable String pas, @PathVariable int asgnd, @PathVariable int auth, @PathVariable int months) {
 
-
-        LocalDate localDate = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int thisMonth = localDate.getMonthValue();
-        AtomicInteger year = new AtomicInteger(new DateTime().getYear());
-        afscChartRepository.deleteAll();
-
-            AtomicInteger assigned = new AtomicInteger(getAssigned(afsc));
-            AtomicInteger authorized = new AtomicInteger(getAuthorized(afsc));
+            AtomicInteger assigned = new AtomicInteger(asgnd);
+            AtomicInteger authorized = new AtomicInteger(auth);
             LocalDate start = new Date().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-            LocalDate end = new DateTime(new Date()).plusMonths(48 + thisMonth).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-            //Iterate by month until the rest of this year and the following two years.
+            LocalDate end = new DateTime(new Date()).plusMonths(months).toDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            List<ProjectedAFSCManning> projectedAFSCMannings = new ArrayList<>();
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+            //Iterate by months starting this month by given months and tally each departure and arrival
             for (LocalDate date = start; date.isBefore(end); date = date.plusMonths(1)) {
                 int iMonth = date.getMonthValue();
                 int iYear = date.getYear();
 
                 List<AFSCIncrementLog> increments = afscIncrementRepository.findAllByAfscAndMonthAndYear(afsc, iMonth, iYear);
                 for (AFSCIncrementLog increment : increments) {
-                    if (increment.getIncrementType() == "departure") {
+                    if (increment.getIncrementType().equals("departure")) {
                         assigned.decrementAndGet();
                     }
-                    if (increment.getIncrementType() == "projected arrival") {
+                    if (increment.getIncrementType().equals("projected arrival")) {
                         assigned.incrementAndGet();
                     }
                 }
-
-                afscChartRepository.save(new AfscChart(afsc, assigned.intValue(), authorized.intValue(), iMonth, iYear, PercentageCalculator.calculatePercentage(assigned.intValue(), authorized.intValue())));
+                projectedAFSCMannings.add(new ProjectedAFSCManning(Date.from(date.atStartOfDay(defaultZoneId).toInstant()), assigned.intValue(), authorized.intValue()));
             }
 
-
-        //Search through each distinct AFSC and track the count all depatures and arrivals
-
+            return projectedAFSCMannings;
     }
 
     private AtomicInteger adjustAssignedForMonth(AtomicInteger assigned, String afsc, int month) {
@@ -283,13 +256,6 @@ public class PositionController {
         }
     }
 
-    private int getAssigned(String afsc) {
-        return positionRepository.countAllByAfscAuthAndPosNrIsNotNullAndMbrIdAssignedIsNotNull(afsc);
-    }
-
-    private int getAuthorized(String afsc) {
-        return positionRepository.countAllByAfscAuthAndCurrQtrAndPosNrIsNotNull(afsc, "1");
-    }
 
     private List<AFSCIncrementLog> getIncrementsByYear(List<AFSCIncrementLog> allIncrements, int year) {
         List<AFSCIncrementLog> IncrementsOfYear = new ArrayList<>();
@@ -352,19 +318,12 @@ public class PositionController {
 //    }
 
 
-    public void saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
+    public List<Position> saveOrUpdatePositions(@RequestBody @Valid List<PositionJSON> json) {
         Date date = new Date();
         if (json != null) {
-            List<String> pasCodes = json.stream()
-                    .map(PositionJSON::getPasCode)
-                    .distinct()
-                    .collect(toList());
-
-            for (String pasCode : pasCodes) {
-                positionRepository.deleteAllByPasCode(pasCode);
-                doubleBilletedRepository.deleteAllByPasCode(pasCode);
-                unassignedRepository.deleteAllByPasCode(pasCode);
-            }
+                positionRepository.deleteAll();
+                doubleBilletedRepository.deleteAll();
+                unassignedRepository.deleteAll();
 
 
             json.forEach((newImport -> {
@@ -434,6 +393,7 @@ public class PositionController {
                 }
             }));
         }
+        return positionRepository.findAll();
     }
 
     private DoubleBilleted createDoubleBilletedModel(Date date, PositionJSON newImport, SqidGenerator sqid) {

@@ -6,12 +6,18 @@ import PositionModel from "../../store/positions/models/PositionModel";
 import AFSCSkillContentRow from "./AFSCCkillContentRow";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
 import FundedAndUnfundedModel from "../../store/positions/models/FundedAndUnfundedModel";
-import {useDispatch} from "react-redux";
+import ShowChartRoundedIcon from '@material-ui/icons/ShowChartRounded';
+import withStyles from "@material-ui/core/styles/withStyles";
+import Tooltip from "@material-ui/core/Tooltip";
+import {Typography} from "@material-ui/core";
+import ErrorOutlineIcon from "@material-ui/icons/ErrorOutline";
 
 interface Props {
     skillLevel: string;
+    afsc: string;
     apositions: AssignedPositionModel[];
     className?: string;
+    callBack: (afsc: string, assigned: number, authorized: number) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,16 +90,26 @@ const useStyles = makeStyles((theme: Theme) =>
         manningText: {
             lineHeight: '20px',
             cursor: 'pointer',
+        },
+        projectedBtn: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 40,
+            height: 18,
+            cursor: 'pointer'
         }
     }),
 );
 
+
 const AFSCSkillContent: React.FC<Props> = props => {
         const classes = useStyles();
-
+        const assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
+        const total = props.apositions.filter(item => item.position.currQtr == "1").length
         const manningPercent = () => {
-            const assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
-            const total = props.apositions.filter(item => item.position.currQtr == "1").length
+            let assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
+            let total = props.apositions.filter(item => item.position.currQtr == "1").length
             return Math.round((assigned * 100) / total);
         }
 
@@ -115,6 +131,16 @@ const AFSCSkillContent: React.FC<Props> = props => {
             return fundedAndUnfunded;
         }
 
+    const HtmlTooltip = withStyles((theme: Theme) => ({
+        tooltip: {
+            backgroundColor: '#f5f5f9',
+            color: 'rgba(0, 0, 0, 0.87)',
+            maxWidth: 240,
+            fontSize: theme.typography.pxToRem(12),
+            border: '1px solid #dadde9',
+        },
+    }))(Tooltip);
+
         const [showPositions, toggleShowPositions] = useState(true);
 
         function renderFunded(funded: AssignedPositionModel, unfunded: AssignedPositionModel[], index: number) {
@@ -127,6 +153,16 @@ const AFSCSkillContent: React.FC<Props> = props => {
                         <AFSCSkillContentRow key={pos.position.id} aposition={pos}/>) : null}
                 </React.Fragment>
             )
+        }
+
+        function handleOpen() {
+            if (props.afsc.charAt(3) === "X") {
+                let newAfsc = props.afsc.substring(0, 3) + props.skillLevel.substring(0, 1) + props.afsc.substring(4, props.afsc.length);
+                props.callBack(newAfsc, assigned, total)
+            } else {
+                props.callBack(props.afsc, assigned, total)
+
+            }
         }
 
         return (
@@ -148,6 +184,17 @@ const AFSCSkillContent: React.FC<Props> = props => {
                     <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
                                 {props.apositions ? "unfunded " + props.apositions.filter(item => item.position.currQtr == "0").length : ""}
                     </span>
+                    <HtmlTooltip
+                        title={
+                            <React.Fragment>
+                                <Typography color="inherit">Projected Manning</Typography>
+                            </React.Fragment>
+                        }
+                    >
+                    <button type="button" onClick={handleOpen} className={classes.projectedBtn}>
+                        <ShowChartRoundedIcon fontSize="small"/>
+                    </button>
+                    </HtmlTooltip>
                 </header>
                 <div className={classes.positionContent}>
                     <div className={classes.AFSCContentSubHeader}>

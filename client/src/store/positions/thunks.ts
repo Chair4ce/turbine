@@ -38,20 +38,11 @@ export const getChartData = () => {
     }
 };
 
-export const generateChartData = () => {
-    return (dispatch: any) => {
-        return callApi('get','positions/manning_chart/generate')
-            .catch(err => dispatch(positionsFetchError(err)));
-    }
-};
-
 export const savePositions = (positions: any[]) => {
     return (dispatch: any) => {
         dispatch(positionsFetchRequest());
        return callApi('POST', 'positions/save',PositionSerializer.serializeToBackend(positions))
-            .then((res) => {
-                dispatch(uploadPositionsSuccess());
-            }
+            .then((res) => dispatch(positionsFetchSuccess(PositionSerializer.serializeFromBackend(res)))
             ).catch(err => dispatch(positionsFetchError(err))
         );
     }
