@@ -9,10 +9,9 @@ import classNames from "classnames";
 import Fade from "@material-ui/core/Fade";
 import AFSCSkillContent from "./AFSCSkillContent";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
 import ManningChartModel from "../../store/positions/models/ManningChartModel";
-import ManningChart from "./ManningChart";
+import ContentModal from "./ContentModal";
+import * as am4core from "@amcharts/amcharts4/core";
 
 interface Props {
     afsc: string;
@@ -34,19 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
             margin: 2,
             marginTop: 0
         },
-        modal: {
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        paperModal: {
-            backgroundColor: theme.palette.background.paper,
-            border: '2px solid #000',
-            width: '1000',
-            height: '900',
-            boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 4, 3),
-        },
+
         afscCard: {
             margin: 0,
             padding: 0,
@@ -121,8 +108,10 @@ const AFSCCard: React.FC<Props> = props => {
     };
 
     const handleClose = () => {
+
         setOpen(false);
     };
+
 
     useEffect(() => {
 
@@ -162,7 +151,7 @@ const AFSCCard: React.FC<Props> = props => {
 
     function handleCallback(afsc: string, assigned: number, authorized: number) {
 
-        fetch(`/positions/projected/${props.pas}/${afsc}/${authorized}/${assigned}/${100}`,
+        fetch(`/positions/projected/${props.pas}/${afsc}/${authorized}/${assigned}/${62}`,
             {
                 method: 'get',
             })
@@ -173,14 +162,25 @@ const AFSCCard: React.FC<Props> = props => {
     }
 
     function handleChartData(json: ManningChartModel[]) {
-        console.log(json);
         setChartData(json);
         handleOpen();
     }
 
-
     function handlePanelClose() {
-        props.callback(props.afsc)
+        if(!chartsExist()) {
+        am4core.disposeAllCharts();
+            }
+        props.callback(props.afsc);
+    }
+
+    function chartsExist() {
+        let charts = am4core.registry.baseSprites;
+        for(let i = 0; i < charts.length; i++) {
+            if (charts[i].svgContainer != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     function renderCardInfo() {
@@ -196,32 +196,9 @@ const AFSCCard: React.FC<Props> = props => {
 
     return (
         <Paper className={classes.paper}>
-
-            <Modal
-                aria-labelledby="transition-modal-title"
-                aria-describedby="transition-modal-description"
-                className={classes.modal}
-                open={open}
-                onClose={handleClose}
-                closeAfterTransition
-                BackdropComponent={Backdrop}
-                BackdropProps={{
-                    timeout: 500,
-                }}
-            >
-                <Fade in={open}>
-                    <div className={classes.paper}>
-                        { chartData ? chartData.map((m: ManningChartModel) => {
-                            return <p key={m.date}>
-                                {m.date}
-                                {m.authorized}
-                                {m.assigned}
-                            </p>
-                        }) : null}
-                        {/*{ chartData ? <ManningChart chartData={chartData}/> : null}*/}
-                    </div>
-                </Fade>
-            </Modal>
+            <>
+            <ContentModal open={open} callback={handleClose} chartData={chartData}/>
+            </>
             <Fade in={true} exit={true}>
                 <div className={classes.afscCard}>
                     <header className={classes.cardHeader}>

@@ -8,14 +8,12 @@ import {
     getOfficeCollection,
     getUniqueAFSCCollection
 } from "../../store/members/thunks";
-import {generateChartData} from "../../store/positions/thunks";
 import {ApplicationState} from "../../store";
 import {History} from 'history';
 
 interface Props {
     history: History;
     getMembers: () => void;
-    generateChartData: () => void;
     getOfficeCollection: () => void;
     getUniqueAFSCCollection: () => void;
     getGainingMembers: () => void;
@@ -49,7 +47,6 @@ const mapStateToProps = ({members}: ApplicationState) => ({
 
 const mapDispatchToProps = {
     getMembers: getMembers,
-    generateChartData: generateChartData,
     getOfficeCollection: getOfficeCollection,
     getUniqueAFSCCollection: getUniqueAFSCCollection,
     getGainingMembers: getGainingMembers,

@@ -74,8 +74,9 @@ public class PositionController {
     @CrossOrigin
     @Transactional
     @PostMapping(path = "/save")
-    public void addPositions(@Valid @RequestBody List<PositionJSON> json) {
-        saveOrUpdateAndReturnAllPositions(json);
+    Iterable<Position> addPositions(@Valid @RequestBody List<PositionJSON> json) {
+       return saveOrUpdatePositions(json);
+
     }
 
 
@@ -319,19 +320,12 @@ public class PositionController {
 //    }
 
 
-    public void saveOrUpdateAndReturnAllPositions(@RequestBody @Valid List<PositionJSON> json) {
+    public List<Position> saveOrUpdatePositions(@RequestBody @Valid List<PositionJSON> json) {
         Date date = new Date();
         if (json != null) {
-            List<String> pasCodes = json.stream()
-                    .map(PositionJSON::getPasCode)
-                    .distinct()
-                    .collect(toList());
-
-            for (String pasCode : pasCodes) {
-                positionRepository.deleteAllByPasCode(pasCode);
-                doubleBilletedRepository.deleteAllByPasCode(pasCode);
-                unassignedRepository.deleteAllByPasCode(pasCode);
-            }
+                positionRepository.deleteAll();
+                doubleBilletedRepository.deleteAll();
+                unassignedRepository.deleteAll();
 
 
             json.forEach((newImport -> {
@@ -401,6 +395,7 @@ public class PositionController {
                 }
             }));
         }
+        return positionRepository.findAll();
     }
 
     private DoubleBilleted createDoubleBilletedModel(Date date, PositionJSON newImport, SqidGenerator sqid) {
