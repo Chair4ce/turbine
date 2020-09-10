@@ -10,8 +10,10 @@ import {
 } from "../../store/members/thunks";
 import {generateChartData} from "../../store/positions/thunks";
 import {ApplicationState} from "../../store";
+import {History} from 'history';
 
 interface Props {
+    history: History;
     getMembers: () => void;
     generateChartData: () => void;
     getOfficeCollection: () => void;
@@ -36,7 +38,7 @@ export class MainIndexPage extends React.Component<Props, any> {
 
     public render() {
         return (
-            <MainDashboard/>
+            <MainDashboard history={this.props.history}/>
         );
     }
 }

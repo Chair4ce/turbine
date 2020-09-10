@@ -74,6 +74,7 @@ interface Props {
 
 const ROSTER_MENU_SELECT_ITEM = {
     TOGGLE_CURRENT_ROSTER: 'ROSTER_MENU/TOGGLE_CURRENT',
+    LOADING_CURRENT_ROSTER: 'ROSTER_MENU/LOADING_CURRENT',
     TOGGLE_PROJECTED_ROSTER: 'ROSTER_MENU/TOGGLE_PROJECTED',
     TOGGLE_GAINING_ROSTER: 'ROSTER_MENU/TOGGLE_GAINING',
     TOGGLE_LOSING_ROSTER: 'ROSTER_MENU/TOGGLE_LOSING',
@@ -83,11 +84,6 @@ const ROSTER_MENU_SELECT_ITEM = {
 const RosterMenu: React.FC<Props> = props => {
     const classes = useStyles();
 
-    const toggleCurrentPanel = () => {
-        props.menuSelectHandler(
-            ROSTER_MENU_SELECT_ITEM.TOGGLE_CURRENT_ROSTER
-        )
-    }
     //
     // const toggleProjectedPanel = () => {
     //     props.menuSelectHandler(
@@ -95,11 +91,6 @@ const RosterMenu: React.FC<Props> = props => {
     //     )
     // }
 
-    const toggleGainingPanel = () => {
-        props.menuSelectHandler(
-            ROSTER_MENU_SELECT_ITEM.TOGGLE_GAINING_ROSTER
-        )
-    }
 
     // const toggleLosingPanel = () => {
     //     props.menuSelectHandler(
@@ -114,7 +105,9 @@ const RosterMenu: React.FC<Props> = props => {
     // }
 
     const handleCurrentClick = () => {
-        toggleCurrentPanel();
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_CURRENT_ROSTER
+        )
     }
 
     // const handleProjectedClick = () => {
@@ -122,7 +115,9 @@ const RosterMenu: React.FC<Props> = props => {
     // }
     //
     const handleGainingClick = () => {
-        toggleGainingPanel();
+        props.menuSelectHandler(
+            ROSTER_MENU_SELECT_ITEM.TOGGLE_GAINING_ROSTER
+        )
     }
     //
     // const handleLosingClick = () => {

@@ -215,7 +215,7 @@ interface Props {
 const CurrentRosterPanel: React.FC<Props> = props => {
     // const collectionAFSC: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.genericAFSCList);
     // const collectionOffice: GenericGroupCollectionModel[] = useSelector(({members}: ApplicationState) => members.officeCollection);
-    const loading: boolean = useSelector(({members}: ApplicationState) => members.loading);
+
     const members: MemberModel[] = useSelector(({members}: ApplicationState) => members.data);
     const dispatch = useDispatch();
     const classes = useStyles();

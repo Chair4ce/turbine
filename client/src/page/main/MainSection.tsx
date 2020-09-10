@@ -75,18 +75,18 @@ const MainSection: React.FC<Props> = props => {
             case ROSTER_MENU_SELECT_ACTION.TOGGLE_CURRENT_ROSTER:
                 toggleCurrentPanel(prev => !prev)
                 break;
-            case ROSTER_MENU_SELECT_ACTION.TOGGLE_PROJECTED_ROSTER:
-                toggleProjectedPanel(prev => !prev)
-                break;
+            // case ROSTER_MENU_SELECT_ACTION.TOGGLE_PROJECTED_ROSTER:
+            //     toggleProjectedPanel(prev => !prev)
+            //     break;
             case ROSTER_MENU_SELECT_ACTION.TOGGLE_GAINING_ROSTER:
                 toggleGainingPanel(prev => !prev)
                 break;
-            case ROSTER_MENU_SELECT_ACTION.TOGGLE_LOSING_ROSTER:
-                toggleLosingPanel(prev => !prev)
-                break;
-            case ROSTER_MENU_SELECT_ACTION.TOGGLE_POSITION_PANEL:
-                togglePositionPanel(prev => !prev)
-                break;
+            // case ROSTER_MENU_SELECT_ACTION.TOGGLE_LOSING_ROSTER:
+            //     toggleLosingPanel(prev => !prev)
+            //     break;
+            // case ROSTER_MENU_SELECT_ACTION.TOGGLE_POSITION_PANEL:
+            //     togglePositionPanel(prev => !prev)
+            //     break;
             case SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND:
                 props.sideBarCallBack(SIDEBAR_ACTION.TOGGLE_SIDEBAR_EXPAND)
                 break;

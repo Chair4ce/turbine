@@ -6,12 +6,13 @@ import PositionModel from "../../store/positions/models/PositionModel";
 import AFSCSkillContentRow from "./AFSCCkillContentRow";
 import AssignedPositionModel from "../../store/positions/models/AssignedPositionModel";
 import FundedAndUnfundedModel from "../../store/positions/models/FundedAndUnfundedModel";
-import {useDispatch} from "react-redux";
 
 interface Props {
     skillLevel: string;
+    afsc: string;
     apositions: AssignedPositionModel[];
     className?: string;
+    callBack: (afsc: string, assigned: number, authorized: number) => void;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -81,12 +82,14 @@ const useStyles = makeStyles((theme: Theme) =>
     }),
 );
 
+
 const AFSCSkillContent: React.FC<Props> = props => {
         const classes = useStyles();
-
+    const assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
+    const total = props.apositions.filter(item => item.position.currQtr == "1").length
         const manningPercent = () => {
-            const assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
-            const total = props.apositions.filter(item => item.position.currQtr == "1").length
+            let assigned = props.apositions.filter(item => item.assigned != null || item.position.nameAssigned != null).length
+            let total = props.apositions.filter(item => item.position.currQtr == "1").length
             return Math.round((assigned * 100) / total);
         }
 
@@ -122,6 +125,17 @@ const AFSCSkillContent: React.FC<Props> = props => {
             )
         }
 
+        function handleOpen() {
+            if(props.afsc.charAt(3) === "X") {
+                let newAfsc = props.afsc.substring(0,3) + props.skillLevel.substring(0, 1) + props.afsc.substring(4, props.afsc.length );
+                console.log(newAfsc);
+                props.callBack(newAfsc, assigned, total)
+            } else {
+            props.callBack(props.afsc, assigned, total)
+
+            }
+        }
+
         return (
             <div className={classNames(props.className, classes.root)}>
                 <header className={classes.positionGroupHeader}>
@@ -141,6 +155,9 @@ const AFSCSkillContent: React.FC<Props> = props => {
                     <span className={classNames(classes.subHeader, classes.subheader_assigned)}>
                                 {props.apositions ? "unfunded " + props.apositions.filter(item => item.position.currQtr == "0").length : ""}
                     </span>
+                    <button type="button" onClick={handleOpen}>
+                        react-transition-group
+                    </button>
                 </header>
                 <div className={classes.positionContent}>
                     <div className={classes.AFSCContentSubHeader}>

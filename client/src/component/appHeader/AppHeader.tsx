@@ -2,9 +2,8 @@ import * as React from "react";
 import classNames from "classnames";
 import TurbineLogo from "../icon/TurbineLogo";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {Typography} from "@material-ui/core";
+import {Button, Typography} from "@material-ui/core";
 import clsx from "clsx";
-import SettingsIcon from '@material-ui/icons/Settings';
 import {AppSettingsPage} from "../settingsPage/AppSettingsPage";
 import {setStaging} from "../../store/members/thunks";
 import {useDispatch} from "react-redux";
@@ -12,6 +11,11 @@ import IconButton from "@material-ui/core/IconButton";
 import SettingsSpinIcon from "../icon/SettingsSpinIcon";
 import {resetGainingSuccess, resetSuccess, stageGainingUploadData, stageMemberUploadData} from "../../store/members";
 import {stagePositionUploadData} from "../../store/positions";
+import Link from "@material-ui/core/Link";
+import {useAppContext} from "../../libs/contextLib";
+import Divider from "@material-ui/core/Divider";
+import Fade from "@material-ui/core/Fade";
+import {History} from 'history';
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -90,20 +94,39 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         unSelected: {},
         profileActions: {
-            width: 100,
+            width: 200,
             height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center'
         },
         uploadModalBtn: {
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            height: 30,
+            marginTop: 5
+        },
+        loginDivider: {
+            height: 20,
+            marginLeft: 5,
+            marginRight: 5
+        },
+        loginSignUp: {
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: 45,
+            width: 123,
+            fontSize: '13px'
+        },
+        logoutBtn: {
+fontSize: '13px'
         }
 
     }),
 );
 
 interface Props {
+    history: History;
     menuSelectHandler: (type: string) => void;
     className?: string;
 }
@@ -113,7 +136,9 @@ const HEADER_MENU_SELECT_ITEM = {
     SHOW_HEALTH_SECTION: 'HEADER_MENU/SHOW_HEALTH_SECTION',
 }
 
-const MainHeader: React.FC<Props> = props => {
+const MainHeader: React.FC<Props> =  props => {
+    const { isAuthenticated, userHasAuthenticated } = useAppContext();
+
     const [selected, setSelected] = React.useState('HEADER_MENU/SHOW_MAIN_SECTION');
     const dispatch = useDispatch();
 
@@ -153,6 +178,14 @@ const MainHeader: React.FC<Props> = props => {
     const MenuItemHealthClassName = clsx({
         [classes.selected]: selected === 'HEADER_MENU/SHOW_HEALTH_SECTION',
     });
+
+
+    function handleLogout() {
+        userHasAuthenticated(false);
+
+      props.history.push("/login")
+
+    }
     return (
         <header className={classNames(classes.root, props.className)}>
             <div className={classes.titleArea}>
@@ -175,13 +208,33 @@ const MainHeader: React.FC<Props> = props => {
                 </div>
             </div>
             <div className={classes.profileActions}>
-                <IconButton size="small" onClick={handleClickOpen} className={classes.uploadModalBtn} style={{ backgroundColor: 'transparent' }} >
-                    <SettingsSpinIcon/>
-                    {/*<SettingsIcon fontSize="default"/>*/}
-                </IconButton>
-                <AppSettingsPage callBack={handleClickClose} open={uploadDialog}/>
-                {/*<ProfileMenu/>*/}
 
+                {/*<ProfileMenu/>*/}
+                {isAuthenticated
+                    ? <>
+                        <IconButton size="small" onClick={handleClickOpen} className={classes.uploadModalBtn} style={{ backgroundColor: 'transparent' }} >
+                            <SettingsSpinIcon/>
+                            {/*<SettingsIcon fontSize="default"/>*/}
+                        </IconButton>
+                        <AppSettingsPage callBack={handleClickClose} open={uploadDialog}/>
+                    <div className={classes.loginSignUp}>
+                        <Button onClick={handleLogout} className={classes.logoutBtn}>Logout</Button>
+                    </div>
+                    </>
+                    : <>
+                        <Fade in={!isAuthenticated}>
+                        <div className={classes.loginSignUp}>
+                        <Link href="/signup">
+                            <Typography>Signup</Typography>
+                        </Link>
+                        <Divider className={classes.loginDivider} orientation="vertical"/>
+                        <Link href="/login">
+                            <Typography>Login</Typography>
+                        </Link>
+                        </div>
+                        </Fade>
+                    </>
+                }
             </div>
         </header>
     )

@@ -4,7 +4,7 @@ import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {LinearProgress, Modal, Paper} from "@material-ui/core";
 import {SIDEBAR_ACTION} from "../../component/sidebar/SideBar";
-
+import {History} from 'history';
 const Health = lazy(() => import('./HealthSection'));
 const Members = lazy(() => import('./MainSection'));
 
@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface Props {
+    history: History
     className?: string;
 }
 
@@ -48,7 +49,7 @@ const MainDashboard: React.FC<Props> = props => {
     return (
         <div className={classNames(classes.root, props.className)}>
             <div className={classes.header_container}>
-                <MainHeader menuSelectHandler={headerMenuSelectHandler}/>
+                <MainHeader menuSelectHandler={headerMenuSelectHandler} history={props.history}/>
             </div>
             {showMainSection && <Suspense fallback={
                 <LinearProgress/>
