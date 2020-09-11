@@ -1,7 +1,7 @@
 import * as React from 'react';
 import classNames from "classnames";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import TurbineBanner from "../icon/TurbineBanner";
+import TurbineBanner from "../component/icon/TurbineBanner";
 import {ButtonGroup} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
@@ -9,11 +9,11 @@ import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import {AccountCircle} from "@material-ui/icons";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import {useAppContext} from "../../libs/contextLib";
+import {useAppContext} from "../libs/contextLib";
 import {History} from 'history';
 import {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
-import {PositionSerializer} from "../../util/PositionSerializer";
+import {PositionSerializer} from "../util/PositionSerializer";
 
 interface Props {
     history: History;
@@ -93,10 +93,9 @@ const LoginDashboard: React.FC<Props> = props => {
                 {
                     method: 'POST',
                     headers: {
-                        'Accept': 'application/json, text/plain, */*',
-                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                        'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    body: 'username=' + email + '&password=' + password + '&grant_type=password'
+                    body: 'grant_type=password&email=' + email + '&password=' + password
                 }
         )
                 .then(response => console.log(response))

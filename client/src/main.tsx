@@ -13,7 +13,7 @@ import {AppContext} from "./libs/contextLib";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {Route, Switch} from "react-router-dom";
 import {StyledMainIndexPage} from "./page/main";
-import LoginDashboard from "./component/login/LoginDashboard";
+import LoginDashboard from "./login/LoginDashboard";
 
 // Any additional component props go here.
 interface MainProps {
