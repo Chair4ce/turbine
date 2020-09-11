@@ -13,6 +13,7 @@ import {useAppContext} from "../../libs/contextLib";
 import {History} from 'history';
 import {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
+import {PositionSerializer} from "../../util/PositionSerializer";
 
 interface Props {
     history: History;
@@ -80,19 +81,51 @@ const LoginDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [emailError, setEmailError] = useState(false);
+    const [passwordError, setPasswordError] = useState(false);
+
     useEffect(() => {
 
         if(isLoading) {
-        const timer = setTimeout(() => {
-            userHasAuthenticated(true);
-            props.history.push("/")
-        }, 3000);
-        return () => clearTimeout(timer);
+            fetch(`/oauth/token`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*',
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                    body: 'username=' + email + '&password=' + password + '&grant_type=password'
+                }
+        )
+                .then(response => console.log(response))
+                .catch(reason => console.log(`Fetch failed: ${reason}`));
+        return () => {}
         }
     }, [isLoading]);
+
     function handleLogin() {
-        setIsLoading(true);
+        if(email == null || email == "") setEmailError(true);
+        if (password == null || password == "") setPasswordError(true);
+            if(!(email == null || email == "") && !(password == null || password == "")) {
+                setIsLoading(true);
+            }
     }
+
+    function handleEmailChange(event: { target: { value: string; }; }) {
+        if(event.target.value != "" || event.target.value != null) {
+            setEmail(event.target.value);
+            if(emailError) {setEmailError(false)}
+        }
+    }
+    function handlePasswordChange(event: { target: { value: string; }; }) {
+        if(event.target.value != "" || event.target.value != null) {
+            setPassword(event.target.value);
+            if(passwordError){setPasswordError(false)}
+        }
+    }
+
     return (
         <div className={classes.root}>
             <div className={classes.container}>
@@ -102,20 +135,20 @@ const LoginDashboard: React.FC<Props> = props => {
                     <div className={classes.margin}>
                         <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
-                                <AccountCircle />
+                                <AccountCircle style={{height: '100%'}}/>
                             </Grid>
                             <Grid item>
-                                <TextField id="input-with-icon-grid" label="Username" />
+                                {!emailError ? <TextField id="input-with-icon-grid" label="Email" required={true} onChange={handleEmailChange}/> : <TextField error id="input-with-icon-grid-error" label="Email" required={true} onChange={handleEmailChange}  />  }
                             </Grid>
                         </Grid>
                     </div>
                     <div className={classes.margin}>
                         <Grid container spacing={1} alignItems="flex-end">
                             <Grid item>
-                                <VpnKeyIcon />
+                                <VpnKeyIcon style={{height: '100%'}} />
                             </Grid>
                             <Grid item>
-                                <TextField id="input-with-icon-grid" label="password" />
+                                {!passwordError ? <TextField id="input-with-icon-grid-password" type="password" label="Password" required={true} onChange={handlePasswordChange}/> : <TextField error id="input-with-icon-grid-password-error" type="password" label="Password" required={true} onChange={handlePasswordChange}  /> }
                             </Grid>
                         </Grid>
                     </div>

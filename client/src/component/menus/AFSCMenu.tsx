@@ -100,7 +100,7 @@ const AFSCMenu: React.FC<Props> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [distinctAfscList, setDistinctAFSCList] = useState();
+    const [distinctAfscList, setDistinctAFSCList] = useState([] as string[]);
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
@@ -152,7 +152,7 @@ const AFSCMenu: React.FC<Props> = props => {
                 <span className={classes.showAllBtnText}>Show All</span>
             </Button>
             </div>
-                {distinctAfscList && renderDistinctAFSCs()}
+                {distinctAfscList.length > 0 ? renderDistinctAFSCs() : null}
         </div>
     );
 };
