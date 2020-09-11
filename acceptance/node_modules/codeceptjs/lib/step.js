@@ -1,3 +1,6 @@
+// TODO: place MetaStep in other file, disable rule
+/* eslint-disable max-classes-per-file */
+
 const store = require('./store');
 const Secret = require('./secret');
 
@@ -93,9 +96,13 @@ class Step {
   /** @return {string} */
   humanizeArgs() {
     return this.args.map((arg) => {
+      if (!arg) {
+        return '';
+      }
       if (typeof arg === 'string') {
         return `"${arg}"`;
-      } else if (Array.isArray(arg)) {
+      }
+      if (Array.isArray(arg)) {
         try {
           const res = JSON.stringify(arg);
           return res;

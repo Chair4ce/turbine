@@ -57,7 +57,6 @@ class Config {
   static load(configFile) {
     configFile = path.resolve(configFile || '.');
 
-
     if (!fileExists(configFile)) {
       throw new Error(`Config file ${configFile} does not exist. Execute 'codeceptjs init' to create config`);
     }
@@ -114,7 +113,7 @@ class Config {
    */
   static reset() {
     hooks = [];
-    return config = Object.assign({}, defaultConfig);
+    return config = { ...defaultConfig };
   }
 }
 
@@ -132,4 +131,3 @@ function loadConfigFile(configFile) {
   }
   throw new Error(`Config file ${configFile} can't be loaded`);
 }
-

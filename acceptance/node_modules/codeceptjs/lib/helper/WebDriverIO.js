@@ -1,5 +1,9 @@
 let webdriverio;
+
+const assert = require('assert');
+const path = require('path');
 const requireg = require('requireg');
+
 const Helper = require('../helper');
 const stringIncludes = require('../assert/include').includes;
 const { urlEquals, equals } = require('../assert/equal');
@@ -20,9 +24,6 @@ const {
 } = require('../colorUtils');
 const ElementNotFound = require('./errors/ElementNotFound');
 const ConnectionRefused = require('./errors/ConnectionRefused');
-
-const assert = require('assert');
-const path = require('path');
 
 const webRoot = 'body';
 const Locator = require('../locator');
@@ -615,7 +616,6 @@ class WebDriverIO extends Helper {
     return this.browser.elementIdValue(elem.ELEMENT, value);
   }
 
-
   /**
    * {{> clearField}}
    * Appium: support
@@ -626,7 +626,6 @@ class WebDriverIO extends Helper {
     const elem = res.value[0];
     return this.browser.elementIdClear(elem.ELEMENT);
   }
-
 
   /**
    * {{> selectOption}}
@@ -1165,7 +1164,7 @@ class WebDriverIO extends Helper {
   }
 
   /**
-   * {{> moveCursorTo}}
+   * {{> moveCursorTo }}
    * Appium: support only web testing
    */
   async moveCursorTo(locator, offsetX = 0, offsetY = 0) {
@@ -1226,7 +1225,6 @@ class WebDriverIO extends Helper {
     return this.browser.saveScreenshot(outputFile);
   }
 
-
   /**
    * {{> setCookie}}
    * Appium: support only web testing
@@ -1239,7 +1237,7 @@ class WebDriverIO extends Helper {
   }
 
   /**
-   * {{> clearCookie}}
+   * {{> clearCookie }}
    * Appium: support only web testing
    */
   async clearCookie(cookie) {
@@ -1247,7 +1245,7 @@ class WebDriverIO extends Helper {
   }
 
   /**
-   * {{> seeCookie}}
+   * {{> seeCookie }}
    * Appium: support only web testing
    */
   async seeCookie(name) {
@@ -1256,7 +1254,7 @@ class WebDriverIO extends Helper {
   }
 
   /**
-   * {{> dontSeeCookie}}
+   * {{> dontSeeCookie }}
    * Appium: support only web testing
    */
   async dontSeeCookie(name) {
@@ -1265,7 +1263,7 @@ class WebDriverIO extends Helper {
   }
 
   /**
-   * {{> grabCookie}}
+   * {{> grabCookie }}
    * Appium: support only web testing
    */
   async grabCookie(name) {
@@ -1396,7 +1394,6 @@ class WebDriverIO extends Helper {
     );
   }
 
-
   /**
    * Close all tabs except for the current one.
    * Appium: support web test
@@ -1464,7 +1461,6 @@ class WebDriverIO extends Helper {
     * use 'waitForDetached to wait for element to be removed'`);
     return this.waitForStalenessOf(locator, sec);
   }
-
 
   /**
    * {{> waitInUrl }}
@@ -1581,6 +1577,7 @@ class WebDriverIO extends Helper {
       let selected = await forEachAsync(res.value, async el => this.browser.elementIdDisplayed(el.ELEMENT));
 
       if (!Array.isArray(selected)) selected = [selected];
+      selected = selected.filter(val => val === true);
       return selected.length === num;
     }, aSec * 1000, `The number of elements (${JSON.stringify(locator)}) is not ${num} after ${aSec} sec`);
   }
@@ -1666,9 +1663,11 @@ class WebDriverIO extends Helper {
   async switchTo(locator) {
     if (Number.isInteger(locator)) {
       return this.browser.frame(locator);
-    } else if (!locator) {
+    }
+    if (!locator) {
       return this.browser.frame(null);
     }
+
     const res = await this._locate(withStrictLocator.call(this, locator), true);
     assertElementExists(res, locator);
     return this.browser.frame(res.value[0]);
@@ -1877,16 +1876,11 @@ async function forEachAsync(array, callback, option = {}) {
   const inputArray = Array.isArray(array) ? array : [array];
   const values = [];
   for (let index = 0; index < inputArray.length; index++) {
-    let res;
-    try {
-      res = await callback(inputArray[index], index, inputArray);
-      if (Array.isArray(res) && expandArrayResults) {
-        res.forEach(val => values.push(val));
-      } else if (res) {
-        values.push(res);
-      }
-    } catch (err) {
-      throw err;
+    const res = await callback(inputArray[index], index, inputArray);
+    if (Array.isArray(res) && expandArrayResults) {
+      res.forEach(val => values.push(val));
+    } else if (res) {
+      values.push(res);
     }
   }
   if (unifyResults) {
@@ -1910,20 +1904,15 @@ async function filterAsync(array, callback, option = {}) {
   const inputArray = Array.isArray(array) ? array : [array];
   const values = [];
   for (let index = 0; index < inputArray.length; index++) {
-    try {
-      const res = unify(await callback(inputArray[index], index, inputArray), { extractValue });
-      const value = Array.isArray(res) ? res[0] : res;
+    const res = unify(await callback(inputArray[index], index, inputArray), { extractValue });
+    const value = Array.isArray(res) ? res[0] : res;
 
-      if (value) {
-        values.push(inputArray[index]);
-      }
-    } catch (err) {
-      throw err;
+    if (value) {
+      values.push(inputArray[index]);
     }
   }
   return values;
 }
-
 
 // Internal helper method to handle command results (similar behaviour as the unify function from WebDriverIO
 // except it does not resolve promises)
@@ -1970,7 +1959,6 @@ async function findClickable(locator, locateFn) {
 
   return locateFn(locator.value); // by css or xpath
 }
-
 
 async function findFields(locator) {
   locator = new Locator(locator);

@@ -1,8 +1,9 @@
 ---
-id: data
+permalink: /data
 title: Data Management
 ---
 
+# Data Management
 
 > This chapter describes data management for external sources. If you are looking for using Data Sets in tests, see [Data Driven Tests](http://codecept.io/advanced/#data-drivern-tests) section*
 
@@ -153,8 +154,8 @@ Scenario('check post page', async (I)  => {
 // cleanup created data
 After((I) => {
   I.sendMutation(
-    'mutation deletePost($id: ID!) { deletePost(id: $id) }',
-    { id: postData.id},
+    'mutation deletePost($permalink: /ID!) { deletePost(permalink: /$id) }',
+    { permalink: /postData.id},
   );
 });
 ```
@@ -195,7 +196,7 @@ The way for setting data for a test is as simple as writing:
 ```js
 // inside async function
 let post = await I.have('post');
-I.haveMultiple('comment', 5, { postId: post.id});
+I.haveMultiple('comment', 5, { postpermalink: /post.id});
 ```
 
 After completing the preparations under 'Data Generation with Factories', create a factory module which will export a factory.
@@ -247,7 +248,7 @@ This way for setting data for a test is as simple as writing:
 ```js
 // inside async function
 let post = await I.mutateData('createPost');
-I.mutateMultiple('createComment', 5, { postId: post.id});
+I.mutateMultiple('createComment', 5, { postpermalink: /post.id});
 ```
 
 
@@ -287,7 +288,7 @@ GraphQLDataFactory: {
       query: 'mutation createUser($input: UserInput!) { createUser(input: $input) { id name }}',
       factory: './factories/users',
       revert: (data) => ({
-        query: 'mutation deleteUser($id: ID!) { deleteUser(id: $id) }',
+        query: 'mutation deleteUser($permalink: /ID!) { deleteUser(permalink: /$id) }',
         variables: { id : data.id},
       }),
     },
@@ -313,7 +314,7 @@ By doing this we can make requests within the current browser session without a 
 > Sharing browser session with ApiDataFactory or GraphQLDataFactory can be especially useful when you test Single Page Applications
 
 Since CodeceptJS 2.3.3 there is a simple way to enable shared session for browser and data helpers.
-Install [`@codeceptjs/configure`](https://github.com/codecept-js/configure) package:
+Install [`@codeceptjs/configure`](https://github.com/codeceptjs/configure) package:
 
 ```
 npm i @codeceptjs/configure --save

@@ -61,7 +61,6 @@ module.exports.getParamNames = function (fn) {
   return getFunctionArguments(fn);
 };
 
-
 module.exports.installedLocally = function () {
   return path.resolve(`${__dirname}/../`).indexOf(process.cwd()) === 0;
 };
@@ -182,7 +181,6 @@ module.exports.test = {
     return array.slice(startIndex + 1, endIndex);
   },
 
-
   submittedData(dataFile) {
     return function (key) {
       if (!fs.existsSync(dataFile)) {
@@ -210,6 +208,7 @@ function toCamelCase(name) {
     return letter.toUpperCase();
   });
 }
+module.exports.toCamelCase = toCamelCase;
 
 function convertFontWeightToNumber(name) {
   const fontWeightPatterns = [
@@ -270,13 +269,17 @@ module.exports.deleteDir = function (dir_path) {
   }
 };
 
+/**
+ * Returns absolute filename to save screenshot.
+ * @param fileName {string} - filename.
+ */
 module.exports.screenshotOutputFolder = function (fileName) {
   const fileSep = path.sep;
 
   if (!fileName.includes(fileSep) || fileName.includes('record_')) {
     return path.join(global.output_dir, fileName);
   }
-  return path.join(global.codecept_dir, fileName);
+  return path.resolve(global.codecept_dir, fileName);
 };
 
 module.exports.beautify = function (code) {
