@@ -14,6 +14,7 @@ import {History} from 'history';
 import {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {PositionSerializer} from "../util/PositionSerializer";
+import AuthenticationService from "../util/AuthenticationService";
 
 interface Props {
     history: History;
@@ -86,13 +87,52 @@ const LoginDashboard: React.FC<Props> = props => {
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
 
+    function loginClicked() {
+        //in28minutes,dummy
+        // if(this.state.username==='in28minutes' && this.state.password==='dummy'){
+        //     AuthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
+        //     this.props.history.push(`/courses`)
+        //     //this.setState({showSuccessMessage:true})
+        //     //this.setState({hasLoginFailed:false})
+        // }
+        // else {
+        //     this.setState({showSuccessMessage:false})
+        //     this.setState({hasLoginFailed:true})
+        // }
+
+        // AuthenticationService
+        //     .executeBasicAuthenticationService(email, password)
+        //     .then(() => {
+        //         AuthenticationService.registerSuccessfulLogin(email, password)
+        //         props.history.push(`/`)
+        //     }).catch(() => {
+        //         console.log("Login failed")
+        //     // this.setState({ showSuccessMessage: false })
+        //     // this.setState({ hasLoginFailed: true })
+        // })
+
+        AuthenticationService
+            .executeJwtAuthenticationService(email, password)
+            .then((response) => {
+                AuthenticationService.registerSuccessfulLoginForJwt(email, response.data.token)
+                console.log("Login Successful")
+                props.history.push(`/courses`)
+            }).catch(() => {
+            console.log("Login failed")
+        });
+
+
+
+    }
+
     useEffect(() => {
 
         if(isLoading) {
-            fetch(`/oauth/token`,
+            fetch(`/api/signin`,
                 {
                     method: 'POST',
                     headers: {
+                        'Accept': '*/*',
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
                     body: 'grant_type=password&email=' + email + '&password=' + password

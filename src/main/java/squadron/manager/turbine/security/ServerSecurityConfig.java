@@ -58,7 +58,7 @@ public class ServerSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/signin/**").permitAll()
-                .antMatchers("/api/glee/**").hasAnyAuthority("ADMIN", "USER")
+                .antMatchers("/api/settings/**").hasAnyAuthority("ADMIN", "USER")
                 .antMatchers("/api/users/**").hasAuthority("ADMIN")
                 .antMatchers("/api/**").authenticated()
                 .anyRequest().authenticated()

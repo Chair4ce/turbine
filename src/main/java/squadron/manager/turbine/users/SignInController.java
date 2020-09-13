@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping(SignInController.URI)
 @CrossOrigin(origins={ "http://localhost:3000", "http://localhost:4200" })
@@ -24,7 +23,6 @@ public class SignInController {
 
     @PostMapping
     User signin(@RequestParam String email, @RequestParam String password) {
-        System.out.println("requesting auth with..." + email);
         User u = new User(null, email, passwordEncoder.encode(password), User.Role.USER);
         return repository.save(u);
     }

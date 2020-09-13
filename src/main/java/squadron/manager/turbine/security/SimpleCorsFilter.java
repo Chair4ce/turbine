@@ -12,7 +12,7 @@ import java.io.IOException;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Profile("dev")
+@Profile("default")
 public class SimpleCorsFilter implements Filter {
 
     public SimpleCorsFilter() {
