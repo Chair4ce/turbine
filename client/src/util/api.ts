@@ -11,3 +11,5 @@ export async function callApi(method: string, path: string, data?: any) {
         return res.json();
     }
 }
+
+

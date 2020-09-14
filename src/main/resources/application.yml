@@ -14,10 +14,6 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-jwt:
-  clientId: turbine
-  client-secret: secret
-  accessTokenValidititySeconds: 100
-  refreshTokenValiditySeconds: 1000
 server.compression.enabled: false
+
 

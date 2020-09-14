@@ -3,13 +3,14 @@ package squadron.manager.turbine.position;
 import javafx.geometry.Pos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import squadron.manager.turbine.member.Member;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-
+@Repository
 public interface PositionRepository extends JpaRepository<Position, Long> {
     List<Position> findAllByPasCodeAndPosNrIsNotNullAndAfscAuthIsNotNullAndCurrQtr(String pasCode, String currQtr);
     List<Position> findAllByCurrQtrIsTrue();

@@ -1,5 +1,6 @@
 package squadron.manager.turbine.users;
 
+import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Page<User> findAllByEmail(String email, Pageable pageable);
     Page<User> findAllByEmailContainsAndEmail(String email, String auth, Pageable pageable);
     Boolean existsByEmail(String email);
+
+
+
+    Optional<User> findByUsernameOrEmail(String username, String email);
+
+    boolean existsByUsername(String username);
 }

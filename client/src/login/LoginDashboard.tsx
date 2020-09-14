@@ -15,6 +15,8 @@ import {useEffect, useState} from "react";
 import Typography from "@material-ui/core/Typography";
 import {PositionSerializer} from "../util/PositionSerializer";
 import AuthenticationService from "../util/AuthenticationService";
+import {ACCESS_TOKEN} from "../store/users/constants";
+import {login} from "../store/users/thunks";
 
 interface Props {
     history: History;
@@ -82,8 +84,8 @@ const LoginDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     const { userHasAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [email, setEmail] = useState("JacyLH@gmail.com");
+    const [password, setPassword] = useState("60CYleh@m");
     const [emailError, setEmailError] = useState(false);
     const [passwordError, setPasswordError] = useState(false);
 
@@ -111,15 +113,7 @@ const LoginDashboard: React.FC<Props> = props => {
         //     // this.setState({ hasLoginFailed: true })
         // })
 
-        AuthenticationService
-            .executeJwtAuthenticationService(email, password)
-            .then((response) => {
-                AuthenticationService.registerSuccessfulLoginForJwt(email, response.data.token)
-                console.log("Login Successful")
-                props.history.push(`/courses`)
-            }).catch(() => {
-            console.log("Login failed")
-        });
+
 
 
 
@@ -128,18 +122,32 @@ const LoginDashboard: React.FC<Props> = props => {
     useEffect(() => {
 
         if(isLoading) {
-            fetch(`/api/signin`,
-                {
-                    method: 'POST',
-                    headers: {
-                        'Accept': '*/*',
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: 'grant_type=password&email=' + email + '&password=' + password
+
+            const loginRequest = Object.assign({}, email, password);
+            login(loginRequest)
+                .then(response => {
+                    localStorage.setItem(ACCESS_TOKEN, response.accessToken);
+                }).catch(error => {
+                if(error.status === 401) {
+                    console.log('Your Username or Password is incorrect. Please try again!');
+
+                } else {
+                    console.log('Sorry! Something went wrong. Please try again!');
+
                 }
-        )
-                .then(response => console.log(response))
-                .catch(reason => console.log(`Fetch failed: ${reason}`));
+            });
+        //     fetch(`/oauth/token`,
+        //         {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Accept': '*/*',
+        //                 'Content-Type': 'application/x-www-form-urlencoded',
+        //             },
+        //             body: 'grant_type=password&email=' + email + '&password=' + password
+        //         }
+        // )
+        //         .then(response => console.log(response))
+        //         .catch(reason => console.log(`Fetch failed: ${reason}`));
         return () => {}
         }
     }, [isLoading]);
