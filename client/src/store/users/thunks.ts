@@ -31,3 +31,45 @@ export function login(loginRequest: any) {
         body: JSON.stringify(loginRequest)
     });
 }
+
+export function signup(signupRequest: any) {
+    return request({
+        url: API_BASE_URL + "/auth/signup",
+        method: 'POST',
+        body: JSON.stringify(signupRequest)
+    });
+}
+
+export function checkUsernameAvailability(username: any) {
+    return request({
+        url: API_BASE_URL + "/user/checkUsernameAvailability?username=" + username,
+        method: 'GET'
+    });
+}
+
+export function checkEmailAvailability(email: any) {
+    return request({
+        url: API_BASE_URL + "/user/checkEmailAvailability?email=" + email,
+        method: 'GET'
+    });
+}
+
+
+export function getCurrentUser() {
+    if(!localStorage.getItem(ACCESS_TOKEN)) {
+        return Promise.reject("No access token set.");
+    }
+
+    return request({
+        url: API_BASE_URL + "/user/me",
+        method: 'GET'
+    });
+}
+
+export function getUserProfile(username: any) {
+    return request({
+        url: API_BASE_URL + "/users/" + username,
+        method: 'GET'
+    });
+}
+

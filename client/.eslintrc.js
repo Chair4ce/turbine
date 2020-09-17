@@ -1,5 +1,8 @@
 module.exports = {
     parser: "@typescript-eslint/parser", // Specifies the ESLint parser
+    "plugins": [
+        "react-hooks"
+    ],
     extends: [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
@@ -15,6 +18,8 @@ module.exports = {
         }
     },
     rules: {
-        "semi": "error"
+        "semi": "error",
+        "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+        "react-hooks/exhaustive-deps": "warn" // Checks effect dependencies
     }
 };

@@ -1,23 +1,27 @@
 import * as React from 'react';
-import classNames from "classnames";
+import {ChangeEvent, useEffect, useState} from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import TurbineBanner from "../component/icon/TurbineBanner";
-import {ButtonGroup} from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Input from "@material-ui/core/Input";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import {AccountCircle} from "@material-ui/icons";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import {useAppContext} from "../libs/contextLib";
 import {History} from 'history';
-import {useEffect, useState} from "react";
-import Typography from "@material-ui/core/Typography";
-import {PositionSerializer} from "../util/PositionSerializer";
-import AuthenticationService from "../util/AuthenticationService";
-import {ACCESS_TOKEN} from "../store/users/constants";
-import {login} from "../store/users/thunks";
-
+import InputFieldModel from "../store/users/InputFieldModel";
+import {validateEmail} from "./FormValidationRules";
+import {Controller, useForm} from "react-hook-form";
+import MaterialUIInput from "@material-ui/core/Input";
+import {watch} from "fsevents";
+import Input from "@material-ui/core/Input";
+import theme from "@amcharts/amcharts4/.internal/themes/dark";
+import Button from '@material-ui/core/Button';
+import {OutlinedInput} from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import classNames from "classnames";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import TurbineBanner from "../component/icon/TurbineBanner";
 interface Props {
     history: History;
     className?: string;
@@ -41,11 +45,11 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'center',
             width: '30rem',
-            height: '20rem',
-            boxShadow: '0 0 2rem 0 rgba(0, 0, 0, .2)',
-            borderRadius: '5px',
+            height: '30rem',
+            // boxShadow: '0 0 2rem 0 rgba(0, 0, 0, .8)',
+            borderRadius: '100%',
             zIndex: 1,
-            background: 'inherit',
+            background: '#212121',
             overflow: 'hidden',
             position: 'absolute',
             '&:before': {
@@ -55,14 +59,18 @@ const useStyles = makeStyles((theme: Theme) =>
                 left: 0,
                 right: 0,
                 bottom: 0,
-                boxShadow: 'inset 0 0 2000px rgba(255, 255, 255, .5)',
+                // boxShadow: 'inset 0 0 2000px rgba(255, 255, 255, .5)',
                 filter: 'blur(10px)',
                 background: 'inherit',
             },
         },
         loginForm: {
             position: 'absolute',
-
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            height: '298px'
         },
         loginBtnGrp: {
             display: 'flex',
@@ -72,146 +80,163 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 170
         },
         margin: {
-            margin: theme.spacing(1),
+            margin: 3,
         },
         loadingMsg: {
             fontSize: '22px'
+        },
+        InputGrp: {
+            // display: 'flex',
+            // flexDirection: 'row',
+            // alignItems: 'center',
+            // justifyContent: 'space-around',
+            // border: '1px solid #67deea',
+            // borderRadius: 3,
+            // height: '45px',
+            // width: '217px'
+        },
+        textField: {
+            width: '25ch',
+        },
+        reactBtn: {
+            border: '1px solid #66bae0',
+            borderRadius: 3,
+            height: '56px',
+            width: '251px',
+            background: 'transparent',
+            outline: 'none',
+            cursor: 'pointer',
+            color: '#ffffff',
+            transition: 'background 200ms',
+            '&:hover': {
+                background: '#66BAE0'
+            }
+        },
+        errorMsg: {
+            height: '20px',
+            textAlign: 'left',
+            width: '251px',
+            color: '#66BAE0'
         }
     }),
 );
 
+interface IFormInput {
+    email: string;
+    password: string;
+};
+
 const LoginDashboard: React.FC<Props> = props => {
     const classes = useStyles();
-    const { userHasAuthenticated } = useAppContext();
-    const [isLoading, setIsLoading] = useState(false);
-    const [email, setEmail] = useState("JacyLH@gmail.com");
-    const [password, setPassword] = useState("60CYleh@m");
-    const [emailError, setEmailError] = useState(false);
-    const [passwordError, setPasswordError] = useState(false);
+    // const [values, setValues] = useState({} as InputFieldModel[]);
+    const [isSigningUp, setIsSigningUp] = useState(true);
+    //
+    //
+    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    //     if (event) event.preventDefault();
+    //     setIsSubmitting(true);
+    //
+    //     return values
+    // };
+    //
+    // // useEffect(() => {
+    // //     if (Object.keys(errors).length === 0 && isSubmitting) {
+    // //         callback();
+    // //     }
+    // // }, [errors]);
+    //
+    // const { userHasAuthenticated } = useAppContext();
+    // const [isLoggingIn, setIsLoggingIn] = useState(true);
+    // const [isSigningUp, setIsSigningUp] = useState(false);
+    //
+    //
+    // function showSignUpForm() {
+    //     setIsLoggingIn(false);
+    //     setIsSigningUp(true)
+    // }
+    //
+    // function handleClickCancel() {
+    //     setIsSigningUp(false);
+    //     setIsLoggingIn(true);
+    // }
+    //
+    // function handleInputChange(event: React.ChangeEvent<HTMLInputElement>, validateFun: (input: string) => { validateStatus: string, errorMsg: string }): void {
+    //     event.persist();
+    //     let target = event.currentTarget;
+    //     let inputName = target.name;
+    //     let inputValue = target.value;
+    //     let result = validateFun(inputValue);
+    //     setValues(state => ({...state, [inputName]: inputValue, ...result}));
+    // }
 
-    function loginClicked() {
-        //in28minutes,dummy
-        // if(this.state.username==='in28minutes' && this.state.password==='dummy'){
-        //     AuthenticationService.registerSuccessfulLogin(this.state.username,this.state.password)
-        //     this.props.history.push(`/courses`)
-        //     //this.setState({showSuccessMessage:true})
-        //     //this.setState({hasLoginFailed:false})
-        // }
-        // else {
-        //     this.setState({showSuccessMessage:false})
-        //     this.setState({hasLoginFailed:true})
-        // }
+    const {handleSubmit, register, errors, control} = useForm<IFormInput>();
+    const onSubmit = (data: IFormInput) => {
+        setIsSigningUp(false);
+    };
 
-        // AuthenticationService
-        //     .executeBasicAuthenticationService(email, password)
-        //     .then(() => {
-        //         AuthenticationService.registerSuccessfulLogin(email, password)
-        //         props.history.push(`/`)
-        //     }).catch(() => {
-        //         console.log("Login failed")
-        //     // this.setState({ showSuccessMessage: false })
-        //     // this.setState({ hasLoginFailed: true })
-        // })
-
-
-
-
-
-    }
-
-    useEffect(() => {
-
-        if(isLoading) {
-
-            const loginRequest = Object.assign({}, email, password);
-            login(loginRequest)
-                .then(response => {
-                    localStorage.setItem(ACCESS_TOKEN, response.accessToken);
-                }).catch(error => {
-                if(error.status === 401) {
-                    console.log('Your Username or Password is incorrect. Please try again!');
-
-                } else {
-                    console.log('Sorry! Something went wrong. Please try again!');
-
-                }
-            });
-        //     fetch(`/oauth/token`,
-        //         {
-        //             method: 'POST',
-        //             headers: {
-        //                 'Accept': '*/*',
-        //                 'Content-Type': 'application/x-www-form-urlencoded',
-        //             },
-        //             body: 'grant_type=password&email=' + email + '&password=' + password
-        //         }
-        // )
-        //         .then(response => console.log(response))
-        //         .catch(reason => console.log(`Fetch failed: ${reason}`));
-        return () => {}
-        }
-    }, [isLoading]);
-
-    function handleLogin() {
-        if(email == null || email == "") setEmailError(true);
-        if (password == null || password == "") setPasswordError(true);
-            if(!(email == null || email == "") && !(password == null || password == "")) {
-                setIsLoading(true);
-            }
-    }
-
-    function handleEmailChange(event: { target: { value: string; }; }) {
-        if(event.target.value != "" || event.target.value != null) {
-            setEmail(event.target.value);
-            if(emailError) {setEmailError(false)}
-        }
-    }
-    function handlePasswordChange(event: { target: { value: string; }; }) {
-        if(event.target.value != "" || event.target.value != null) {
-            setPassword(event.target.value);
-            if(passwordError){setPasswordError(false)}
-        }
-    }
 
     return (
         <div className={classes.root}>
+          <TurbineBanner duration={!isSigningUp ? "40s" : null}/>
             <div className={classes.container}>
-            <TurbineBanner duration={isLoading && "20s"}/>
-            <div className={classes.loginForm}>
-                {!isLoading ?  <form className={classes.loginBtnGrp}>
-                    <div className={classes.margin}>
-                        <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item>
-                                <AccountCircle style={{height: '100%'}}/>
-                            </Grid>
-                            <Grid item>
-                                {!emailError ? <TextField id="input-with-icon-grid" label="Email" required={true} onChange={handleEmailChange}/> : <TextField error id="input-with-icon-grid-error" label="Email" required={true} onChange={handleEmailChange}  />  }
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <div className={classes.margin}>
-                        <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item>
-                                <VpnKeyIcon style={{height: '100%'}} />
-                            </Grid>
-                            <Grid item>
-                                {!passwordError ? <TextField id="input-with-icon-grid-password" type="password" label="Password" required={true} onChange={handlePasswordChange}/> : <TextField error id="input-with-icon-grid-password-error" type="password" label="Password" required={true} onChange={handlePasswordChange}  /> }
-                            </Grid>
-                        </Grid>
-                    </div>
-                    <Button onClick={handleLogin}>
-                        Submit
-                    </Button>
-                </form> :
+                {isSigningUp ?
                 <>
-                   <Typography className={classes.loadingMsg}>Logging in...</Typography>
-                </>}
+                    <form
+                        className={classes.loginForm}
+                        onSubmit={handleSubmit(onSubmit)}>
 
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
 
-            </div>
+                                <OutlinedInput id="outlined-adornment-email" inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})} name="email"  startAdornment={
+                                    <InputAdornment position="start">
+                                        <AccountCircle style={{ color: '#66BAE0'}}/>
+                                    </InputAdornment>
+                                }
+                                />
+                            </FormControl>
+                        </div>
+                        <span className={classes.errorMsg}>
+                        {errors.email && "* Email is required"}
+                        </span>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
+
+                            <OutlinedInput id="outlined-adornment-password" inputRef={register({ required: true, minLength: 6, maxLength: 20 })} name="password" type="password" startAdornment={
+                                <InputAdornment position="start">
+                                    <VpnKeyIcon style={{ color: '#66bae0'}}/>
+                                </InputAdornment>
+                            }
+                            />
+                            </FormControl>
+                        </div>
+                        <span className={classes.errorMsg}>
+                        {errors.password && "* Password is required"}
+                        </span>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
+
+                                <OutlinedInput id="outlined-adornment-confirmPassword" inputRef={register({ required: true, minLength: 6, maxLength: 20 })} name="confirmPassword" type="password" startAdornment={
+                                    <InputAdornment position="start">
+                                        <VpnKeyIcon style={{ color: '#66bae0'}}/>
+                                    </InputAdornment>
+                                }
+                                />
+                            </FormControl>
+                        </div>
+                        <span className={classes.errorMsg}>
+                            {errors.password ? errors.password.type : null
+                            // &&
+                            // "* Retyping password is required"
+                            }
+                        </span>
+                       <input className={classNames(classes.reactBtn,classes.margin)} type="submit"/>
+                    </form>
+                </> : null
+                }
             </div>
         </div>
     );
-};
+}
 
 export default LoginDashboard;

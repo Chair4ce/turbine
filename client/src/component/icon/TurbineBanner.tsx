@@ -76,8 +76,11 @@ interface Props {
 const TurbineBanner: React.FC<Props> = props => {
 
     return (
-            <Zoom in={!!props.duration}>
+        <div  style={{position: 'absolute',transform: 'translate(50%, -50%)',top: '50%', right: '50%' }}>
+            <Zoom in={!!props.duration}
+            >
         <Wrapper
+
         >
                 <svg width="838" height="838" viewBox="0 0 838 838" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
@@ -100,6 +103,7 @@ const TurbineBanner: React.FC<Props> = props => {
                 </svg>
         </Wrapper>
             </Zoom>
+        </div>
     );
 };
 
@@ -108,7 +112,7 @@ export default TurbineBanner;
 const Wrapper = styled('div')`
 svg {
 
-filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+//filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
 }
    .iris {
    position: absolute;
