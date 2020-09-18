@@ -82,16 +82,17 @@ const TurbineBanner: React.FC<Props> = props => {
         <Wrapper
 
         >
+
                 <svg width="838" height="838" viewBox="0 0 838 838" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path
                         className={"iris"}
                         d={pathD}
-                        fill="#56899F">
+                        fill="#000000">
                         <animateTransform
                             type="rotate"
                             attributeName="transform"
                             from="0 -2 -1" to="360 0 0"
-                            begin="0s" dur={props.duration ? props.duration : "3000s"}
+                            begin="0s" dur={props.duration ? props.duration : "300s"}
                             repeatCount="indefinite"/>
                     </path>
                     {/*<path*/}
@@ -101,6 +102,7 @@ const TurbineBanner: React.FC<Props> = props => {
                     {/*    fill="#828282">*/}
                     {/*</path>*/}
                 </svg>
+
         </Wrapper>
             </Zoom>
         </div>
@@ -110,9 +112,12 @@ const TurbineBanner: React.FC<Props> = props => {
 export default TurbineBanner;
 
 const Wrapper = styled('div')`
+
+
 svg {
 
-//filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+z-index: 2;
+opacity: .2;
 }
    .iris {
    position: absolute;

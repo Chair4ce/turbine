@@ -1,27 +1,20 @@
 import * as React from 'react';
-import {ChangeEvent, useEffect, useState} from 'react';
+import {useState} from 'react';
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
 import {AccountCircle} from "@material-ui/icons";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
-import {useAppContext} from "../libs/contextLib";
 import {History} from 'history';
-import InputFieldModel from "../store/users/InputFieldModel";
-import {validateEmail} from "./FormValidationRules";
-import {Controller, useForm} from "react-hook-form";
-import MaterialUIInput from "@material-ui/core/Input";
-import {watch} from "fsevents";
-import Input from "@material-ui/core/Input";
-import theme from "@amcharts/amcharts4/.internal/themes/dark";
-import Button from '@material-ui/core/Button';
+import {LiteralUnion, useForm, ValidationRules} from "react-hook-form";
 import {OutlinedInput} from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import IconButton from "@material-ui/core/IconButton";
 import classNames from "classnames";
 import FormControl from "@material-ui/core/FormControl";
-import InputLabel from "@material-ui/core/InputLabel";
+import {PASSWORD_MIN_LENGTH} from "../store/users/constants";
+import Button from "@material-ui/core/Button";
+import Fade from "@material-ui/core/Fade";
+import Typography from "@material-ui/core/Typography";
 import TurbineBanner from "../component/icon/TurbineBanner";
+
 interface Props {
     history: History;
     className?: string;
@@ -30,9 +23,7 @@ interface Props {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            backgroundAttachment: 'fixed',
-            backgroundSize: 'cover',
-            display: 'grid',
+            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             height: '100vh',
@@ -41,82 +32,91 @@ const useStyles = makeStyles((theme: Theme) =>
             transform: 'translate(50%, -50%)',
             top: '50%',
             right: '50%',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: '30rem',
+            display: 'block',
+            width: '23rem',
             height: '30rem',
-            // boxShadow: '0 0 2rem 0 rgba(0, 0, 0, .8)',
-            borderRadius: '100%',
+            borderRadius: '7px',
             zIndex: 1,
-            background: '#212121',
-            overflow: 'hidden',
             position: 'absolute',
-            '&:before': {
-                content: '',
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                // boxShadow: 'inset 0 0 2000px rgba(255, 255, 255, .5)',
-                filter: 'blur(10px)',
-                background: 'inherit',
-            },
+        },
+        loginContainer: {
+            transform: 'translate(50%, -50%)',
+            top: '50%',
+            right: '50%',
+            display: 'block',
+            width: '23rem',
+            height: '22rem',
+            borderRadius: '7px',
+            zIndex: 1,
+            position: 'absolute',
         },
         loginForm: {
-            position: 'absolute',
+            position: 'relative',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'space-around',
-            height: '298px'
+            justifyContent: 'center',
+            height: '100%',
+            width: '100%',
+            padding: 10
         },
-        loginBtnGrp: {
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            height: 170
+        padding: {
+            padding: 3,
+            height: '100%',
+            width: '100%'
         },
-        margin: {
-            margin: 3,
+        formTitle: {
+            fontSize: '23px',
+            fontWeight: 'bold',
+            textAlign: 'center'
         },
         loadingMsg: {
             fontSize: '22px'
         },
         InputGrp: {
-            // display: 'flex',
-            // flexDirection: 'row',
-            // alignItems: 'center',
-            // justifyContent: 'space-around',
-            // border: '1px solid #67deea',
-            // borderRadius: 3,
-            // height: '45px',
-            // width: '217px'
+            height: '64px',
+            width: '100%'
         },
         textField: {
-            width: '25ch',
+            height: '100%',
+            width: '100%',
+            paddingRight: 1,
+            background: '#212121'
         },
-        reactBtn: {
-            border: '1px solid #66bae0',
+        submitBtn: {
             borderRadius: 3,
-            height: '56px',
-            width: '251px',
-            background: 'transparent',
+            height: '64px',
+            width: '100%',
+            background: '#212121',
+            border: '1px solid',
             outline: 'none',
-            cursor: 'pointer',
             color: '#ffffff',
+            cursor: 'pointer',
             transition: 'background 200ms',
             '&:hover': {
-                background: '#66BAE0'
+                background: '#343434'
             }
         },
         errorMsg: {
-            height: '20px',
+            height: '205px',
             textAlign: 'left',
-            width: '251px',
-            color: '#66BAE0'
+            width: '100%',
+            color: '#66BAE0',
+            paddingLeft: 4
+        },
+        cancelBtn: {
+            textTransform: 'unset',
+            background: '#212121'
+        },
+        signUpBtn: {
+            color: '#66BAE0',
+            border: 'none',
+            textTransform: 'unset',
+        },
+        btnDisabled: {
+            opacity: '.1',
+            '&:hover': {
+            }
         }
     }),
 );
@@ -124,12 +124,15 @@ const useStyles = makeStyles((theme: Theme) =>
 interface IFormInput {
     email: string;
     password: string;
+    confirmPassword: string;
 };
 
 const LoginDashboard: React.FC<Props> = props => {
     const classes = useStyles();
     // const [values, setValues] = useState({} as InputFieldModel[]);
-    const [isSigningUp, setIsSigningUp] = useState(true);
+    const [isSigningUp, setIsSigningUp] = useState(false);
+    const [isLogin, setIsLogin] = useState(true);
+
     //
     //
     // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -172,25 +175,110 @@ const LoginDashboard: React.FC<Props> = props => {
     const {handleSubmit, register, errors, control} = useForm<IFormInput>();
     const onSubmit = (data: IFormInput) => {
         setIsSigningUp(false);
+        setIsLogin(false);
+        console.log(data);
     };
 
+    function handleClickSignUp() {
+        setIsSigningUp(true);
+        setIsLogin(false);
+    }
+
+    function handleCancel() {
+        setIsSigningUp(false);
+        setIsLogin(true);
+    }
+
+
+    function renderError(type: LiteralUnion<keyof ValidationRules, string>) {
+        if (type == "required") {
+            return "* This field is required"
+        } else if (type == "minLength") {
+            return `Password is too short (Minimum ${PASSWORD_MIN_LENGTH} characters needed.)`
+        }
+        return type
+    }
 
     return (
         <div className={classes.root}>
-          <TurbineBanner duration={!isSigningUp ? "40s" : null}/>
+            <TurbineBanner duration={(!isSigningUp && !isLogin) ? "10s" : "200s"}/>
+            {isLogin &&
+                <div className={classes.loginContainer}>
+                    <Typography className={classes.formTitle}> Log in
+                    </Typography>
+                    <Fade in={isLogin}>
+                        <form
+                            className={classes.loginForm}
+                            onSubmit={handleSubmit(onSubmit)}>
+
+                            <div className={classes.InputGrp}>
+                                <FormControl className={classNames(classes.padding)} variant="outlined">
+
+                                    <OutlinedInput className={classes.textField} id="outlined-adornment-email"
+                                                   inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})}
+                                                   name="email" startAdornment={
+                                        <InputAdornment position="start">
+                                            <AccountCircle style={{color: '#66BAE0'}}/>
+                                        </InputAdornment>
+                                    }
+                                    />
+
+                                </FormControl>
+                            </div>
+
+                            <span className={classes.errorMsg}>
+                        {errors.email && "* Email is required"}
+                        </span>
+
+                            <div className={classes.InputGrp}>
+                                <FormControl className={classNames(classes.padding)}
+                                             variant="outlined">
+                                    <OutlinedInput className={classes.textField} id="outlined-adornment-password"
+                                                   inputRef={register({required: true, minLength: 6, maxLength: 20})}
+                                                   name="password" type="password" startAdornment={
+                                        <InputAdornment position="start">
+                                            <VpnKeyIcon style={{color: '#66bae0'}}/>
+                                        </InputAdornment>
+                                    }
+                                    />
+                                </FormControl>
+                            </div>
+                            <span className={classes.errorMsg}>
+                        {errors.password && "* Password is required"}
+                        </span>
+                            <div className={classes.InputGrp}>
+                                <FormControl className={classNames(classes.padding)}
+                                             variant="outlined">
+                                    <input className={classNames(classes.submitBtn, classes.padding, errors.email ? classes.btnDisabled : null  )} type="submit" disabled={!!errors.email}/>
+                                </FormControl>
+                            </div>
+                            <div className={classes.InputGrp}>
+                                <FormControl className={classNames(classes.padding)}
+                                             variant="outlined">
+                                    <Button variant="outlined" className={classNames( classes.signUpBtn)}
+                                            onClick={handleClickSignUp}>Sign Up</Button>
+                                </FormControl>
+                            </div>
+                        </form>
+                    </Fade>
+                </div>
+            }
+
+            {isSigningUp &&
             <div className={classes.container}>
-                {isSigningUp ?
-                <>
+                <Fade in={isSigningUp}>
                     <form
                         className={classes.loginForm}
                         onSubmit={handleSubmit(onSubmit)}>
 
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
 
-                                <OutlinedInput id="outlined-adornment-email" inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})} name="email"  startAdornment={
+                                <OutlinedInput className={classes.textField} id="outlined-adornment-email"
+                                               inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})}
+                                               name="email" startAdornment={
                                     <InputAdornment position="start">
-                                        <AccountCircle style={{ color: '#66BAE0'}}/>
+                                        <AccountCircle style={{color: '#66BAE0'}}/>
                                     </InputAdornment>
                                 }
                                 />
@@ -199,42 +287,56 @@ const LoginDashboard: React.FC<Props> = props => {
                         <span className={classes.errorMsg}>
                         {errors.email && "* Email is required"}
                         </span>
-                        <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
 
-                            <OutlinedInput id="outlined-adornment-password" inputRef={register({ required: true, minLength: 6, maxLength: 20 })} name="password" type="password" startAdornment={
-                                <InputAdornment position="start">
-                                    <VpnKeyIcon style={{ color: '#66bae0'}}/>
-                                </InputAdornment>
-                            }
-                            />
-                            </FormControl>
-                        </div>
-                        <span className={classes.errorMsg}>
-                        {errors.password && "* Password is required"}
-                        </span>
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.margin, classes.textField)} variant="outlined">
+                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
 
-                                <OutlinedInput id="outlined-adornment-confirmPassword" inputRef={register({ required: true, minLength: 6, maxLength: 20 })} name="confirmPassword" type="password" startAdornment={
+                                <OutlinedInput className={classes.textField} id="outlined-adornment-password"
+                                               inputRef={register({required: true, minLength: 6, maxLength: 20})}
+                                               name="password" type="password" startAdornment={
                                     <InputAdornment position="start">
-                                        <VpnKeyIcon style={{ color: '#66bae0'}}/>
+                                        <VpnKeyIcon style={{color: '#66bae0'}}/>
                                     </InputAdornment>
                                 }
                                 />
                             </FormControl>
                         </div>
                         <span className={classes.errorMsg}>
-                            {errors.password ? errors.password.type : null
-                            // &&
-                            // "* Retyping password is required"
-                            }
+                        {errors.password && "* Password is required"}
                         </span>
-                       <input className={classNames(classes.reactBtn,classes.margin)} type="submit"/>
+
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+
+                                <OutlinedInput className={classes.textField} id="outlined-adornment-confirmPassword"
+                                               inputRef={register({required: true, minLength: 6, maxLength: 20})}
+                                               name="confirmPassword" type="password" startAdornment={
+                                    <InputAdornment position="start">
+                                        <VpnKeyIcon style={{color: '#66bae0'}}/>
+                                    </InputAdornment>
+                                }
+                                />
+                            </FormControl>
+                        </div>
+                        <span className={classes.errorMsg}>
+                            {errors.confirmPassword ? renderError(errors.confirmPassword.type) : null}
+                        </span>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+                                <input className={classNames(classes.submitBtn, classes.padding)} type="submit"/>
+                            </FormControl>
+                        </div>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+                                <Button variant="outlined" className={classes.cancelBtn}
+                                        onClick={handleCancel}>Cancel</Button>
+                            </FormControl>
+                        </div>
                     </form>
-                </> : null
-                }
+                </Fade>
             </div>
+            }
+
         </div>
     );
 }
