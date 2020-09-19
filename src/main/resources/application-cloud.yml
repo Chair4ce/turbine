@@ -1,0 +1,9 @@
+security:
+  oauth2:
+    client:
+      client-id: ${SSO_CLIENT_ID}
+      client-secret: ${SSO_CLIENT_SECRET}
+      user-authorization-uri: ${SSO_SERVICE_URL}/oauth/authorize
+      access-token-uri: ${SSO_SERVICE_URL}/oauth/token
+    resource:
+      user-info-uri: ${SSO_SERVICE_URL}/userinfo

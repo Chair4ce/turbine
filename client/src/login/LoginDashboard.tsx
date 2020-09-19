@@ -4,7 +4,7 @@ import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import {AccountCircle} from "@material-ui/icons";
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import {History} from 'history';
-import {LiteralUnion, useForm, ValidationRules} from "react-hook-form";
+import {Control, LiteralUnion, useForm, useWatch, ValidationRules} from "react-hook-form";
 import {OutlinedInput} from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import classNames from "classnames";
@@ -88,9 +88,9 @@ const useStyles = makeStyles((theme: Theme) =>
             height: '64px',
             width: '100%',
             background: '#212121',
-            border: '1px solid',
+            border: '1px solid #5a5a5a',
             outline: 'none',
-            color: '#ffffff',
+            color: '#66BAE0',
             cursor: 'pointer',
             transition: 'background 200ms',
             '&:hover': {
@@ -105,17 +105,18 @@ const useStyles = makeStyles((theme: Theme) =>
             paddingLeft: 4
         },
         cancelBtn: {
+            color: '#ffffff',
+            border: 'none',
             textTransform: 'unset',
-            background: '#212121'
         },
         signUpBtn: {
-            color: '#66BAE0',
+            color: '#ffffff',
             border: 'none',
             textTransform: 'unset',
         },
         btnDisabled: {
-            opacity: '.1',
             '&:hover': {
+                background: '#5d3e3e',
             }
         }
     }),
@@ -172,21 +173,44 @@ const LoginDashboard: React.FC<Props> = props => {
     //     setValues(state => ({...state, [inputName]: inputValue, ...result}));
     // }
 
-    const {handleSubmit, register, errors, control} = useForm<IFormInput>();
+    const {handleSubmit, register, errors, control, reset, clearErrors} = useForm<IFormInput>();
+    const email = useWatch({
+        control,
+        name: "email", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+        defaultValue: "default" // default value before the render
+    });
+    const password = useWatch({
+        control,
+        name: "password", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+        defaultValue: "default" // default value before the render
+    });
     const onSubmit = (data: IFormInput) => {
-        setIsSigningUp(false);
-        setIsLogin(false);
+
+        if (isSigningUp) {
+            setIsSigningUp(false);
+            setIsLogin(false);
+        }
+        if (isLogin) {
+            setIsSigningUp(false);
+            setIsLogin(false);
+        }
+
         console.log(data);
     };
 
     function handleClickSignUp() {
+        clearErrors();
+        reset();
         setIsSigningUp(true);
         setIsLogin(false);
     }
 
     function handleCancel() {
+        clearErrors();
+        reset();
         setIsSigningUp(false);
         setIsLogin(true);
+
     }
 
 
@@ -199,73 +223,87 @@ const LoginDashboard: React.FC<Props> = props => {
         return type
     }
 
+    // function FirstNameWatched({ control }: { control: Control<IFormInput> }) {
+    //     const email = useWatch({
+    //         control,
+    //         name: "email", // without supply name will watch the entire form, or ['firstName', 'lastName'] to watch both
+    //         defaultValue: "default" // default value before the render
+    //     });
+    //
+    //     return <p>Watch: {email}</p>; // only re-render at the component level, when firstName changes
+    // }
+
     return (
         <div className={classes.root}>
             <TurbineBanner duration={(!isSigningUp && !isLogin) ? "10s" : "200s"}/>
             {isLogin &&
-                <div className={classes.loginContainer}>
-                    <Typography className={classes.formTitle}> Log in
-                    </Typography>
-                    <Fade in={isLogin}>
-                        <form
-                            className={classes.loginForm}
-                            onSubmit={handleSubmit(onSubmit)}>
+            <div className={classes.loginContainer}>
+                <Typography className={classes.formTitle}> Log in
+                </Typography>
+                <Fade in={isLogin}>
+                    <form
+                        className={classes.loginForm}
+                        onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className={classes.InputGrp}>
-                                <FormControl className={classNames(classes.padding)} variant="outlined">
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
 
-                                    <OutlinedInput className={classes.textField} id="outlined-adornment-email"
-                                                   inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})}
-                                                   name="email" startAdornment={
-                                        <InputAdornment position="start">
-                                            <AccountCircle style={{color: '#66BAE0'}}/>
-                                        </InputAdornment>
-                                    }
-                                    />
+                                <OutlinedInput className={classes.textField} id="outlined-adornment-email"
+                                               inputRef={register({required: true, pattern: /\S+@\S+\.\S+/})}
+                                               name="email" startAdornment={
+                                    <InputAdornment position="start">
+                                        <AccountCircle style={{color: '#66BAE0'}}/>
+                                    </InputAdornment>
+                                }
+                                />
 
-                                </FormControl>
-                            </div>
+                            </FormControl>
+                        </div>
 
-                            <span className={classes.errorMsg}>
+                        <span className={classes.errorMsg}>
                         {errors.email && "* Email is required"}
                         </span>
 
-                            <div className={classes.InputGrp}>
-                                <FormControl className={classNames(classes.padding)}
-                                             variant="outlined">
-                                    <OutlinedInput className={classes.textField} id="outlined-adornment-password"
-                                                   inputRef={register({required: true, minLength: 6, maxLength: 20})}
-                                                   name="password" type="password" startAdornment={
-                                        <InputAdornment position="start">
-                                            <VpnKeyIcon style={{color: '#66bae0'}}/>
-                                        </InputAdornment>
-                                    }
-                                    />
-                                </FormControl>
-                            </div>
-                            <span className={classes.errorMsg}>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding)}
+                                         variant="outlined">
+                                <OutlinedInput className={classes.textField} id="outlined-adornment-password"
+                                               inputRef={register({required: true, minLength: 6, maxLength: 20})}
+                                               name="password" type="password" startAdornment={
+                                    <InputAdornment position="start">
+                                        <VpnKeyIcon style={{color: '#66bae0'}}/>
+                                    </InputAdornment>
+                                }
+                                />
+                            </FormControl>
+                        </div>
+                        <span className={classes.errorMsg}>
                         {errors.password && "* Password is required"}
                         </span>
-                            <div className={classes.InputGrp}>
-                                <FormControl className={classNames(classes.padding)}
-                                             variant="outlined">
-                                    <input className={classNames(classes.submitBtn, classes.padding, errors.email ? classes.btnDisabled : null  )} type="submit" disabled={!!errors.email}/>
-                                </FormControl>
-                            </div>
-                            <div className={classes.InputGrp}>
-                                <FormControl className={classNames(classes.padding)}
-                                             variant="outlined">
-                                    <Button variant="outlined" className={classNames( classes.signUpBtn)}
-                                            onClick={handleClickSignUp}>Sign Up</Button>
-                                </FormControl>
-                            </div>
-                        </form>
-                    </Fade>
-                </div>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding)}
+                                         variant="outlined">
+                                <input
+                                    className={classNames(classes.submitBtn, classes.padding, (!errors.email && !errors.password) && (email.length > 0) ? null : classes.btnDisabled)}
+                                    type="submit" disabled={!!errors.email}/>
+                            </FormControl>
+                        </div>
+                        <div className={classes.InputGrp}>
+                            <FormControl className={classNames(classes.padding)}
+                                         variant="outlined">
+                                <Button variant="outlined" className={classNames(classes.signUpBtn)}
+                                        onClick={handleClickSignUp}>Sign Up</Button>
+                            </FormControl>
+                        </div>
+                    </form>
+                </Fade>
+            </div>
             }
 
             {isSigningUp &&
             <div className={classes.container}>
+                <Typography className={classes.formTitle}> Sign Up
+                </Typography>
                 <Fade in={isSigningUp}>
                     <form
                         className={classes.loginForm}
@@ -289,7 +327,7 @@ const LoginDashboard: React.FC<Props> = props => {
                         </span>
 
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
 
                                 <OutlinedInput className={classes.textField} id="outlined-adornment-password"
                                                inputRef={register({required: true, minLength: 6, maxLength: 20})}
@@ -302,11 +340,11 @@ const LoginDashboard: React.FC<Props> = props => {
                             </FormControl>
                         </div>
                         <span className={classes.errorMsg}>
-                        {errors.password && "* Password is required"}
+                                  {errors.password ? renderError(errors.password.type) : null}
                         </span>
 
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
 
                                 <OutlinedInput className={classes.textField} id="outlined-adornment-confirmPassword"
                                                inputRef={register({required: true, minLength: 6, maxLength: 20})}
@@ -322,12 +360,14 @@ const LoginDashboard: React.FC<Props> = props => {
                             {errors.confirmPassword ? renderError(errors.confirmPassword.type) : null}
                         </span>
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
-                                <input className={classNames(classes.submitBtn, classes.padding)} type="submit"/>
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
+                                <input
+                                    className={classNames(classes.submitBtn, classes.padding, (!errors.email && !errors.password) && email.length > 0 ? null : classes.btnDisabled)}
+                                    type="submit"/>
                             </FormControl>
                         </div>
                         <div className={classes.InputGrp}>
-                            <FormControl className={classNames(classes.padding, classes.textField)} variant="outlined">
+                            <FormControl className={classNames(classes.padding)} variant="outlined">
                                 <Button variant="outlined" className={classes.cancelBtn}
                                         onClick={handleCancel}>Cancel</Button>
                             </FormControl>
