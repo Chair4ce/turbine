@@ -15,7 +15,6 @@ public class ProfileJSON {
   private Long roleId;
   private String roleName;
   private Long squadronId;
-  private boolean classified;
 
   public ProfileJSON(
     Long id,
@@ -24,8 +23,7 @@ public class ProfileJSON {
     Long squadronId,
     String siteName,
     Long roleId,
-    String roleName,
-    boolean classified
+    String roleName
   ) {
     this.id = id;
     this.username = username;
@@ -34,6 +32,5 @@ public class ProfileJSON {
     this.siteName = siteName;
     this.roleId = roleId;
     this.roleName = roleName;
-    this.classified = classified;
   }
 }

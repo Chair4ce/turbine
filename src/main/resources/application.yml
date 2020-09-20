@@ -14,12 +14,12 @@ spring:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
+  security:
+    user:
+      name: tytus
+      password: password
+      roles: USER
 
-security:
-  user:
-    name: tytus
-    password: password
-    role: USER
 server.compression:
   enabled: true
   mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css

@@ -37,7 +37,7 @@ public class ProfileService {
   }
 
   public Profile setSite(Profile profile, Long siteId) {
-    final Site site = siteRepository.findOne(siteId);
+    final Site site = siteRepository.getOne(siteId);
     if (site != null) {
       profile.setSite(site);
     }
@@ -45,12 +45,12 @@ public class ProfileService {
   }
 
   public Profile update(ProfileJSON json) {
-    Profile profile = profileRepository.findOne(json.getId());
+    Profile profile = profileRepository.getOne(json.getId());
     if (profile == null) {
       return null;
     }
 
-    final Role role = roleRepository.findOne(json.getRoleId());
+    final Role role = roleRepository.getOne(json.getRoleId());
     if (role != null) {
       profile.setRole(role);
     }
@@ -59,7 +59,7 @@ public class ProfileService {
   }
 
   public Profile setSiteAndSquadron(Profile profile, Long siteId, Long squadronId) {
-    final Site site = siteRepository.findOne(siteId);
+    final Site site = siteRepository.getOne(siteId);
 
     if (site != null) {
       profile.setSite(site);

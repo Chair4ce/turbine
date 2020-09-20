@@ -1,13 +1,13 @@
 package squadron.manager.turbine.admin;
 
-import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.flight.FlightRepository;
-import mil.af.us.narwhal.site.SiteRepository;
-import mil.af.us.narwhal.squadron.Squadron;
-import mil.af.us.narwhal.squadron.SquadronRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import squadron.manager.turbine.flight.Flight;
+import squadron.manager.turbine.flight.FlightRepository;
+import squadron.manager.turbine.site.SiteRepository;
+import squadron.manager.turbine.squadron.Squadron;
+import squadron.manager.turbine.squadron.SquadronRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +61,7 @@ public class AdminSquadronController{
   public ResponseEntity<Object> delete(@PathVariable Long id) {
 //    this.squadronRepository.delete(id);
 
-    Squadron squadron = this.squadronRepository.findOne(id);
+    Squadron squadron = this.squadronRepository.getOne(id);
 
     List<Flight> flightList = this.flightRepository.findAllBySquadron(squadron);
 

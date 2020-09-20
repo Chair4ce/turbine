@@ -1,7 +1,8 @@
 package squadron.manager.turbine.flight;
 
-import mil.af.us.narwhal.squadron.Squadron;
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import squadron.manager.turbine.squadron.Squadron;
 
 import java.util.List;
 

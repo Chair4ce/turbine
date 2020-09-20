@@ -3,7 +3,7 @@ package squadron.manager.turbine.site;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mil.af.us.narwhal.squadron.Squadron;
+import squadron.manager.turbine.squadron.Squadron;
 
 import javax.persistence.*;
 import java.util.ArrayList;

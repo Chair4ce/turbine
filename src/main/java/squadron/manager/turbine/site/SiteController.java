@@ -25,6 +25,6 @@ public class SiteController {
 
   @GetMapping(path = "/{siteId}")
   public Site show(@PathVariable Long siteId) {
-    return siteRepository.findOne(siteId);
+    return siteRepository.getOne(siteId);
   }
 }

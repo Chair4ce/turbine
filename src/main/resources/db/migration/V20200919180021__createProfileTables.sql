@@ -1,12 +1,12 @@
-CREATE TABLE group
+CREATE TABLE site
 (
     id   INT(11)     NOT NULL AUTO_INCREMENT,
     name VARCHAR(64) NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY unique_group_name (name)
+    UNIQUE KEY unique_site_name (name)
 );
 
-INSERT INTO group
+INSERT INTO site
 VALUES (1, 'DGS 1'),
        (2, 'DGS 2'),
        (3, 'DGS 3'),
@@ -18,20 +18,20 @@ CREATE TABLE profile
 (
     id          INT(11)     NOT NULL AUTO_INCREMENT,
     username    VARCHAR(64) NOT NULL UNIQUE,
-    group_id    INT(11) DEFAULT NULL,
+    site_id    INT(11) DEFAULT NULL,
     squadron_id INT     DEFAULT NULL,
     PRIMARY KEY (id),
-    CONSTRAINT profile_ibfk_1 FOREIGN KEY (group_id) REFERENCES group (id)
+    CONSTRAINT profile_ibfk_1 FOREIGN KEY (site_id) REFERENCES site (id)
 );
 
 CREATE TABLE squadron
 (
     id       INT(11)     NOT NULL AUTO_INCREMENT,
     name     VARCHAR(64) NOT NULL,
-    group_id INT(11) DEFAULT NULL,
+    site_id INT(11) DEFAULT NULL,
     PRIMARY KEY (id),
-    KEY group_id (group_id),
-    CONSTRAINT squadron_ibfk_1 FOREIGN KEY (group_id) REFERENCES group (id)
+    KEY site_id (site_id),
+    CONSTRAINT squadron_ibfk_1 FOREIGN KEY (site_id) REFERENCES site (id)
 );
 
 
@@ -62,15 +62,15 @@ ALTER TABLE profile
 UPDATE profile
 SET profile.role_id = 1;
 
-CREATE TABLE rank
+CREATE TABLE grade
 (
     id           INT(11)     NOT NULL AUTO_INCREMENT,
     abbreviation VARCHAR(64) NOT NULL,
     PRIMARY KEY (id),
-    UNIQUE KEY unique_rank (abbreviation)
+    UNIQUE KEY unique_grade (abbreviation)
 );
 
-INSERT INTO rank (id, abbreviation)
+INSERT INTO grade (id, abbreviation)
 VALUES (1, 'No Rank'),
        (2, 'AB'),
        (3, 'Amn'),

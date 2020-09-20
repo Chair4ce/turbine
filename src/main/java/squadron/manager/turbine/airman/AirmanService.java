@@ -1,10 +1,11 @@
 package squadron.manager.turbine.airman;
 
-import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.flight.FlightRepository;
-import mil.af.us.narwhal.rank.Rank;
-import mil.af.us.narwhal.rank.RankRepository;
+
 import org.springframework.stereotype.Service;
+import squadron.manager.turbine.flight.Flight;
+import squadron.manager.turbine.flight.FlightRepository;
+import squadron.manager.turbine.rank.grade;
+import squadron.manager.turbine.rank.GradeRepository;
 
 import java.util.List;
 
@@ -12,20 +13,20 @@ import java.util.List;
 public class AirmanService {
   private AirmanRepository airmanRepository;
   private FlightRepository flightRepository;
-  private RankRepository rankRepository;
+  private GradeRepository gradeRepository;
 
   public AirmanService(
     AirmanRepository airmanRepository,
     FlightRepository flightRepository,
-    RankRepository rankRepository
+    GradeRepository gradeRepository
   ) {
     this.airmanRepository = airmanRepository;
     this.flightRepository = flightRepository;
-    this.rankRepository = rankRepository;
+    this.gradeRepository = gradeRepository;
   }
 
   public Airman getAirman(Long airmanId) {
-    return airmanRepository.findOne(airmanId);
+    return airmanRepository.getOne(airmanId);
   }
 
   public List<Airman> getAirmenBySite(Long siteId) {
@@ -33,33 +34,28 @@ public class AirmanService {
   }
 
   public Airman updateAirman(AirmanJSON json) {
-    final Airman airman = airmanRepository.findOne(json.getId());
-    final Rank rank = rankRepository.findOne(json.getRank().getId());
-    final Flight flight = flightRepository.findOne(json.getFlightId());
-    return setAirmanAttributes(json, airman, rank, flight);
+    final Airman airman = airmanRepository.getOne(json.getId());
+    final grade grade = gradeRepository.getOne(json.getGrade().getId());
+    final Flight flight = flightRepository.getOne(json.getFlightId());
+    return setAirmanAttributes(json, airman, grade, flight);
   }
 
   public Airman createAirman(AirmanJSON json) {
-    final Rank rank = rankRepository.findOne(json.getRank().getId());
-    final Flight flight = flightRepository.findOne(json.getFlightId());
-    return setAirmanAttributes(json, new Airman(), rank, flight);
+    final grade grade = gradeRepository.getOne(json.getGrade().getId());
+    final Flight flight = flightRepository.getOne(json.getFlightId());
+    return setAirmanAttributes(json, new Airman(), grade, flight);
   }
 
-  private Airman setAirmanAttributes(AirmanJSON json, Airman airman, Rank rank, Flight flight) {
-    airman.setRank(rank);
+  private Airman setAirmanAttributes(AirmanJSON json, Airman airman, grade grade, Flight flight) {
+    airman.setGrade(grade);
     airman.setLastName(json.getLastName());
     airman.setFirstName(json.getFirstName());
     airman.setRemarks(json.getRemarks());
     airman.setFlight(flight);
-    airman.setShift(json.getShift());
-    json.getSchedules().stream()
-      .filter(airmanSchedule -> airmanSchedule.getId() == null)
-      .findFirst()
-      .ifPresent(airman::addSchedule);
     return airmanRepository.save(airman);
   }
 
   public void deleteAirman(Long id) {
-    airmanRepository.delete(id);
+    airmanRepository.deleteAirmanById(id);
   }
 }

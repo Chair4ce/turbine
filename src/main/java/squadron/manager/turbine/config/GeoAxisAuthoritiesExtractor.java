@@ -1,8 +1,8 @@
 package squadron.manager.turbine.config;
 
-import mil.af.us.narwhal.profile.ProfileService;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.security.core.GrantedAuthority;
+import squadron.manager.turbine.profile.ProfileService;
 
 import java.util.ArrayList;
 import java.util.List;

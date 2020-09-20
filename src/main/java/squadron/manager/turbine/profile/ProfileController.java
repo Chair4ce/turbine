@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 public class ProfileController {
   public static final String URI = "/api/profiles";
 
-  @Value("${classified}") private Boolean classified;
   private ProfileService profileService;
   private RoleRepository roleRepository;
 
@@ -26,13 +25,13 @@ public class ProfileController {
   @GetMapping
   public List<ProfileJSON> index() {
     return this.profileService.getAllProfiles().stream()
-      .map(profile -> profile.toProfileJSON(classified))
+      .map(Profile::toProfileJSON)
       .collect(Collectors.toList());
   }
 
   @GetMapping(path = "/me")
   public ProfileJSON show(@AuthenticationPrincipal Profile profile) {
-    return profile.toProfileJSON(classified);
+    return profile.toProfileJSON();
   }
 
   @DeleteMapping(path = "/me")
@@ -48,11 +47,11 @@ public class ProfileController {
   ) {
     if (squadronId != null) {
       profile = this.profileService.setSiteAndSquadron(profile, siteId, squadronId);
-      ProfileJSON profileJSON = profile.toProfileJSON(classified);
+      ProfileJSON profileJSON = profile.toProfileJSON();
       profileJSON.setSquadronId(profile.getSquadronId());
       return profileJSON;
     } else {
-      return this.profileService.setSite(profile, siteId).toProfileJSON(classified);
+      return this.profileService.setSite(profile, siteId).toProfileJSON();
     }
   }
 
@@ -60,7 +59,7 @@ public class ProfileController {
   public ResponseEntity<ProfileJSON> update(@RequestBody ProfileJSON json) {
     Profile profile = profileService.update(json);
     return profile != null ?
-      new ResponseEntity<>(profile.toProfileJSON(classified), HttpStatus.OK) :
+      new ResponseEntity<>(profile.toProfileJSON(), HttpStatus.OK) :
       new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 

@@ -109,7 +109,7 @@ public class Profile implements UserDetails {
     return true;
   }
 
-  public ProfileJSON toProfileJSON(boolean classified) {
+  public ProfileJSON toProfileJSON() {
     final Long siteId = site == null ? null : site.getId();
     final String siteName = site == null ? "" : site.getFullName();
     return new ProfileJSON(
@@ -119,8 +119,7 @@ public class Profile implements UserDetails {
       squadronId,
       siteName,
       role.getId(),
-      role.getName().name(),
-      classified
+      role.getName().name()
     );
   }
 }

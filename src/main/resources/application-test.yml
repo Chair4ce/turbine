@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:turbinedev;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    url: jdbc:h2:mem:test;DB_CLOSE_ON_EXIT=FALSE
   jpa:
     properties:
       hibernate:
@@ -10,6 +10,7 @@ spring:
       enabled: false
   flyway:
     enabled: false
+
 logging.level.org.hibernate:
   SQL: DEBUG
   type.descriptor.sql.BasicBinder: TRACE

@@ -20,7 +20,7 @@ public class AdminSquadronService {
 
   public AdminSquadronItemJSON createSquadron(AdminSquadronItemJSON item) {
     Squadron squadron = new Squadron();
-    final Site site = this.siteRepository.findOne(item.getSiteId());
+    final Site site = this.siteRepository.getOne(item.getSiteId());
     squadron.setSite(site);
     squadron.setName(item.getSquadronName());
     squadron = this.squadronRepository.save(squadron);

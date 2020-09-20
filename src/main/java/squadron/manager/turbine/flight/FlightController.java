@@ -33,7 +33,7 @@ public class FlightController {
     @Valid
     @RequestBody FlightJSON flightJSON
   ) {
-    Squadron squadron = squadronRepository.findOne(flightJSON.getSquadronId());
+    Squadron squadron = squadronRepository.getOne(flightJSON.getSquadronId());
     Flight flight = new Flight(squadron, flightJSON.getName());
     flightRepository.save(flight);
     return new ResponseEntity<>(flight, HttpStatus.CREATED);
@@ -41,7 +41,7 @@ public class FlightController {
 
   @DeleteMapping(value = "/{id}")
   public ResponseEntity<Object> deleteFlight(@PathVariable Long id) {
-    Flight flight = this.flightRepository.findOne(id);
+    Flight flight = this.flightRepository.getOne(id);
     List<Flight> lists = new ArrayList<>();
     lists.add(flight);
     this.flightRepository.deleteInBatch(lists);
