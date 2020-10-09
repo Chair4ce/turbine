@@ -9,6 +9,7 @@ import {ApplicationState} from "../../store";
 import {getChartData} from "../../store/positions/thunks";
 import clsx from "clsx";
 import AFSCPanelContainer from "../../component/panels/AFSCPanelContainer";
+import Typography from "@material-ui/core/Typography";
 
 const Chart = lazy(() => import("../../component/panels/ManningChart"))
 
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
         sidebar_container: {
             position: 'relative',
             height: '100%',
-            zIndex: 2
+            zIndex: 2,
         },
         main: {
             position: 'relative',
@@ -38,6 +39,17 @@ const useStyles = makeStyles((theme: Theme) =>
         show: {},
         hide: {
             display: 'none'
+        },
+        noContentMsg: {
+            display: 'flex',
+            height: 200,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+        },
+        noContentTxt: {
+            color: '#6d6d6d',
+            fontSize: 32
         }
     }),
 );
@@ -92,6 +104,11 @@ const HealthSection: React.FC<Props> = props => {
                     />
             </div>
             <article className={classes.main}>
+                {!showAFSCPanelView &&
+                <div className={classes.noContentMsg}>
+                    <Typography className={classes.noContentTxt}>No Panels are open</Typography>
+                </div>
+                }
                 {/*<Chart chartData={chartDataAFSC} className={chartClassName}/>*/}
                 {showAFSCPanelView && <AFSCPanelContainer pas={pas}/> }
             </article>

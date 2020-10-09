@@ -1,13 +1,11 @@
 package squadron.manager.turbine.position;
 
 
-import javafx.geometry.Pos;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import squadron.manager.turbine.afscChart.AfscChart;
 import squadron.manager.turbine.afscChart.AfscChartRepository;
-import squadron.manager.turbine.afscPositions.PositionType;
 import squadron.manager.turbine.doubleBilleted.DoubleBilleted;
 import squadron.manager.turbine.doubleBilleted.DoubleBilletedRepository;
 import squadron.manager.turbine.gainingMember.GainingMember;

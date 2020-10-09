@@ -111,6 +111,11 @@ const useStyles = makeStyles((theme: Theme) =>
             },
             MenuContainer: {
                 zIndex: 1
+            },
+            scrollRef: {
+                height: 1,
+                background: 'transparent',
+                width: "100%"
             }
         }),
     )
@@ -119,16 +124,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const AFSCPanelContainer: React.FC<Props> = props => {
     const classes = useStyles();
 
-    const [selectedAFSC, setSelectedAFSC] = useState([] as string[])
+    const [selectedAFSC, setSelectedAFSC] = useState<string[]>([])
     const [open, toggleOpen] = useState(true);
+    const [closing, toggleClosing] = useState(false);
 
     let afsc = selectedAFSC;
 
     function handleCallback(selected: string) {
         if (selectedAFSC.indexOf(selected) > -1) {
+            toggleClosing(true);
             afsc = selectedAFSC.filter(item => item != selected);
             setSelectedAFSC(afsc);
+
         } else {
+            toggleClosing(false);
             setSelectedAFSC(selectedAFSC.concat(selected));
         }
     }
@@ -138,17 +147,20 @@ const AFSCPanelContainer: React.FC<Props> = props => {
         setSelectedAFSC(afsclist);
     }
 
-    // useEffect(() => {
-    //     console.log(selectedAFSC);
-    // }, [selectedAFSC]);
+    useEffect(() => {
+        if (!closing) {
+            let element = document.getElementById("scrollRabbit");
+            element.scrollIntoView();
+            element.scrollIntoView(false);
+            element.scrollIntoView({block: "end"});
+            element.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+        }
 
-    // function GridItems() {
-    //     return (
-    //         <React.Fragment>
-    //
-    //         </React.Fragment>
-    //     )
-    // }
+
+        return function cleanup() {
+        }
+    }, [selectedAFSC]);
+
 
     function handleClick() {
         toggleOpen(prev => !prev)
@@ -173,14 +185,15 @@ const AFSCPanelContainer: React.FC<Props> = props => {
                 </div>
             </Slide>
             <Slide direction="right" in={!open} mountOnEnter unmountOnExit>
-                    <div className={classes.toggleBtnOpen} onClick={handleClick}>
-                        <ArrowRightIcon fontSize={"small"}/>
-                    </div>
+                <div className={classes.toggleBtnOpen} onClick={handleClick}>
+                    <ArrowRightIcon fontSize={"small"}/>
+                </div>
             </Slide>
             <div className={classNames(classes.AFSCCardContainer, !open ? classes.divider : "")}>
                 {selectedAFSC && selectedAFSC.map((item: string, index: number) => {
                     return <AFSCCard key={item} pas={props.pas} afsc={item} mapKi={index} callback={handleCallback}/>
                 })}
+                <div id={"scrollRabbit"} className={classes.scrollRef}/>
             </div>
         </div>
     );

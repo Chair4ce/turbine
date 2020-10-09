@@ -27,11 +27,8 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         main: {
             position: 'relative',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             height: '100%',
-            width: '100%',
+            width: '100%'
         },
         irisIcon: {
             display: 'flex',
@@ -110,11 +107,6 @@ const MainSection: React.FC<Props> = props => {
             <article className={classes.main}>
                 {!showCurrentPanel && !showGainingPanel &&
                     <div className={classes.noContentMsg}>
-
-                <div className={classes.irisIcon}>
-                    {/*<TurbineIris/>*/}
-                    {/*<TurbineIris/>*/}
-                </div>
                         <Typography className={classes.noContentTxt}>No Panels are open</Typography>
                     </div>
                 }

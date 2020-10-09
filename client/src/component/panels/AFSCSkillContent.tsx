@@ -21,6 +21,9 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'block'
         },
         positionGroupHeader: {
+            position: 'sticky',
+            top: '-4px',
+            background: 'lightslategray',
             paddingLeft: 4,
             display: 'flex',
             justifyContent: 'start',
@@ -60,6 +63,10 @@ const useStyles = makeStyles((theme: Theme) =>
             fontSize: '11px'
         },
         AFSCContentSubHeader: {
+            borderRadius: '0 0 3px 3px',
+            position: 'sticky',
+            top: '16px',
+            background: 'lightslategray',
             width: '100%',
             height: 18,
             display: 'flex',
