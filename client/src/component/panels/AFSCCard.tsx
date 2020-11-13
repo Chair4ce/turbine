@@ -100,7 +100,7 @@ const AFSCCard: React.FC<Props> = props => {
     const [lvl5Positions, setlvl5Positions] = useState([] as AssignedPositionModel[]);
     const [lvl7Positions, setlvl7Positions] = useState([] as AssignedPositionModel[]);
     const [chartData, setChartData] = useState([] as ManningChartModel[]);
-    const [AFSCManned, setAFSCManned] = useState();
+    const [AFSCManned, setAFSCManned] = useState<number>();
     const [open, setOpen] = React.useState(false);
 
     const handleOpen = () => {

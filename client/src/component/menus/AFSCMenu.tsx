@@ -100,7 +100,7 @@ const AFSCMenu: React.FC<Props> = props => {
     const classes = useStyles();
     const dispatch = useDispatch();
 
-    const [distinctAfscList, setDistinctAFSCList] = useState();
+    const [distinctAfscList, setDistinctAFSCList] = useState<string[]>();
     const [showAll, setShowAll] = useState(true);
 
     useEffect(() => {
