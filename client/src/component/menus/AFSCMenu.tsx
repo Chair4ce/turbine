@@ -9,7 +9,7 @@ interface Props {
     callback: (selected: string) => void;
     showAll: (afsclist: string[]) => void;
     selected: string[];
-className?: string;
+    className?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -25,9 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
             background: '#2b2b2b',
             height: 'calc(100vh - 121px)'
         },
-        container: {
-
-        },
+        container: {},
         menuBtn: {
             background: 'none',
             height: 30
@@ -50,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: 32,
 
             '&:hover': {
-            border: '1px solid #5D8AA8',
+                border: '1px solid #5D8AA8',
             },
         },
         BorderSelected: {
@@ -59,7 +57,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 66,
             height: 38,
             overflow: 'hidden',
-            transition: theme.transitions.create(["width","height"],{ duration: theme.transitions.duration.shortest }),
+            transition: theme.transitions.create(["width", "height"], {duration: theme.transitions.duration.shortest}),
             // transition: 'width 600ms ease-out, height 600ms ease-out',
             border: '1px solid #5D8AA8',
         },
@@ -67,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: 54,
             height: 22,
             background: 'none',
-            transition: theme.transitions.create(["width","height"],{ duration: theme.transitions.duration.shortest }),
+            transition: theme.transitions.create(["width", "height"], {duration: theme.transitions.duration.shortest}),
         },
         btnBorder: {
             display: 'flex',
@@ -124,7 +122,7 @@ const AFSCMenu: React.FC<Props> = props => {
     }
 
     function toggleAll() {
-        if(showAll) {
+        if (showAll) {
             props.showAll(distinctAfscList)
         } else {
             props.showAll([]);
@@ -136,9 +134,12 @@ const AFSCMenu: React.FC<Props> = props => {
     function renderDistinctAFSCs() {
         return distinctAfscList.map((afsc: string, index: number) => {
             return <div key={index} className={classes.menuItem}>
-                <div className={classNames(classes.btnBorder, props.selected.indexOf(afsc) > -1 ? classes.BorderSelected : classes.BorderUnselected )}>
-                    <Button className={classNames(props.selected.indexOf(afsc) > -1 ? classes.selected : classes.unselected, classes.menuBtn)} onClick={() => handleClick(afsc)}>
-                    {afsc}
+                <div
+                    className={classNames(classes.btnBorder, props.selected.indexOf(afsc) > -1 ? classes.BorderSelected : classes.BorderUnselected)}>
+                    <Button
+                        className={classNames(props.selected.indexOf(afsc) > -1 ? classes.selected : classes.unselected, classes.menuBtn)}
+                        onClick={() => handleClick(afsc)}>
+                        {afsc}
                     </Button>
                 </div>
             </div>
@@ -148,11 +149,12 @@ const AFSCMenu: React.FC<Props> = props => {
     return (
         <div className={classes.root}>
             <div className={classes.toggleBtnGrp}>
-            <Button onClick={toggleAll} className={classNames(classes.toggleShowHideBtn, !showAll ? classes.toggled : "")}>
-                <span className={classes.showAllBtnText}>Show All</span>
-            </Button>
+                <Button onClick={toggleAll}
+                        className={classNames(classes.toggleShowHideBtn, !showAll ? classes.toggled : "")}>
+                    <span className={classes.showAllBtnText}>Show All</span>
+                </Button>
             </div>
-                {distinctAfscList && renderDistinctAFSCs()}
+            {distinctAfscList && renderDistinctAFSCs()}
         </div>
     );
 };

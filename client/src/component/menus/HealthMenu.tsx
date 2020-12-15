@@ -4,7 +4,6 @@ import clsx from "clsx";
 import classNames from "classnames";
 import {MenuList} from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
-import MultilineChartIcon from '@material-ui/icons/MultilineChart';
 import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -163,7 +162,8 @@ const HealthMenu: React.FC<Props> = props => {
                 {/*    </span> : ''}*/}
                 {/*    {props.showManningChart ? <div className={classes.selected_item}/> : ''}*/}
                 {/*</MenuItem>*/}
-                <MenuItem id={'gaining_roster_toggle_btn'}  className={classNames(classes.menu_btn, AFSCPanelSelectorClassName)}
+                <MenuItem id={'gaining_roster_toggle_btn'}
+                          className={classNames(classes.menu_btn, AFSCPanelSelectorClassName)}
                           onClick={toggleAFSCPanelView}>
                     <div className={classes.iconArea}>
                         <AmpStoriesIcon/>
