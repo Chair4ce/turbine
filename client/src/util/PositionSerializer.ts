@@ -6,7 +6,7 @@ import StagingUploadPositionModel from "../store/positions/models/StagingUploadP
 import AssignedPositionModel from "../store/positions/models/AssignedPositionModel";
 
 
-const crypto = require('crypto');
+const sha1 = require('sha1');
 
 
 function convertToHash(mbrId: string) {
@@ -15,10 +15,7 @@ function convertToHash(mbrId: string) {
     //     .match(/\d+/g).map(Number).join("").substring(1,10);
     let oldMbrId = mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
-    if(mbrId.length < 9) mbrId = "1" + mbrId;
-    if(mbrId.length < 9) mbrId = "1" + mbrId;
-    return crypto.createHash('sha1').update(mbrId.replace(/-/g, "")).digest('hex').toString()
-        .match(/\d+/g).map(Number).join("").substring(1, 10);
+    return sha1(mbrId)
 }
 
 export class PositionSerializer {

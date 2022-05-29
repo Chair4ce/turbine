@@ -1,13 +1,15 @@
 import * as React from 'react';
 import {Provider} from 'react-redux';
-import {ConnectedRouter} from 'connected-react-router';
+
 import {Store} from 'redux';
-import {History} from 'history';
-import Routes from './routes';
 import {ApplicationState} from './store';
 import normalize from "./style/normalize";
-import {Global} from "@emotion/core";
+import {Global} from "@emotion/react";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import {History} from "history";
+import {StyledMainIndexPage} from "./page/main";
+import {BrowserRouter, Route} from 'react-router-dom';
+import {Switch} from "react-router";
 
 // Any additional component props go here.
 interface MainProps {
@@ -16,14 +18,17 @@ interface MainProps {
 }
 
 // Create an intersection type of the component props and our Redux props.
-const Main: React.FC<MainProps> = ({store, history}) => {
+const Main: React.FC<MainProps> = ({store, history }) => {
+
     return (
             <Provider store={store}>
                 <Global styles={normalize}/>
                 <CssBaseline/>
-                <ConnectedRouter history={history}>
-                    <Routes/>
-                </ConnectedRouter>
+                        <BrowserRouter>
+                            <Switch>
+                                <Route path='/' component={StyledMainIndexPage}/>
+                            </Switch>
+                        </BrowserRouter>
             </Provider>
     );
 };

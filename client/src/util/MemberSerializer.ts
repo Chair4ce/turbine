@@ -7,20 +7,14 @@ import GenericGainingGroupCollectionModel from "../store/members/models/GenericG
 import StagingUploadMemberModel from "../store/members/models/StagingUploadMemberModel";
 import StagingUploadGainingModel from "../store/members/models/StagingUploadGainingModel";
 import AFSCListModel from "../store/positions/models/AFSCListModel";
-
-const crypto = require('crypto');
-
+const sha1 = require('sha1');
 
 function convertToHash(mbrId: string) {
     //This throws out everything except integers of the hash
     // let newNameHash = crypto.createHash('sha1').update(name).digest('hex').toString()
     //     .match(/\d+/g).map(Number).join("").substring(1,10);
-    let oldMbrId = mbrId;
     if(mbrId.length < 9) mbrId = "1" + mbrId;
-    if(mbrId.length < 9) mbrId = "1" + mbrId;
-    if(mbrId.length < 9) mbrId = "1" + mbrId;
-    return crypto.createHash('sha1').update(mbrId.replace(/-/g,"")).digest('hex').toString()
-        .match(/\d+/g).map(Number).join("").substring(1, 10);
+    return sha1(mbrId)
 }
 
 export class MemberSerializer {

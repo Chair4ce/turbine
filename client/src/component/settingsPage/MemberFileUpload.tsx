@@ -1,7 +1,6 @@
 import React, {useCallback, useState} from 'react'
 import {useDropzone} from 'react-dropzone'
 import {Paper} from "@material-ui/core";
-import RootRef from "@material-ui/core/RootRef";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 // @ts-ignore
 import readXlsxFile from "read-excel-file";
@@ -53,7 +52,7 @@ export const MemberFileUpload: React.FC<Props> = props => {
      updateError("");
  }
 
-    const onDrop = useCallback(acceptedFiles => {
+    const onDrop = useCallback((acceptedFiles: any[]) => {
         acceptedFiles.forEach((file: any) => {
                 let fileName = file.name;
 
@@ -62,14 +61,13 @@ export const MemberFileUpload: React.FC<Props> = props => {
                         schema, transformData(data: any) {
                             return data.splice(2, data.length - 3)
                         }
-                    }).then(((rows: any, errors: any) => {
-                        if (errors) {
+                    }).then(((rows: any) => {
+                        if (error) {
                             props.parentCallback(FILE_UPLOAD.ALPHA_SUCCESS,false)
                         } else {
                             props.parentCallback(FILE_UPLOAD.ALPHA_SUCCESS,true)
                             dispatch(stageMemberUploadData(MemberSerializer.serializeMembersToStaging(MemberModel.filterEnlistedStagingUploadOnly(rows.rows))));
-                        }
-                        ;
+                        };
                     }))
                 } else {
                     updateError("Please convert file to xlsm before uploading again")
@@ -96,7 +94,7 @@ export const MemberFileUpload: React.FC<Props> = props => {
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
     const {ref, ...rootProps} = getRootProps()
     return (
-        <RootRef rootRef={ref}>
+        <>
             <Paper {...rootProps} className={classes.fileDropArea}>
                 <input {...getInputProps()} />
                 {error.length > 0 ? <ErrorDialog title={"File Type Error"} error={error} callback={handleCallback}/> : null}
@@ -106,7 +104,7 @@ export const MemberFileUpload: React.FC<Props> = props => {
                          <p>Drag 'n' drop some files here, or click to select files</p>
                 }
             </Paper>
-        </RootRef>
+        </>
     )
 }
 

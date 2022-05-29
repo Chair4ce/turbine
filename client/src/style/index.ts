@@ -1,4 +1,4 @@
-import { css } from '@emotion/core';
+import { css } from '@emotion/react';
 import normalize from './normalize';
 
 // eslint-disable-next-line no-unused-expressions

@@ -1,9 +1,4 @@
-import {saveCurrentRoster} from "../store/members/thunks";
-// @ts-ignore
 import readXlsxFile from "read-excel-file";
-import {useDispatch} from "react-redux";
-import {membersFetchError} from "../store/members";
-
 
 export class UploadList {
     public static handleFile = (e: HTMLInputElement, type: string) => {
@@ -18,17 +13,17 @@ export class UploadList {
                 return null;
 
         }
-        function readData(schema: Object) {
+        function readData(schema: any) {
             return readXlsxFile(e.files[0], {
-                schema, transformData(data: any) {
+             schema, transformData(data: any) {
                     return data.splice(2, data.length - 3)
                 }
-            }).then(((rows: any, errors: any) => {
-                if (errors) {
+            }).then((rows: any) => {
+                if (Error) {
                 } else {
                     return rows.rows;
                 }
-            }));
+            });
         }
     }
 }

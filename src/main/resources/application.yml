@@ -1,8 +1,9 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/turbinedev?useSSL=false&serverTimezone=UTC
-    username: turbine
+    url: ${TURBINE_DB_URL}
+    username: ${TURBINE_DB_USERNAME}
     driver-class-name: com.mysql.cj.jdbc.Driver
+    password: ${TURBINE_DB_PASSWORD}
   flyway:
     locations: classpath:db/migration
     baseline-on-migrate: true

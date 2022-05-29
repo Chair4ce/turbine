@@ -193,7 +193,7 @@ export const AlphaReviewTable: React.FC<Props> = props => {
                 onRowUpdate: (newData, oldData) =>
                     new Promise(resolve => {
                         setTimeout(() => {
-                            resolve();
+
                             if (oldData) {
                                 setState(prevState => {
                                     const data = [...prevState.data];
@@ -207,7 +207,6 @@ export const AlphaReviewTable: React.FC<Props> = props => {
                 onRowDelete: oldData =>
                     new Promise(resolve => {
                         setTimeout(() => {
-                            resolve();
                             setState(prevState => {
                                 const data = [...prevState.data];
                                 data.splice(data.indexOf(oldData), 1);

@@ -1,7 +1,7 @@
 import createPalette from "@material-ui/core/styles/createPalette";
 import './font/roboto/roboto.css';
 import './font/rambla/rambla.css';
-import { createMuiTheme } from '@material-ui/core';
+import { createTheme } from '@material-ui/core';
 import brandColors from "./colors/brandColors";
 
 const theme = {
@@ -107,7 +107,7 @@ const theme = {
             },
         });
 
-    export const muiTheme = createMuiTheme(
+    export const muiTheme = createTheme(
         {
             overrides: {
                 MuiDialog: {

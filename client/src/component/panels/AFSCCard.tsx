@@ -95,7 +95,7 @@ const AFSCCard: React.FC<Props> = props => {
     const [lvl3Positions, setlvl3Positions] = useState([] as AssignedPositionModel[]);
     const [lvl5Positions, setlvl5Positions] = useState([] as AssignedPositionModel[]);
     const [lvl7Positions, setlvl7Positions] = useState([] as AssignedPositionModel[]);
-    const [AFSCManned, setAFSCManned] = useState();
+    const [AFSCManned, setAFSCManned] = useState<number>();
     const [lvl3AFSCManned, setlvl3AFSCManned] = useState();
     const [lvl5AFSCManned, setlvl5AFSCManned] = useState();
     const [lvl7AFSCManned, selvl7AFSCManned] = useState();

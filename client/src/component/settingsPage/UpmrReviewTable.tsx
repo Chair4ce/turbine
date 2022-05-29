@@ -1,6 +1,5 @@
 import React from 'react';
 import MaterialTable, {Column} from 'material-table';
-import StagingUploadMemberModel from "../../store/members/models/StagingUploadMemberModel";
 import {connect} from "react-redux";
 import {ApplicationState} from "../../store";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
@@ -192,7 +191,7 @@ export const UpmrReviewTable: React.FC<Props> = props => {
                     onRowUpdate: (newData, oldData) =>
                         new Promise(resolve => {
                             setTimeout(() => {
-                                resolve();
+
                                 if (oldData) {
                                     setState(prevState => {
                                         const data = [...prevState.data];
@@ -206,7 +205,7 @@ export const UpmrReviewTable: React.FC<Props> = props => {
                     onRowDelete: oldData =>
                         new Promise(resolve => {
                             setTimeout(() => {
-                                resolve();
+
                                 setState(prevState => {
                                     const data = [...prevState.data];
                                     data.splice(data.indexOf(oldData), 1);
